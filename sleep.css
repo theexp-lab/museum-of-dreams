@@ -250,52 +250,38 @@ a {
     saturate(0.92);
 }
 
+/* Visage aux yeux ouverts */
+
 .face-open {
   z-index: 1;
+
+  opacity:
+    calc(
+      1 -
+      var(--eyes-closed)
+    );
 }
 
 
-/*
- * Seule la zone des paupières de la seconde
- * image apparaît. Le reste du visage demeure
- * parfaitement stable.
- */
+/* Visage aux yeux fermés */
 
 .face-closed {
   z-index: 2;
 
-  opacity: var(--eyes-closed);
-
-  -webkit-mask-image:
-    radial-gradient(
-      ellipse 11% 6% at 45% 25%,
-      black 40%,
-      rgba(0, 0, 0, 0.92) 58%,
-      transparent 82%
-    ),
-
-    radial-gradient(
-      ellipse 11% 6% at 55% 25%,
-      black 40%,
-      rgba(0, 0, 0, 0.92) 58%,
-      transparent 82%
-    );
-
-  mask-image:
-    radial-gradient(
-      ellipse 11% 6% at 45% 25%,
-      black 40%,
-      rgba(0, 0, 0, 0.92) 58%,
-      transparent 82%
-    ),
-
-    radial-gradient(
-      ellipse 11% 6% at 55% 25%,
-      black 40%,
-      rgba(0, 0, 0, 0.92) 58%,
-      transparent 82%
-    );
+  opacity:
+    var(--eyes-closed);
 }
+
+
+/* Transition douce entre les deux états */
+
+.face-open,
+.face-closed {
+  transition:
+    opacity 80ms linear;
+}
+
+
 
 
 /* ==========================================
