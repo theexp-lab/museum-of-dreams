@@ -322,15 +322,11 @@ a {
   mix-blend-mode: screen;
 
   filter:
-    saturate(1.25)
-    drop-shadow(
-      0 0 8px
-      rgba(225, 202, 255, 0.72)
-    )
-    drop-shadow(
-      0 0 22px
-      rgba(137, 105, 255, 0.35)
-    );
+  saturate(1.15)
+  drop-shadow(
+    0 0 10px
+    rgba(190, 160, 255, 0.45)
+  );
 
   pointer-events: none;
 }
