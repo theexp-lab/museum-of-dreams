@@ -17,7 +17,7 @@
   --face-scale: 1;
   --face-blur: 0px;
 
-  --eyelid-close: 0;
+  --eyes-closed: 0;
 
   --brain-opacity: 0;
   --brain-intensity: 0;
@@ -168,7 +168,7 @@ a {
 
 
 /* ==========================================
-   SCULPTURE
+   SCULPTURE MONUMENTALE
 ========================================== */
 
 .face-stage {
@@ -180,10 +180,10 @@ a {
   z-index: 4;
 
   width:
-    min(72vh, 680px);
+    min(78vw, 1050px);
 
   height:
-    min(90vh, 850px);
+    100vh;
 
   opacity:
     var(--face-opacity);
@@ -194,21 +194,27 @@ a {
   transform:
     translate(
       calc(-50% + var(--pointer-x)),
-      calc(-48% + var(--pointer-y))
+      calc(-50% + var(--pointer-y))
     )
     scale(var(--face-scale));
+
+  transform-origin:
+    center center;
 
   transition:
     opacity 100ms linear;
 }
 
+
+/* Halo derrière le crâne */
+
 .face-aura {
   position: absolute;
 
-  top: 11%;
+  top: 4%;
   left: 50%;
 
-  width: 72%;
+  width: 88%;
   aspect-ratio: 1;
 
   border-radius: 50%;
@@ -216,103 +222,128 @@ a {
   background:
     radial-gradient(
       circle,
-      rgba(138, 123, 210, 0.24),
-      rgba(77, 90, 173, 0.1) 45%,
-      transparent 72%
+      rgba(161, 139, 236, 0.28),
+      rgba(75, 92, 181, 0.12) 48%,
+      transparent 74%
     );
 
   filter:
-    blur(35px);
+    blur(48px);
 
   transform:
     translateX(-50%);
+
+  animation:
+    faceAuraBreathing
+    7s ease-in-out infinite;
 }
+
+
+/* Réglages partagés par les deux images */
 
 .sleeper-image {
   position: absolute;
+
   inset: 0;
 
   width: 100%;
   height: 100%;
 
-  object-fit: contain;
+  object-fit: cover;
+
+  /*
+   * Le cadrage remonte légèrement le visage
+   * et coupe une partie des épaules.
+   */
+
+  object-position:
+    center 39%;
 
   pointer-events: none;
 
   filter:
     contrast(1.05)
-    brightness(0.82)
-    saturate(0.8);
+    brightness(0.88)
+    saturate(0.88);
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 5%,
+      black 88%,
+      transparent 100%
+    );
 
   mask-image:
     linear-gradient(
       to bottom,
-      black 0%,
-      black 76%,
-      transparent 97%
+      transparent 0%,
+      black 5%,
+      black 88%,
+      transparent 100%
     );
 }
 
 
-/* ==========================================
-   PAUPIÈRES
+/* Image principale : yeux ouverts */
 
-   Placées par-dessus les yeux de l’image.
-========================================== */
+.sleeper-open {
+  z-index: 2;
+}
 
-.coded-eyelid {
-  position: absolute;
 
-  top: 36.2%;
+/*
+ * Image fermée superposée.
+ *
+ * Seules les zones autour des yeux sont visibles :
+ * le visage entier ne produit donc aucun fondu fantôme.
+ */
 
-  z-index: 8;
-
-  width: 16.5%;
-  height: 5%;
-
-  border-radius:
-    50% 50% 48% 48%;
+.sleeper-closed {
+  z-index: 3;
 
   opacity:
-    var(--eyelid-close);
+    var(--eyes-closed);
 
-  background:
-    linear-gradient(
-      180deg,
-      #777d8e,
-      #484d5d 72%,
-      #252936
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 18% 9% at 39% 34%,
+      black 24%,
+      rgba(0, 0, 0, 0.94) 44%,
+      rgba(0, 0, 0, 0.42) 66%,
+      transparent 82%
+    ),
+
+    radial-gradient(
+      ellipse 18% 9% at 61% 34%,
+      black 24%,
+      rgba(0, 0, 0, 0.94) 44%,
+      rgba(0, 0, 0, 0.42) 66%,
+      transparent 82%
     );
 
-  box-shadow:
-    0 3px 5px
-    rgba(0, 0, 0, 0.38),
+  mask-image:
+    radial-gradient(
+      ellipse 18% 9% at 39% 34%,
+      black 24%,
+      rgba(0, 0, 0, 0.94) 44%,
+      rgba(0, 0, 0, 0.42) 66%,
+      transparent 82%
+    ),
 
-    inset 0 -1px 0
-    rgba(215, 219, 236, 0.2);
+    radial-gradient(
+      ellipse 18% 9% at 61% 34%,
+      black 24%,
+      rgba(0, 0, 0, 0.94) 44%,
+      rgba(0, 0, 0, 0.42) 66%,
+      transparent 82%
+    );
 
-  transform:
-    scaleY(var(--eyelid-close));
-
-  transform-origin:
-    top;
+  transition:
+    opacity 80ms linear;
 }
 
-.left-coded-eyelid {
-  left: 30.7%;
-
-  transform:
-    rotate(2deg)
-    scaleY(var(--eyelid-close));
-}
-
-.right-coded-eyelid {
-  right: 30.7%;
-
-  transform:
-    rotate(-2deg)
-    scaleY(var(--eyelid-close));
-}
 
 
 /* ==========================================
@@ -851,7 +882,24 @@ a {
       scale(45);
   }
 }
+@keyframes faceAuraBreathing {
+  0%,
+  100% {
+    opacity: 0.55;
 
+    transform:
+      translateX(-50%)
+      scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      scale(1.08);
+  }
+}
 
 /* ==========================================
    MOBILE
@@ -871,14 +919,11 @@ a {
   }
 
   .face-stage {
-    top: 45%;
+  top: 48%;
 
-    width:
-      min(92vw, 590px);
-
-    height:
-      min(76vh, 720px);
-  }
+  width: 112vw;
+  height: 92vh;
+}
 
   .narration-area {
     bottom: 11vh;
@@ -917,8 +962,9 @@ a {
 
 @media (max-width: 480px) {
   .face-stage {
-    width: 105vw;
-  }
+  width: 128vw;
+  height: 88vh;
+}
 
   .narration {
     font-size: 40px;
