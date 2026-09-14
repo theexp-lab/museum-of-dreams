@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ==========================================
+       INFORMATIONS PRINCIPALES DU SITE
+  =========================================== -->
+
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="The Museum of Dreams — an immersive exhibition concept by Lou-Ann de Sia."
+  >
+
+  <title>The Museum of Dreams</title>
+
+  <!-- Feuille de style -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ==========================================
+       FOND 3D
+       Le contenu sera créé dans script.js
+  =========================================== -->
+
+  <canvas id="dream-world"></canvas>
+
+
+  <!-- ==========================================
+       PAGE D’ENTRÉE
+  =========================================== -->
+
+  <main>
+
+    <section class="opening" id="opening">
+
+      <div class="opening-top">
+
+        <p class="laboratory-label">
+          THE EXPERIENCE LABORATORY · EXPERIENCE 002
+        </p>
+
+        <div class="sleep-status">
+          <span class="pulse-dot"></span>
+          <span id="clock">02:17:00</span>
+          <span>SUBJECT IS FALLING ASLEEP</span>
+        </div>
+
+      </div>
+
+
+      <div class="opening-center">
+
+        <p class="opening-question">
+          WHAT IF WE COULD WALK INSIDE SOMEONE ELSE'S DREAM?
+        </p>
+
+        <h1>
+          THE MUSEUM<br>
+          OF DREAMS
+        </h1>
+
+        <p class="opening-description">
+          A living museum built from the dreams
+          people have while the world is asleep.
+        </p>
+
+        <div class="opening-actions">
+
+          <button id="enter-prototype" class="main-button">
+            EXPERIENCE THE PROTOTYPE
+          </button>
+
+          <a href="#case-study" class="text-link">
+            EXPLORE THE EXHIBITION ↓
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <p class="sound-note">
+        HEADPHONES RECOMMENDED · SOUND OPTIONAL
+      </p>
+
+    </section>
+
+
+    <!-- ==========================================
+         PROTOTYPE 3D
+         Cette partie apparaît après avoir cliqué
+         sur EXPERIENCE THE PROTOTYPE
+    =========================================== -->
+
+    <section class="prototype hidden" id="prototype">
+
+      <header class="prototype-header">
+
+        <span>THE MUSEUM OF DREAMS</span>
+
+        <span id="sleep-phase">
+          HYPNAGOGIA
+        </span>
+
+        <div class="prototype-controls">
+
+          <button id="sound-button">
+            SOUND OFF
+          </button>
+
+          <button id="exit-button">
+            EXIT
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- Informations sur la salle actuelle -->
+
+      <article class="chapter-panel" id="chapter-panel">
+
+        <div class="chapter-meta">
+
+          <span id="chapter-number">
+            PHASE 01
+          </span>
+
+          <span id="chapter-time">
+            02:17
+          </span>
+
+        </div>
+
+        <h2 id="chapter-title">
+          THE THRESHOLD
+        </h2>
+
+        <p id="chapter-description">
+          The body lets go first.
+          The mind keeps the door open.
+        </p>
+
+        <p id="chapter-medium" class="chapter-medium">
+          LIGHT · SPATIAL SOUND · KINETIC SCULPTURE
+        </p>
+
+      </article>
+
+
+      <!-- Navigation dans le prototype -->
+
+      <div class="prototype-bottom">
+
+        <nav class="prototype-navigation">
+
+          <button
+            id="previous-button"
+            class="arrow-button"
+            aria-label="Previous space"
+          >
+            ←
+          </button>
+
+          <div class="progress-line">
+            <span id="progress-fill"></span>
+          </div>
+
+          <button
+            id="next-button"
+            class="arrow-button"
+            aria-label="Next space"
+          >
+            →
+          </button>
+
+        </nav>
+
+        <p class="movement-instruction">
+          MOVE YOUR CURSOR TO DISTURB THE MIND
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ==========================================
+       CASE STUDY
+       Présentation professionnelle du projet
+  =========================================== -->
+
+  <article class="case-study" id="case-study">
+
+
+    <!-- INTRODUCTION DU PROJET -->
+
+    <section class="case-introduction">
+
+      <p class="case-label">
+        EXPERIENCE 002 · IMMERSIVE EXHIBITION CONCEPT · 2026
+      </p>
+
+      <h2>
+        WHAT IF THE DREAMS WE FORGET EVERY MORNING
+        BECAME PLACES WE COULD VISIT?
+      </h2>
+
+      <div class="case-summary">
+
+        <p>
+          <strong>The Museum of Dreams</strong> is a temporary
+          immersive exhibition built from dreams submitted
+          anonymously by people around the world.
+        </p>
+
+        <p>
+          Artists, filmmakers, sound designers and creative
+          technologists transform selected dreams into physical
+          environments that visitors can enter.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- MANIFESTE COURT -->
+
+    <section class="project-statement">
+
+      <p>DREAMS ARE PRIVATE.</p>
+      <p>DREAMS ARE TEMPORARY.</p>
+
+      <p class="purple-statement">
+        THIS MUSEUM MAKES THEM COLLECTIVE.
+      </p>
+
+    </section>
+
+
+    <!-- ==========================================
+         01 — LE CONCEPT
+    =========================================== -->
+
+    <section class="case-section case-grid">
+
+      <p class="section-number">
+        01 · THE IDEA
+      </p>
+
+      <div class="section-title">
+
+        <h3>
+          A MUSEUM INSIDE<br>
+          A SLEEPING MIND
+        </h3>
+
+      </div>
+
+      <div class="section-text">
+
+        <p>
+          The exhibition building becomes the body of one sleeping
+          stranger. Visitors cross the threshold of sleep, enter an
+          oversized brain and travel through one complete night.
+        </p>
+
+        <p>
+          Each room transforms a submitted dream into a different
+          artistic experience using physical sets, sculpture,
+          projection, sound, light, technology and sensory effects.
+        </p>
+
+        <p>
+          As the night progresses, the museum becomes darker,
+          stranger and increasingly unstable—until the dream turns
+          into a nightmare and forces the audience to wake up.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         02 — PARCOURS DU VISITEUR
+    =========================================== -->
+
+    <section class="visitor-journey">
+
+      <p class="section-number">
+        02 · VISITOR JOURNEY · 60–90 MINUTES
+      </p>
+
+      <ol class="journey-list">
+
+        <li>
+
+          <span class="journey-number">01</span>
+
+          <strong>SUBMIT</strong>
+
+          <p>
+            Dreams are collected anonymously from people
+            around the world.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="journey-number">02</span>
+
+          <strong>INTERPRET</strong>
+
+          <p>
+            Selected creators transform the dreams into
+            multisensory artworks.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="journey-number">03</span>
+
+          <strong>ENTER</strong>
+
+          <p>
+            Visitors enter the body of a sleeping stranger
+            and cross into the brain.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="journey-number">04</span>
+
+          <strong>WANDER</strong>
+
+          <p>
+            Every room follows a different dream and
+            artistic language.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="journey-number">05</span>
+
+          <strong>WAKE</strong>
+
+          <p>
+            A nightmare destabilises the exhibition
+            and chases visitors toward the exit.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="journey-number">06</span>
+
+          <strong>REMEMBER</strong>
+
+          <p>
+            Visitors leave one of their own dreams
+            for a future edition.
+          </p>
+
+        </li>
+
+      </ol>
+
+    </section>
+
+
+    <!-- ==========================================
+         03 — LES CINQ SALLES
+    =========================================== -->
+
+    <section class="rooms-section">
+
+      <p class="section-number">
+        03 · THE PHYSICAL ROOMS
+      </p>
+
+      <div class="rooms-heading">
+
+        <h3>
+          ONE NIGHT.<br>
+          FIVE ARTISTIC LANGUAGES.
+        </h3>
+
+        <p>
+          Each category defines an emotional territory rather
+          than a fixed visual formula. The submitted dream
+          determines the final artwork.
+        </p>
+
+      </div>
+
+
+      <div class="room-list">
+
+
+        <!-- SALLE CHILDHOOD -->
+
+        <article class="room">
+
+          <span>ROOM 01</span>
+
+          <h4>CHILDHOOD</h4>
+
+          <p>
+            Painted scenery, oversized sculptures, familiar
+            scents and distant childhood recordings.
+          </p>
+
+        </article>
+
+
+        <!-- SALLE ADVENTURE -->
+
+        <article class="room">
+
+          <span>ROOM 02</span>
+
+          <h4>ADVENTURE</h4>
+
+          <p>
+            Playable installations, moving architecture,
+            3D landscapes, projection and wind.
+          </p>
+
+        </article>
+
+
+        <!-- SALLE ROMANCE -->
+
+        <article class="room">
+
+          <span>ROOM 03</span>
+
+          <h4>ROMANCE</h4>
+
+          <p>
+            Dance films, translucent fabrics, intimate sound,
+            perfume and faceless human figures.
+          </p>
+
+        </article>
+
+
+        <!-- SALLE ACTION -->
+
+        <article class="room">
+
+          <span>ROOM 04</span>
+
+          <h4>ACTION</h4>
+
+          <p>
+            Responsive lights, powerful bass, practical effects
+            and choreographed physical movement.
+          </p>
+
+        </article>
+
+
+        <!-- SALLE HORREUR -->
+
+        <article class="room nightmare-room">
+
+          <span>ROOM 05</span>
+
+          <h4>HORROR</h4>
+
+          <p>
+            The exhibition breaks its own rules. Flashing lights,
+            distorted sound and an invisible presence chase
+            visitors toward the waking world.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         04 — SCIENCE DU SOMMEIL
+    =========================================== -->
+
+    <section class="case-section case-grid science-section">
+
+      <p class="section-number">
+        04 · SCIENCE AS DRAMATURGY
+      </p>
+
+      <div class="section-title">
+
+        <h3>
+          THE BRAIN NEVER<br>
+          FULLY GOES QUIET.
+        </h3>
+
+      </div>
+
+      <div class="section-text">
+
+        <p>
+          Dreams can occur during both REM and non-REM sleep.
+          Memory fragments, emotional processing and sensory
+          associations contribute to their unusual narratives.
+        </p>
+
+        <p>
+          The exhibition uses sleep science as a structural
+          language rather than presenting a literal scientific
+          simulation.
+        </p>
+
+        <p>
+          The descent toward horror is a creative decision.
+          Longer periods of REM sleep toward morning inspire
+          the increasing visual and emotional intensity.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         05 — CRÉATEURS ET PRODUCTION
+    =========================================== -->
+
+    <section class="creators-section">
+
+      <p class="section-number">
+        05 · A LIVING, INTERNATIONAL MUSEUM
+      </p>
+
+      <h3>
+        THE COLLECTION CHANGES<br>
+        EVERY TIME THE WORLD SLEEPS.
+      </h3>
+
+      <div class="creator-columns">
+
+        <p>
+          Dreams are gathered through an online submission
+          room. Contributors can remain anonymous and retain
+          control over how their stories are interpreted.
+        </p>
+
+        <p>
+          Every edition invites artists, filmmakers, musicians,
+          sculptors, scenographers and creative technologists
+          from different countries.
+        </p>
+
+        <p>
+          The rooms combine painting, sculpture, projections,
+          screens, spatial sound, interactive technology,
+          lighting, scent and carefully designed 4D effects.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         FOOTER DU PROJET
+    =========================================== -->
+
+    <footer class="project-footer">
+
+      <div>
+
+        <p class="footer-label">
+          CREATIVE DIRECTION & CONCEPT
+        </p>
+
+        <p>LOU-ANN DE SIA</p>
+
+      </div>
+
+
+      <div>
+
+        <p class="footer-label">
+          PROJECT TYPE
+        </p>
+
+        <p>
+          IMMERSIVE EXHIBITION · DIGITAL PROTOTYPE
+        </p>
+
+      </div>
+
+
+      <button id="replay-button">
+        EXPERIENCE THE PROTOTYPE ↗
+      </button>
+
+    </footer>
+
+  </article>
+
+
+  <!-- ==========================================
+       SALLE FINALE — ENVOYER SON RÊVE
+  =========================================== -->
+
+  <dialog id="dream-dialog">
+
+    <button
+      id="close-dialog"
+      class="close-dialog"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+    <p class="case-label">
+      THE WAKING ROOM
+    </p>
+
+    <h2>
+      WHAT DID YOU DREAM?
+    </h2>
+
+    <p>
+      Leave one fragment for a future edition
+      of the museum.
+    </p>
+
+    <label for="dream-input">
+      YOUR DREAM
+    </label>
+
+    <textarea
+      id="dream-input"
+      maxlength="600"
+      placeholder="I was walking through..."
+    ></textarea>
+
+    <button id="submit-dream" class="main-button">
+      SEND INTO THE ARCHIVE
+    </button>
+
+    <button id="view-project-button" class="dialog-link">
+      VIEW THE PHYSICAL EXHIBITION ↓
+    </button>
+
+    <p class="privacy-note">
+      PROTOTYPE MODE · YOUR DREAM REMAINS ON THIS DEVICE
+    </p>
+
+  </dialog>
+
+
+  <!-- JavaScript et univers 3D -->
+  <script
+    type="module"
+    src="script.js"
+  ></script>
+
+</body>
+</html>
