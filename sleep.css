@@ -299,7 +299,7 @@ a {
 
 
 /* ==========================================
-   CERVEAU
+   CERVEAU FÉÉRIQUE
 ========================================== */
 
 #brain {
@@ -313,12 +313,23 @@ a {
 
   opacity: var(--brain-opacity);
 
+  /*
+   * Les particules se mélangent à la lumière
+   * du visage plutôt que d’être simplement
+   * posées dessus.
+   */
+
   mix-blend-mode: screen;
 
   filter:
+    saturate(1.25)
     drop-shadow(
-      0 0 14px
-      rgba(194, 168, 255, 0.75)
+      0 0 8px
+      rgba(225, 202, 255, 0.72)
+    )
+    drop-shadow(
+      0 0 22px
+      rgba(137, 105, 255, 0.35)
     );
 
   pointer-events: none;
