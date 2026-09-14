@@ -8,46 +8,42 @@
    OUTILS
 ========================================== */
 
-function clamp(
-  value,
-  minimum,
-  maximum
-) {
+function clamp(value, minimum, maximum) {
   return Math.min(
-    Math.max(
-      value,
-      minimum
-    ),
+    Math.max(value, minimum),
     maximum
   );
 }
 
 
-function range(
-  progress,
-  start,
-  end
-) {
+function range(progress, start, end) {
   return clamp(
-    (
-      progress -
-      start
-    ) /
-    (
-      end -
-      start
-    ),
+    (progress - start) /
+    (end - start),
     0,
     1
   );
 }
 
 
+function smooth(value) {
+  return (
+    value *
+    value *
+    (3 - 2 * value)
+  );
+}
+
+
 /* ==========================================
-   ÉLÉMENTS HTML
+   ÉLÉMENTS PRINCIPAUX
+
+   Le scroll est initialisé avant les canvas :
+   une erreur graphique ne peut donc plus
+   bloquer la narration.
 ========================================== */
 
-const sleeperPage =
+const page =
   document.querySelector(
     ".sleeper-page"
   );
@@ -59,15 +55,15 @@ const narration =
   );
 
 
-const revelation =
+const progressFill =
   document.querySelector(
-    "#dream-revelation"
+    "#progress-fill"
   );
 
 
-const progressFill =
+const scrollInstruction =
   document.querySelector(
-    "#scroll-progress-fill"
+    "#scroll-instruction"
   );
 
 
@@ -83,9 +79,9 @@ const sleepStage =
   );
 
 
-const awarenessValue =
+const awareness =
   document.querySelector(
-    "#awareness-value"
+    "#awareness"
   );
 
 
@@ -103,11 +99,9 @@ const enterMind =
 
 /* ==========================================
    PHRASES
-
-   Une seule phrase est injectée à la fois.
 ========================================== */
 
-const narrationSteps = [
+const phrases = [
   {
     start: 0,
     text:
@@ -115,308 +109,265 @@ const narrationSteps = [
   },
 
   {
-    start: 0.16,
+    start: 0.15,
     text:
       "the eyes <em>close.</em>"
   },
 
   {
-    start: 0.31,
+    start: 0.3,
     text:
       "and the mind <em>begins to wander…</em>"
   },
 
   {
-    start: 0.47,
+    start: 0.46,
     text:
       "following no rules, <em>obeying no laws.</em>"
   },
 
   {
-    start: 0.63,
+    start: 0.62,
     text:
       "with no beginning <em>and no end.</em>"
   },
 
   {
-    start: 0.78,
+    start: 0.77,
     text:
       "it creates…"
   }
 ];
 
 
-let currentNarrationIndex =
-  -1;
+let currentPhrase = 0;
 
+let phraseTimer = null;
 
-let narrationTimeout;
+let ticking = false;
 
 
 /* ==========================================
-   CHANGER UNE PHRASE SANS CHEVAUCHEMENT
+   CHANGER LA PHRASE
 ========================================== */
 
-function displayNarration(
-  newIndex
-) {
+function changePhrase(index) {
   if (
-    newIndex ===
-    currentNarrationIndex
+    index === currentPhrase
   ) {
     return;
   }
 
 
-  currentNarrationIndex =
-    newIndex;
+  currentPhrase = index;
 
 
   window.clearTimeout(
-    narrationTimeout
+    phraseTimer
   );
 
 
   narration.classList.add(
-    "changing"
+    "is-changing"
   );
 
 
-  narrationTimeout =
+  phraseTimer =
     window.setTimeout(
       function () {
         narration.innerHTML =
-          narrationSteps[
-            newIndex
-          ].text;
+          phrases[index].text;
 
 
         narration.classList.remove(
-          "changing"
+          "is-changing"
         );
       },
-      440
+      320
     );
 }
 
 
 /* ==========================================
-   MISE À JOUR DU SCROLL
+   MISE À JOUR DU STORYTELLING
 ========================================== */
 
-function updateSleeper() {
+function updateStory() {
   const maximumScroll =
-    document.documentElement.scrollHeight -
-    window.innerHeight;
+    Math.max(
+      1,
+      document.documentElement.scrollHeight -
+      window.innerHeight
+    );
 
 
   const progress =
-    maximumScroll > 0
-      ? clamp(
-          window.scrollY /
-          maximumScroll,
-          0,
-          1
-        )
-      : 0;
+    clamp(
+      window.scrollY /
+      maximumScroll,
+      0,
+      1
+    );
 
 
-  /* Trouver la phrase actuelle */
+  /* Phrase actuelle */
 
-  let newNarrationIndex = 0;
+  let selectedPhrase = 0;
 
 
-  narrationSteps.forEach(
-    function (
-      step,
-      index
+  for (
+    let index = 0;
+    index < phrases.length;
+    index++
+  ) {
+    if (
+      progress >=
+      phrases[index].start
     ) {
-      if (
-        progress >=
-        step.start
-      ) {
-        newNarrationIndex =
-          index;
-      }
+      selectedPhrase = index;
     }
+  }
+
+
+  changePhrase(
+    selectedPhrase
   );
 
 
-  displayNarration(
-    newNarrationIndex
-  );
+  /* Fermeture des yeux */
+
+  const eyeMovement =
+    smooth(
+      range(
+        progress,
+        0.13,
+        0.28
+      )
+    );
 
 
-  /* ==========================================
-   FERMETURE NATURELLE DES YEUX
-
-   La transition commence doucement pendant
-   la deuxième phrase, puis reste fermée.
-========================================== */
-
-const eyeProgress =
-  range(
-    progress,
-    0.135,
-    0.285
-  );
-
-
-/*
- * Courbe douce :
- * évite une fermeture droite et mécanique.
- */
-
-/* ==========================================
-   FERMETURE PROGRESSIVE DES YEUX
-========================================== */
-
-const eyeProgress =
-  range(
-    progress,
-    0.135,
-    0.285
-  );
-
-
-const eyesClosed =
-  eyeProgress *
-  eyeProgress *
-  (
-    3 -
-    2 *
-    eyeProgress
-  );
-
-
-/* Apparition du cerveau */
-
+  /* Apparition du cerveau */
 
   const brainOpacity =
-    range(
-      progress,
-      0.3,
-      0.69
+    smooth(
+      range(
+        progress,
+        0.29,
+        0.7
+      )
     );
 
 
-  /* Disparition du visage */
-
-  const faceDisappearance =
-    range(
-      progress,
-      0.67,
-      0.91
+  const brainGlow =
+    smooth(
+      range(
+        progress,
+        0.35,
+        0.82
+      )
     );
 
 
-  const faceOpacity =
+  /* Effacement progressif du portrait */
+
+  const portraitFade =
+    range(
+      progress,
+      0.7,
+      0.94
+    );
+
+
+  const portraitOpacity =
     1 -
-    faceDisappearance *
-    0.84;
+    portraitFade *
+    0.83;
 
 
-  const faceScale =
+  const portraitScale =
     1 +
     range(
       progress,
       0.2,
-      0.87
+      0.88
     ) *
-    0.12;
+    0.075;
 
 
-  const faceBlur =
-    range(
-      progress,
-      0.76,
-      0.94
-    ) *
-    4;
+  /* Révélation finale */
 
-
-  const brainIntensity =
-    range(
-      progress,
-      0.38,
-      0.86
+  const finalOpacity =
+    smooth(
+      range(
+        progress,
+        0.86,
+        0.97
+      )
     );
 
 
-  const revelationOpacity =
-    range(
-      progress,
-      0.86,
-      0.97
-    );
+  page.style.setProperty(
+    "--eyes-closed",
+    eyeMovement
+  );
 
 
-  /* Envoyer les valeurs au CSS */
-
-  sleeperPage.style.setProperty(
-  "--eyes-closed",
-  eyesClosed
-);
-
-
-  sleeperPage.style.setProperty(
+  page.style.setProperty(
     "--brain-opacity",
     brainOpacity
   );
 
 
-  sleeperPage.style.setProperty(
-    "--brain-intensity",
-    brainIntensity
+  page.style.setProperty(
+    "--brain-glow",
+    brainGlow
   );
 
 
-  sleeperPage.style.setProperty(
-    "--face-opacity",
-    faceOpacity
+  page.style.setProperty(
+    "--portrait-opacity",
+    portraitOpacity
   );
 
 
-  sleeperPage.style.setProperty(
-    "--face-scale",
-    faceScale
+  page.style.setProperty(
+    "--portrait-scale",
+    portraitScale
   );
 
 
-  sleeperPage.style.setProperty(
-    "--face-blur",
-    faceBlur + "px"
+  page.style.setProperty(
+    "--final-opacity",
+    finalOpacity
   );
 
 
-  sleeperPage.style.setProperty(
-    "--revelation-opacity",
-    revelationOpacity
-  );
-
-
-  /* Révélation finale */
+  /* État final */
 
   if (
-    progress > 0.86
+    progress >= 0.86
   ) {
-    sleeperPage.classList.add(
-      "revelation-active"
+    page.classList.add(
+      "final-active"
     );
 
-    narration.style.visibility =
-      "hidden";
+
+    narration.classList.add(
+      "is-hidden"
+    );
   } else {
-    sleeperPage.classList.remove(
-      "revelation-active"
+    page.classList.remove(
+      "final-active"
     );
 
-    narration.style.visibility =
-      "visible";
+
+    narration.classList.remove(
+      "is-hidden"
+    );
   }
 
 
-  /* Progression verticale */
+  /* Barre de progression */
 
   progressFill.style.height =
     progress *
@@ -424,25 +375,30 @@ const eyesClosed =
     "%";
 
 
-  /* Informations du laboratoire */
+  /* Indication de scroll */
 
-  const awareness =
-    Math.max(
-      0,
-      Math.round(
-        100 -
-        range(
-          progress,
-          0.06,
-          0.72
-        ) *
-        100
-      )
+  scrollInstruction.style.opacity =
+    progress > 0.04
+      ? "0"
+      : "0.48";
+
+
+  /* Données */
+
+  const awarenessValue =
+    Math.round(
+      100 -
+      range(
+        progress,
+        0.05,
+        0.72
+      ) *
+      100
     );
 
 
-  awarenessValue.textContent =
-    awareness +
+  awareness.textContent =
+    awarenessValue +
     "%";
 
 
@@ -452,13 +408,15 @@ const eyesClosed =
     sleepStage.textContent =
       "WAKEFULNESS";
 
+
     neuralStatus.textContent =
       "BASELINE";
   } else if (
-    progress < 0.43
+    progress < 0.44
   ) {
     sleepStage.textContent =
       "N1 · HYPNAGOGIA";
+
 
     neuralStatus.textContent =
       "RISING";
@@ -468,18 +426,21 @@ const eyesClosed =
     sleepStage.textContent =
       "LIGHT SLEEP";
 
+
     neuralStatus.textContent =
       "WANDERING";
   } else {
     sleepStage.textContent =
       "DREAM STATE";
 
+
     neuralStatus.textContent =
       "UNRESTRICTED";
   }
 
 
-  const elapsedMinutes =
+  const minutes =
+    47 +
     Math.floor(
       progress *
       8
@@ -488,890 +449,47 @@ const eyesClosed =
 
   sleepClock.textContent =
     "23:" +
-    String(
-      47 +
-      elapsedMinutes
-    ).padStart(
+    String(minutes).padStart(
       2,
       "0"
     );
 
 
-  brainEnergy =
-    brainIntensity;
+  /*
+   * Variable indépendante utilisée
+   * uniquement par le cerveau.
+   */
+
+  window.brainEnergy =
+    brainGlow;
+
+
+  ticking = false;
 }
 
 
 /* ==========================================
-   ÉTOILES DE FOND
+   ÉCOUTE DU SCROLL
 ========================================== */
 
-const starCanvas =
-  document.querySelector(
-    "#star-canvas"
-  );
-
-
-const starContext =
-  starCanvas.getContext(
-    "2d"
-  );
-
-
-let starWidth = 0;
-
-let starHeight = 0;
-
-let stars = [];
-
-
-let pointerX = 0;
-
-let pointerY = 0;
-
-let pointerTargetX = 0;
-
-let pointerTargetY = 0;
-
-
-/* Créer les étoiles */
-
-function createStars() {
-  stars = [];
-
-
-  const starCount =
-    window.innerWidth < 700
-      ? 650
-      : 1400;
-
-
-  for (
-    let index = 0;
-    index < starCount;
-    index++
-  ) {
-    const milkyStar =
-      Math.random() < 0.58;
-
-
-    const x =
-      Math.random() *
-      starWidth;
-
-
-    let y;
-
-
-    if (milkyStar) {
-      const band =
-        starHeight *
-        0.73 +
-
-        (
-          x /
-          starWidth -
-          0.5
-        ) *
-
-        starHeight *
-        0.14;
-
-
-      y =
-        band +
-
-        (
-          Math.random() -
-          0.5
-        ) *
-
-        starHeight *
-        0.17;
-    } else {
-      y =
-        Math.random() *
-        starHeight;
-    }
-
-
-    stars.push({
-      x: x,
-      y: y,
-
-      radius:
-        0.25 +
-        Math.random() *
-        1.35,
-
-      opacity:
-        0.2 +
-        Math.random() *
-        0.8,
-
-      speed:
-        0.4 +
-        Math.random() *
-        1.7,
-
-      offset:
-        Math.random() *
-        Math.PI *
-        2,
-
-      depth:
-        0.2 +
-        Math.random() *
-        0.8,
-
-      milky:
-        milkyStar
-    });
-  }
-}
-
-
-/* Redimensionner le canvas */
-
-function resizeStars() {
-  const pixelRatio =
-    Math.min(
-      window.devicePixelRatio,
-      2
-    );
-
-
-  starWidth =
-    window.innerWidth;
-
-
-  starHeight =
-    window.innerHeight;
-
-
-  starCanvas.width =
-    starWidth *
-    pixelRatio;
-
-
-  starCanvas.height =
-    starHeight *
-    pixelRatio;
-
-
-  starContext.setTransform(
-    pixelRatio,
-    0,
-    0,
-    pixelRatio,
-    0,
-    0
-  );
-
-
-  createStars();
-}
-
-
-/* ==========================================
-   CERVEAU DE PARTICULES
-========================================== */
-
-const brainCanvas =
-  document.querySelector(
-    "#brain-canvas"
-  );
-
-
-const brainContext =
-  brainCanvas.getContext(
-    "2d"
-  );
-
-
-let brainWidth = 0;
-
-let brainHeight = 0;
-
-let brainParticles = [];
-
-let brainBursts = [];
-
-let brainEnergy = 0;
-
-
-/* Créer le volume du cerveau */
-
-function createBrain() {
-  brainParticles = [];
-
-
-  const particleCount =
-    window.innerWidth < 700
-      ? 310
-      : 560;
-
-
-  for (
-    let index = 0;
-    index < particleCount;
-    index++
-  ) {
-    const side =
-      Math.random() < 0.5
-        ? -1
-        : 1;
-
-
-    const angle =
-      Math.random() *
-      Math.PI *
-      2;
-
-
-    const radius =
-      Math.sqrt(
-        Math.random()
-      );
-
-
-    const centerX =
-      brainWidth *
-      (
-        side < 0
-          ? 0.38
-          : 0.62
-      );
-
-
-    brainParticles.push({
-      x:
-        centerX +
-
-        Math.cos(angle) *
-        radius *
-        brainWidth *
-        0.27,
-
-      y:
-        brainHeight *
-        0.52 +
-
-        Math.sin(angle) *
-        radius *
-        brainHeight *
-        0.38,
-
-      originX: 0,
-      originY: 0,
-
-      radius:
-        0.5 +
-        Math.random() *
-        1.8,
-
-      phase:
-        Math.random() *
-        Math.PI *
-        2,
-
-      speed:
-        0.5 +
-        Math.random() *
-        2,
-
-      brightness:
-        0.2 +
-        Math.random() *
-        0.8
-    });
-  }
-
-
-  brainParticles.forEach(
-    function (particle) {
-      particle.originX =
-        particle.x;
-
-      particle.originY =
-        particle.y;
-    }
-  );
-}
-
-
-/* Redimensionner le cerveau */
-
-function resizeBrain() {
-  const pixelRatio =
-    Math.min(
-      window.devicePixelRatio,
-      2
-    );
-
-
-  const bounds =
-    brainCanvas.getBoundingClientRect();
-
-
-  brainWidth =
-    bounds.width;
-
-
-  brainHeight =
-    bounds.height;
-
-
-  brainCanvas.width =
-    brainWidth *
-    pixelRatio;
-
-
-  brainCanvas.height =
-    brainHeight *
-    pixelRatio;
-
-
-  brainContext.setTransform(
-    pixelRatio,
-    0,
-    0,
-    pixelRatio,
-    0,
-    0
-  );
-
-
-  createBrain();
-}
-
-
-/* ==========================================
-   MINI-EXPLOSIONS NEURONALES
-========================================== */
-
-function createBrainBurst() {
-  if (
-    brainEnergy < 0.12
-  ) {
+function requestStoryUpdate() {
+  if (ticking) {
     return;
   }
 
 
-  const source =
-    brainParticles[
-      Math.floor(
-        Math.random() *
-        brainParticles.length
-      )
-    ];
-
-
-  brainBursts.push({
-    x: source.x,
-    y: source.y,
-
-    radius: 2,
-
-    opacity:
-      0.45 +
-      brainEnergy *
-      0.55,
-
-    growth:
-      0.7 +
-      brainEnergy *
-      2
-  });
-}
-
-
-/* ==========================================
-   ANIMATION COMPLÈTE
-========================================== */
-
-let previousBurstTime = 0;
-
-
-function animateWorld(
-  currentTime
-) {
-  /* Étoiles */
-
-  starContext.clearRect(
-    0,
-    0,
-    starWidth,
-    starHeight
-  );
-
-
-  pointerX +=
-    (
-      pointerTargetX -
-      pointerX
-    ) *
-    0.025;
-
-
-  pointerY +=
-    (
-      pointerTargetY -
-      pointerY
-    ) *
-    0.025;
-
-
-  stars.forEach(
-    function (star) {
-      const twinkle =
-        0.7 +
-
-        Math.sin(
-          currentTime *
-          0.001 *
-          star.speed +
-
-          star.offset
-        ) *
-
-        0.3;
-
-
-      starContext.beginPath();
-
-
-      starContext.arc(
-        star.x +
-        pointerX *
-        star.depth,
-
-        star.y +
-        pointerY *
-        star.depth,
-
-        star.radius,
-
-        0,
-
-        Math.PI *
-        2
-      );
-
-
-      starContext.fillStyle =
-        star.milky
-
-          ? "rgba(215,205,255," +
-            star.opacity *
-            twinkle +
-            ")"
-
-          : "rgba(255,250,240," +
-            star.opacity *
-            twinkle +
-            ")";
-
-
-      starContext.fill();
-    }
-  );
-
-
-  /* Cerveau */
-
-  brainContext.clearRect(
-    0,
-    0,
-    brainWidth,
-    brainHeight
-  );
-
-
-  brainParticles.forEach(
-    function (
-      particle,
-      index
-    ) {
-      const movement =
-        0.6 +
-        brainEnergy *
-        3.4;
-
-
-      particle.x =
-        particle.originX +
-
-        Math.sin(
-          currentTime *
-          0.001 *
-          particle.speed +
-
-          particle.phase
-        ) *
-
-        movement;
-
-
-      particle.y =
-        particle.originY +
-
-        Math.cos(
-          currentTime *
-          0.0013 *
-          particle.speed +
-
-          particle.phase
-        ) *
-
-        movement;
-
-
-      const pulse =
-        0.45 +
-
-        Math.sin(
-          currentTime *
-          0.003 *
-          particle.speed +
-
-          particle.phase
-        ) *
-
-        0.4;
-
-
-      const flash =
-        Math.random() <
-        brainEnergy *
-        0.008
-
-          ? 1
-
-          : 0;
-
-
-      brainContext.beginPath();
-
-
-      brainContext.arc(
-        particle.x,
-        particle.y,
-
-        particle.radius +
-        flash *
-        2.5,
-
-        0,
-
-        Math.PI *
-        2
-      );
-
-
-      brainContext.fillStyle =
-        "rgba(210,184,255," +
-
-        (
-          particle.brightness *
-          pulse +
-          flash *
-          0.65
-        ) +
-
-        ")";
-
-
-      brainContext.fill();
-
-
-      /*
-       * Quelques connexions organiques
-       * très courtes apparaissent puis
-       * disparaissent. Aucun trait fixe.
-       */
-
-      if (
-        brainEnergy > 0.35 &&
-        index % 11 === 0
-      ) {
-        const neighbour =
-          brainParticles[
-            (
-              index + 5
-            ) %
-            brainParticles.length
-          ];
-
-
-        const distance =
-          Math.hypot(
-            neighbour.x -
-            particle.x,
-
-            neighbour.y -
-            particle.y
-          );
-
-
-        if (
-          distance < 42
-        ) {
-          brainContext.beginPath();
-
-          brainContext.moveTo(
-            particle.x,
-            particle.y
-          );
-
-          brainContext.quadraticCurveTo(
-            (
-              particle.x +
-              neighbour.x
-            ) /
-            2 +
-
-            Math.sin(
-              currentTime *
-              0.002 +
-              index
-            ) *
-            5,
-
-            (
-              particle.y +
-              neighbour.y
-            ) /
-            2,
-
-            neighbour.x,
-            neighbour.y
-          );
-
-
-          brainContext.strokeStyle =
-            "rgba(174,145,255," +
-
-            brainEnergy *
-            0.12 +
-
-            ")";
-
-
-          brainContext.lineWidth =
-            0.45;
-
-
-          brainContext.stroke();
-        }
-      }
-    }
-  );
-
-
-  /* Génération des explosions */
-
-  const burstDelay =
-    900 -
-    brainEnergy *
-    720;
-
-
-  if (
-    currentTime -
-    previousBurstTime >
-    burstDelay
-  ) {
-    createBrainBurst();
-
-    previousBurstTime =
-      currentTime;
-  }
-
-
-  /* Dessiner les ondes */
-
-  brainBursts.forEach(
-    function (burst) {
-      burst.radius +=
-        burst.growth;
-
-
-      burst.opacity *=
-        0.94;
-
-
-      brainContext.beginPath();
-
-
-      brainContext.arc(
-        burst.x,
-        burst.y,
-        burst.radius,
-        0,
-        Math.PI * 2
-      );
-
-
-      brainContext.strokeStyle =
-        "rgba(232,219,255," +
-        burst.opacity +
-        ")";
-
-
-      brainContext.lineWidth =
-        1.2;
-
-
-      brainContext.stroke();
-
-
-      brainContext.beginPath();
-
-
-      brainContext.arc(
-        burst.x,
-        burst.y,
-        Math.max(
-          1,
-          burst.radius *
-          0.18
-        ),
-        0,
-        Math.PI * 2
-      );
-
-
-      brainContext.fillStyle =
-        "rgba(255,249,229," +
-        burst.opacity +
-        ")";
-
-
-      brainContext.fill();
-    }
-  );
-
-
-  brainBursts =
-    brainBursts.filter(
-      function (burst) {
-        return burst.opacity >
-          0.02;
-      }
-    );
+  ticking = true;
 
 
   window.requestAnimationFrame(
-    animateWorld
+    updateStory
   );
 }
-
-
-/* ==========================================
-   SOURIS ET PARALLAXE
-========================================== */
-
-window.addEventListener(
-  "pointermove",
-  function (event) {
-    const horizontal =
-      event.clientX /
-      window.innerWidth -
-      0.5;
-
-
-    const vertical =
-      event.clientY /
-      window.innerHeight -
-      0.5;
-
-
-    pointerTargetX =
-      horizontal *
-      15;
-
-
-    pointerTargetY =
-      vertical *
-      10;
-
-
-    sleeperPage.style.setProperty(
-      "--pointer-x",
-      horizontal *
-      9 +
-      "px"
-    );
-
-
-    sleeperPage.style.setProperty(
-      "--pointer-y",
-      vertical *
-      7 +
-      "px"
-    );
-  },
-  {
-    passive: true
-  }
-);
-
-
-/* ==========================================
-   ENTRER DANS LE CERVEAU
-========================================== */
-
-enterMind.addEventListener(
-  "click",
-  function (event) {
-    event.preventDefault();
-
-
-    if (
-      sleeperPage.classList.contains(
-        "entering-brain"
-      )
-    ) {
-      return;
-    }
-
-
-    sleeperPage.classList.add(
-      "entering-brain"
-    );
-
-
-    window.setTimeout(
-      function () {
-        window.location.href =
-          "brain.html";
-      },
-      1400
-    );
-  }
-);
-
-
-/* ==========================================
-   INITIALISATION
-========================================== */
-
-resizeStars();
-
-resizeBrain();
-
-updateSleeper();
-
-
-window.requestAnimationFrame(
-  animateWorld
-);
 
 
 window.addEventListener(
   "scroll",
-  updateSleeper,
+  requestStoryUpdate,
   {
     passive: true
   }
@@ -1380,11 +498,611 @@ window.addEventListener(
 
 window.addEventListener(
   "resize",
-  function () {
-    resizeStars();
-
-    resizeBrain();
-
-    updateSleeper();
+  requestStoryUpdate,
+  {
+    passive: true
   }
 );
+
+
+/* Lancer immédiatement le storytelling */
+
+updateStory();
+
+
+/* ==========================================
+   ÉTOILES
+
+   Ce bloc est indépendant du scroll.
+========================================== */
+
+function initialiseStars() {
+  const canvas =
+    document.querySelector(
+      "#stars"
+    );
+
+
+  if (
+    !canvas ||
+    !canvas.getContext
+  ) {
+    return;
+  }
+
+
+  const context =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  let width = 0;
+
+  let height = 0;
+
+  let stars = [];
+
+
+  function resize() {
+    const ratio =
+      Math.min(
+        window.devicePixelRatio || 1,
+        2
+      );
+
+
+    width =
+      window.innerWidth;
+
+
+    height =
+      window.innerHeight;
+
+
+    canvas.width =
+      width *
+      ratio;
+
+
+    canvas.height =
+      height *
+      ratio;
+
+
+    context.setTransform(
+      ratio,
+      0,
+      0,
+      ratio,
+      0,
+      0
+    );
+
+
+    stars = [];
+
+
+    const total =
+      width < 700
+        ? 340
+        : 820;
+
+
+    for (
+      let index = 0;
+      index < total;
+      index++
+    ) {
+      stars.push({
+        x:
+          Math.random() *
+          width,
+
+        y:
+          Math.random() *
+          height,
+
+        radius:
+          0.25 +
+          Math.random() *
+          1.35,
+
+        opacity:
+          0.2 +
+          Math.random() *
+          0.8,
+
+        speed:
+          0.5 +
+          Math.random() *
+          1.8,
+
+        phase:
+          Math.random() *
+          Math.PI *
+          2
+      });
+    }
+  }
+
+
+  function draw(time) {
+    context.clearRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+
+    for (
+      const star of stars
+    ) {
+      const pulse =
+        0.7 +
+        Math.sin(
+          time *
+          0.001 *
+          star.speed +
+          star.phase
+        ) *
+        0.3;
+
+
+      context.beginPath();
+
+
+      context.arc(
+        star.x,
+        star.y,
+        star.radius,
+        0,
+        Math.PI * 2
+      );
+
+
+      context.fillStyle =
+        "rgba(242,238,255," +
+        star.opacity *
+        pulse +
+        ")";
+
+
+      context.fill();
+    }
+
+
+    window.requestAnimationFrame(
+      draw
+    );
+  }
+
+
+  resize();
+
+
+  window.addEventListener(
+    "resize",
+    resize,
+    {
+      passive: true
+    }
+  );
+
+
+  window.requestAnimationFrame(
+    draw
+  );
+}
+
+
+/* ==========================================
+   CERVEAU DE PARTICULES
+
+   Aucun trait : seulement des points,
+   impulsions et mini-explosions.
+========================================== */
+
+function initialiseBrain() {
+  const canvas =
+    document.querySelector(
+      "#brain"
+    );
+
+
+  if (
+    !canvas ||
+    !canvas.getContext
+  ) {
+    return;
+  }
+
+
+  const context =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  let width = 0;
+
+  let height = 0;
+
+  let neurons = [];
+
+  let bursts = [];
+
+
+  function resize() {
+    const ratio =
+      Math.min(
+        window.devicePixelRatio || 1,
+        2
+      );
+
+
+    width =
+      window.innerWidth;
+
+
+    height =
+      window.innerHeight;
+
+
+    canvas.width =
+      width *
+      ratio;
+
+
+    canvas.height =
+      height *
+      ratio;
+
+
+    context.setTransform(
+      ratio,
+      0,
+      0,
+      ratio,
+      0,
+      0
+    );
+
+
+    neurons = [];
+
+
+    const total =
+      width < 700
+        ? 180
+        : 360;
+
+
+    for (
+      let index = 0;
+      index < total;
+      index++
+    ) {
+      const angle =
+        Math.random() *
+        Math.PI *
+        2;
+
+
+      const radius =
+        Math.sqrt(
+          Math.random()
+        );
+
+
+      neurons.push({
+        x:
+          width *
+          0.5 +
+          Math.cos(angle) *
+          radius *
+          Math.min(
+            width * 0.145,
+            205
+          ),
+
+        y:
+          height *
+          0.285 +
+          Math.sin(angle) *
+          radius *
+          Math.min(
+            height * 0.145,
+            120
+          ),
+
+        size:
+          0.5 +
+          Math.random() *
+          1.8,
+
+        phase:
+          Math.random() *
+          Math.PI *
+          2,
+
+        speed:
+          0.6 +
+          Math.random() *
+          2
+      });
+    }
+  }
+
+
+  function createBurst() {
+    const energy =
+      window.brainEnergy || 0;
+
+
+    if (
+      energy < 0.18 ||
+      neurons.length === 0
+    ) {
+      return;
+    }
+
+
+    const source =
+      neurons[
+        Math.floor(
+          Math.random() *
+          neurons.length
+        )
+      ];
+
+
+    bursts.push({
+      x: source.x,
+      y: source.y,
+      radius: 2,
+      opacity:
+        0.45 +
+        energy *
+        0.5
+    });
+  }
+
+
+  let previousBurst = 0;
+
+
+  function draw(time) {
+    const energy =
+      window.brainEnergy || 0;
+
+
+    context.clearRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+
+    for (
+      const neuron of neurons
+    ) {
+      const pulse =
+        0.45 +
+        Math.sin(
+          time *
+          0.003 *
+          neuron.speed +
+          neuron.phase
+        ) *
+        0.42;
+
+
+      const flash =
+        Math.random() <
+        energy *
+        0.009
+          ? 1
+          : 0;
+
+
+      context.beginPath();
+
+
+      context.arc(
+        neuron.x +
+        Math.sin(
+          time *
+          0.001 +
+          neuron.phase
+        ) *
+        energy *
+        3,
+
+        neuron.y +
+        Math.cos(
+          time *
+          0.0013 +
+          neuron.phase
+        ) *
+        energy *
+        3,
+
+        neuron.size +
+        flash *
+        2.8,
+
+        0,
+        Math.PI *
+        2
+      );
+
+
+      context.fillStyle =
+        "rgba(220,196,255," +
+        clamp(
+          pulse +
+          flash *
+          0.6,
+          0,
+          1
+        ) +
+        ")";
+
+
+      context.fill();
+    }
+
+
+    const delay =
+      950 -
+      energy *
+      760;
+
+
+    if (
+      time -
+      previousBurst >
+      delay
+    ) {
+      createBurst();
+
+      previousBurst = time;
+    }
+
+
+    for (
+      const burst of bursts
+    ) {
+      burst.radius +=
+        0.8 +
+        energy *
+        1.7;
+
+
+      burst.opacity *=
+        0.94;
+
+
+      context.beginPath();
+
+
+      context.arc(
+        burst.x,
+        burst.y,
+        burst.radius,
+        0,
+        Math.PI *
+        2
+      );
+
+
+      context.strokeStyle =
+        "rgba(232,218,255," +
+        burst.opacity +
+        ")";
+
+
+      context.lineWidth =
+        1.15;
+
+
+      context.stroke();
+    }
+
+
+    bursts =
+      bursts.filter(
+        function (burst) {
+          return burst.opacity >
+            0.025;
+        }
+      );
+
+
+    window.requestAnimationFrame(
+      draw
+    );
+  }
+
+
+  resize();
+
+
+  window.addEventListener(
+    "resize",
+    resize,
+    {
+      passive: true
+    }
+  );
+
+
+  window.requestAnimationFrame(
+    draw
+  );
+}
+
+
+/*
+ * Chaque effet est protégé séparément.
+ * Même s’il échoue, le scroll continue.
+ */
+
+try {
+  initialiseStars();
+} catch (error) {
+  console.warn(
+    "Star animation unavailable:",
+    error
+  );
+}
+
+
+try {
+  initialiseBrain();
+} catch (error) {
+  console.warn(
+    "Brain animation unavailable:",
+    error
+  );
+}
+
+
+/* ==========================================
+   ENTRÉE DANS LE CERVEAU
+========================================== */
+
+if (enterMind) {
+  enterMind.addEventListener(
+    "click",
+    function (event) {
+      event.preventDefault();
+
+
+      if (
+        page.classList.contains(
+          "entering"
+        )
+      ) {
+        return;
+      }
+
+
+      page.classList.add(
+        "entering"
+      );
+
+
+      window.setTimeout(
+        function () {
+          window.location.href =
+            "brain.html";
+        },
+        1350
+      );
+    }
+  );
+}
