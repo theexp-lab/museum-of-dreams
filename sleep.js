@@ -698,10 +698,12 @@ function initialiseStars() {
 
 
 /* ==========================================
-   CERVEAU DE PARTICULES
+   CERVEAU FÉÉRIQUE
 
-   Aucun trait : seulement des points,
-   impulsions et mini-explosions.
+   Poussière magique, étoiles, spirales
+   et floraisons lumineuses.
+
+   Aucun trait neuronal.
 ========================================== */
 
 function initialiseBrain() {
@@ -729,10 +731,148 @@ function initialiseBrain() {
 
   let height = 0;
 
-  let neurons = [];
+  let centerX = 0;
 
-  let bursts = [];
+  let centerY = 0;
 
+  let radiusX = 0;
+
+  let radiusY = 0;
+
+  let fairies = [];
+
+  let blossoms = [];
+
+  let previousBlossom = 0;
+
+
+  /* Couleurs magiques */
+
+  const colours = [
+    {
+      red: 226,
+      green: 207,
+      blue: 255
+    },
+
+    {
+      red: 185,
+      green: 151,
+      blue: 255
+    },
+
+    {
+      red: 255,
+      green: 213,
+      blue: 242
+    },
+
+    {
+      red: 255,
+      green: 236,
+      blue: 181
+    },
+
+    {
+      red: 170,
+      green: 218,
+      blue: 255
+    }
+  ];
+
+
+  /* ==========================================
+     CRÉER LA POUSSIÈRE MAGIQUE
+  ========================================== */
+
+  function createFairies() {
+    fairies = [];
+
+
+    const total =
+      width < 700
+        ? 150
+        : 290;
+
+
+    for (
+      let index = 0;
+      index < total;
+      index++
+    ) {
+      const colour =
+        colours[
+          Math.floor(
+            Math.random() *
+            colours.length
+          )
+        ];
+
+
+      fairies.push({
+        angle:
+          Math.random() *
+          Math.PI *
+          2,
+
+        distance:
+          Math.sqrt(
+            Math.random()
+          ),
+
+        heightPosition:
+          (
+            Math.random() -
+            0.5
+          ),
+
+        size:
+          0.45 +
+          Math.random() *
+          2.2,
+
+        glow:
+          3 +
+          Math.random() *
+          11,
+
+        opacity:
+          0.24 +
+          Math.random() *
+          0.72,
+
+        speed:
+          0.12 +
+          Math.random() *
+          0.38,
+
+        pulseSpeed:
+          0.8 +
+          Math.random() *
+          2.8,
+
+        phase:
+          Math.random() *
+          Math.PI *
+          2,
+
+        lift:
+          Math.random() *
+          22,
+
+        star:
+          Math.random() <
+          0.13,
+
+        colour: colour
+      });
+    }
+  }
+
+
+  /* ==========================================
+     REDIMENSIONNEMENT
+  ========================================== */
 
   function resize() {
     const ratio =
@@ -770,108 +910,221 @@ function initialiseBrain() {
     );
 
 
-    neurons = [];
+    /*
+     * Position du cerveau dans le haut
+     * du crâne du nouveau PNG.
+     */
+
+    centerX =
+      width *
+      0.5;
 
 
-    const total =
-      width < 700
-        ? 180
-        : 360;
+    centerY =
+      height *
+      (
+        width < 700
+          ? 0.19
+          : 0.165
+      );
 
 
-    for (
-      let index = 0;
-      index < total;
-      index++
-    ) {
-      const angle =
-        Math.random() *
-        Math.PI *
-        2;
+    radiusX =
+      Math.min(
+        width *
+        (
+          width < 700
+            ? 0.21
+            : 0.125
+        ),
+        205
+      );
 
 
-      const radius =
-        Math.sqrt(
-          Math.random()
-        );
+    radiusY =
+      Math.min(
+        height *
+        0.09,
+        100
+      );
 
 
-      neurons.push({
-        x:
-  width *
-  0.5 +
-  Math.cos(angle) *
-  radius *
-  Math.min(
-    width * 0.12,
-    185
-  ),
-
-y:
-  height *
-  0.155 +
-  Math.sin(angle) *
-  radius *
-  Math.min(
-    height * 0.075,
-    82
-  ),
-
-        size:
-          0.5 +
-          Math.random() *
-          1.8,
-
-        phase:
-          Math.random() *
-          Math.PI *
-          2,
-
-        speed:
-          0.6 +
-          Math.random() *
-          2
-      });
-    }
+    createFairies();
   }
 
 
-  function createBurst() {
+  /* ==========================================
+     PETITE FLORAISON LUMINEUSE
+  ========================================== */
+
+  function createBlossom() {
     const energy =
       window.brainEnergy || 0;
 
 
     if (
-      energy < 0.18 ||
-      neurons.length === 0
+      energy < 0.16
     ) {
       return;
     }
 
 
-    const source =
-      neurons[
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+
+    const distance =
+      Math.sqrt(
+        Math.random()
+      );
+
+
+    const colour =
+      colours[
         Math.floor(
           Math.random() *
-          neurons.length
+          colours.length
         )
       ];
 
 
-    bursts.push({
-      x: source.x,
-      y: source.y,
-      radius: 2,
+    blossoms.push({
+      x:
+        centerX +
+        Math.cos(angle) *
+        radiusX *
+        distance,
+
+      y:
+        centerY +
+        Math.sin(angle) *
+        radiusY *
+        distance,
+
+      radius:
+        1.5,
+
       opacity:
-        0.45 +
+        0.65 +
         energy *
-        0.5
+        0.3,
+
+      rotation:
+        Math.random() *
+        Math.PI,
+
+      petals:
+        5 +
+        Math.floor(
+          Math.random() *
+          4
+        ),
+
+      colour: colour
     });
   }
 
 
-  let previousBurst = 0;
+  /* ==========================================
+     DESSINER UNE ÉTOILE FÉÉRIQUE
+  ========================================== */
 
+  function drawFairyStar(
+    x,
+    y,
+    size,
+    opacity,
+    colour
+  ) {
+    const colourString =
+      colour.red +
+      "," +
+      colour.green +
+      "," +
+      colour.blue;
+
+
+    context.save();
+
+
+    context.translate(
+      x,
+      y
+    );
+
+
+    context.beginPath();
+
+
+    context.moveTo(
+      0,
+      -size * 3.8
+    );
+
+
+    context.quadraticCurveTo(
+      size * 0.4,
+      -size * 0.4,
+      size * 3.8,
+      0
+    );
+
+
+    context.quadraticCurveTo(
+      size * 0.4,
+      size * 0.4,
+      0,
+      size * 3.8
+    );
+
+
+    context.quadraticCurveTo(
+      -size * 0.4,
+      size * 0.4,
+      -size * 3.8,
+      0
+    );
+
+
+    context.quadraticCurveTo(
+      -size * 0.4,
+      -size * 0.4,
+      0,
+      -size * 3.8
+    );
+
+
+    context.fillStyle =
+      "rgba(" +
+      colourString +
+      "," +
+      opacity +
+      ")";
+
+
+    context.shadowColor =
+      "rgba(" +
+      colourString +
+      ",0.9)";
+
+
+    context.shadowBlur =
+      size *
+      5;
+
+
+    context.fill();
+
+
+    context.restore();
+  }
+
+
+  /* ==========================================
+     ANIMATION
+  ========================================== */
 
   function draw(time) {
     const energy =
@@ -886,54 +1139,372 @@ y:
     );
 
 
-    for (
-      const neuron of neurons
+    context.save();
+
+
+    context.globalCompositeOperation =
+      "lighter";
+
+
+    /*
+     * Brume lumineuse douce
+     * au centre du cerveau.
+     */
+
+    if (
+      energy >
+      0.02
     ) {
-      const pulse =
-        0.45 +
+      const haze =
+        context.createRadialGradient(
+          centerX,
+          centerY,
+          0,
+
+          centerX,
+          centerY,
+          radiusX *
+          1.18
+        );
+
+
+      haze.addColorStop(
+        0,
+        "rgba(222,200,255," +
+        energy *
+        0.13 +
+        ")"
+      );
+
+
+      haze.addColorStop(
+        0.48,
+        "rgba(144,111,255," +
+        energy *
+        0.075 +
+        ")"
+      );
+
+
+      haze.addColorStop(
+        1,
+        "rgba(74,50,175,0)"
+      );
+
+
+      context.fillStyle =
+        haze;
+
+
+      context.beginPath();
+
+
+      context.ellipse(
+        centerX,
+        centerY,
+        radiusX *
+        1.22,
+        radiusY *
+        1.3,
+        0,
+        0,
+        Math.PI *
+        2
+      );
+
+
+      context.fill();
+    }
+
+
+    /*
+     * Poussière orbitale.
+     */
+
+    for (
+      const fairy of fairies
+    ) {
+      const orbit =
+        fairy.angle +
+        time *
+        0.0001 *
+        fairy.speed *
+        (
+          1 +
+          energy *
+          2.8
+        );
+
+
+      const breathing =
+        0.88 +
         Math.sin(
           time *
-          0.003 *
-          neuron.speed +
-          neuron.phase
+          0.0007 +
+          fairy.phase
         ) *
-        0.42;
+        0.12;
 
 
-      const flash =
-        Math.random() <
-        energy *
-        0.009
-          ? 1
+      const pulse =
+        0.55 +
+        Math.sin(
+          time *
+          0.002 *
+          fairy.pulseSpeed +
+          fairy.phase
+        ) *
+        0.45;
+
+
+      /*
+       * Plus le rêve se forme,
+       * plus certaines particules
+       * s’élèvent hors du cerveau.
+       */
+
+      const rising =
+        energy >
+        0.62
+
+          ? (
+              energy -
+              0.62
+            ) *
+            fairy.lift *
+            Math.sin(
+              time *
+              0.0005 +
+              fairy.phase
+            )
+
           : 0;
+
+
+      const x =
+        centerX +
+        Math.cos(orbit) *
+        radiusX *
+        fairy.distance *
+        breathing;
+
+
+      const y =
+        centerY +
+        Math.sin(orbit) *
+        radiusY *
+        fairy.distance +
+
+        fairy.heightPosition *
+        10 -
+
+        rising;
+
+
+      const opacity =
+        fairy.opacity *
+        pulse *
+        (
+          0.25 +
+          energy *
+          0.75
+        );
+
+
+      const colourString =
+        fairy.colour.red +
+        "," +
+        fairy.colour.green +
+        "," +
+        fairy.colour.blue;
+
+
+      if (
+        fairy.star &&
+        pulse >
+        0.76
+      ) {
+        drawFairyStar(
+          x,
+          y,
+          fairy.size,
+          opacity,
+          fairy.colour
+        );
+      } else {
+        context.beginPath();
+
+
+        context.arc(
+          x,
+          y,
+          fairy.size *
+          (
+            0.65 +
+            pulse *
+            0.55
+          ),
+          0,
+          Math.PI *
+          2
+        );
+
+
+        context.fillStyle =
+          "rgba(" +
+          colourString +
+          "," +
+          opacity +
+          ")";
+
+
+        context.shadowColor =
+          "rgba(" +
+          colourString +
+          ",0.85)";
+
+
+        context.shadowBlur =
+          fairy.glow;
+
+
+        context.fill();
+      }
+    }
+
+
+    /*
+     * Créer les floraisons.
+     */
+
+    const blossomDelay =
+      1150 -
+      energy *
+      920;
+
+
+    if (
+      time -
+      previousBlossom >
+      blossomDelay
+    ) {
+      createBlossom();
+
+
+      previousBlossom =
+        time;
+    }
+
+
+    /*
+     * Dessiner les floraisons
+     * comme de petites fleurs de lumière.
+     */
+
+    for (
+      const blossom of blossoms
+    ) {
+      blossom.radius +=
+        0.42 +
+        energy *
+        0.85;
+
+
+      blossom.opacity *=
+        0.955;
+
+
+      blossom.rotation +=
+        0.012;
+
+
+      const colourString =
+        blossom.colour.red +
+        "," +
+        blossom.colour.green +
+        "," +
+        blossom.colour.blue;
+
+
+      context.save();
+
+
+      context.translate(
+        blossom.x,
+        blossom.y
+      );
+
+
+      context.rotate(
+        blossom.rotation
+      );
+
+
+      for (
+        let petal = 0;
+        petal < blossom.petals;
+        petal++
+      ) {
+        const angle =
+          (
+            Math.PI *
+            2 /
+            blossom.petals
+          ) *
+          petal;
+
+
+        context.beginPath();
+
+
+        context.ellipse(
+          Math.cos(angle) *
+          blossom.radius *
+          0.55,
+
+          Math.sin(angle) *
+          blossom.radius *
+          0.55,
+
+          blossom.radius *
+          0.58,
+
+          blossom.radius *
+          0.18,
+
+          angle,
+
+          0,
+
+          Math.PI *
+          2
+        );
+
+
+        context.fillStyle =
+          "rgba(" +
+          colourString +
+          "," +
+          blossom.opacity *
+          0.42 +
+          ")";
+
+
+        context.fill();
+      }
 
 
       context.beginPath();
 
 
       context.arc(
-        neuron.x +
-        Math.sin(
-          time *
-          0.001 +
-          neuron.phase
-        ) *
-        energy *
-        3,
-
-        neuron.y +
-        Math.cos(
-          time *
-          0.0013 +
-          neuron.phase
-        ) *
-        energy *
-        3,
-
-        neuron.size +
-        flash *
-        2.8,
-
+        0,
+        0,
+        Math.max(
+          1.2,
+          blossom.radius *
+          0.12
+        ),
         0,
         Math.PI *
         2
@@ -941,85 +1512,40 @@ y:
 
 
       context.fillStyle =
-        "rgba(220,196,255," +
-        clamp(
-          pulse +
-          flash *
-          0.6,
-          0,
-          1
-        ) +
+        "rgba(255,248,218," +
+        blossom.opacity +
         ")";
+
+
+      context.shadowColor =
+        "rgba(" +
+        colourString +
+        ",1)";
+
+
+      context.shadowBlur =
+        18;
 
 
       context.fill();
+
+
+      context.restore();
     }
 
 
-    const delay =
-      950 -
-      energy *
-      760;
-
-
-    if (
-      time -
-      previousBurst >
-      delay
-    ) {
-      createBurst();
-
-      previousBurst = time;
-    }
-
-
-    for (
-      const burst of bursts
-    ) {
-      burst.radius +=
-        0.8 +
-        energy *
-        1.7;
-
-
-      burst.opacity *=
-        0.94;
-
-
-      context.beginPath();
-
-
-      context.arc(
-        burst.x,
-        burst.y,
-        burst.radius,
-        0,
-        Math.PI *
-        2
-      );
-
-
-      context.strokeStyle =
-        "rgba(232,218,255," +
-        burst.opacity +
-        ")";
-
-
-      context.lineWidth =
-        1.15;
-
-
-      context.stroke();
-    }
-
-
-    bursts =
-      bursts.filter(
-        function (burst) {
-          return burst.opacity >
-            0.025;
+    blossoms =
+      blossoms.filter(
+        function (blossom) {
+          return (
+            blossom.opacity >
+            0.025
+          );
         }
       );
+
+
+    context.restore();
 
 
     window.requestAnimationFrame(
