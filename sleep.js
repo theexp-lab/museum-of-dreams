@@ -798,24 +798,24 @@ function initialiseBrain() {
 
       neurons.push({
         x:
-          width *
-          0.5 +
-          Math.cos(angle) *
-          radius *
-          Math.min(
-            width * 0.145,
-            205
-          ),
+  width *
+  0.5 +
+  Math.cos(angle) *
+  radius *
+  Math.min(
+    width * 0.12,
+    185
+  ),
 
-        y:
-          height *
-          0.285 +
-          Math.sin(angle) *
-          radius *
-          Math.min(
-            height * 0.145,
-            120
-          ),
+y:
+  height *
+  0.155 +
+  Math.sin(angle) *
+  radius *
+  Math.min(
+    height * 0.075,
+    82
+  ),
 
         size:
           0.5 +
