@@ -856,19 +856,25 @@ a {
 
 
 .begin-night-link {
-
   position: relative;
 
   display: inline-block;
 
+  max-width: 100%;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
   font-size:
-    clamp(86px, 14vw, 220px);
+    clamp(65px, 10vw, 155px);
 
-  font-weight: 300;
+  font-weight: 400;
 
-  line-height: 0.68;
+  line-height: 0.92;
 
-  letter-spacing: -0.085em;
+  letter-spacing: -0.055em;
 
   text-align: center;
 
@@ -882,7 +888,6 @@ a {
     ),
 
     text-shadow 700ms ease;
-
 }
 
 
@@ -893,24 +898,21 @@ a {
 }
 
 
-.begin-night-link em {
+.begin-night-link span {
+  display: block;
 
-  color: #d9d4ff;
-
-  font-weight: 300;
-
+  padding:
+    0.04em 0;
 }
 
 
 .begin-night-link:hover,
 .begin-night-link:focus-visible {
-
-  letter-spacing: -0.045em;
+  letter-spacing: -0.025em;
 
   text-shadow:
     0 0 38px
     rgba(198, 204, 255, 0.3);
-
 }
 
 
@@ -1246,13 +1248,13 @@ a {
 
 
   .begin-night-link {
+  font-size:
+    clamp(58px, 17vw, 100px);
 
-    font-size:
-      clamp(80px, 22vw, 130px);
+  line-height: 0.95;
 
-    line-height: 0.75;
-
-  }
+  letter-spacing: -0.04em;
+}
 
 
   .begin-night-link::before,
