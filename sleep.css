@@ -268,31 +268,31 @@ a {
 
   -webkit-mask-image:
     radial-gradient(
-      ellipse 10% 8% at 45% 34%,
-      black 36%,
-      rgba(0, 0, 0, 0.86) 58%,
+      ellipse 11% 6% at 45% 25%,
+      black 40%,
+      rgba(0, 0, 0, 0.92) 58%,
       transparent 82%
     ),
 
     radial-gradient(
-      ellipse 10% 8% at 55% 34%,
-      black 36%,
-      rgba(0, 0, 0, 0.86) 58%,
+      ellipse 11% 6% at 55% 25%,
+      black 40%,
+      rgba(0, 0, 0, 0.92) 58%,
       transparent 82%
     );
 
   mask-image:
     radial-gradient(
-      ellipse 10% 8% at 45% 34%,
-      black 36%,
-      rgba(0, 0, 0, 0.86) 58%,
+      ellipse 11% 6% at 45% 25%,
+      black 40%,
+      rgba(0, 0, 0, 0.92) 58%,
       transparent 82%
     ),
 
     radial-gradient(
-      ellipse 10% 8% at 55% 34%,
-      black 36%,
-      rgba(0, 0, 0, 0.86) 58%,
+      ellipse 11% 6% at 55% 25%,
+      black 40%,
+      rgba(0, 0, 0, 0.92) 58%,
       transparent 82%
     );
 }
