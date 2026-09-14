@@ -247,14 +247,34 @@ function updateSleeper() {
   );
 
 
-  /* Fermeture progressive des yeux */
+  /* ==========================================
+   FERMETURE NATURELLE DES YEUX
 
-  const eyelidClose =
-    range(
-      progress,
-      0.14,
-      0.3
-    );
+   La transition commence doucement pendant
+   la deuxième phrase, puis reste fermée.
+========================================== */
+
+const eyeProgress =
+  range(
+    progress,
+    0.135,
+    0.285
+  );
+
+
+/*
+ * Courbe douce :
+ * évite une fermeture droite et mécanique.
+ */
+
+const eyesClosed =
+  eyeProgress *
+  eyeProgress *
+  (
+    3 -
+    2 *
+    eyeProgress
+  );
 
 
   /* Apparition du cerveau */
@@ -321,9 +341,9 @@ function updateSleeper() {
   /* Envoyer les valeurs au CSS */
 
   sleeperPage.style.setProperty(
-    "--eyelid-close",
-    eyelidClose
-  );
+  "--eyes-closed",
+  eyesClosed
+);
 
 
   sleeperPage.style.setProperty(
