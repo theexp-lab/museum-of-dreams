@@ -608,11 +608,11 @@ function createStars() {
 
   const numberOfStars =
 
-    window.innerWidth < 700
+  window.innerWidth < 700
 
-      ? 330
+    ? 550
 
-      : 760;
+    : 1250;
 
 
   for (
@@ -644,11 +644,17 @@ function createStars() {
 
       const diagonalCenter =
 
-        canvasHeight *
-        0.15 +
+  canvasHeight *
+  0.76 +
 
-        starX *
-        0.37;
+  (
+    starX /
+    canvasWidth -
+    0.5
+  ) *
+
+  canvasHeight *
+  0.14;
 
 
       starY =
@@ -658,7 +664,7 @@ function createStars() {
         randomGaussian() *
 
         canvasHeight *
-        0.11;
+0.075;
 
     } else {
 
