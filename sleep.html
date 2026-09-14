@@ -16,13 +16,13 @@
   >
 
   <meta
-    name="description"
-    content="The Sleeper — enter the sleeping mind."
+    name="theme-color"
+    content="#02030b"
   >
 
   <meta
-    name="theme-color"
-    content="#070b20"
+    name="description"
+    content="The Sleeper — enter the Museum of Dreams."
   >
 
   <title>
@@ -30,9 +30,7 @@
   </title>
 
 
-  <!-- ==========================================
-       POLICES
-  =========================================== -->
+  <!-- Polices -->
 
   <link
     rel="preconnect"
@@ -51,171 +49,92 @@
   >
 
 
-  <!-- Feuille de style partagée -->
+  <!-- CSS réservé à cette page -->
 
   <link
     rel="stylesheet"
-    href="./style.css?v=22"
+    href="./sleep.css?v=30"
   >
 
 </head>
 
 
-<body class="sleep-page">
+<body class="sleeper-page">
 
 
   <!-- ==========================================
-       DÉCOR FIXE
+       CIEL ET PARTICULES
   =========================================== -->
 
   <div
-    class="sleep-world"
+    class="night-background"
     aria-hidden="true"
   >
 
-    <!-- Chambre qui disparaît -->
+    <div class="night-gradient"></div>
 
-    <div class="bedroom-background"></div>
+    <div class="night-nebula"></div>
 
-    <div class="window-light"></div>
+    <div class="night-milky-way"></div>
 
-    <div class="curtain-shadow"></div>
-
-
-    <!-- Étoiles extérieures -->
-
-    <canvas id="sleep-stars"></canvas>
-
-
-    <!-- Halo intérieur de la tête -->
-
-    <div class="mind-glow"></div>
-
-
-    <!-- ==========================================
-         VISAGE DU DORMEUR
-    =========================================== -->
-
-    <div class="sleeper-container">
-
-      <div class="sleeper-neck"></div>
-
-      <div class="sleeper-face">
-
-
-        <!-- Lumières à l’intérieur du visage -->
-
-        <div class="inner-night"></div>
-
-
-        <!-- Réseau neuronal abstrait -->
-
-        <div class="neural-network">
-
-          <span class="neuron neuron-one"></span>
-
-          <span class="neuron neuron-two"></span>
-
-          <span class="neuron neuron-three"></span>
-
-          <span class="neuron neuron-four"></span>
-
-          <span class="neuron neuron-five"></span>
-
-          <span class="neuron neuron-six"></span>
-
-          <span class="neural-line line-one"></span>
-
-          <span class="neural-line line-two"></span>
-
-          <span class="neural-line line-three"></span>
-
-          <span class="neural-line line-four"></span>
-
-          <span class="neural-line line-five"></span>
-
-        </div>
-
-
-        <!-- Sourcils -->
-
-        <span class="eyebrow left-eyebrow"></span>
-
-        <span class="eyebrow right-eyebrow"></span>
-
-
-        <!-- Œil gauche -->
-
-        <div class="sleep-eye left-eye">
-
-          <span class="iris"></span>
-
-          <span class="pupil"></span>
-
-          <span class="eye-light"></span>
-
-        </div>
-
-
-        <!-- Œil droit -->
-
-        <div class="sleep-eye right-eye">
-
-          <span class="iris"></span>
-
-          <span class="pupil"></span>
-
-          <span class="eye-light"></span>
-
-        </div>
-
-
-        <!-- Nez et bouche -->
-
-        <span class="face-nose"></span>
-
-        <span class="face-mouth"></span>
-
-
-        <!-- Lumière qui ouvre l’esprit -->
-
-        <div class="mind-entrance">
-
-          <span class="entrance-ring"></span>
-
-          <span class="entrance-center"></span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- Grain cinématographique -->
-
-    <div class="sleep-grain"></div>
+    <canvas id="star-canvas"></canvas>
 
   </div>
 
 
   <!-- ==========================================
-       HEADER
+       SCULPTURE DU DORMEUR
   =========================================== -->
 
-  <header class="sleep-header">
+  <div
+    class="face-stage"
+    id="face-stage"
+    aria-hidden="true"
+  >
+
+    <div class="face-aura"></div>
+
+
+    <!-- Image 3D -->
+
+    <img
+      class="sleeper-image"
+      src="./sleeper-face.png"
+      alt=""
+    >
+
+
+    <!-- Paupières animées -->
+
+    <span class="coded-eyelid left-coded-eyelid"></span>
+
+    <span class="coded-eyelid right-coded-eyelid"></span>
+
+
+    <!-- Activité cérébrale -->
+
+    <canvas id="brain-canvas"></canvas>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
+  <header class="sleeper-header">
 
     <a href="index.html">
       THE MUSEUM OF DREAMS
     </a>
 
 
-    <div class="sleep-observation">
+    <div class="sleeper-time">
 
-      <span class="observation-dot"></span>
+      <span class="live-dot"></span>
 
-      <span id="sleep-time">
-        23:47:00
+      <span id="sleep-clock">
+        23:47
       </span>
 
     </div>
@@ -229,226 +148,113 @@
 
 
   <!-- ==========================================
-       STORYTELLING AU SCROLL
+       NARRATION UNIQUE
+
+       Une seule zone est utilisée afin que
+       les phrases ne se chevauchent jamais.
   =========================================== -->
 
-  <main class="sleep-story">
+  <div
+    class="narration-area"
+    id="narration-area"
+  >
 
+    <p
+      class="narration"
+      id="narration"
+    >
+      When night <em>has fallen…</em>
+    </p>
 
-    <!-- Cette zone crée la longueur du scroll -->
-
-    <div class="sleep-scroll-space">
-
-
-      <!-- Phrase 1 -->
-
-      <section
-        class="sleep-chapter"
-        data-start="0.02"
-        data-end="0.18"
-      >
-
-        <p class="sleep-sentence">
-
-          When night
-          <em>has fallen…</em>
-
-        </p>
-
-      </section>
-
-
-      <!-- Phrase 2 -->
-
-      <section
-        class="sleep-chapter"
-        data-start="0.17"
-        data-end="0.33"
-      >
-
-        <p class="sleep-sentence">
-
-          the eyes
-          <em>close.</em>
-
-        </p>
-
-      </section>
-
-
-      <!-- Phrase 3 -->
-
-      <section
-        class="sleep-chapter"
-        data-start="0.31"
-        data-end="0.49"
-      >
-
-        <p class="sleep-sentence">
-
-          and the mind
-          <em>begins to wander…</em>
-
-        </p>
-
-      </section>
-
-
-      <!-- Phrase 4 -->
-
-      <section
-        class="sleep-chapter"
-        data-start="0.47"
-        data-end="0.65"
-      >
-
-        <p class="sleep-sentence">
-
-          following no rules,
-          <em>obeying no laws.</em>
-
-        </p>
-
-      </section>
-
-
-      <!-- Phrase 5 -->
-
-      <section
-        class="sleep-chapter"
-        data-start="0.63"
-        data-end="0.79"
-      >
-
-        <p class="sleep-sentence">
-
-          with no beginning
-          <em>and no end.</em>
-
-        </p>
-
-      </section>
-
-
-      <!-- Phrase 6 -->
-
-      <section
-        class="sleep-chapter creates-chapter"
-        data-start="0.77"
-        data-end="0.9"
-      >
-
-        <p class="sleep-sentence">
-
-          it creates…
-
-        </p>
-
-      </section>
-
-
-      <!-- ==========================================
-           RÉVÉLATION FINALE
-      =========================================== -->
-
-      <section
-        class="sleep-chapter dreams-chapter"
-        data-start="0.87"
-        data-end="1"
-      >
-
-        <div class="dreams-reveal">
-
-          <h1>
-            DREAMS
-          </h1>
-
-
-          <p class="museum-open-text">
-            THE MUSEUM IS NOW OPEN
-          </p>
-
-
-          <a
-            href="brain.html"
-            class="enter-mind-link"
-            id="enter-mind-link"
-          >
-            ENTER THE MIND
-          </a>
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
+  </div>
 
 
   <!-- ==========================================
-       DONNÉES SCIENTIFIQUES DISCRÈTES
+       RÉVÉLATION FINALE
   =========================================== -->
 
-  <aside class="sleep-data">
+  <div
+    class="dream-revelation"
+    id="dream-revelation"
+  >
+
+    <p class="creation-line">
+      it creates…
+    </p>
+
+    <h1>
+      DREAMS
+    </h1>
+
+    <p class="museum-status">
+      THE MUSEUM IS NOW OPEN
+    </p>
+
+    <a
+      href="brain.html"
+      id="enter-mind"
+      class="enter-mind"
+    >
+      ENTER THE MIND
+    </a>
+
+  </div>
+
+
+  <!-- ==========================================
+       DONNÉES DISCRÈTES
+  =========================================== -->
+
+  <aside class="sleep-monitor">
 
     <p>
       SLEEP STAGE
-      <span id="sleep-stage">
-        WAKEFULNESS
-      </span>
+      <span id="sleep-stage">WAKEFULNESS</span>
     </p>
 
     <p>
-      EXTERNAL AWARENESS
-      <span id="awareness-level">
-        100%
-      </span>
+      AWARENESS
+      <span id="awareness-value">100%</span>
     </p>
 
     <p>
-      MENTAL ACTIVITY
-      <span id="mental-level">
-        DETECTED
-      </span>
+      NEURAL ACTIVITY
+      <span id="neural-status">BASELINE</span>
     </p>
 
   </aside>
 
 
   <!-- ==========================================
-       PROGRESSION
+       PROGRESSION DU SCROLL
   =========================================== -->
 
-  <div class="sleep-progress">
+  <div class="scroll-progress">
 
-    <span id="sleep-progress-fill"></span>
+    <span id="scroll-progress-fill"></span>
 
   </div>
 
 
-  <p class="sleep-scroll-instruction">
-
+  <p class="scroll-message">
     DESCEND INTO SLEEP
-
   </p>
 
 
-  <!-- ==========================================
-       TRANSITION VERS LE CERVEAU
-  =========================================== -->
+  <!-- Espace créant la narration verticale -->
+
+  <main class="sleep-scroll"></main>
+
+
+  <!-- Transition vers le cerveau -->
 
   <div
-    class="mind-transition"
+    class="brain-transition"
     aria-hidden="true"
   ></div>
 
 
-  <!-- JavaScript partagé -->
-
-  <script
-    src="./script.js?v=22"
-  ></script>
+  <script src="./sleep.js?v=30"></script>
 
 </body>
 
