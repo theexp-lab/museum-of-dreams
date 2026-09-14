@@ -20,16 +20,47 @@
     content="The Museum of Dreams — an immersive exhibition concept by Lou-Ann de Sia."
   >
 
+  <meta
+    name="theme-color"
+    content="#f4bd74"
+  >
+
   <title>
     The Museum of Dreams
   </title>
 
-  <!-- Feuille de style générale -->
+
+  <!-- ==========================================
+       POLICES
+  =========================================== -->
 
   <link
-  rel="stylesheet"
-  href="./style.css?v=14"
->
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- ==========================================
+       FEUILLE DE STYLE
+       Le numéro force Chrome à charger
+       la nouvelle version.
+  =========================================== -->
+
+  <link
+    rel="stylesheet"
+    href="./style.css?v=20"
+  >
 
 </head>
 
@@ -38,10 +69,61 @@
 
 
   <!-- ==========================================
-       NAVIGATION DISCRÈTE
+       CIEL FIXE
   =========================================== -->
 
-  <header class="intro-header">
+  <div
+    class="sky"
+    aria-hidden="true"
+  >
+
+    <!-- Ciel du coucher de soleil -->
+
+    <div class="sky-layer sunset-sky"></div>
+
+
+    <!-- Ciel du crépuscule -->
+
+    <div class="sky-layer twilight-sky"></div>
+
+
+    <!-- Ciel de nuit -->
+
+    <div class="sky-layer night-sky"></div>
+
+
+    <!-- Soleil -->
+
+    <div class="setting-sun"></div>
+
+
+    <!-- Lumière de l’horizon -->
+
+    <div class="horizon-light"></div>
+
+
+    <!-- Voie lactée -->
+
+    <div class="milky-way"></div>
+
+
+    <!-- Les étoiles sont dessinées en JavaScript -->
+
+    <canvas id="stars-canvas"></canvas>
+
+
+    <!-- Grain cinématographique -->
+
+    <div class="sky-grain"></div>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION FIXE
+  =========================================== -->
+
+  <header class="museum-header">
 
     <a
       href="index.html"
@@ -51,9 +133,9 @@
     </a>
 
 
-    <div class="intro-status">
+    <div class="experience-number">
 
-      <span class="status-dot"></span>
+      <span class="experience-dot"></span>
 
       <span>
         EXPERIENCE 002
@@ -73,151 +155,196 @@
 
 
   <!-- ==========================================
-       CONTENU PRINCIPAL
+       PARCOURS VERTICAL
   =========================================== -->
 
-  <main class="intro-main">
-
-
-    <!-- Présentation du laboratoire -->
-
-    <p class="intro-presents">
-
-      THE EXPERIENCE LABORATORY
-      <span>PRESENTS</span>
-
-    </p>
+  <main class="nightfall-story">
 
 
     <!-- ==========================================
-         PORTAIL / PUPILLE / ÉCLIPSE
+         PARTIE 1 — GOLDEN HOUR
     =========================================== -->
 
-    <button
-      class="dream-portal"
-      id="dream-portal"
-      aria-label="Begin the night"
+    <section
+      class="story-scene opening-scene"
+      id="opening-scene"
     >
 
-      <!-- Halo extérieur -->
+      <div class="opening-content">
 
-      <span class="portal-halo"></span>
+        <p class="presents-label">
 
+          THE EXPERIENCE LABORATORY
+          <span>PRESENTS</span>
 
-      <!-- Cercle noir principal -->
-
-      <span class="portal-core"></span>
-
-
-      <!-- Particules violettes -->
-
-      <span class="portal-particle particle-one"></span>
-
-      <span class="portal-particle particle-two"></span>
-
-      <span class="portal-particle particle-three"></span>
-
-      <span class="portal-particle particle-four"></span>
-
-      <span class="portal-particle particle-five"></span>
+        </p>
 
 
-      <!-- Texte à l’intérieur du portail -->
+        <h1 class="museum-title">
 
-      <span class="portal-text">
+          <span class="title-line title-line-one">
+            THE MUSEUM
+          </span>
 
-        BEGIN<br>
-        THE NIGHT
+          <span class="title-line title-line-two">
+            OF <em>DREAMS</em>
+          </span>
 
-      </span>
-
-    </button>
-
-
-    <!-- ==========================================
-         TITRE PRINCIPAL
-    =========================================== -->
-
-    <div class="intro-title-wrapper">
-
-      <h1 class="intro-title">
-
-        <span>THE MUSEUM</span>
-
-        <span>OF DREAMS</span>
-
-      </h1>
+        </h1>
 
 
-      <p class="intro-description">
+        <p class="museum-description">
 
-        A living museum built from the dreams
-        people have while the world is asleep.
+          A living museum built from the dreams
+          people have while the world is asleep.
 
-      </p>
+        </p>
 
-    </div>
+      </div>
+
+
+      <div class="scroll-indicator">
+
+        <span>
+          SCROLL UNTIL NIGHTFALL
+        </span>
+
+        <span class="scroll-line"></span>
+
+      </div>
+
+    </section>
 
 
     <!-- ==========================================
-         QUESTION CENTRALE
+         PARTIE 2 — TWILIGHT
     =========================================== -->
 
-    <p class="intro-question">
+    <section
+      class="story-scene question-scene"
+      id="question-scene"
+    >
 
-      What if the dreams we forget every morning
-      became places we could visit?
+      <div class="question-wrapper">
 
-    </p>
+        <p class="question-label">
+          A QUESTION BEFORE NIGHTFALL
+        </p>
+
+
+        <h2 class="dream-question">
+
+          <span class="question-line">
+            What if the
+            <em>dreams</em>
+          </span>
+
+          <span class="question-line">
+            we forget
+            <em>every morning</em>
+          </span>
+
+          <span class="question-line">
+            became places
+          </span>
+
+          <span class="question-line">
+            we could
+            <em>visit?</em>
+          </span>
+
+        </h2>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         PARTIE 3 — NIGHT
+    =========================================== -->
+
+    <section
+      class="story-scene begin-scene"
+      id="begin-scene"
+    >
+
+      <div class="begin-content">
+
+        <p class="night-arrived">
+          NIGHT HAS FALLEN
+        </p>
+
+
+        <!--
+          Le titre est lui-même le lien.
+          Aucun deuxième bouton nécessaire.
+        -->
+
+        <a
+          href="sleep.html"
+          class="begin-night-link"
+          id="begin-night-link"
+        >
+
+          <span>BEGIN</span>
+
+          <span>
+            THE <em>NIGHT</em>
+          </span>
+
+        </a>
+
+
+        <p class="enter-hint">
+          CLICK TO ENTER
+        </p>
+
+      </div>
+
+    </section>
 
   </main>
 
 
   <!-- ==========================================
-       INFORMATIONS EN BAS DE PAGE
+       INFORMATIONS FIXES
   =========================================== -->
 
-  <footer class="intro-footer">
+  <footer class="museum-footer">
 
     <p>
-
       AN IMMERSIVE EXHIBITION CONCEPT
-
     </p>
 
-
     <p>
-
       LOU-ANN DE SIA · 2026
-
     </p>
 
-
-    <p>
-
-      MOVE YOUR CURSOR TOWARD THE ECLIPSE
-
+    <p id="night-progress">
+      SUNSET · 00%
     </p>
 
   </footer>
 
 
   <!-- ==========================================
-       TRANSITION VERS LA NUIT
+       TRANSITION VERS LA PAGE 2
   =========================================== -->
 
   <div
-    class="night-transition"
-    id="night-transition"
+    class="page-transition"
     aria-hidden="true"
   ></div>
 
 
-  <!-- JavaScript partagé -->
+  <!-- ==========================================
+       JAVASCRIPT
+  =========================================== -->
 
   <script
-  src="./script.js?v=14"
-></script>
+    src="./script.js?v=20"
+  ></script>
 
 </body>
 
