@@ -17,7 +17,7 @@
 
   <meta
     name="theme-color"
-    content="#02030b"
+    content="#01030c"
   >
 
   <meta
@@ -49,12 +49,12 @@
   >
 
 
-  <!-- CSS réservé à cette page -->
+  <!-- CSS de la page -->
 
   <link
-  rel="stylesheet"
-  href="./sleep.css?v=32"
->
+    rel="stylesheet"
+    href="./sleep.css?v=40"
+  >
 
 </head>
 
@@ -63,70 +63,81 @@
 
 
   <!-- ==========================================
-       CIEL ET PARTICULES
+       CIEL ANIMÉ
   =========================================== -->
 
   <div
-    class="night-background"
+    class="dream-sky"
     aria-hidden="true"
   >
 
-    <div class="night-gradient"></div>
+    <div class="sky-gradient"></div>
 
-    <div class="night-nebula"></div>
+    <div class="milky-way"></div>
 
-    <div class="night-milky-way"></div>
+    <div class="nebula nebula-one"></div>
 
-    <canvas id="star-canvas"></canvas>
+    <div class="nebula nebula-two"></div>
+
+    <canvas id="stars"></canvas>
 
   </div>
 
 
   <!-- ==========================================
-       SCULPTURE DU DORMEUR
+       VISAGE DU DORMEUR
   =========================================== -->
 
   <div
-    class="face-stage"
-    id="face-stage"
+    class="sleeper-portrait"
     aria-hidden="true"
   >
 
-    <div class="face-aura"></div>
+    <div class="head-aura"></div>
 
 
-    <!-- Image 3D -->
+    <!-- État initial : yeux ouverts -->
 
-    <!-- Visage avec les yeux ouverts -->
-
-<img
-  class="sleeper-image sleeper-open"
-  src="./sleeper-open.png"
-  alt=""
->
+    <img
+      class="sleeper-face face-open"
+      src="./sleeper-open.png"
+      alt=""
+    >
 
 
-<!-- Même visage avec les yeux fermés -->
+    <!-- État révélé : yeux fermés -->
 
-<img
-  class="sleeper-image sleeper-closed"
-  src="./sleeper-closed.png"
-  alt=""
->
+    <img
+      class="sleeper-face face-closed"
+      src="./sleeper-closed.png"
+      alt=""
+    >
+
+  </div>
+
+
+  <!-- ==========================================
+       ACTIVITÉ CÉRÉBRALE
+  =========================================== -->
+
+  <canvas
+    id="brain"
+    aria-hidden="true"
+  ></canvas>
 
 
   <!-- ==========================================
        NAVIGATION
   =========================================== -->
 
-  <header class="sleeper-header">
+  <header class="page-header">
 
     <a href="index.html">
       THE MUSEUM OF DREAMS
     </a>
 
 
-    <div class="sleeper-time">
+    <div class="clock-wrapper">
 
       <span class="live-dot"></span>
 
@@ -145,15 +156,14 @@
 
 
   <!-- ==========================================
-       NARRATION UNIQUE
+       NARRATION
 
-       Une seule zone est utilisée afin que
-       les phrases ne se chevauchent jamais.
+       Une seule phrase peut être visible.
   =========================================== -->
 
-  <div
-    class="narration-area"
-    id="narration-area"
+  <section
+    class="narration-wrapper"
+    aria-live="polite"
   >
 
     <p
@@ -163,16 +173,16 @@
       When night <em>has fallen…</em>
     </p>
 
-  </div>
+  </section>
 
 
   <!-- ==========================================
        RÉVÉLATION FINALE
   =========================================== -->
 
-  <div
-    class="dream-revelation"
-    id="dream-revelation"
+  <section
+    class="final-revelation"
+    id="final-revelation"
   >
 
     <p class="creation-line">
@@ -189,69 +199,74 @@
 
     <a
       href="brain.html"
-      id="enter-mind"
       class="enter-mind"
+      id="enter-mind"
     >
       ENTER THE MIND
     </a>
 
-  </div>
+  </section>
 
 
   <!-- ==========================================
-       DONNÉES DISCRÈTES
+       DONNÉES DU SOMMEIL
   =========================================== -->
 
-  <aside class="sleep-monitor">
+  <aside class="sleep-data">
 
     <p>
-      SLEEP STAGE
-      <span id="sleep-stage">WAKEFULNESS</span>
+      <span>SLEEP STAGE</span>
+      <strong id="sleep-stage">WAKEFULNESS</strong>
     </p>
 
     <p>
-      AWARENESS
-      <span id="awareness-value">100%</span>
+      <span>AWARENESS</span>
+      <strong id="awareness">100%</strong>
     </p>
 
     <p>
-      NEURAL ACTIVITY
-      <span id="neural-status">BASELINE</span>
+      <span>NEURAL ACTIVITY</span>
+      <strong id="neural-status">BASELINE</strong>
     </p>
 
   </aside>
 
 
   <!-- ==========================================
-       PROGRESSION DU SCROLL
+       INDICATION DE SCROLL
   =========================================== -->
 
-  <div class="scroll-progress">
-
-    <span id="scroll-progress-fill"></span>
-
-  </div>
-
-
-  <p class="scroll-message">
+  <p
+    class="scroll-instruction"
+    id="scroll-instruction"
+  >
     DESCEND INTO SLEEP
   </p>
 
 
-  <!-- Espace créant la narration verticale -->
+  <div class="progress-line">
 
-  <main class="sleep-scroll"></main>
+    <span id="progress-fill"></span>
+
+  </div>
 
 
-  <!-- Transition vers le cerveau -->
+  <!-- Hauteur nécessaire au storytelling -->
+
+  <main class="scroll-space"></main>
+
+
+  <!-- Transition vers la prochaine page -->
 
   <div
-    class="brain-transition"
+    class="page-transition"
     aria-hidden="true"
   ></div>
 
 
-  <script src="./sleep.js?v=33"></script>
+  <!-- JavaScript de la page -->
+
+  <script src="./sleep.js?v=40"></script>
 
 </body>
 
