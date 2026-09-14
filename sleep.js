@@ -267,6 +267,16 @@ const eyeProgress =
  * évite une fermeture droite et mécanique.
  */
 
+/* Fermeture progressive des vrais yeux */
+
+const eyeProgress =
+  range(
+    progress,
+    0.135,
+    0.285
+  );
+
+
 const eyesClosed =
   eyeProgress *
   eyeProgress *
