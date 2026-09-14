@@ -9,23 +9,16 @@
 ========================================== */
 
 :root {
-  --white: #fffaf2;
-  --violet: #c5b1ff;
-  --deep-blue: #02030b;
-
-  --face-opacity: 1;
-  --face-scale: 1;
-  --face-blur: 0px;
+  --white: #fffaf4;
+  --violet: #cbbaff;
+  --night: #01030c;
 
   --eyes-closed: 0;
-
   --brain-opacity: 0;
-  --brain-intensity: 0;
-
-  --revelation-opacity: 0;
-
-  --pointer-x: 0px;
-  --pointer-y: 0px;
+  --brain-glow: 0;
+  --portrait-opacity: 1;
+  --portrait-scale: 1;
+  --final-opacity: 0;
 }
 
 
@@ -37,17 +30,21 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--night);
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100%;
-}
 
-body {
   overflow-x: hidden;
+
   color: var(--white);
-  background: var(--deep-blue);
+  background: var(--night);
 }
 
 a {
@@ -57,108 +54,114 @@ a {
 
 
 /* ==========================================
-   FOND DE NUIT
+   CIEL
 ========================================== */
 
-.night-background {
+.dream-sky {
   position: fixed;
   inset: 0;
   z-index: 0;
+
   overflow: hidden;
 
   background:
-    #02030b;
+    linear-gradient(
+      180deg,
+      #01030c 0%,
+      #04091c 48%,
+      #09163a 100%
+    );
 }
 
-.night-gradient {
+.sky-gradient {
   position: absolute;
   inset: 0;
 
   background:
     radial-gradient(
-      circle at 50% 36%,
-      rgba(56, 72, 139, 0.32),
-      transparent 35%
+      circle at 50% 28%,
+      rgba(76, 89, 180, 0.24),
+      transparent 32%
     ),
 
     radial-gradient(
-      circle at 16% 75%,
-      rgba(82, 51, 131, 0.26),
+      circle at 15% 76%,
+      rgba(96, 55, 157, 0.22),
       transparent 34%
     ),
 
-    linear-gradient(
-      180deg,
-      #02030b 0%,
-      #050919 42%,
-      #0a1534 77%,
-      #101e47 100%
+    radial-gradient(
+      circle at 85% 68%,
+      rgba(46, 98, 183, 0.18),
+      transparent 32%
     );
 }
 
-.night-nebula {
+.milky-way {
   position: absolute;
-  top: -20%;
+
+  top: 46%;
   left: -15%;
 
   width: 130%;
-  height: 75%;
+  height: 38%;
 
-  opacity: 0.42;
+  opacity: 0.28;
 
   background:
-    radial-gradient(
-      ellipse,
-      rgba(130, 103, 206, 0.2),
-      transparent 62%
+    linear-gradient(
+      7deg,
+      transparent 15%,
+      rgba(127, 142, 228, 0.08) 31%,
+      rgba(222, 207, 255, 0.28) 49%,
+      rgba(136, 113, 214, 0.1) 65%,
+      transparent 82%
     );
 
-  filter:
-    blur(55px);
+  filter: blur(24px);
 
-  transform:
-    translate(
-      calc(var(--pointer-x) * -0.5),
-      calc(var(--pointer-y) * -0.4)
-    );
+  transform: rotate(-5deg);
+
+  animation:
+    milkyWayDrift 18s ease-in-out infinite;
+}
+
+.nebula {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(70px);
 
   animation:
     nebulaBreathing 12s ease-in-out infinite;
 }
 
-.night-milky-way {
-  position: absolute;
+.nebula-one {
+  top: -20%;
+  left: -12%;
 
-  right: -20%;
-  bottom: -7%;
-  left: -20%;
-
-  height: 52%;
-
-  opacity: 0.38;
+  width: 65vw;
+  height: 65vw;
 
   background:
-    linear-gradient(
-      -8deg,
-      transparent 15%,
-      rgba(121, 142, 221, 0.04) 29%,
-      rgba(185, 185, 243, 0.12) 41%,
-      rgba(235, 222, 255, 0.22) 49%,
-      rgba(174, 164, 234, 0.1) 57%,
-      transparent 76%
-    );
-
-  filter:
-    blur(17px);
-
-  transform:
-    translate(
-      calc(var(--pointer-x) * -0.8),
-      calc(var(--pointer-y) * -0.55)
-    );
+    rgba(73, 60, 162, 0.15);
 }
 
-#star-canvas {
+.nebula-two {
+  right: -18%;
+  bottom: -34%;
+
+  width: 75vw;
+  height: 75vw;
+
+  background:
+    rgba(54, 99, 184, 0.13);
+
+  animation-delay: -5s;
+}
+
+#stars {
   position: absolute;
   inset: 0;
 
@@ -168,232 +171,157 @@ a {
 
 
 /* ==========================================
-   SCULPTURE MONUMENTALE
+   VISAGE TRANSPARENT
 ========================================== */
 
-.face-stage {
+.sleeper-portrait {
   position: fixed;
+  inset: 0;
 
-  top: 50%;
-  left: 50%;
+  z-index: 5;
 
-  z-index: 4;
-
-  width:
-    min(78vw, 1050px);
-
-  height:
-    100vh;
-
-  opacity:
-    var(--face-opacity);
-
-  filter:
-    blur(var(--face-blur));
+  opacity: var(--portrait-opacity);
 
   transform:
-    translate(
-      calc(-50% + var(--pointer-x)),
-      calc(-50% + var(--pointer-y))
-    )
-    scale(var(--face-scale));
+    scale(var(--portrait-scale));
 
-  transform-origin:
-    center center;
+  transform-origin: center center;
 
-  transition:
-    opacity 100ms linear;
+  pointer-events: none;
 }
 
-
-/* Halo derrière le crâne */
-
-.face-aura {
+.head-aura {
   position: absolute;
 
   top: 4%;
   left: 50%;
 
-  width: 88%;
+  width: min(58vw, 760px);
   aspect-ratio: 1;
 
   border-radius: 50%;
 
+  opacity:
+    calc(
+      0.2 +
+      var(--brain-glow) * 0.65
+    );
+
   background:
     radial-gradient(
       circle,
-      rgba(161, 139, 236, 0.28),
-      rgba(75, 92, 181, 0.12) 48%,
-      transparent 74%
+      rgba(199, 177, 255, 0.34),
+      rgba(94, 92, 204, 0.12) 48%,
+      transparent 72%
     );
 
-  filter:
-    blur(48px);
+  filter: blur(48px);
 
   transform:
     translateX(-50%);
 
   animation:
-    faceAuraBreathing
-    7s ease-in-out infinite;
+    auraPulse 5s ease-in-out infinite;
 }
 
-
-/* Réglages partagés par les deux images */
-
-.sleeper-image {
+.sleeper-face {
   position: absolute;
 
-  inset: 0;
+  top: 50%;
+  left: 50%;
 
-  width: 100%;
-  height: 100%;
+  display: block;
 
-  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
 
-  /*
-   * Le cadrage remonte légèrement le visage
-   * et coupe une partie des épaules.
-   */
+  object-fit: contain;
+  object-position: center;
 
-  object-position:
-    center 39%;
+  transform:
+    translate(-50%, -50%);
 
+  user-select: none;
   pointer-events: none;
 
   filter:
-    contrast(1.05)
-    brightness(0.88)
-    saturate(0.88);
-
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 5%,
-      black 88%,
-      transparent 100%
-    );
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 5%,
-      black 88%,
-      transparent 100%
-    );
+    contrast(1.04)
+    brightness(0.9)
+    saturate(0.92);
 }
 
-
-/* Image principale : yeux ouverts */
-
-.sleeper-open {
-  z-index: 2;
-
-  /*
-   * Fusion progressive des quatre bords
-   * de l’image avec le ciel du site.
-   */
-
-  -webkit-mask-image:
-    radial-gradient(
-      ellipse 76% 78% at 50% 47%,
-      black 48%,
-      rgba(0, 0, 0, 0.96) 62%,
-      rgba(0, 0, 0, 0.55) 78%,
-      transparent 100%
-    );
-
-  mask-image:
-    radial-gradient(
-      ellipse 76% 78% at 50% 47%,
-      black 48%,
-      rgba(0, 0, 0, 0.96) 62%,
-      rgba(0, 0, 0, 0.55) 78%,
-      transparent 100%
-    );
+.face-open {
+  z-index: 1;
 }
 
 
 /*
- * Image fermée superposée.
- *
- * Seules les zones autour des yeux sont visibles :
- * le visage entier ne produit donc aucun fondu fantôme.
+ * Seule la zone des paupières de la seconde
+ * image apparaît. Le reste du visage demeure
+ * parfaitement stable.
  */
 
-.sleeper-closed {
-  z-index: 3;
+.face-closed {
+  z-index: 2;
 
-  opacity:
-    var(--eyes-closed);
+  opacity: var(--eyes-closed);
 
   -webkit-mask-image:
     radial-gradient(
-      ellipse 18% 9% at 39% 34%,
-      black 24%,
-      rgba(0, 0, 0, 0.94) 44%,
-      rgba(0, 0, 0, 0.42) 66%,
+      ellipse 10% 8% at 45% 34%,
+      black 36%,
+      rgba(0, 0, 0, 0.86) 58%,
       transparent 82%
     ),
 
     radial-gradient(
-      ellipse 18% 9% at 61% 34%,
-      black 24%,
-      rgba(0, 0, 0, 0.94) 44%,
-      rgba(0, 0, 0, 0.42) 66%,
+      ellipse 10% 8% at 55% 34%,
+      black 36%,
+      rgba(0, 0, 0, 0.86) 58%,
       transparent 82%
     );
 
   mask-image:
     radial-gradient(
-      ellipse 18% 9% at 39% 34%,
-      black 24%,
-      rgba(0, 0, 0, 0.94) 44%,
-      rgba(0, 0, 0, 0.42) 66%,
+      ellipse 10% 8% at 45% 34%,
+      black 36%,
+      rgba(0, 0, 0, 0.86) 58%,
       transparent 82%
     ),
 
     radial-gradient(
-      ellipse 18% 9% at 61% 34%,
-      black 24%,
-      rgba(0, 0, 0, 0.94) 44%,
-      rgba(0, 0, 0, 0.42) 66%,
+      ellipse 10% 8% at 55% 34%,
+      black 36%,
+      rgba(0, 0, 0, 0.86) 58%,
       transparent 82%
     );
-
-  transition:
-    opacity 80ms linear;
 }
 
 
-
 /* ==========================================
-   CERVEAU ANIMÉ
+   CERVEAU
 ========================================== */
 
-#brain-canvas {
-  position: absolute;
-
-  top: 9%;
-  left: 17%;
+#brain {
+  position: fixed;
+  inset: 0;
 
   z-index: 7;
 
-  width: 66%;
-  height: 36%;
+  width: 100%;
+  height: 100%;
 
-  opacity:
-    var(--brain-opacity);
+  opacity: var(--brain-opacity);
+
+  mix-blend-mode: screen;
 
   filter:
     drop-shadow(
-      0 0 12px
-      rgba(194, 164, 255, 0.75)
+      0 0 14px
+      rgba(194, 168, 255, 0.75)
     );
 
-  mix-blend-mode: screen;
+  pointer-events: none;
 }
 
 
@@ -401,7 +329,7 @@ a {
    HEADER
 ========================================== */
 
-.sleeper-header {
+.page-header {
   position: fixed;
 
   top: 0;
@@ -418,8 +346,7 @@ a {
 
   width: 100%;
 
-  padding:
-    24px 36px;
+  padding: 24px 36px;
 
   font-family:
     "DM Mono",
@@ -427,12 +354,12 @@ a {
 
   font-size: 9px;
 
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
 
   text-transform: uppercase;
 }
 
-.sleeper-header > a:last-child {
+.page-header > a:last-child {
   justify-self: end;
 
   padding-bottom: 5px;
@@ -442,7 +369,7 @@ a {
     rgba(255, 255, 255, 0.45);
 }
 
-.sleeper-time {
+.clock-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -457,24 +384,22 @@ a {
   background: var(--violet);
 
   box-shadow:
-    0 0 10px var(--violet);
+    0 0 12px var(--violet);
 
   animation:
-    pulse 2.4s ease-in-out infinite;
+    livePulse 2.4s ease-in-out infinite;
 }
 
 
 /* ==========================================
    NARRATION
-
-   Toujours un seul texte à l’écran.
 ========================================== */
 
-.narration-area {
+.narration-wrapper {
   position: fixed;
 
   right: 0;
-  bottom: 12vh;
+  bottom: 9vh;
   left: 0;
 
   z-index: 20;
@@ -482,16 +407,15 @@ a {
   display: grid;
   place-items: center;
 
-  min-height: 150px;
+  min-height: 170px;
 
-  padding:
-    20px 32px;
+  padding: 24px 40px;
 
   pointer-events: none;
 }
 
 .narration {
-  max-width: 900px;
+  max-width: 940px;
 
   margin: 0;
 
@@ -501,34 +425,28 @@ a {
     serif;
 
   font-size:
-    clamp(47px, 6.2vw, 96px);
+    clamp(44px, 5.7vw, 92px);
 
-  line-height: 0.96;
+  line-height: 0.94;
 
   letter-spacing: -0.045em;
 
   text-align: center;
 
   text-shadow:
-    0 5px 30px
-    rgba(0, 0, 10, 0.72);
+    0 4px 28px
+    rgba(0, 0, 10, 0.92);
 
   transition:
-    opacity 440ms ease,
-    filter 440ms ease,
-    transform 550ms
-    cubic-bezier(
-      0.22,
-      1,
-      0.36,
-      1
-    );
+    opacity 320ms ease,
+    filter 420ms ease,
+    transform 420ms ease;
 }
 
 .narration em {
   display: block;
 
-  color: #d9ccff;
+  color: #d8caff;
 
   font-family:
     "Gloock",
@@ -538,24 +456,28 @@ a {
   font-weight: 400;
 }
 
-.narration.changing {
+.narration.is-changing {
   opacity: 0;
 
-  filter:
-    blur(13px);
+  filter: blur(12px);
 
   transform:
-    translateY(-12px);
+    translateY(-12px)
+    scale(0.98);
+}
+
+.narration.is-hidden {
+  visibility: hidden;
+  opacity: 0;
 }
 
 
 /* ==========================================
-   DREAMS — RÉVÉLATION FINALE
+   RÉVÉLATION FINALE
 ========================================== */
 
-.dream-revelation {
+.final-revelation {
   position: fixed;
-
   inset: 0;
 
   z-index: 25;
@@ -565,27 +487,24 @@ a {
 
   visibility: hidden;
 
-  opacity:
-    var(--revelation-opacity);
+  opacity: var(--final-opacity);
 
-  padding:
-    90px 24px;
+  padding: 80px 24px;
 
   text-align: center;
 
   pointer-events: none;
 }
 
-.sleeper-page.revelation-active
-.dream-revelation {
+.sleeper-page.final-active
+.final-revelation {
   visibility: visible;
 
   pointer-events: auto;
 }
 
 .creation-line {
-  margin:
-    0 0 25px;
+  margin: 0 0 24px;
 
   font-family:
     "Italiana",
@@ -593,10 +512,10 @@ a {
     serif;
 
   font-size:
-    clamp(24px, 3vw, 44px);
+    clamp(23px, 3vw, 44px);
 }
 
-.dream-revelation h1 {
+.final-revelation h1 {
   margin: 0;
 
   font-family:
@@ -605,25 +524,24 @@ a {
     serif;
 
   font-size:
-    clamp(100px, 20vw, 290px);
+    clamp(92px, 19vw, 280px);
 
   font-weight: 400;
 
-  line-height: 0.75;
+  line-height: 0.76;
 
   letter-spacing: -0.07em;
 
   text-shadow:
-    0 0 30px
-    rgba(217, 200, 255, 0.3),
+    0 0 35px
+    rgba(217, 200, 255, 0.34),
 
     0 0 120px
-    rgba(117, 88, 206, 0.28);
+    rgba(110, 80, 210, 0.35);
 }
 
 .museum-status {
-  margin:
-    58px 0 20px;
+  margin: 54px 0 18px;
 
   font-family:
     "DM Mono",
@@ -631,18 +549,15 @@ a {
 
   font-size: 9px;
 
-  letter-spacing: 0.17em;
+  letter-spacing: 0.18em;
 
-  text-transform: uppercase;
-
-  opacity: 0.6;
+  opacity: 0.65;
 }
 
 .enter-mind {
   justify-self: center;
 
-  padding:
-    11px 0;
+  padding: 11px 0;
 
   border-bottom:
     1px solid
@@ -654,35 +569,33 @@ a {
 
   font-size: 11px;
 
-  letter-spacing: 0.15em;
-
-  text-transform: uppercase;
+  letter-spacing: 0.16em;
 
   transition:
-    letter-spacing 450ms ease,
+    letter-spacing 400ms ease,
     opacity 300ms ease;
 }
 
 .enter-mind:hover {
-  letter-spacing: 0.24em;
+  letter-spacing: 0.25em;
 
-  opacity: 0.68;
+  opacity: 0.7;
 }
 
 
 /* ==========================================
-   INFORMATIONS SUR LE SOMMEIL
+   INFORMATIONS
 ========================================== */
 
-.sleep-monitor {
+.sleep-data {
   position: fixed;
 
   right: 36px;
-  bottom: 34px;
+  bottom: 30px;
 
   z-index: 30;
 
-  width: 210px;
+  width: 220px;
 
   font-family:
     "DM Mono",
@@ -694,68 +607,34 @@ a {
 
   text-transform: uppercase;
 
-  opacity: 0.52;
+  opacity: 0.56;
 }
 
-.sleep-monitor p {
+.sleep-data p {
   display: flex;
   justify-content: space-between;
   gap: 20px;
 
-  margin:
-    5px 0;
+  margin: 5px 0;
 }
 
-.sleep-monitor span {
-  color: #cbb9ff;
+.sleep-data strong {
+  color: var(--violet);
+
+  font-weight: 300;
 
   text-align: right;
 }
 
 
 /* ==========================================
-   PROGRESSION DU SCROLL
+   SCROLL
 ========================================== */
 
-.scroll-progress {
+.scroll-instruction {
   position: fixed;
 
-  top: 50%;
-  right: 18px;
-
-  z-index: 30;
-
-  width: 1px;
-  height: 150px;
-
-  background:
-    rgba(255, 255, 255, 0.16);
-
-  transform:
-    translateY(-50%);
-}
-
-.scroll-progress span {
-  display: block;
-
-  width: 100%;
-  height: 0%;
-
-  background:
-    linear-gradient(
-      #fffaf2,
-      #b99cff
-    );
-
-  box-shadow:
-    0 0 8px
-    rgba(185, 156, 255, 0.7);
-}
-
-.scroll-message {
-  position: fixed;
-
-  bottom: 32px;
+  bottom: 30px;
   left: 36px;
 
   z-index: 30;
@@ -768,35 +647,66 @@ a {
 
   font-size: 8px;
 
-  letter-spacing: 0.12em;
+  letter-spacing: 0.13em;
 
-  text-transform: uppercase;
+  opacity: 0.48;
 
-  opacity: 0.45;
+  transition:
+    opacity 350ms ease;
 }
 
+.progress-line {
+  position: fixed;
 
-/* ==========================================
-   LONGUEUR DE LA NARRATION
-========================================== */
+  top: 50%;
+  right: 18px;
 
-.sleep-scroll {
+  z-index: 30;
+
+  width: 1px;
+  height: 160px;
+
+  background:
+    rgba(255, 255, 255, 0.15);
+
+  transform:
+    translateY(-50%);
+}
+
+.progress-line span {
+  display: block;
+
+  width: 100%;
+  height: 0%;
+
+  background:
+    linear-gradient(
+      #fffaf4,
+      #ad91ff
+    );
+
+  box-shadow:
+    0 0 9px
+    rgba(185, 156, 255, 0.8);
+}
+
+.scroll-space {
   position: relative;
 
   z-index: 1;
 
-  height: 720vh;
+  height: 700vh;
 }
 
 
 /* ==========================================
-   TRANSITION VERS LE CERVEAU
+   TRANSITION
 ========================================== */
 
-.brain-transition {
+.page-transition {
   position: fixed;
 
-  top: 30%;
+  top: 31%;
   left: 50%;
 
   z-index: 100;
@@ -815,10 +725,10 @@ a {
   background:
     radial-gradient(
       circle,
-      #fffaf2,
-      #c5aeff 25%,
+      #fffaf4,
+      #c8b4ff 24%,
       #21164d 58%,
-      #010208 100%
+      #01030c 100%
     );
 
   transform:
@@ -826,12 +736,12 @@ a {
     scale(0);
 }
 
-.sleeper-page.entering-brain
-.brain-transition {
+.sleeper-page.entering
+.page-transition {
   visibility: visible;
 
   animation:
-    brainEntrance 1.5s
+    enterBrain 1.4s
     cubic-bezier(
       0.76,
       0,
@@ -846,41 +756,40 @@ a {
    ANIMATIONS
 ========================================== */
 
-@keyframes pulse {
+@keyframes livePulse {
   50% {
     opacity: 0.25;
 
+    transform: scale(0.65);
+  }
+}
+
+@keyframes auraPulse {
+  50% {
     transform:
-      scale(0.65);
+      translateX(-50%)
+      scale(1.09);
   }
 }
 
 @keyframes nebulaBreathing {
-  0%,
-  100% {
-    opacity: 0.3;
-
-    transform:
-      translate(
-        calc(var(--pointer-x) * -0.5),
-        calc(var(--pointer-y) * -0.4)
-      )
-      scale(0.96);
-  }
-
   50% {
-    opacity: 0.52;
+    opacity: 0.55;
 
-    transform:
-      translate(
-        calc(var(--pointer-x) * -0.5),
-        calc(var(--pointer-y) * -0.4)
-      )
-      scale(1.08);
+    transform: scale(1.1);
   }
 }
 
-@keyframes brainEntrance {
+@keyframes milkyWayDrift {
+  50% {
+    transform:
+      translateY(-3%)
+      rotate(-2deg)
+      scale(1.06);
+  }
+}
+
+@keyframes enterBrain {
   0% {
     visibility: visible;
 
@@ -902,104 +811,77 @@ a {
 
     transform:
       translate(-50%, -50%)
-      scale(45);
+      scale(48);
   }
 }
-@keyframes faceAuraBreathing {
-  0%,
-  100% {
-    opacity: 0.55;
 
-    transform:
-      translateX(-50%)
-      scale(0.94);
-  }
-
-  50% {
-    opacity: 1;
-
-    transform:
-      translateX(-50%)
-      scale(1.08);
-  }
-}
 
 /* ==========================================
    MOBILE
 ========================================== */
 
 @media (max-width: 800px) {
-  .sleeper-header {
+  .page-header {
     grid-template-columns:
       1fr auto;
 
-    padding:
-      18px 20px;
+    padding: 18px 20px;
   }
 
-  .sleeper-time {
+  .clock-wrapper {
     display: none;
   }
 
-  .face-stage {
-  top: 48%;
+  .sleeper-face {
+    width: auto;
+    height: 100vh;
 
-  width: 112vw;
-  height: 92vh;
+    max-width: none;
+  }
 
-overflow: visible;
-}
+  .narration-wrapper {
+    bottom: 10vh;
 
-  .narration-area {
-    bottom: 11vh;
+    min-height: 130px;
 
-    min-height: 120px;
+    padding: 20px;
   }
 
   .narration {
     font-size:
-      clamp(40px, 11vw, 68px);
+      clamp(38px, 11vw, 66px);
   }
 
-  .sleep-monitor {
+  .sleep-data {
     right: 20px;
-    bottom: 24px;
+    bottom: 22px;
 
-    width: 180px;
+    width: 185px;
 
     font-size: 7px;
   }
 
-  .scroll-message {
-    bottom: 24px;
+  .scroll-instruction {
+    bottom: 22px;
     left: 20px;
   }
 
-  .scroll-progress {
+  .progress-line {
     right: 9px;
   }
 
-  .dream-revelation h1 {
+  .final-revelation h1 {
     font-size:
-      clamp(92px, 27vw, 175px);
+      clamp(86px, 26vw, 170px);
   }
 }
 
 @media (max-width: 480px) {
-  .face-stage {
-  width: 128vw;
-  height: 88vh;
-}
-
-  .narration {
-    font-size: 40px;
-  }
-
-  .sleep-monitor {
+  .sleep-data {
     display: none;
   }
 
-  .scroll-message {
+  .scroll-instruction {
     font-size: 7px;
   }
 }
