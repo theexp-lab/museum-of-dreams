@@ -1,0 +1,1487 @@
+/* ==========================================
+   THE MUSEUM OF DREAMS
+   Direction artistique générale
+========================================== */
+
+@import url(
+  "https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Inter:wght@300;400;500&display=swap"
+);
+
+:root {
+  --black: #05050a;
+  --soft-black: #111016;
+
+  --white: #f5f2ff;
+  --paper: #f1f0ed;
+
+  --violet: #c9b7ff;
+  --dark-violet: #70609d;
+
+  --light-line: rgba(255, 255, 255, 0.24);
+  --dark-line: rgba(17, 16, 22, 0.25);
+
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  color: var(--white);
+  background: var(--black);
+
+  font-synthesis: none;
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100%;
+
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--black);
+}
+
+body.prototype-active {
+  overflow: hidden;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+
+/* ==========================================
+   TYPOGRAPHIE TECHNIQUE
+========================================== */
+
+.laboratory-label,
+.sleep-status,
+.sound-note,
+.prototype-header,
+.chapter-meta,
+.chapter-medium,
+.movement-instruction,
+.case-label,
+.section-number,
+.room span,
+.footer-label,
+label,
+.privacy-note {
+  font-family: "DM Mono", monospace;
+
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+
+/* ==========================================
+   UNIVERS 3D
+========================================== */
+
+#dream-world {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  background: var(--black);
+}
+
+
+/* ==========================================
+   PAGE D’ENTRÉE
+========================================== */
+
+main {
+  position: relative;
+
+  z-index: 2;
+
+  min-height: 100svh;
+}
+
+.opening {
+  position: relative;
+
+  display: grid;
+
+  grid-template-rows:
+    auto
+    1fr
+    auto;
+
+  min-height: 100svh;
+
+  padding: 32px 48px;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 52%,
+      transparent 0%,
+      rgba(3, 3, 8, 0.12) 30%,
+      rgba(3, 3, 8, 0.76) 100%
+    );
+
+  transition:
+    opacity 1.2s ease,
+    visibility 1.2s ease;
+}
+
+
+/* Ombres latérales cinématographiques */
+
+.opening::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.55),
+      transparent 26%,
+      transparent 74%,
+      rgba(0, 0, 0, 0.55)
+    );
+}
+
+
+/* Tous les éléments restent au-dessus de l’ombre */
+
+.opening > * {
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* ==========================================
+   HAUT DE LA PAGE D’ENTRÉE
+========================================== */
+
+.opening-top {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 24px;
+}
+
+.laboratory-label {
+  margin: 0;
+
+  font-size: 11px;
+
+  opacity: 0.7;
+}
+
+.sleep-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  font-size: 10px;
+
+  opacity: 0.68;
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--violet);
+
+  box-shadow:
+    0 0 12px var(--violet);
+
+  animation:
+    pulse 2.2s ease-in-out infinite;
+}
+
+
+/* ==========================================
+   CENTRE DE LA PAGE D’ENTRÉE
+========================================== */
+
+.opening-center {
+  align-self: center;
+}
+
+.opening-question {
+  margin: 0 0 32px;
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 11px;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  opacity: 0.7;
+}
+
+.opening h1 {
+  margin: 0;
+
+  font-size:
+    clamp(58px, 10vw, 150px);
+
+  font-weight: 300;
+
+  line-height: 0.82;
+
+  letter-spacing: -0.075em;
+
+  text-shadow:
+    0 0 34px rgba(183, 156, 255, 0.12);
+}
+
+.opening-description {
+  max-width: 530px;
+
+  margin:
+    32px auto 30px;
+
+  font-size:
+    clamp(16px, 1.5vw, 20px);
+
+  font-weight: 300;
+
+  line-height: 1.5;
+
+  opacity: 0.82;
+}
+
+
+/* ==========================================
+   BOUTONS D’ENTRÉE
+========================================== */
+
+.opening-actions {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 24px;
+}
+
+.main-button {
+  border:
+    1px solid rgba(255, 255, 255, 0.62);
+
+  padding:
+    15px 24px;
+
+  background:
+    rgba(5, 5, 10, 0.3);
+
+  color: var(--white);
+
+  font-family:
+    "DM Mono", monospace;
+
+  font-size: 12px;
+
+  letter-spacing: 0.11em;
+
+  cursor: pointer;
+
+  backdrop-filter:
+    blur(10px);
+
+  transition:
+    background 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.main-button:hover,
+.main-button:focus-visible {
+  color: #090812;
+
+  background: #f4f0ff;
+
+  transform:
+    translateY(-2px);
+}
+
+.text-link {
+  padding:
+    11px 0;
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.45);
+
+  font-family:
+    "DM Mono", monospace;
+
+  font-size: 11px;
+
+  letter-spacing: 0.1em;
+
+  text-decoration: none;
+
+  transition:
+    border-color 250ms ease,
+    opacity 250ms ease;
+}
+
+.text-link:hover {
+  border-color: white;
+
+  opacity: 0.7;
+}
+
+.sound-note {
+  margin: 0;
+
+  font-size: 9px;
+
+  opacity: 0.5;
+}
+
+
+/* ==========================================
+   ÉLÉMENTS CACHÉS
+========================================== */
+
+.hidden {
+  visibility: hidden;
+
+  pointer-events: none;
+
+  opacity: 0;
+}
+
+
+/* ==========================================
+   PROTOTYPE 3D
+========================================== */
+
+.prototype {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5;
+
+  display: grid;
+
+  grid-template-rows:
+    auto
+    1fr
+    auto;
+
+  padding: 32px 48px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      transparent 20%,
+      rgba(0, 0, 0, 0.58) 100%
+    );
+
+  transition:
+    opacity 1.4s ease,
+    visibility 1.4s ease;
+}
+
+
+/* ==========================================
+   HEADER DU PROTOTYPE
+========================================== */
+
+.prototype-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  font-size: 10px;
+}
+
+.prototype-controls {
+  display: flex;
+
+  gap: 20px;
+}
+
+.prototype-header button {
+  border: 0;
+
+  padding: 0;
+
+  background: transparent;
+
+  font-family: inherit;
+
+  font-size: inherit;
+
+  letter-spacing: inherit;
+
+  cursor: pointer;
+
+  opacity: 0.75;
+
+  transition:
+    opacity 200ms ease;
+}
+
+.prototype-header button:hover {
+  opacity: 1;
+}
+
+
+/* ==========================================
+   PANNEAU DE LA SALLE ACTUELLE
+========================================== */
+
+.chapter-panel {
+  align-self: center;
+
+  width:
+    min(560px, calc(100vw - 48px));
+
+  padding:
+    24px 0;
+
+  border-top:
+    1px solid var(--light-line);
+
+  border-bottom:
+    1px solid var(--light-line);
+
+  transition:
+    opacity 350ms ease,
+    transform 350ms ease;
+}
+
+.chapter-panel.changing {
+  opacity: 0;
+
+  transform:
+    translateY(12px);
+}
+
+.chapter-meta {
+  display: flex;
+
+  justify-content: space-between;
+
+  font-size: 10px;
+
+  opacity: 0.66;
+}
+
+.chapter-panel h2 {
+  margin:
+    22px 0 14px;
+
+  font-size:
+    clamp(40px, 6vw, 80px);
+
+  font-weight: 300;
+
+  line-height: 0.92;
+
+  letter-spacing: -0.055em;
+}
+
+#chapter-description {
+  max-width: 480px;
+
+  margin:
+    0;
+
+  font-size: 17px;
+
+  font-weight: 300;
+
+  line-height: 1.55;
+}
+
+.chapter-medium {
+  margin:
+    24px 0 0;
+
+  font-size: 10px;
+
+  line-height: 1.7;
+
+  opacity: 0.66;
+}
+
+
+/* ==========================================
+   NAVIGATION DU PROTOTYPE
+========================================== */
+
+.prototype-bottom {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: end;
+
+  gap: 40px;
+}
+
+.prototype-navigation {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  width:
+    min(560px, 100%);
+}
+
+.arrow-button {
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+
+  border:
+    1px solid var(--light-line);
+
+  border-radius: 50%;
+
+  background:
+    rgba(0, 0, 0, 0.24);
+
+  cursor: pointer;
+
+  transition:
+    background 250ms ease,
+    color 250ms ease,
+    transform 250ms ease;
+}
+
+.arrow-button:hover {
+  color: var(--black);
+
+  background: var(--white);
+
+  transform:
+    scale(1.05);
+}
+
+.progress-line {
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    var(--light-line);
+}
+
+.progress-line span {
+  display: block;
+
+  width: 14.2%;
+  height: 100%;
+
+  background: white;
+
+  transition:
+    width 800ms
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.movement-instruction {
+  margin:
+    0 0 16px;
+
+  font-size: 9px;
+
+  opacity: 0.52;
+}
+
+
+/* ==========================================
+   CASE STUDY
+========================================== */
+
+.case-study {
+  position: relative;
+
+  z-index: 3;
+
+  color: var(--soft-black);
+
+  background: var(--paper);
+}
+
+
+/* ==========================================
+   INTRODUCTION DU CASE STUDY
+========================================== */
+
+.case-introduction {
+  display: grid;
+
+  grid-template-columns:
+    minmax(160px, 0.65fr)
+    1.35fr
+    1fr;
+
+  column-gap:
+    clamp(32px, 5vw, 96px);
+
+  align-content: center;
+
+  min-height: 100svh;
+
+  padding:
+    clamp(64px, 9vw, 144px)
+    clamp(24px, 5vw, 80px);
+}
+
+.case-label,
+.section-number {
+  margin: 0;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.case-introduction h2 {
+  grid-column:
+    2 / 4;
+
+  margin:
+    48px 0 80px;
+
+  font-size:
+    clamp(48px, 7vw, 125px);
+
+  font-weight: 300;
+
+  line-height: 0.88;
+
+  letter-spacing: -0.065em;
+}
+
+.case-summary {
+  grid-column: 3;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+.case-summary p {
+  margin:
+    0 0 24px;
+}
+
+.case-summary strong {
+  font-weight: 500;
+}
+
+
+/* ==========================================
+   MANIFESTE DU PROJET
+========================================== */
+
+.project-statement {
+  padding:
+    12vw 5vw;
+
+  color: #f7f4ff;
+
+  background: #0b0910;
+
+  text-align: center;
+}
+
+.project-statement p {
+  margin:
+    0.15em 0;
+
+  font-size:
+    clamp(40px, 7vw, 128px);
+
+  font-weight: 300;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.06em;
+}
+
+.project-statement .purple-statement {
+  color: var(--violet);
+}
+
+
+/* ==========================================
+   STRUCTURE DES SECTIONS
+========================================== */
+
+.case-section {
+  padding:
+    clamp(96px, 11vw, 190px)
+    clamp(24px, 5vw, 80px);
+
+  border-bottom:
+    1px solid var(--dark-line);
+}
+
+.case-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(160px, 0.65fr)
+    1.35fr
+    1fr;
+
+  column-gap:
+    clamp(32px, 5vw, 96px);
+}
+
+.section-title {
+  grid-column: 2;
+}
+
+.section-title h3,
+.rooms-heading h3,
+.creators-section h3 {
+  margin: 0;
+
+  font-size:
+    clamp(46px, 6vw, 110px);
+
+  font-weight: 300;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.065em;
+}
+
+.section-text {
+  grid-column: 3;
+
+  align-self: end;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+.section-text p {
+  margin:
+    0 0 24px;
+}
+
+
+/* ==========================================
+   PARCOURS DU VISITEUR
+========================================== */
+
+.visitor-journey {
+  padding:
+    clamp(96px, 10vw, 160px)
+    clamp(24px, 5vw, 80px);
+
+  color: #f4f0ff;
+
+  background: #12101a;
+}
+
+.journey-list {
+  margin:
+    64px 0 0;
+
+  padding: 0;
+
+  list-style: none;
+}
+
+.journey-list li {
+  display: grid;
+
+  grid-template-columns:
+    80px
+    1fr
+    1fr;
+
+  align-items: baseline;
+
+  gap: 24px;
+
+  padding:
+    24px 0;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.22);
+}
+
+.journey-number,
+.journey-list strong {
+  font-family:
+    "DM Mono", monospace;
+
+  font-size: 11px;
+
+  letter-spacing: 0.11em;
+}
+
+.journey-list p {
+  margin: 0;
+
+  line-height: 1.6;
+
+  opacity: 0.7;
+}
+
+
+/* ==========================================
+   SALLES DE L’EXPOSITION
+========================================== */
+
+.rooms-section {
+  padding:
+    clamp(96px, 11vw, 190px)
+    clamp(24px, 5vw, 80px);
+
+  color: var(--soft-black);
+
+  background: #dedbd5;
+}
+
+.rooms-heading {
+  display: grid;
+
+  grid-template-columns:
+    1.5fr
+    1fr;
+
+  gap: 64px;
+
+  margin:
+    64px 0
+    110px 20%;
+}
+
+.rooms-heading p {
+  align-self: end;
+
+  max-width: 440px;
+
+  margin: 0;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+.room {
+  display: grid;
+
+  grid-template-columns:
+    144px
+    1fr
+    1fr;
+
+  align-items: baseline;
+
+  gap: 32px;
+
+  padding:
+    32px 0;
+
+  border-top:
+    1px solid rgba(17, 16, 22, 0.35);
+}
+
+.room span {
+  font-size: 11px;
+}
+
+.room h4 {
+  margin: 0;
+
+  font-size:
+    clamp(32px, 4vw, 78px);
+
+  font-weight: 300;
+
+  letter-spacing: -0.045em;
+}
+
+.room p {
+  max-width: 500px;
+
+  margin: 0;
+
+  line-height: 1.65;
+}
+
+
+/* Salle finale cauchemar */
+
+.nightmare-room {
+  margin-inline:
+    calc(clamp(24px, 5vw, 80px) * -1);
+
+  padding-inline:
+    clamp(24px, 5vw, 80px);
+
+  color: #ffedf1;
+
+  background: #210109;
+}
+
+
+/* ==========================================
+   SECTION SCIENTIFIQUE
+========================================== */
+
+.science-section {
+  background: #f1f0ed;
+}
+
+
+/* ==========================================
+   CRÉATEURS INTERNATIONAUX
+========================================== */
+
+.creators-section {
+  padding:
+    clamp(112px, 13vw, 220px)
+    clamp(24px, 5vw, 80px);
+
+  color: #17131e;
+
+  background:
+    linear-gradient(
+      135deg,
+      #c5b5ff,
+      #eef0ff 55%,
+      #ffd9e3
+    );
+}
+
+.creators-section h3 {
+  max-width: 1350px;
+
+  margin:
+    64px 0
+    110px 18%;
+}
+
+.creator-columns {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 48px;
+
+  margin-left: 18%;
+
+  line-height: 1.7;
+}
+
+.creator-columns p {
+  margin: 0;
+}
+
+
+/* ==========================================
+   FOOTER DU PROJET
+========================================== */
+
+.project-footer {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    auto;
+
+  align-items: end;
+
+  gap: 48px;
+
+  padding:
+    80px;
+
+  color: #f4f0ff;
+
+  background: #08070c;
+}
+
+.project-footer p {
+  margin:
+    6px 0;
+}
+
+.footer-label {
+  font-size: 10px;
+
+  opacity: 0.55;
+}
+
+.project-footer button {
+  border:
+    1px solid rgba(255, 255, 255, 0.6);
+
+  padding:
+    16px 22px;
+
+  background: transparent;
+
+  font-family:
+    "DM Mono", monospace;
+
+  font-size: 11px;
+
+  letter-spacing: 0.1em;
+
+  cursor: pointer;
+
+  transition:
+    color 250ms ease,
+    background 250ms ease;
+}
+
+.project-footer button:hover {
+  color: var(--black);
+
+  background: var(--white);
+}
+
+
+/* ==========================================
+   FENÊTRE D’ENVOI DU RÊVE
+========================================== */
+
+dialog {
+  width:
+    min(640px, calc(100vw - 32px));
+
+  padding:
+    clamp(32px, 5vw, 64px);
+
+  border: 0;
+
+  color: #17131e;
+
+  background:
+    rgba(247, 243, 255, 0.97);
+
+  box-shadow:
+    0 32px 128px rgba(0, 0, 0, 0.55);
+}
+
+dialog::backdrop {
+  background:
+    rgba(2, 2, 6, 0.78);
+
+  backdrop-filter:
+    blur(15px);
+}
+
+dialog h2 {
+  margin:
+    32px 0 16px;
+
+  font-size:
+    clamp(42px, 7vw, 88px);
+
+  font-weight: 300;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.06em;
+}
+
+dialog label {
+  display: block;
+
+  margin:
+    32px 0 12px;
+
+  font-size: 10px;
+}
+
+dialog textarea {
+  width: 100%;
+  min-height: 150px;
+
+  padding: 16px;
+
+  resize: vertical;
+
+  border:
+    1px solid #9f98aa;
+
+  color: #17131e;
+
+  background: transparent;
+
+  line-height: 1.5;
+}
+
+.close-dialog {
+  position: absolute;
+
+  top: 16px;
+  right: 20px;
+
+  border: 0;
+
+  color: #17131e;
+
+  background: transparent;
+
+  font-size: 32px;
+
+  cursor: pointer;
+}
+
+dialog .main-button {
+  margin-top: 16px;
+
+  border-color: #17131e;
+
+  color: white;
+
+  background: #17131e;
+}
+
+dialog .main-button:hover {
+  color: white;
+
+  background: #4d405f;
+}
+
+.dialog-link {
+  display: block;
+
+  margin-top: 20px;
+
+  padding:
+    8px 0;
+
+  border: 0;
+
+  border-bottom:
+    1px solid #17131e;
+
+  color: #17131e;
+
+  background: transparent;
+
+  font-family:
+    "DM Mono", monospace;
+
+  font-size: 10px;
+
+  letter-spacing: 0.09em;
+
+  cursor: pointer;
+}
+
+.privacy-note {
+  margin:
+    20px 0 0;
+
+  font-size: 9px;
+
+  opacity: 0.55;
+}
+
+
+/* ==========================================
+   ANIMATION DU POINT DE SOMMEIL
+========================================== */
+
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+
+    transform:
+      scale(0.55);
+  }
+}
+
+
+/* ==========================================
+   VERSION TABLETTE ET MOBILE
+========================================== */
+
+@media (max-width: 800px) {
+
+  .opening {
+    padding:
+      20px;
+  }
+
+  .opening-top {
+    display: block;
+  }
+
+  .laboratory-label {
+    text-align: left;
+  }
+
+  .sleep-status {
+    justify-content: center;
+
+    margin-top: 20px;
+  }
+
+  .opening-actions {
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .sound-note {
+    margin-top: 32px;
+  }
+
+
+  /* Prototype */
+
+  .prototype {
+    padding:
+      20px;
+  }
+
+  #sleep-phase {
+    display: none;
+  }
+
+  .prototype-header {
+    align-items: flex-start;
+  }
+
+  .prototype-controls {
+    gap: 14px;
+  }
+
+  .chapter-panel {
+    width: 100%;
+  }
+
+  .prototype-bottom {
+    display: block;
+  }
+
+  .prototype-navigation {
+    width: 100%;
+  }
+
+  .movement-instruction {
+    display: none;
+  }
+
+
+  /* Case study */
+
+  .case-introduction,
+  .case-grid {
+    display: block;
+  }
+
+  .case-introduction {
+    min-height: auto;
+
+    padding:
+      100px 24px;
+  }
+
+  .case-introduction h2 {
+    margin:
+      48px 0;
+  }
+
+  .case-summary,
+  .section-text {
+    margin-top:
+      48px;
+  }
+
+  .project-statement {
+    padding:
+      120px 24px;
+  }
+
+
+  /* Parcours */
+
+  .journey-list li {
+    grid-template-columns:
+      48px
+      1fr;
+  }
+
+  .journey-list p {
+    grid-column: 2;
+  }
+
+
+  /* Salles */
+
+  .rooms-heading {
+    display: block;
+
+    margin:
+      48px 0
+      80px;
+  }
+
+  .rooms-heading p {
+    margin-top:
+      32px;
+  }
+
+  .room {
+    grid-template-columns:
+      1fr;
+
+    gap: 12px;
+  }
+
+
+  /* Créateurs */
+
+  .creators-section h3 {
+    margin:
+      48px 0
+      80px;
+  }
+
+  .creator-columns {
+    display: block;
+
+    margin-left: 0;
+  }
+
+  .creator-columns p {
+    margin-bottom:
+      32px;
+  }
+
+
+  /* Footer */
+
+  .project-footer {
+    grid-template-columns:
+      1fr;
+
+    padding:
+      64px 24px;
+  }
+
+}
+
+
+/* ==========================================
+   VERSION TRÈS PETIT ÉCRAN
+========================================== */
+
+@media (max-width: 480px) {
+
+  .opening h1 {
+    font-size:
+      clamp(48px, 17vw, 76px);
+  }
+
+  .opening-question {
+    max-width: 280px;
+
+    margin-inline: auto;
+  }
+
+  .sleep-status span:last-child {
+    display: none;
+  }
+
+  .chapter-panel h2 {
+    font-size:
+      42px;
+  }
+
+  .case-introduction h2 {
+    font-size:
+      44px;
+  }
+
+  .project-statement p {
+    font-size:
+      40px;
+  }
+
+}
+
+
+/* ==========================================
+   ACCESSIBILITÉ
+   Réduit les animations si demandé
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+
+}
