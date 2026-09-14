@@ -547,9 +547,9 @@ function initialiseStars() {
   function resize() {
     const ratio =
       Math.min(
-        window.devicePixelRatio || 1,
-        2
-      );
+  window.devicePixelRatio || 1,
+  1.25
+);
 
 
     width =
@@ -584,10 +584,9 @@ function initialiseStars() {
 
 
     const total =
-      width < 700
-        ? 340
-        : 820;
-
+  width < 700
+    ? 140
+    : 320;
 
     for (
       let index = 0;
@@ -790,9 +789,9 @@ function initialiseBrain() {
 
 
     const total =
-      width < 700
-        ? 150
-        : 290;
+  width < 700
+    ? 55
+    : 105;
 
 
     for (
@@ -877,9 +876,9 @@ function initialiseBrain() {
   function resize() {
     const ratio =
       Math.min(
-        window.devicePixelRatio || 1,
-        2
-      );
+  window.devicePixelRatio || 1,
+  1.25
+);
 
 
     width =
@@ -961,6 +960,11 @@ function initialiseBrain() {
     const energy =
       window.brainEnergy || 0;
 
+     if (
+  blossoms.length >= 6
+) {
+  return;
+}
 
     if (
       energy < 0.16
@@ -1104,10 +1108,7 @@ function initialiseBrain() {
       ")";
 
 
-    context.shadowColor =
-      "rgba(" +
-      colourString +
-      ",0.9)";
+    
 
 
     context.shadowBlur =
@@ -1364,8 +1365,7 @@ function initialiseBrain() {
           ",0.85)";
 
 
-        context.shadowBlur =
-          fairy.glow;
+        
 
 
         context.fill();
