@@ -290,6 +290,29 @@ a {
 
 .sleeper-open {
   z-index: 2;
+
+  /*
+   * Fusion progressive des quatre bords
+   * de l’image avec le ciel du site.
+   */
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 76% 78% at 50% 47%,
+      black 48%,
+      rgba(0, 0, 0, 0.96) 62%,
+      rgba(0, 0, 0, 0.55) 78%,
+      transparent 100%
+    );
+
+  mask-image:
+    radial-gradient(
+      ellipse 76% 78% at 50% 47%,
+      black 48%,
+      rgba(0, 0, 0, 0.96) 62%,
+      rgba(0, 0, 0, 0.55) 78%,
+      transparent 100%
+    );
 }
 
 
@@ -923,6 +946,8 @@ a {
 
   width: 112vw;
   height: 92vh;
+
+overflow: visible;
 }
 
   .narration-area {
