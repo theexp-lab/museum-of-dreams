@@ -237,13 +237,13 @@ function updateStory() {
   /* Fermeture des yeux */
 
   const eyeMovement =
-    smooth(
-      range(
-        progress,
-        0.13,
-        0.28
-      )
-    );
+  smooth(
+    range(
+      progress,
+      0.13,
+      0.22
+    )
+  );
 
 
   /* Apparition du cerveau */
