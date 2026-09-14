@@ -267,7 +267,9 @@ const eyeProgress =
  * évite une fermeture droite et mécanique.
  */
 
-/* Fermeture progressive des vrais yeux */
+/* ==========================================
+   FERMETURE PROGRESSIVE DES YEUX
+========================================== */
 
 const eyeProgress =
   range(
@@ -287,7 +289,8 @@ const eyesClosed =
   );
 
 
-  /* Apparition du cerveau */
+/* Apparition du cerveau */
+
 
   const brainOpacity =
     range(
