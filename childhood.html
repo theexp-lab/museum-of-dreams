@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#2b315f"
+  >
+
+  <meta
+    name="description"
+    content="Childhood — Room 02 of The Museum of Dreams."
+  >
+
+  <title>
+    Childhood — Museum of Dreams
+  </title>
+
+
+  <!-- Polices -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- CSS de la salle -->
+
+  <link
+    rel="stylesheet"
+    href="./childhood.css?v=1"
+  >
+
+</head>
+
+
+<body class="childhood-page phase-0">
+
+
+  <!-- ==========================================
+       MAISON RECONSTRUITE PAR LA MÉMOIRE
+  =========================================== -->
+
+  <div
+    class="childhood-world"
+    aria-hidden="true"
+  >
+
+    <img
+      class="childhood-image"
+      src="./childhood-room.png"
+      alt=""
+    >
+
+    <div class="room-colour"></div>
+
+    <div class="door-memory-light"></div>
+
+    <div class="cursor-glow"></div>
+
+    <canvas id="memory-dust"></canvas>
+
+  </div>
+
+
+  <!-- ==========================================
+       ÉCHELLE DE L’ENFANT
+  =========================================== -->
+
+  <div
+    class="height-memory"
+    aria-hidden="true"
+  >
+
+    <span style="--height: 12%;">
+      175 CM
+    </span>
+
+    <span style="--height: 36%;">
+      140 CM
+    </span>
+
+    <span style="--height: 61%;">
+      110 CM
+    </span>
+
+    <span style="--height: 82%;">
+      86 CM
+    </span>
+
+  </div>
+
+
+  <!-- ==========================================
+       CRÉATURE DU PAPIER PEINT
+  =========================================== -->
+
+  <div
+    class="memory-animal"
+    aria-hidden="true"
+  >
+
+    <div class="animal-aura"></div>
+
+
+    <svg
+      viewBox="0 0 500 420"
+      role="presentation"
+    >
+
+      <g class="animal-body">
+
+        <ellipse
+          cx="264"
+          cy="245"
+          rx="116"
+          ry="67"
+        ></ellipse>
+
+        <path
+          d="M168 244 C132 225 112 188 122 143 C129 110 155 90 189 87 C181 114 184 151 203 188 Z"
+        ></path>
+
+        <ellipse
+          cx="137"
+          cy="113"
+          rx="48"
+          ry="34"
+          transform="rotate(-17 137 113)"
+        ></ellipse>
+
+        <path
+          d="M103 94 L71 52 L116 76 Z"
+        ></path>
+
+        <path
+          d="M147 80 L165 34 L171 88 Z"
+        ></path>
+
+        <path
+          d="M168 301 L155 387"
+        ></path>
+
+        <path
+          d="M231 307 L225 399"
+        ></path>
+
+        <path
+          d="M315 307 L329 397"
+        ></path>
+
+        <path
+          d="M365 293 L395 382"
+        ></path>
+
+        <path
+          d="M373 225 C415 203 434 220 448 245"
+        ></path>
+
+        <circle
+          cx="119"
+          cy="107"
+          r="5"
+        ></circle>
+
+      </g>
+
+
+      <g class="animal-antlers">
+
+        <path
+          d="M119 78 C96 49 101 23 87 8 M99 48 L72 33 M100 39 L114 14"
+        ></path>
+
+        <path
+          d="M145 77 C158 48 151 22 166 8 M157 45 L184 29 M157 36 L144 12"
+        ></path>
+
+      </g>
+
+    </svg>
+
+
+    <span class="animal-star star-one"></span>
+
+    <span class="animal-star star-two"></span>
+
+    <span class="animal-star star-three"></span>
+
+  </div>
+
+
+  <!-- ==========================================
+       VOIX DERRIÈRE LA PORTE
+  =========================================== -->
+
+  <div
+    class="remembered-voice"
+    aria-hidden="true"
+  >
+
+    <div class="voice-light"></div>
+
+
+    <div class="voice-wave">
+
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       FRAGMENTS QUI SE RECOMBINENT
+  =========================================== -->
+
+  <div
+    class="memory-fragments"
+    aria-hidden="true"
+  >
+
+    <span class="fragment fragment-one"></span>
+
+    <span class="fragment fragment-two"></span>
+
+    <span class="fragment fragment-three"></span>
+
+    <span class="fragment fragment-four"></span>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
+  <header class="childhood-header">
+
+    <a href="everyday.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
+
+    <div class="childhood-location">
+
+      <span class="location-dot"></span>
+
+      <span>
+        ROOM 02 · CHILDHOOD
+      </span>
+
+    </div>
+
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
+  </header>
+
+
+  <!-- ==========================================
+       TITRE DE LA SALLE
+  =========================================== -->
+
+  <section class="childhood-introduction">
+
+    <p>
+      ROOM 02
+    </p>
+
+
+    <h1>
+
+      CHILD
+
+      <em>HOOD</em>
+
+    </h1>
+
+
+    <span>
+      THE HOUSE REMEMBERS
+    </span>
+
+  </section>
+
+
+  <!-- ==========================================
+       NARRATION
+  =========================================== -->
+
+  <section
+    class="childhood-narration"
+    aria-live="polite"
+  >
+
+    <p
+      class="childhood-sentence"
+      id="childhood-sentence"
+    >
+
+      The house remembers you smaller
+
+      <em>
+        than you remember yourself.
+      </em>
+
+    </p>
+
+  </section>
+
+
+  <!-- ==========================================
+       CARTEL DU RÊVE
+  =========================================== -->
+
+  <aside
+    class="childhood-label"
+    id="childhood-label"
+    aria-live="polite"
+  >
+
+    <span id="composite-number">
+      COMPOSITE DREAM 01
+    </span>
+
+
+    <strong id="composite-title">
+      THE HOUSE WITHOUT MEASURE
+    </strong>
+
+
+    <dl>
+
+      <div>
+
+        <dt>
+          MEMORY SOURCE
+        </dt>
+
+        <dd id="memory-source">
+          HOME
+        </dd>
+
+      </div>
+
+
+      <div>
+
+        <dt>
+          EMOTIONAL CORE
+        </dt>
+
+        <dd id="emotional-core">
+          BELONGING
+        </dd>
+
+      </div>
+
+    </dl>
+
+  </aside>
+
+
+  <!-- ==========================================
+       NOTE SCIENTIFIQUE
+  =========================================== -->
+
+  <aside
+    class="research-note"
+    id="research-note"
+  >
+
+    <span>
+      RESEARCH NOTE 02
+    </span>
+
+
+    <p>
+
+      Dreams tend to incorporate autobiographical
+      fragments rather than replay complete memories.
+
+    </p>
+
+
+    <strong>
+      INTERPRETATION · NOT REPRODUCTION
+    </strong>
+
+  </aside>
+
+
+  <!-- ==========================================
+       CONCLUSION
+  =========================================== -->
+
+  <section class="childhood-conclusion">
+
+    <p>
+      You do not return to childhood.
+    </p>
+
+
+    <h2>
+
+      CHILDHOOD RETURNS
+      <br>
+
+      <em>
+        REARRANGED.
+      </em>
+
+    </h2>
+
+  </section>
+
+
+  <!-- ==========================================
+       FENÊTRE VERS ADVENTURE
+  =========================================== -->
+
+  <section
+    class="adventure-exit"
+    id="adventure-exit"
+  >
+
+    <div
+      class="adventure-window"
+      aria-hidden="true"
+    >
+
+      <div class="window-sky"></div>
+
+      <div class="window-cloud cloud-one"></div>
+
+      <div class="window-cloud cloud-two"></div>
+
+      <div class="window-frame"></div>
+
+      <div class="flying-curtain curtain-left"></div>
+
+      <div class="flying-curtain curtain-right"></div>
+
+    </div>
+
+
+    <p>
+
+      Beyond the window,
+      <br>
+
+      <em>
+        gravity is beginning to loosen.
+      </em>
+
+    </p>
+
+
+    <a
+      href="adventure.html"
+      id="enter-adventure"
+    >
+
+      <span>
+        ENTER ROOM 03
+      </span>
+
+      <strong>
+        ADVENTURE
+      </strong>
+
+      <small>
+        STEP THROUGH →
+      </small>
+
+    </a>
+
+  </section>
+
+
+  <!-- ==========================================
+       INTERFACE
+  =========================================== -->
+
+  <p
+    class="childhood-instruction"
+    id="childhood-instruction"
+  >
+    RETURN TO THE HOUSE
+  </p>
+
+
+  <div class="childhood-progress">
+
+    <span id="childhood-progress-fill"></span>
+
+  </div>
+
+
+  <!-- Espace de narration verticale -->
+
+  <main class="childhood-scroll"></main>
+
+
+  <!-- Transitions -->
+
+  <div
+    class="childhood-arrival"
+    aria-hidden="true"
+  ></div>
+
+
+  <div
+    class="adventure-transition"
+    aria-hidden="true"
+  ></div>
+
+
+  <script src="./childhood.js?v=1"></script>
+
+</body>
+
+</html>
