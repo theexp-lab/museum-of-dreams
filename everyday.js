@@ -941,7 +941,7 @@ if (
       window.setTimeout(
         function () {
           window.location.href =
-            "recurring.html";
+  "childhood.html";
         },
         1200
       );
