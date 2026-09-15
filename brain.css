@@ -1190,3 +1190,10 @@ a {
       0.01ms !important;
   }
 }
+.welcome-line {
+  font-size: clamp(14px, 1.25vw, 19px);
+}
+
+.collection-line {
+  font-size: clamp(12px, 1vw, 16px);
+}
