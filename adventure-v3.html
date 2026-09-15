@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#8298d8">
+  <meta name="description" content="Adventure — Room 03 of The Museum of Dreams.">
+  <title>Adventure — The Museum of Dreams</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Italiana&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="adventure.css?v=4">
+</head>
+
+<body class="adventure-page">
+  <div class="adventure-world" aria-hidden="true">
+    <div class="base-sky"></div>
+    <div class="clear-sun"></div>
+
+    <div class="sunset sunset-golden">
+      <span class="sunset-sun"></span>
+    </div>
+    <div class="sunset sunset-electric">
+      <span class="sunset-sun"></span>
+    </div>
+    <div class="sunset sunset-last-light">
+      <span class="sunset-sun"></span>
+    </div>
+
+    <canvas id="adventure-canvas"></canvas>
+
+    <div class="cloud-tunnel">
+      <span class="tunnel-cloud cloud-1"></span>
+      <span class="tunnel-cloud cloud-2"></span>
+      <span class="tunnel-cloud cloud-3"></span>
+      <span class="tunnel-cloud cloud-4"></span>
+      <span class="tunnel-cloud cloud-5"></span>
+      <span class="tunnel-cloud cloud-6"></span>
+      <span class="tunnel-cloud cloud-7"></span>
+      <span class="tunnel-cloud cloud-8"></span>
+    </div>
+
+    <div class="inverted-forest">
+      <svg class="forest-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMin slice">
+        <g class="tree tree-left">
+          <path class="tree-trunk" d="M170 -20 C155 145 195 245 166 385 C140 510 181 612 165 735"></path>
+          <path class="tree-branch" d="M170 285 C115 340 70 390 35 475 M170 385 C240 430 282 498 315 575 M166 515 C105 570 78 635 52 715"></path>
+          <circle class="tree-crown" cx="80" cy="730" r="105"></circle>
+          <circle class="tree-crown" cx="177" cy="795" r="143"></circle>
+          <circle class="tree-crown" cx="292" cy="745" r="112"></circle>
+        </g>
+
+        <g class="tree tree-centre">
+          <path class="tree-trunk" d="M600 -20 C580 150 625 285 595 430 C568 560 620 665 600 790"></path>
+          <path class="tree-branch" d="M600 270 C525 325 468 398 420 500 M600 390 C687 445 742 526 790 620 M598 555 C520 610 478 692 445 790"></path>
+          <circle class="tree-crown" cx="480" cy="755" r="125"></circle>
+          <circle class="tree-crown" cx="610" cy="832" r="166"></circle>
+          <circle class="tree-crown" cx="753" cy="770" r="132"></circle>
+        </g>
+
+        <g class="tree tree-right">
+          <path class="tree-trunk" d="M1030 -20 C1050 155 1008 260 1035 405 C1060 530 1015 635 1034 760"></path>
+          <path class="tree-branch" d="M1030 300 C968 355 925 418 888 510 M1033 412 C1098 460 1148 530 1182 610 M1034 550 C1090 608 1128 672 1150 750"></path>
+          <circle class="tree-crown" cx="913" cy="755" r="110"></circle>
+          <circle class="tree-crown" cx="1035" cy="813" r="150"></circle>
+          <circle class="tree-crown" cx="1155" cy="770" r="118"></circle>
+        </g>
+      </svg>
+
+      <span class="luminous-leaf leaf-1"></span>
+      <span class="luminous-leaf leaf-2"></span>
+      <span class="luminous-leaf leaf-3"></span>
+      <span class="luminous-leaf leaf-4"></span>
+      <span class="luminous-leaf leaf-5"></span>
+    </div>
+
+    <div class="impossible-horizon">
+      <div class="mirror-top"></div>
+      <div class="mirror-line"></div>
+      <div class="mirror-bottom"></div>
+    </div>
+
+    <div class="romance-light">
+      <span class="romance-halo"></span>
+      <span class="romance-core"></span>
+    </div>
+  </div>
+
+  <header class="adventure-header">
+    <a href="childhood.html">← ROOM 02</a>
+    <p>THE MUSEUM OF DREAMS</p>
+    <a href="romance.html">ROOM 04 →</a>
+  </header>
+
+  <aside class="room-index">
+    <span>ROOM 03</span>
+    <strong>ADVENTURE</strong>
+  </aside>
+
+  <section class="narration-stage" aria-live="polite">
+    <div class="adventure-narration" id="adventure-narration">
+      <p class="narration-label">ROOM 03 · ADVENTURE</p>
+      <h1>The sky starts here.<em>And gravity ends.</em></h1>
+    </div>
+  </section>
+
+  <aside class="science-note" id="science-note">
+    <span class="science-number" id="science-number">03.1</span>
+    <div class="science-content">
+      <strong id="science-title">FLYING DREAMS</strong>
+      <p id="science-text">In one student sample, 48.3% reported having experienced a flying dream.</p>
+      <a id="science-source" href="https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b" target="_blank" rel="noopener noreferrer">VIEW STUDY ↗</a>
+    </div>
+  </aside>
+
+  <div class="scroll-progress"><span id="scroll-progress-fill"></span></div>
+  <p class="scroll-message" id="scroll-message">FLY INTO THE DREAM</p>
+
+  <section class="romance-gate" id="romance-gate">
+    <p class="romance-introduction">Everything keeps changing.</p>
+    <h2>Except for<em>one small light.</em></h2>
+    <p class="romance-sentence">A moment ago, you were somewhere else.<br>Now, someone is here.</p>
+    <a href="romance.html" id="follow-glow" class="follow-glow">
+      <span>FOLLOW THE GLOW</span>
+      <small>ROOM 04 · ROMANCE</small>
+    </a>
+  </section>
+
+  <main class="adventure-scroll"></main>
+  <div class="romance-transition" aria-hidden="true"></div>
+  <script src="adventure.js?v=4"></script>
+</body>
+</html>
