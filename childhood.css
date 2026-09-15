@@ -1886,3 +1886,180 @@ a {
       0.01ms !important;
   }
 }
+/* ==========================================
+   NOUVELLE PROGRESSION — CHILDHOOD
+========================================== */
+
+
+/* L’animal reste visible pendant deux phrases */
+
+.phase-3 .memory-animal,
+.phase-4 .memory-animal {
+  opacity: 0.9;
+
+  filter: none;
+
+  transform:
+    translate(-50%, 0)
+    scale(1);
+
+  animation:
+    animalFloat
+    5.5s ease-in-out infinite;
+}
+
+
+/* La voix apparaît plus tard */
+
+.phase-4 .remembered-voice {
+  opacity: 0;
+}
+
+.phase-5 .remembered-voice,
+.phase-6 .remembered-voice {
+  opacity: 0.86;
+}
+
+
+/* Les fragments apparaissent pendant
+   la recombinaison de la maison */
+
+.phase-5 .memory-fragments,
+.phase-6 .memory-fragments {
+  opacity: 0;
+}
+
+.phase-7 .memory-fragments,
+.phase-8 .memory-fragments {
+  opacity: 0.75;
+}
+
+.phase-7 .fragment,
+.phase-8 .fragment {
+  animation:
+    fragmentDrift
+    6s ease-in-out infinite alternate;
+}
+
+.phase-7 .fragment-two,
+.phase-8 .fragment-two {
+  animation-delay: -1s;
+}
+
+.phase-7 .fragment-three,
+.phase-8 .fragment-three {
+  animation-delay: -2s;
+}
+
+.phase-7 .fragment-four,
+.phase-8 .fragment-four {
+  animation-delay: -3s;
+}
+
+
+/* Observations scientifiques évolutives */
+
+.research-note.visible {
+  opacity: 0.92;
+
+  transform: none;
+}
+
+
+/* Empêcher l’ancienne conclusion
+   d’apparaître trop tôt */
+
+.phase-6 .childhood-conclusion {
+  visibility: hidden;
+
+  opacity: 0;
+}
+
+.phase-9 .childhood-conclusion {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+
+/* Empêcher l’ancienne fenêtre
+   d’apparaître pendant les fragments */
+
+.phase-7 .adventure-exit {
+  visibility: hidden;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.phase-10 .adventure-exit {
+  visibility: visible;
+
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
+
+/* Lumière normale pendant la voix */
+
+.phase-5 .childhood-image,
+.phase-6 .childhood-image {
+  filter:
+    brightness(0.64)
+    saturate(0.86)
+    contrast(1.02);
+}
+
+
+/* Maison transformée */
+
+.phase-7 .childhood-image,
+.phase-8 .childhood-image {
+  filter:
+    brightness(0.58)
+    saturate(0.76)
+    contrast(1.04)
+    hue-rotate(5deg);
+}
+
+
+/* Restaurer le décor pendant les fragments */
+
+.phase-7 .childhood-world {
+  opacity: 1;
+}
+
+.phase-7 .cursor-glow {
+  opacity: 0.54;
+}
+
+
+/* Conclusion */
+
+.phase-9 .childhood-image {
+  filter:
+    brightness(0.47)
+    saturate(0.68)
+    contrast(1.05)
+    blur(1px);
+}
+
+
+/* Fenêtre finale */
+
+.phase-10 .childhood-world {
+  opacity: 0.46;
+}
+
+.phase-10 .cursor-glow {
+  opacity: 0;
+}
+
+
+/* Plus d’espace pour les nouvelles phrases */
+
+.childhood-scroll {
+  height: 850vh;
+}
