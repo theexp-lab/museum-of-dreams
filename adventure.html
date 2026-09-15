@@ -13,12 +13,12 @@
 
   <meta
     name="theme-color"
-    content="#737fd7"
+    content="#7f92d5"
   >
 
   <meta
     name="description"
-    content="Room 03 — Adventure. A journey through flying, falling and impossible dream landscapes."
+    content="Adventure — Room 03 of The Museum of Dreams."
   >
 
   <title>
@@ -26,7 +26,7 @@
   </title>
 
 
-  <!-- POLICES -->
+  <!-- Polices -->
 
   <link
     rel="preconnect"
@@ -45,11 +45,11 @@
   >
 
 
-  <!-- CSS DE LA SALLE -->
+  <!-- CSS de la salle -->
 
   <link
     rel="stylesheet"
-    href="./adventure.css?v=1"
+    href="./adventure.css?v=2"
   >
 
 </head>
@@ -59,130 +59,283 @@
 
 
   <!-- ==========================================
-       MONDE FIXE
+       MONDE DU RÊVE
   =========================================== -->
 
   <div
-    class="dream-world"
+    class="adventure-world"
     aria-hidden="true"
   >
 
-    <div class="sky-gradient"></div>
+    <!-- Ciel principal -->
 
-    <div class="sky-light"></div>
+    <div class="base-sky"></div>
 
-    <div class="sky-aurora"></div>
+    <div class="celestial-light"></div>
 
-    <canvas id="magic-canvas"></canvas>
-
-
-    <!-- SOLEIL / PORTAIL -->
-
-    <div class="dream-sun">
-
-      <span></span>
-
-    </div>
+    <div class="soft-aurora"></div>
 
 
-    <!-- NUAGES LOINTAINS -->
+    <!-- Couchers de soleil de la chute -->
 
-    <div class="cloud-layer cloud-layer-far">
+    <div class="sunset-layer sunset-peach"></div>
 
-      <span class="cloud cloud-a"></span>
+    <div class="sunset-layer sunset-pink"></div>
 
-      <span class="cloud cloud-b"></span>
-
-      <span class="cloud cloud-c"></span>
-
-      <span class="cloud cloud-d"></span>
-
-    </div>
+    <div class="sunset-layer sunset-night"></div>
 
 
-    <!-- ÎLES FLOTTANTES -->
+    <!-- Étoiles -->
 
-    <div class="island-layer">
-
-      <div class="floating-island island-one">
-
-        <span class="island-top"></span>
-
-        <span class="island-rock"></span>
-
-        <span class="island-waterfall"></span>
-
-      </div>
+    <canvas id="adventure-canvas"></canvas>
 
 
-      <div class="floating-island island-two">
+    <!-- ======================================
+         VOL DANS LES NUAGES
+    ======================================= -->
 
-        <span class="island-top"></span>
+    <div class="cloud-flight">
 
-        <span class="island-rock"></span>
+      <span class="mist mist-one"></span>
 
-      </div>
+      <span class="mist mist-two"></span>
 
+      <span class="mist mist-three"></span>
 
-      <div class="floating-island island-three">
+      <span class="mist mist-four"></span>
 
-        <span class="island-top"></span>
+      <span class="mist mist-five"></span>
 
-        <span class="island-rock"></span>
-
-        <span class="island-waterfall"></span>
-
-      </div>
+      <span class="mist mist-six"></span>
 
     </div>
 
 
-    <!-- FORÊT INVERSÉE -->
+    <!-- ======================================
+         FORÊT INVERSÉE
+    ======================================= -->
 
-    <div class="upside-forest">
+    <div class="inverted-forest">
 
-      <div class="forest-root root-one"></div>
+      <svg
+        class="forest-svg"
+        viewBox="0 0 1400 720"
+        preserveAspectRatio="xMidYMin slice"
+      >
 
-      <div class="forest-root root-two"></div>
+        <!-- Arbre gauche -->
 
-      <div class="forest-root root-three"></div>
+        <g class="dream-tree tree-one">
 
-      <div class="forest-root root-four"></div>
+          <path
+            class="tree-trunk"
+            d="
+              M120 0
+              C124 85 112 153 126 229
+              C139 295 122 353 146 438
+              L178 438
+              C196 346 176 286 190 217
+              C203 149 190 75 195 0
+              Z
+            "
+          ></path>
 
-      <div class="forest-root root-five"></div>
+          <path
+            class="tree-branches"
+            d="
+              M146 208
+              C97 247 61 283 33 337
+              C82 300 120 284 156 272
+
+              M165 257
+              C219 288 255 330 283 387
+              C233 344 196 328 157 315
+
+              M150 340
+              C95 376 67 420 46 474
+              C96 432 132 420 167 405
+            "
+          ></path>
+
+          <circle
+            class="tree-crown"
+            cx="74"
+            cy="407"
+            r="76"
+          ></circle>
+
+          <circle
+            class="tree-crown"
+            cx="163"
+            cy="445"
+            r="105"
+          ></circle>
+
+          <circle
+            class="tree-crown"
+            cx="245"
+            cy="411"
+            r="79"
+          ></circle>
+
+        </g>
+
+
+        <!-- Arbre central -->
+
+        <g class="dream-tree tree-two">
+
+          <path
+            class="tree-trunk"
+            d="
+              M653 0
+              C660 89 640 158 660 241
+              C676 311 649 391 682 505
+              L721 505
+              C747 400 718 317 740 236
+              C758 161 742 82 747 0
+              Z
+            "
+          ></path>
+
+          <path
+            class="tree-branches"
+            d="
+              M681 226
+              C621 257 570 300 530 369
+              C591 324 632 311 692 292
+
+              M712 278
+              C773 306 817 357 856 425
+              C797 378 756 355 697 340
+
+              M686 381
+              C622 414 584 461 551 533
+              C611 480 655 465 707 444
+            "
+          ></path>
+
+          <circle
+            class="tree-crown"
+            cx="591"
+            cy="469"
+            r="95"
+          ></circle>
+
+          <circle
+            class="tree-crown"
+            cx="698"
+            cy="513"
+            r="128"
+          ></circle>
+
+          <circle
+            class="tree-crown"
+            cx="811"
+            cy="467"
+            r="91"
+          ></circle>
+
+        </g>
+
+
+        <!-- Arbre droit -->
+
+        <g class="dream-tree tree-three">
+
+          <path
+            class="tree-trunk"
+            d="
+              M1185 0
+              C1181 95 1200 166 1184 238
+              C1167 313 1195 371 1168 458
+              L1204 458
+              C1227 371 1207 307 1222 235
+              C1238 159 1224 83 1230 0
+              Z
+            "
+          ></path>
+
+          <path
+            class="tree-branches"
+            d="
+              M1192 225
+              C1143 257 1098 295 1066 354
+              C1114 316 1150 300 1200 282
+
+              M1207 286
+              C1261 314 1300 354 1336 415
+              C1285 373 1249 354 1195 337
+
+              M1190 354
+              C1140 390 1105 431 1084 487
+              C1129 449 1166 433 1206 414
+            "
+          ></path>
+
+          <circle
+            class="tree-crown"
+            cx="1113"
+            cy="426"
+            r="81"
+          ></circle>
+
+          <circle
+            class="tree-crown"
+            cx="1190"
+            cy="474"
+            r="111"
+          ></circle>
+
+          <circle
+            class="tree-crown"
+            cx="1294"
+            cy="438"
+            r="87"
+          ></circle>
+
+        </g>
+
+      </svg>
+
+
+      <!-- Feuilles lumineuses -->
+
+      <span class="dream-leaf leaf-one"></span>
+
+      <span class="dream-leaf leaf-two"></span>
+
+      <span class="dream-leaf leaf-three"></span>
+
+      <span class="dream-leaf leaf-four"></span>
+
+      <span class="dream-leaf leaf-five"></span>
 
     </div>
 
 
-    <!-- COUCHERS DE SOLEIL DE LA CHUTE -->
+    <!-- ======================================
+         HORIZON IMPOSSIBLE
+    ======================================= -->
 
-    <div class="falling-worlds">
+    <div class="impossible-horizon">
 
-      <span class="sunset-ring ring-one"></span>
+      <div class="upper-sky-reflection"></div>
 
-      <span class="sunset-ring ring-two"></span>
+      <div class="horizon-light"></div>
 
-      <span class="sunset-ring ring-three"></span>
+      <div class="lower-sky-reflection"></div>
 
-    </div>
+      <span class="horizon-star star-left"></span>
 
-
-    <!-- OCÉAN / HORIZON IMPOSSIBLE -->
-
-    <div class="impossible-ocean">
-
-      <div class="ocean-glow"></div>
-
-      <div class="ocean-line line-one"></div>
-
-      <div class="ocean-line line-two"></div>
-
-      <div class="ocean-line line-three"></div>
+      <span class="horizon-star star-right"></span>
 
     </div>
 
 
-    <!-- LUMIÈRE VERS ROMANCE -->
+    <!-- ======================================
+         LUMIÈRE VERS ROMANCE
+    ======================================= -->
 
     <div class="romance-light">
 
@@ -219,10 +372,10 @@
 
 
   <!-- ==========================================
-       INDICATION DE SALLE
+       NUMÉRO DE LA SALLE
   =========================================== -->
 
-  <aside class="room-marker">
+  <aside class="room-index">
 
     <span>
       ROOM 03
@@ -236,10 +389,7 @@
 
 
   <!-- ==========================================
-       NARRATION UNIQUE
-
-       Le JS remplace cette phrase au fil
-       du scroll afin d’éviter les chevauchements.
+       NARRATION
   =========================================== -->
 
   <section
@@ -248,7 +398,7 @@
   >
 
     <div
-      class="narration"
+      class="adventure-narration"
       id="adventure-narration"
     >
 
@@ -257,8 +407,13 @@
       </p>
 
       <h1>
+
         The sky starts here.
-        <em>And gravity ends.</em>
+
+        <em>
+          And gravity ends.
+        </em>
+
       </h1>
 
     </div>
@@ -267,7 +422,7 @@
 
 
   <!-- ==========================================
-       OBSERVATIONS SCIENTIFIQUES
+       NOTE SCIENTIFIQUE
   =========================================== -->
 
   <aside
@@ -275,30 +430,28 @@
     id="science-note"
   >
 
-    <p
+    <span
       class="science-number"
       id="science-number"
     >
       03.1
-    </p>
+    </span>
 
 
     <div class="science-content">
 
-      <p
-        class="science-title"
-        id="science-title"
-      >
+      <strong id="science-title">
         FLYING DREAMS
-      </p>
+      </strong>
 
-      <p
-        class="science-text"
-        id="science-text"
-      >
+
+      <p id="science-text">
+
         In one student sample, 48.3% reported
         having experienced a flying dream.
+
       </p>
+
 
       <a
         id="science-source"
@@ -315,26 +468,26 @@
 
 
   <!-- ==========================================
-       INDICATEUR DE PROGRESSION
+       PROGRESSION
   =========================================== -->
 
-  <div class="adventure-progress">
+  <div class="scroll-progress">
 
-    <span id="adventure-progress-fill"></span>
+    <span id="scroll-progress-fill"></span>
 
   </div>
 
 
   <p
-    class="scroll-instruction"
-    id="scroll-instruction"
+    class="scroll-message"
+    id="scroll-message"
   >
     FLY INTO THE DREAM
   </p>
 
 
   <!-- ==========================================
-       PASSAGE VERS ROMANCE
+       TRANSITION VERS ROMANCE
   =========================================== -->
 
   <section
@@ -342,35 +495,54 @@
     id="romance-gate"
   >
 
-    <p>
+    <p class="romance-introduction">
+
       Everything keeps changing.
+
     </p>
+
 
     <h2>
+
       Except for
-      <em>one small light.</em>
+
+      <em>
+        one small light.
+      </em>
+
     </h2>
 
-    <p class="romance-arrival">
-      A moment ago, you were somewhere else.<br>
+
+    <p class="romance-sentence">
+
+      A moment ago, you were somewhere else.
+      <br>
+
       Now, someone is here.
+
     </p>
+
 
     <a
       href="romance.html"
       id="follow-glow"
+      class="follow-glow"
     >
-      <span>FOLLOW THE GLOW</span>
+
+      <span>
+        FOLLOW THE GLOW
+      </span>
 
       <small>
         ROOM 04 · ROMANCE
       </small>
+
     </a>
 
   </section>
 
 
-  <!-- Longueur nécessaire à la narration -->
+  <!-- Espace vertical créant le parcours -->
 
   <main class="adventure-scroll"></main>
 
@@ -383,7 +555,7 @@
   ></div>
 
 
-  <script src="./adventure.js?v=1"></script>
+  <script src="./adventure.js?v=2"></script>
 
 </body>
 
