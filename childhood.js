@@ -71,6 +71,24 @@ const researchNote =
   );
 
 
+const researchNumber =
+  document.querySelector(
+    "#research-number"
+  );
+
+
+const researchText =
+  document.querySelector(
+    "#research-text"
+  );
+
+
+const researchPrinciple =
+  document.querySelector(
+    "#research-principle"
+  );
+
+
 const progressFill =
   document.querySelector(
     "#childhood-progress-fill"
@@ -118,25 +136,38 @@ const emotionalCore =
 ========================================== */
 
 const phases = [
+
+  /* PHASE 0 — TITRE */
+
   {
     start: 0,
 
     text: "",
 
-    dream: null
+    dream: null,
+
+    science: null
   },
 
+
+  /* PHASE 1 — RECONNAÎTRE LA MAISON */
+
   {
-    start: 0.1,
+    start: 0.08,
 
     text:
-      "The house remembers you smaller <em>than you remember yourself.</em>",
+      "You have been here before. <em>Just not quite like this.</em>",
 
-    dream: null
+    dream: null,
+
+    science: null
   },
 
+
+  /* PHASE 2 — CHANGEMENT D’ÉCHELLE */
+
   {
-    start: 0.23,
+    start: 0.18,
 
     text:
       "The room was never this big. <em>But perhaps you were this small.</em>",
@@ -152,76 +183,233 @@ const phases = [
         "HOME",
 
       emotion:
-        "BELONGING"
+        "FAMILIARITY"
+    },
+
+    science: {
+      number:
+        "RESEARCH NOTE 02.1",
+
+      text:
+        "Dreams rarely reproduce a complete autobiographical event. They more often incorporate selected fragments.",
+
+      principle:
+        "FRAGMENT · NOT REPLAY"
     }
   },
 
+
+  /* PHASE 3 — LE PAPIER PEINT */
+
   {
-    start: 0.39,
+    start: 0.29,
 
     text:
-      "Before the dream became a story, <em>it was a presence.</em>",
+      "The animals on the wallpaper <em>have moved.</em>",
 
     dream: {
       number:
         "COMPOSITE DREAM 02",
 
       title:
-        "THE ANIMAL THAT KNEW YOU",
+        "THE ANIMAL ON THE WALL",
 
       source:
         "IMAGINATION",
 
       emotion:
         "WONDER"
+    },
+
+    science: {
+      number:
+        "RESEARCH NOTE 02.2",
+
+      text:
+        "Animals appear frequently in young children’s dream reports, especially in shorter and less narrative reports.",
+
+      principle:
+        "DREAM CONTENT · DEVELOPMENT"
     }
   },
 
+
+  /* PHASE 4 — L’ANIMAL APPARAÎT */
+
   {
-    start: 0.55,
+    start: 0.4,
 
     text:
-      "You cannot remember the words. <em>Only the feeling of being called.</em>",
+      "You are almost certain they were somewhere else before. <em>One of them seems to remember you.</em>",
+
+    dream: {
+      number:
+        "COMPOSITE DREAM 02",
+
+      title:
+        "THE ANIMAL ON THE WALL",
+
+      source:
+        "IMAGINATION",
+
+      emotion:
+        "WONDER"
+    },
+
+    science: {
+      number:
+        "RESEARCH NOTE 02.2",
+
+      text:
+        "Animals appear frequently in young children’s dream reports, especially in shorter and less narrative reports.",
+
+      principle:
+        "DREAM CONTENT · DEVELOPMENT"
+    }
+  },
+
+
+  /* PHASE 5 — LA VOIX */
+
+  {
+    start: 0.51,
+
+    text:
+      "Someone is humming <em>in the next room.</em>",
 
     dream: {
       number:
         "COMPOSITE DREAM 03",
 
       title:
-        "THE VOICE BEHIND THE DOOR",
+        "THE VOICE IN THE NEXT ROOM",
 
       source:
-        "A FAMILIAR VOICE",
+        "A FAMILIAR PERSON",
 
       emotion:
-        "LONGING"
+        "COMFORT"
+    },
+
+    science: {
+      number:
+        "RESEARCH NOTE 02.3",
+
+      text:
+        "Emotional intensity and personal significance influence which waking-life elements enter dreams.",
+
+      principle:
+        "EMOTION · PERSONAL SALIENCE"
     }
   },
 
+
+  /* PHASE 6 — LA CHANSON OUBLIÉE */
+
   {
-    start: 0.7,
+    start: 0.61,
 
     text:
-      "Dreams rarely return a memory intact. <em>They keep what mattered. And move everything else.</em>",
+      "You cannot remember the song. <em>But somehow, you still know it.</em>",
 
-    dream: null
+    dream: {
+      number:
+        "COMPOSITE DREAM 03",
+
+      title:
+        "THE VOICE IN THE NEXT ROOM",
+
+      source:
+        "A FAMILIAR PERSON",
+
+      emotion:
+        "COMFORT"
+    },
+
+    science: {
+      number:
+        "RESEARCH NOTE 02.3",
+
+      text:
+        "Emotional intensity and personal significance influence which waking-life elements enter dreams.",
+
+      principle:
+        "EMOTION · PERSONAL SALIENCE"
+    }
   },
 
+
+  /* PHASE 7 — LA MAISON SE MÉLANGE */
+
   {
-    start: 0.84,
+    start: 0.71,
+
+    text:
+      "The bedroom has borrowed a window from another house. <em>The kitchen has kept your old wallpaper.</em>",
+
+    dream: null,
+
+    science: {
+      number:
+        "RESEARCH NOTE 02.4",
+
+      text:
+        "During dreaming, autobiographical fragments may combine with elements from unrelated memories.",
+
+      principle:
+        "RECOMBINATION · HYPERASSOCIATION"
+    }
+  },
+
+
+  /* PHASE 8 — PLAN IMPOSSIBLE */
+
+  {
+    start: 0.8,
+
+    text:
+      "In dreams, <em>no one checks the floor plan.</em>",
+
+    dream: null,
+
+    science: {
+      number:
+        "RESEARCH NOTE 02.4",
+
+      text:
+        "During dreaming, autobiographical fragments may combine with elements from unrelated memories.",
+
+      principle:
+        "RECOMBINATION · HYPERASSOCIATION"
+    }
+  },
+
+
+  /* PHASE 9 — CONCLUSION */
+
+  {
+    start: 0.89,
 
     text: "",
 
-    dream: null
+    dream: null,
+
+    science: null
   },
 
+
+  /* PHASE 10 — SORTIE */
+
   {
-    start: 0.95,
+    start: 0.96,
 
     text: "",
 
-    dream: null
+    dream: null,
+
+    science: null
   }
+
 ];
 
 
@@ -250,7 +438,7 @@ let memoryEnergy =
 
 
 /* ==========================================
-   CARTEL DU RÊVE
+   METTRE À JOUR LE CARTEL
 ========================================== */
 
 function updateLabel(
@@ -312,6 +500,43 @@ function updateLabel(
 
 
 /* ==========================================
+   METTRE À JOUR LA NOTE SCIENTIFIQUE
+========================================== */
+
+function updateResearch(
+  note
+) {
+  if (
+    !note
+  ) {
+    researchNote.classList.remove(
+      "visible"
+    );
+
+
+    return;
+  }
+
+
+  researchNumber.textContent =
+    note.number;
+
+
+  researchText.textContent =
+    note.text;
+
+
+  researchPrinciple.textContent =
+    note.principle;
+
+
+  researchNote.classList.add(
+    "visible"
+  );
+}
+
+
+/* ==========================================
    CHANGER DE PHASE
 ========================================== */
 
@@ -368,13 +593,14 @@ function changePhase(
 
 
   /*
-   * Afficher la note scientifique
-   * pendant la recombinaison des souvenirs.
+   * Mettre à jour la note scientifique.
    */
 
-  researchNote.classList.toggle(
-    "visible",
-    index === 5
+  updateResearch(
+    phases[
+      index
+    ].science ||
+    null
   );
 
 
@@ -385,7 +611,7 @@ function changePhase(
 
   /*
    * Certaines phases utilisent une section
-   * spéciale et masquent la narration.
+   * spéciale et masquent le texte central.
    */
 
   if (
@@ -478,7 +704,7 @@ function updateChildhood() {
 
 
   /*
-   * Envoyer la progression au CSS.
+   * Progression envoyée au CSS.
    */
 
   page.style.setProperty(
@@ -510,8 +736,8 @@ function updateChildhood() {
 
 
   /*
-   * Masquer l’instruction après
-   * le début du scroll.
+   * Masquer l’instruction
+   * après le début du scroll.
    */
 
   instruction.style.opacity =
@@ -521,7 +747,7 @@ function updateChildhood() {
 
 
   /*
-   * Énergie des particules.
+   * Intensité des particules.
    */
 
   memoryEnergy =
@@ -599,7 +825,7 @@ window.addEventListener(
 
 
     /*
-     * Position de la lumière.
+     * Lumière qui suit le curseur.
      */
 
     page.style.setProperty(
@@ -617,7 +843,7 @@ window.addEventListener(
 
 
     /*
-     * Mouvement léger du décor.
+     * Déplacement léger de la chambre.
      */
 
     page.style.setProperty(
@@ -649,8 +875,7 @@ updateChildhood();
 /* ==========================================
    POUSSIÈRE DE MÉMOIRE
 
-   L’animation fonctionne à environ
-   24 images par seconde.
+   Animation limitée à environ 24 FPS.
 ========================================== */
 
 function initialiseMemoryDust() {
@@ -803,7 +1028,7 @@ function initialiseMemoryDust() {
 
 
     /*
-     * Limiter l’animation à environ 24 FPS.
+     * Limitation à environ 24 FPS.
      */
 
     if (
@@ -892,11 +1117,6 @@ function initialiseMemoryDust() {
           2
         );
 
-
-        /*
-         * Certaines particules sont bleues,
-         * les autres sont dorées.
-         */
 
         context.fillStyle =
           particle.cool
