@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#02030d">
+  <meta name="description" content="Inside the dreaming mind — The Museum of Dreams.">
+  <title>Inside the Mind — Museum of Dreams</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./brain.css?v=1">
+</head>
+
+<body class="brain-page">
+
+  <!-- ESPACE MENTAL -->
+  <div class="mind-space" aria-hidden="true">
+    <div class="deep-light"></div>
+    <div class="memory-cloud cloud-one"></div>
+    <div class="memory-cloud cloud-two"></div>
+
+    <!-- Trois couches seulement : profondeur sans surcharge -->
+    <div class="tunnel">
+      <div class="membrane membrane-far"></div>
+      <div class="membrane membrane-middle"></div>
+      <div class="membrane membrane-near"></div>
+    </div>
+
+    <!-- Fragments symboliques -->
+    <div class="fragment fragment-memory">
+      <span>MEMORY</span>
+    </div>
+
+    <div class="fragment fragment-emotion">
+      <span>EMOTION</span>
+    </div>
+
+    <div class="fragment fragment-sensation">
+      <span>SENSATION</span>
+    </div>
+
+    <div class="impossible-door"></div>
+    <canvas id="mind-dust"></canvas>
+  </div>
+
+  <!-- ARCHITECTURE DU MUSÉE -->
+  <div class="museum-architecture" aria-hidden="true">
+    <div class="outer-arch"></div>
+    <div class="inner-arch"></div>
+    <div class="door-light"></div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="brain-header">
+    <a href="sleep.html">THE MUSEUM OF DREAMS</a>
+
+    <div class="brain-location">
+      <span class="location-dot"></span>
+      <span>INSIDE THE MIND</span>
+    </div>
+
+    <a href="case-study.html">PROJECT</a>
+  </header>
+
+  <!-- NARRATION UNIQUE -->
+  <section class="brain-narration" aria-live="polite">
+    <p id="brain-sentence" class="brain-sentence">
+      THE OUTSIDE WORLD <em>IS GONE.</em>
+    </p>
+  </section>
+
+  <!-- DONNÉES DISCRÈTES -->
+  <aside class="mind-monitor">
+    <p><span>MEMORY SIGNAL</span><strong id="memory-signal">DORMANT</strong></p>
+    <p><span>EMOTIONAL LOAD</span><strong id="emotion-signal">LOW</strong></p>
+    <p><span>SENSORY INPUT</span><strong id="sensory-signal">EXTERNAL</strong></p>
+    <p><span>DREAM SPACE</span><strong id="space-signal">UNFORMED</strong></p>
+  </aside>
+
+  <!-- RÉVÉLATION FINALE -->
+  <section class="museum-reveal" id="museum-reveal">
+    <p class="welcome-line">WELCOME TO</p>
+
+    <h1>
+      THE MUSEUM<br>
+      <em>OF DREAMS</em>
+    </h1>
+
+    <p class="collection-line">THE COLLECTION BEGINS HERE</p>
+
+    <a href="everyday.html" class="first-room" id="first-room">
+      <span>ROOM 01</span>
+      <strong>THE EVERYDAY LOOP</strong>
+      <small>ENTER →</small>
+    </a>
+  </section>
+
+  <!-- PROGRESSION -->
+  <p class="move-message" id="move-message">MOVE THROUGH THE MIND</p>
+
+  <div class="brain-progress">
+    <span id="brain-progress-fill"></span>
+  </div>
+
+  <!-- Hauteur du récit -->
+  <main class="brain-scroll"></main>
+
+  <!-- Entrée et sortie de page -->
+  <div class="arrival-flash" aria-hidden="true"></div>
+  <div class="room-transition" aria-hidden="true"></div>
+
+  <script src="./brain.js?v=1"></script>
+</body>
+</html>
