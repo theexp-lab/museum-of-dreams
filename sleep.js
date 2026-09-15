@@ -1596,6 +1596,558 @@ try {
   );
 }
 
+/* ==========================================
+   MAGIE FINALE AUTOUR DE DREAMS
+========================================== */
+
+function initialiseFinalMagic() {
+  const canvas =
+    document.querySelector(
+      "#final-magic"
+    );
+
+
+  if (
+    !canvas ||
+    !canvas.getContext
+  ) {
+    return;
+  }
+
+
+  const context =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  let width = 0;
+
+  let height = 0;
+
+  let particles = [];
+
+  let nextExplosion = 0;
+
+  let previousFrame = 0;
+
+
+  const colours = [
+    [225, 205, 255],
+    [183, 148, 255],
+    [255, 207, 238],
+    [255, 232, 174],
+    [158, 216, 255]
+  ];
+
+
+  function resizeFinalMagic() {
+    const ratio =
+      Math.min(
+        window.devicePixelRatio || 1,
+        1.25
+      );
+
+
+    width =
+      window.innerWidth;
+
+
+    height =
+      window.innerHeight;
+
+
+    canvas.width =
+      width *
+      ratio;
+
+
+    canvas.height =
+      height *
+      ratio;
+
+
+    context.setTransform(
+      ratio,
+      0,
+      0,
+      ratio,
+      0,
+      0
+    );
+  }
+
+
+  /*
+   * Choisir une position autour du titre,
+   * sans exploser directement sur DREAMS.
+   */
+
+  function choosePosition() {
+    const zone =
+      Math.floor(
+        Math.random() *
+        4
+      );
+
+
+    if (zone === 0) {
+      return {
+        x:
+          width *
+          (
+            0.05 +
+            Math.random() *
+            0.25
+          ),
+
+        y:
+          height *
+          (
+            0.16 +
+            Math.random() *
+            0.68
+          )
+      };
+    }
+
+
+    if (zone === 1) {
+      return {
+        x:
+          width *
+          (
+            0.7 +
+            Math.random() *
+            0.25
+          ),
+
+        y:
+          height *
+          (
+            0.16 +
+            Math.random() *
+            0.68
+          )
+      };
+    }
+
+
+    if (zone === 2) {
+      return {
+        x:
+          width *
+          (
+            0.18 +
+            Math.random() *
+            0.64
+          ),
+
+        y:
+          height *
+          (
+            0.08 +
+            Math.random() *
+            0.18
+          )
+      };
+    }
+
+
+    return {
+      x:
+        width *
+        (
+          0.16 +
+          Math.random() *
+          0.68
+        ),
+
+      y:
+        height *
+        (
+          0.74 +
+          Math.random() *
+          0.16
+        )
+    };
+  }
+
+
+  function createExplosion() {
+    if (
+      particles.length >
+      260
+    ) {
+      return;
+    }
+
+
+    const position =
+      choosePosition();
+
+
+    const colour =
+      colours[
+        Math.floor(
+          Math.random() *
+          colours.length
+        )
+      ];
+
+
+    const total =
+      13 +
+      Math.floor(
+        Math.random() *
+        11
+      );
+
+
+    for (
+      let index = 0;
+      index < total;
+      index++
+    ) {
+      const angle =
+        (
+          Math.PI *
+          2 /
+          total
+        ) *
+        index +
+
+        Math.random() *
+        0.25;
+
+
+      const speed =
+        0.45 +
+        Math.random() *
+        1.35;
+
+
+      particles.push({
+        x: position.x,
+        y: position.y,
+
+        velocityX:
+          Math.cos(angle) *
+          speed,
+
+        velocityY:
+          Math.sin(angle) *
+          speed,
+
+        size:
+          0.7 +
+          Math.random() *
+          1.8,
+
+        opacity:
+          0.6 +
+          Math.random() *
+          0.4,
+
+        decay:
+          0.012 +
+          Math.random() *
+          0.014,
+
+        colour: colour,
+
+        star:
+          Math.random() <
+          0.2
+      });
+    }
+
+
+    /*
+     * Point lumineux central.
+     */
+
+    particles.push({
+      x: position.x,
+      y: position.y,
+
+      velocityX: 0,
+      velocityY: 0,
+
+      size: 5,
+
+      opacity: 1,
+
+      decay: 0.045,
+
+      colour: [255, 249, 218],
+
+      star: true
+    });
+  }
+
+
+  function drawFinalMagic(time) {
+    window.requestAnimationFrame(
+      drawFinalMagic
+    );
+
+
+    /*
+     * Maximum 30 images par seconde
+     * pour éviter de refaire laguer la page.
+     */
+
+    if (
+      time -
+      previousFrame <
+      33
+    ) {
+      return;
+    }
+
+
+    previousFrame =
+      time;
+
+
+    context.clearRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+
+    const finalIsVisible =
+      page.classList.contains(
+        "final-active"
+      );
+
+
+    if (!finalIsVisible) {
+      particles = [];
+
+      nextExplosion =
+        time +
+        200;
+
+      return;
+    }
+
+
+    if (
+      time >
+      nextExplosion
+    ) {
+      createExplosion();
+
+
+      /*
+       * Explosions irrégulières :
+       * plus naturelles qu’un rythme fixe.
+       */
+
+      nextExplosion =
+        time +
+        170 +
+        Math.random() *
+        330;
+    }
+
+
+    context.save();
+
+
+    context.globalCompositeOperation =
+      "lighter";
+
+
+    for (
+      const particle of particles
+    ) {
+      particle.x +=
+        particle.velocityX;
+
+
+      particle.y +=
+        particle.velocityY;
+
+
+      particle.velocityX *=
+        0.985;
+
+
+      particle.velocityY *=
+        0.985;
+
+
+      particle.velocityY +=
+        0.004;
+
+
+      particle.opacity -=
+        particle.decay;
+
+
+      const colour =
+        particle.colour.join(
+          ","
+        );
+
+
+      if (particle.star) {
+        context.save();
+
+
+        context.translate(
+          particle.x,
+          particle.y
+        );
+
+
+        context.beginPath();
+
+
+        context.moveTo(
+          0,
+          -particle.size * 2.8
+        );
+
+
+        context.lineTo(
+          particle.size * 0.5,
+          -particle.size * 0.5
+        );
+
+
+        context.lineTo(
+          particle.size * 2.8,
+          0
+        );
+
+
+        context.lineTo(
+          particle.size * 0.5,
+          particle.size * 0.5
+        );
+
+
+        context.lineTo(
+          0,
+          particle.size * 2.8
+        );
+
+
+        context.lineTo(
+          -particle.size * 0.5,
+          particle.size * 0.5
+        );
+
+
+        context.lineTo(
+          -particle.size * 2.8,
+          0
+        );
+
+
+        context.lineTo(
+          -particle.size * 0.5,
+          -particle.size * 0.5
+        );
+
+
+        context.closePath();
+
+
+        context.fillStyle =
+          "rgba(" +
+          colour +
+          "," +
+          Math.max(
+            0,
+            particle.opacity
+          ) +
+          ")";
+
+
+        context.fill();
+
+
+        context.restore();
+      } else {
+        context.beginPath();
+
+
+        context.arc(
+          particle.x,
+          particle.y,
+          particle.size,
+          0,
+          Math.PI *
+          2
+        );
+
+
+        context.fillStyle =
+          "rgba(" +
+          colour +
+          "," +
+          Math.max(
+            0,
+            particle.opacity
+          ) +
+          ")";
+
+
+        context.fill();
+      }
+    }
+
+
+    context.restore();
+
+
+    particles =
+      particles.filter(
+        function (particle) {
+          return (
+            particle.opacity >
+            0
+          );
+        }
+      );
+  }
+
+
+  resizeFinalMagic();
+
+
+  window.addEventListener(
+    "resize",
+    resizeFinalMagic,
+    {
+      passive: true
+    }
+  );
+
+
+  window.requestAnimationFrame(
+    drawFinalMagic
+  );
+}
+
+
+/* Lancer la magie finale sans toucher au reste */
+
+try {
+  initialiseFinalMagic();
+} catch (error) {
+  console.warn(
+    "Final magic unavailable:",
+    error
+  );
+}
 
 /* ==========================================
    ENTRÉE DANS LE CERVEAU
