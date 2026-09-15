@@ -1,272 +1,1192 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#10163d"
-  >
-
-  <meta
-    name="description"
-    content="Inside the dreaming mind — The Museum of Dreams."
-  >
-
-  <title>
-    Inside the Mind — Museum of Dreams
-  </title>
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+/* ==========================================
+   THE MUSEUM OF DREAMS
+   PAGE 03 — INSIDE THE MIND
+========================================== */
+
+:root {
+  --white: #fffaf3;
+  --violet: #dacdff;
+  --night: #10163d;
+
+  --journey: 0;
+  --gate-opacity: 0;
+  --gate-scale: 0.72;
+  --reveal-opacity: 0;
+
+  --pointer-x: 0px;
+  --pointer-y: 0px;
+}
+
+
+/* RESET */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  color: var(--white);
+  background: var(--night);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* ==========================================
+   INTÉRIEUR DU CERVEAU
+========================================== */
+
+.brain-world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #111944;
+}
+
+.brain-interior {
+  position: absolute;
+  inset: -5%;
+
+  width: 110%;
+  height: 110%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter:
+    brightness(0.72)
+    saturate(0.94)
+    contrast(1.03);
+
+  transform:
+    translate(
+      calc(var(--pointer-x) * -0.35),
+      calc(var(--pointer-y) * -0.3)
+    )
+    scale(
+      calc(1 + var(--journey) * 0.1)
+    );
+
+  transform-origin: 50% 48%;
+  will-change: transform;
+}
+
+.brain-colour {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(12, 18, 58, 0.16),
+      rgba(27, 20, 70, 0.08)
+    ),
+    radial-gradient(
+      circle at 50% 46%,
+      transparent 10%,
+      rgba(8, 12, 42, 0.18) 72%,
+      rgba(4, 7, 29, 0.42) 100%
+    );
+}
+
+
+/* OUVERTURE ÉTOILÉE */
+
+.central-starlight {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+
+  width: min(31vw, 470px);
+  aspect-ratio: 1.35;
+
+  border-radius: 50%;
+
+  opacity:
+    calc(0.22 + var(--journey) * 0.58);
+
+  background:
+    radial-gradient(
+      circle at 22% 25%,
+      #ffffff 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 72% 34%,
+      #ffffff 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 43% 62%,
+      #eedfff 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 82% 71%,
+      #ffe8b8 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      ellipse,
+      rgba(235, 216, 255, 0.46),
+      rgba(132, 96, 225, 0.2) 33%,
+      transparent 72%
+    );
+
+  filter:
+    drop-shadow(
+      0 0 18px
+      rgba(207, 184, 255, 0.45)
+    );
+
+  transform:
+    translate(-50%, -50%)
+    scale(
+      calc(0.75 + var(--journey) * 0.8)
+    );
+
+  animation:
+    starlightPulse
+    5s ease-in-out infinite;
+}
+
+#mind-dust {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   TYPOGRAPHIE CINÉTIQUE
+========================================== */
+
+.concepts {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.concept {
+  position: absolute;
+
+  color:
+    rgba(255, 252, 246, 0.8);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size:
+    clamp(42px, 8vw, 130px);
+
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0.16em;
+
+  text-shadow:
+    0 3px 28px
+    rgba(25, 17, 77, 0.75);
+
+  opacity: 0;
+
+  transition:
+    opacity 450ms ease,
+    filter 550ms ease,
+    transform 650ms
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* MEMORY */
+
+.concept-memory {
+  top: 20%;
+  left: 9%;
+
+  display: flex;
+}
+
+.concept-memory span {
+  display: inline-block;
+
+  opacity: 0;
+
+  transform:
+    translate(
+      var(--x),
+      var(--y)
+    )
+    rotate(var(--r));
+
+  transition:
+    opacity 500ms ease,
+    transform 850ms
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.concept-memory.active {
+  opacity: 0.88;
+}
+
+.concept-memory.active span {
+  opacity: 1;
+  transform: none;
+}
+
+.concept-memory.leaving {
+  opacity: 0;
+  filter: blur(16px);
+  transform: scale(1.08);
+}
+
+
+/* EMOTION */
+
+.concept-emotion {
+  top: 18%;
+  right: 8%;
+
+  color:
+    rgba(255, 215, 239, 0.84);
+
+  transform: scale(0.88);
+}
+
+.concept-emotion.active {
+  opacity: 0.88;
+  transform: scale(1);
+
+  animation:
+    emotionBreathing
+    3.2s ease-in-out infinite;
+}
+
+.concept-emotion.leaving {
+  opacity: 0;
+  filter: blur(18px);
+  transform: scale(1.15);
+}
+
+
+/* SENSATION */
+
+.concept-sensation {
+  right: 0;
+  bottom: 16%;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+
+  color:
+    rgba(204, 231, 255, 0.84);
+}
+
+.concept-sensation span {
+  display: inline-block;
+
+  opacity: 0;
+
+  transform:
+    translateY(25px);
+
+  transition:
+    opacity 400ms ease,
+    transform 600ms
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.concept-sensation.active {
+  opacity: 0.86;
+}
+
+.concept-sensation.active span {
+  opacity: 1;
+  transform: none;
+}
+
+.concept-sensation.active span:nth-child(2) {
+  transition-delay: 40ms;
+}
+
+.concept-sensation.active span:nth-child(3) {
+  transition-delay: 80ms;
+}
+
+.concept-sensation.active span:nth-child(4) {
+  transition-delay: 120ms;
+}
+
+.concept-sensation.active span:nth-child(5) {
+  transition-delay: 160ms;
+}
+
+.concept-sensation.active span:nth-child(6) {
+  transition-delay: 200ms;
+}
+
+.concept-sensation.active span:nth-child(7) {
+  transition-delay: 240ms;
+}
+
+.concept-sensation.active span:nth-child(8) {
+  transition-delay: 280ms;
+}
+
+.concept-sensation.active span:nth-child(9) {
+  transition-delay: 320ms;
+}
+
+.concept-sensation.leaving {
+  opacity: 0;
+  filter: blur(16px);
+  transform: translateY(-16px);
+}
+
+
+/* ==========================================
+   PORTE DU MUSÉE
+========================================== */
+
+.museum-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 14;
+
+  opacity: var(--gate-opacity);
+
+  transform:
+    scale(var(--gate-scale));
+
+  transform-origin: 50% 55%;
+  pointer-events: none;
+}
+
+.gate-aura,
+.gate-stars,
+.gate-frame,
+.gate-floor {
+  position: absolute;
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+}
+
+.gate-aura {
+  top: 13%;
+
+  width: min(54vw, 780px);
+  height: 82vh;
+
+  border-radius:
+    48% 48% 8% 8% /
+    39% 39% 8% 8%;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 63%,
+      rgba(255, 250, 229, 0.62),
+      rgba(191, 160, 255, 0.28) 35%,
+      transparent 72%
+    );
+
+  filter: blur(20px);
+}
+
+.gate-stars {
+  top: 21%;
+
+  width: min(34vw, 480px);
+  height: 65vh;
+
+  border-radius:
+    48% 48% 2% 2% /
+    34% 34% 2% 2%;
+
+  background:
+    radial-gradient(
+      circle at 24% 21%,
+      #ffffff 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 68% 15%,
+      #ffffff 0 1.5px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      circle at 43% 39%,
+      #eadcff 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 76% 55%,
+      #ffe9bd 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 28% 74%,
+      #ffffff 0 1px,
+      transparent 2px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(35, 30, 91, 0.72),
+      rgba(145, 105, 222, 0.42),
+      rgba(255, 242, 215, 0.46)
+    );
+
+  box-shadow:
+    inset 0 0 80px
+    rgba(225, 205, 255, 0.38),
+
+    0 0 55px
+    rgba(206, 181, 255, 0.38);
+}
+
+.gate-frame {
+  bottom: -7%;
+
+  border-radius:
+    48% 48% 0 0 /
+    33% 33% 0 0;
+}
+
+.gate-frame-outer {
+  width: min(54vw, 760px);
+  height: 88vh;
+
+  border:
+    2px solid
+    rgba(255, 248, 229, 0.76);
+
+  box-shadow:
+    0 0 18px
+    rgba(255, 239, 205, 0.65),
+
+    0 0 65px
+    rgba(176, 137, 255, 0.5),
+
+    inset 0 0 42px
+    rgba(218, 197, 255, 0.2);
+}
+
+.gate-frame-inner {
+  width: min(38vw, 520px);
+  height: 72vh;
+
+  border:
+    1px solid
+    rgba(221, 205, 255, 0.82);
+
+  box-shadow:
+    0 0 24px
+    rgba(198, 169, 255, 0.55);
+}
+
+.gate-floor {
+  bottom: -8%;
+
+  width: 70vw;
+  height: 28vh;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 243, 218, 0.24),
+      transparent 68%
+    );
+
+  clip-path:
+    polygon(
+      36% 0,
+      64% 0,
+      100% 100%,
+      0 100%
+    );
+
+  filter: blur(7px);
+}
+
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+.brain-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  width: 100%;
+
+  padding:
+    24px 36px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 2px 12px
+    rgba(18, 14, 57, 0.8);
+}
+
+.brain-header > a:last-child {
+  justify-self: end;
+
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.55);
+}
+
+.brain-location {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.location-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--violet);
+
+  box-shadow:
+    0 0 12px
+    var(--violet);
+
+  animation:
+    statusPulse
+    2.4s ease-in-out infinite;
+}
+
+
+/* ==========================================
+   NARRATION
+========================================== */
+
+.brain-narration {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+
+  display: grid;
+  place-items: center;
+
+  padding:
+    80px 32px 130px;
+
+  pointer-events: none;
+}
+
+.brain-sentence {
+  max-width: 950px;
+
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
-    rel="stylesheet"
-  >
+  font-size:
+    clamp(43px, 5.8vw, 92px);
 
-  <link
-    rel="stylesheet"
-    href="./brain.css?v=2"
-  >
-</head>
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+
+  text-align: center;
+
+  text-shadow:
+    0 4px 16px
+    rgba(25, 18, 73, 0.95),
 
+    0 8px 42px
+    rgba(20, 13, 62, 0.88);
 
-<body class="brain-page">
+  transition:
+    opacity 320ms ease,
+    filter 420ms ease,
+    transform 420ms ease;
+}
 
-  <!-- INTÉRIEUR DU CERVEAU -->
+.brain-sentence em {
+  display: block;
 
-  <div
-    class="brain-world"
-    aria-hidden="true"
-  >
-    <img
-      class="brain-interior"
-      src="./brain-interior-v2.png"
-      alt=""
-    >
+  color: #eadfff;
 
-    <div class="brain-colour"></div>
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
 
-    <div class="central-starlight"></div>
+  font-size: 1em;
+  font-weight: 400;
+}
 
-    <canvas id="mind-dust"></canvas>
-  </div>
+.brain-sentence.changing {
+  opacity: 0;
 
+  filter: blur(11px);
+
+  transform:
+    translateY(-12px)
+    scale(0.98);
+}
+
+.brain-sentence.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
 
-  <!-- MATIÈRES DU RÊVE -->
 
-  <div
-    class="concepts"
-    aria-hidden="true"
-  >
+/* ==========================================
+   MONITEUR DU CERVEAU
+========================================== */
 
-    <div
-      class="concept concept-memory"
-      id="concept-memory"
-    >
-      <span style="--x:-80px; --y:-45px; --r:-14deg;">M</span>
-      <span style="--x:45px; --y:65px; --r:9deg;">E</span>
-      <span style="--x:-35px; --y:85px; --r:-8deg;">M</span>
-      <span style="--x:90px; --y:-38px; --r:12deg;">O</span>
-      <span style="--x:-60px; --y:30px; --r:-11deg;">R</span>
-      <span style="--x:55px; --y:-75px; --r:15deg;">Y</span>
-    </div>
+.mind-monitor {
+  position: fixed;
 
+  right: 36px;
+  bottom: 30px;
+
+  z-index: 40;
 
-    <div
-      class="concept concept-emotion"
-      id="concept-emotion"
-    >
-      EMOTION
-    </div>
+  width: 235px;
 
+  opacity: 0.68;
 
-    <div
-      class="concept concept-sensation"
-      id="concept-sensation"
-    >
-      <span>S</span>
-      <span>E</span>
-      <span>N</span>
-      <span>S</span>
-      <span>A</span>
-      <span>T</span>
-      <span>I</span>
-      <span>O</span>
-      <span>N</span>
-    </div>
+  font-family:
+    "DM Mono",
+    monospace;
 
-  </div>
+  font-size: 8px;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+
+  text-shadow:
+    0 2px 9px
+    rgba(15, 10, 53, 0.9);
+}
 
+.mind-monitor p {
+  display: flex;
+  justify-content: space-between;
 
-  <!-- PORTE DU MUSÉE -->
+  gap: 18px;
 
-  <div
-    class="museum-gate"
-    aria-hidden="true"
-  >
-    <div class="gate-aura"></div>
+  margin: 5px 0;
+}
 
-    <div class="gate-stars"></div>
+.mind-monitor strong {
+  color: #eee4ff;
+  font-weight: 300;
+  text-align: right;
+}
 
-    <div class="gate-frame gate-frame-outer"></div>
 
-    <div class="gate-frame gate-frame-inner"></div>
+/* ==========================================
+   RÉVÉLATION DU MUSÉE
+========================================== */
 
-    <div class="gate-floor"></div>
-  </div>
+.museum-reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
 
+  display: grid;
+  place-content: center;
 
-  <!-- NAVIGATION -->
+  visibility: hidden;
 
-  <header class="brain-header">
+  opacity:
+    var(--reveal-opacity);
 
-    <a href="sleep.html">
-      THE MUSEUM OF DREAMS
-    </a>
+  padding:
+    74px 24px;
 
-    <div class="brain-location">
-      <span class="location-dot"></span>
+  text-align: center;
+  pointer-events: none;
+}
 
-      <span>
-        INSIDE THE MIND
-      </span>
-    </div>
+.brain-page.reveal-active
+.museum-reveal {
+  visibility: visible;
+  pointer-events: auto;
+}
 
-    <a href="case-study.html">
-      PROJECT
-    </a>
+.welcome-line,
+.collection-line {
+  margin: 0;
 
-  </header>
+  font-family:
+    "DM Mono",
+    monospace;
 
+  font-size: 9px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0.2em;
 
-  <!-- NARRATION -->
+  text-shadow:
+    0 2px 10px
+    #171046;
+}
 
-  <section
-    class="brain-narration"
-    aria-live="polite"
-  >
-    <p
-      id="brain-sentence"
-      class="brain-sentence"
-    >
-      THE OUTSIDE WORLD
-      <em>IS GONE.</em>
-    </p>
-  </section>
+.welcome-line {
+  margin-bottom: 22px;
+}
 
+.collection-line {
+  margin-top: 35px;
+}
 
-  <!-- DONNÉES DU CERVEAU -->
+.museum-reveal h1 {
+  margin: 0;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
 
-  <aside class="mind-monitor">
+  font-size:
+    clamp(65px, 10.5vw, 165px);
 
-    <p>
-      <span>MEMORY SIGNAL</span>
-      <strong id="memory-signal">DORMANT</strong>
-    </p>
+  font-weight: 400;
+  line-height: 0.78;
+  letter-spacing: -0.065em;
 
-    <p>
-      <span>EMOTIONAL LOAD</span>
-      <strong id="emotion-signal">LOW</strong>
-    </p>
+  text-shadow:
+    0 3px 13px
+    rgba(23, 13, 65, 0.95),
 
-    <p>
-      <span>SENSORY INPUT</span>
-      <strong id="sensory-signal">EXTERNAL</strong>
-    </p>
+    0 0 45px
+    rgba(214, 190, 255, 0.58);
+}
 
-    <p>
-      <span>DREAM SPACE</span>
-      <strong id="space-signal">UNFORMED</strong>
-    </p>
+.museum-reveal h1 em {
+  color: #f0e7ff;
 
-  </aside>
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
 
+  font-size: 1em;
+  font-weight: 400;
+}
 
-  <!-- RÉVÉLATION DU MUSÉE -->
+.first-room {
+  justify-self: center;
 
-  <section
-    class="museum-reveal"
-    id="museum-reveal"
-  >
+  display: grid;
+  gap: 9px;
 
-    <p class="welcome-line">
-      WELCOME TO
-    </p>
+  min-width: 280px;
 
-    <h1>
-      THE MUSEUM
-      <br>
-      <em>OF DREAMS</em>
-    </h1>
+  margin-top: 26px;
 
-    <p class="collection-line">
-      THE COLLECTION BEGINS HERE
-    </p>
+  padding:
+    16px 24px;
 
-    <a
-      href="everyday.html"
-      class="first-room"
-      id="first-room"
-    >
-      <span>ROOM 01</span>
+  border:
+    1px solid
+    rgba(255, 249, 232, 0.66);
 
-      <strong>THE EVERYDAY LOOP</strong>
+  background:
+    rgba(37, 24, 87, 0.46);
 
-      <small>ENTER →</small>
-    </a>
+  backdrop-filter:
+    blur(7px);
 
-  </section>
+  font-family:
+    "DM Mono",
+    monospace;
 
+  box-shadow:
+    0 0 25px
+    rgba(218, 194, 255, 0.2);
 
-  <!-- PROGRESSION -->
+  transition:
+    background 300ms ease,
+    transform 300ms ease,
+    box-shadow 300ms ease;
+}
 
-  <p
-    class="move-message"
-    id="move-message"
-  >
-    MOVE THROUGH THE MIND
-  </p>
+.first-room span,
+.first-room small {
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  opacity: 0.78;
+}
 
-  <div class="brain-progress">
-    <span id="brain-progress-fill"></span>
-  </div>
+.first-room strong {
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
 
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+}
 
-  <!-- ESPACE DE SCROLL -->
+.first-room:hover {
+  background:
+    rgba(129, 87, 197, 0.45);
 
-  <main class="brain-scroll"></main>
+  transform:
+    translateY(-4px);
 
+  box-shadow:
+    0 0 38px
+    rgba(236, 217, 255, 0.38);
+}
 
-  <!-- TRANSITIONS -->
 
-  <div
-    class="arrival-flash"
-    aria-hidden="true"
-  ></div>
+/* ==========================================
+   PROGRESSION
+========================================== */
 
-  <div
-    class="room-transition"
-    aria-hidden="true"
-  ></div>
+.move-message {
+  position: fixed;
 
+  bottom: 30px;
+  left: 36px;
 
-  <script src="./brain.js?v=2"></script>
+  z-index: 40;
 
-</body>
-</html>
+  margin: 0;
+
+  opacity: 0.65;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0.13em;
+
+  text-shadow:
+    0 2px 8px
+    #171046;
+
+  transition:
+    opacity 300ms ease;
+}
+
+.brain-progress {
+  position: fixed;
+
+  top: 50%;
+  right: 18px;
+
+  z-index: 40;
+
+  width: 1px;
+  height: 160px;
+
+  background:
+    rgba(255, 255, 255, 0.3);
+
+  transform:
+    translateY(-50%);
+}
+
+.brain-progress span {
+  display: block;
+
+  width: 100%;
+  height: 0;
+
+  background:
+    linear-gradient(
+      #fffaf3,
+      #d0bfff
+    );
+
+  box-shadow:
+    0 0 8px
+    rgba(215, 195, 255, 0.9);
+}
+
+
+/* LONGUEUR DU SCROLL */
+
+.brain-scroll {
+  position: relative;
+  z-index: 1;
+
+  height: 560vh;
+}
+
+
+/* ==========================================
+   TRANSITIONS
+========================================== */
+
+.arrival-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  background: #fffaf3;
+
+  pointer-events: none;
+
+  animation:
+    arrival
+    1.5s ease-out forwards;
+}
+
+.room-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  visibility: hidden;
+  opacity: 0;
+
+  background:
+    radial-gradient(
+      circle,
+      #fff9e8,
+      #cbb7ff 24%,
+      #1b1242 58%,
+      #080b25 100%
+    );
+
+  pointer-events: none;
+}
+
+.brain-page.leaving
+.room-transition {
+  visibility: visible;
+
+  animation:
+    leaveRoom
+    1.35s
+    cubic-bezier(0.76, 0, 0.24, 1)
+    forwards;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes arrival {
+  0% {
+    opacity: 1;
+  }
+
+  55% {
+    opacity: 0.86;
+  }
+
+  100% {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@keyframes leaveRoom {
+  from {
+    opacity: 0;
+
+    clip-path:
+      circle(0 at 50% 50%);
+  }
+
+  to {
+    opacity: 1;
+
+    clip-path:
+      circle(100% at 50% 50%);
+  }
+}
+
+@keyframes statusPulse {
+  50% {
+    opacity: 0.25;
+    transform: scale(0.65);
+  }
+}
+
+@keyframes starlightPulse {
+  50% {
+    filter:
+      drop-shadow(
+        0 0 28px
+        rgba(230, 211, 255, 0.7)
+      );
+  }
+}
+
+@keyframes emotionBreathing {
+  50% {
+    letter-spacing: 0.21em;
+
+    text-shadow:
+      0 0 28px
+      rgba(255, 185, 229, 0.8);
+  }
+}
+
+
+/* ==========================================
+   TABLETTE ET MOBILE
+========================================== */
+
+@media (max-width: 800px) {
+  .brain-header {
+    grid-template-columns:
+      1fr auto;
+
+    padding:
+      18px 20px;
+  }
+
+  .brain-location {
+    display: none;
+  }
+
+  .brain-interior {
+    inset: -3% -30%;
+
+    width: 160%;
+    height: 106%;
+  }
+
+  .concept {
+    font-size:
+      clamp(35px, 12vw, 65px);
+
+    letter-spacing: 0.08em;
+  }
+
+  .concept-memory {
+    top: 19%;
+    left: 5%;
+  }
+
+  .concept-emotion {
+    top: 20%;
+    right: 3%;
+  }
+
+  .gate-frame-outer {
+    width: 92vw;
+  }
+
+  .gate-frame-inner {
+    width: 68vw;
+  }
+
+  .gate-stars {
+    width: 58vw;
+  }
+
+  .gate-aura {
+    width: 94vw;
+  }
+
+  .mind-monitor {
+    right: 20px;
+    bottom: 22px;
+
+    width: 190px;
+
+    font-size: 7px;
+  }
+
+  .move-message {
+    bottom: 22px;
+    left: 20px;
+  }
+
+  .brain-progress {
+    right: 9px;
+  }
+
+  .brain-sentence {
+    font-size:
+      clamp(38px, 11vw, 64px);
+  }
+}
+
+@media (max-width: 480px) {
+  .mind-monitor {
+    display: none;
+  }
+
+  .museum-reveal h1 {
+    font-size:
+      clamp(58px, 18vw, 92px);
+  }
+}
+
+
+/* ACCESSIBILITÉ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
