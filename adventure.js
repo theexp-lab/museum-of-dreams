@@ -119,13 +119,13 @@
 
   const progressFill =
     document.querySelector(
-      "#adventure-progress-fill"
+      "#scroll-progress-fill"
     );
 
 
-  const scrollInstruction =
+  const scrollMessage =
     document.querySelector(
-      "#scroll-instruction"
+      "#scroll-message"
     );
 
 
@@ -137,7 +137,7 @@
 
   const canvas =
     document.querySelector(
-      "#magic-canvas"
+      "#adventure-canvas"
     );
 
 
@@ -157,9 +157,7 @@
 
 
   /* ==========================================
-     NARRATION
-
-     Une seule phrase est affichée à la fois.
+     PHRASES
   =========================================== */
 
   const narrationSteps = [
@@ -184,7 +182,7 @@
     },
 
     {
-      start: 0.2,
+      start: 0.21,
 
       label:
         "LEARNING TO FLY",
@@ -194,7 +192,7 @@
     },
 
     {
-      start: 0.3,
+      start: 0.31,
 
       label:
         "ABOVE THE CLOUDS",
@@ -214,7 +212,7 @@
     },
 
     {
-      start: 0.49,
+      start: 0.5,
 
       label:
         "THE RACE",
@@ -224,7 +222,7 @@
     },
 
     {
-      start: 0.57,
+      start: 0.59,
 
       label:
         "THE FALL",
@@ -234,7 +232,7 @@
     },
 
     {
-      start: 0.66,
+      start: 0.68,
 
       label:
         "BETWEEN WORLDS",
@@ -244,7 +242,7 @@
     },
 
     {
-      start: 0.75,
+      start: 0.77,
 
       label:
         "A DIFFERENT ENDING",
@@ -254,10 +252,10 @@
     },
 
     {
-      start: 0.83,
+      start: 0.85,
 
       label:
-        "THE IMPOSSIBLE WORLD",
+        "THE IMPOSSIBLE HORIZON",
 
       text:
         "Nothing stays where it was.<em>Not even the horizon.</em>"
@@ -267,9 +265,6 @@
 
   /* ==========================================
      OBSERVATIONS SCIENTIFIQUES
-
-     L’observation Dream Incorporation
-     a volontairement été retirée.
   =========================================== */
 
   const scienceSteps = [
@@ -306,7 +301,7 @@
     },
 
     {
-      start: 0.62,
+      start: 0.61,
 
       number:
         "03.3",
@@ -322,7 +317,7 @@
     },
 
     {
-      start: 0.79,
+      start: 0.81,
 
       number:
         "03.4",
@@ -339,13 +334,9 @@
   ];
 
 
-  let narrationIndex =
-    -1;
+  let narrationIndex = -1;
 
-
-  let scienceIndex =
-    -1;
-
+  let scienceIndex = -1;
 
   let narrationTimer;
 
@@ -353,7 +344,7 @@
 
 
   /* ==========================================
-     CHANGER LA NARRATION
+     CHANGEMENT DE PHRASE
   =========================================== */
 
   function displayNarration(
@@ -403,13 +394,13 @@
             "is-changing"
           );
         },
-        500
+        470
       );
   }
 
 
   /* ==========================================
-     CHANGER LA NOTE SCIENTIFIQUE
+     CHANGEMENT DE NOTE SCIENTIFIQUE
   =========================================== */
 
   function displayScience(
@@ -465,13 +456,13 @@
             "is-changing"
           );
         },
-        390
+        370
       );
   }
 
 
   /* ==========================================
-     PROGRESSION DU SCROLL
+     SCROLL
   =========================================== */
 
   let targetProgress = 0;
@@ -499,12 +490,12 @@
   }
 
 
-  function updateAdventure() {
+  function updateExperience() {
     smoothProgress =
       lerp(
         smoothProgress,
         targetProgress,
-        0.085
+        0.09
       );
 
 
@@ -519,7 +510,9 @@
     }
 
 
-    let newNarrationIndex = 0;
+    /* Phrase actuelle */
+
+    let nextNarrationIndex = 0;
 
 
     narrationSteps.forEach(
@@ -528,10 +521,9 @@
         index
       ) {
         if (
-          smoothProgress >=
-          step.start
+          smoothProgress >= step.start
         ) {
-          newNarrationIndex =
+          nextNarrationIndex =
             index;
         }
       }
@@ -539,11 +531,13 @@
 
 
     displayNarration(
-      newNarrationIndex
+      nextNarrationIndex
     );
 
 
-    let newScienceIndex = 0;
+    /* Observation actuelle */
+
+    let nextScienceIndex = 0;
 
 
     scienceSteps.forEach(
@@ -552,10 +546,9 @@
         index
       ) {
         if (
-          smoothProgress >=
-          step.start
+          smoothProgress >= step.start
         ) {
-          newScienceIndex =
+          nextScienceIndex =
             index;
         }
       }
@@ -563,23 +556,43 @@
 
 
     displayScience(
-      newScienceIndex
+      nextScienceIndex
     );
 
 
-    const flightProgress =
+    /* Vol */
+
+    const flightEntrance =
       range(
         smoothProgress,
-        0.07,
-        0.36
+        0.05,
+        0.17
       );
 
+
+    const flightExit =
+      range(
+        smoothProgress,
+        0.34,
+        0.43
+      );
+
+
+    const flight =
+      flightEntrance *
+      (
+        1 -
+        flightExit
+      );
+
+
+    /* Forêt */
 
     const forestEntrance =
       range(
         smoothProgress,
         0.34,
-        0.48
+        0.43
       );
 
 
@@ -587,11 +600,11 @@
       range(
         smoothProgress,
         0.53,
-        0.63
+        0.61
       );
 
 
-    const forestProgress =
+    const forest =
       forestEntrance *
       (
         1 -
@@ -599,23 +612,25 @@
       );
 
 
+    /* Chute */
+
     const fallEntrance =
       range(
         smoothProgress,
         0.55,
-        0.68
+        0.64
       );
 
 
     const fallExit =
       range(
         smoothProgress,
-        0.74,
-        0.82
+        0.77,
+        0.84
       );
 
 
-    const fallProgress =
+    const fall =
       fallEntrance *
       (
         1 -
@@ -623,49 +638,113 @@
       );
 
 
-    const worldProgress =
+    /* Trois changements de couleur */
+
+    const peach =
       range(
         smoothProgress,
-        0.73,
+        0.56,
+        0.63
+      ) *
+      (
+        1 -
+        range(
+          smoothProgress,
+          0.65,
+          0.7
+        )
+      );
+
+
+    const pinkSunset =
+      range(
+        smoothProgress,
+        0.64,
+        0.7
+      ) *
+      (
+        1 -
+        range(
+          smoothProgress,
+          0.72,
+          0.78
+        )
+      );
+
+
+    const night =
+      range(
+        smoothProgress,
+        0.71,
+        0.81
+      );
+
+
+    /* Horizon */
+
+    const horizon =
+      range(
+        smoothProgress,
+        0.8,
         0.89
       );
 
 
-    const romanceProgress =
+    /* Romance */
+
+    const romance =
       range(
         smoothProgress,
-        0.87,
-        0.96
+        0.89,
+        0.97
       );
 
 
     page.style.setProperty(
-      "--flight-progress",
-      flightProgress
+      "--flight",
+      flight
     );
 
 
     page.style.setProperty(
-      "--forest-progress",
-      forestProgress
+      "--forest",
+      forest
     );
 
 
     page.style.setProperty(
-      "--fall-progress",
-      fallProgress
+      "--fall",
+      fall
     );
 
 
     page.style.setProperty(
-      "--world-progress",
-      worldProgress
+      "--peach",
+      peach
     );
 
 
     page.style.setProperty(
-      "--romance-progress",
-      romanceProgress
+      "--pink-sunset",
+      pinkSunset
+    );
+
+
+    page.style.setProperty(
+      "--night",
+      night
+    );
+
+
+    page.style.setProperty(
+      "--horizon",
+      horizon
+    );
+
+
+    page.style.setProperty(
+      "--romance",
+      romance
     );
 
 
@@ -676,14 +755,14 @@
 
 
     if (
-      smoothProgress > 0.94
+      smoothProgress >= 0.945
     ) {
       page.classList.add(
         "romance-active"
       );
 
 
-      scrollInstruction.style.opacity =
+      scrollMessage.style.opacity =
         "0";
     } else {
       page.classList.remove(
@@ -691,23 +770,21 @@
       );
 
 
-      scrollInstruction.style.opacity =
+      scrollMessage.style.opacity =
         smoothProgress > 0.08
-          ? "0.28"
-          : "0.58";
+          ? "0.27"
+          : "0.53";
     }
   }
 
 
   /* ==========================================
-     PARTICULES FÉERIQUES
+     ÉTOILES
   =========================================== */
 
   let canvasWidth = 0;
 
   let canvasHeight = 0;
-
-  let particles = [];
 
   let stars = [];
 
@@ -721,26 +798,59 @@
   let pointerTargetY = 0;
 
 
-  function createWorldParticles() {
-    particles = [];
+  function resetStar(
+    star,
+    randomDepth
+  ) {
+    star.x =
+      (
+        Math.random() -
+        0.5
+      ) *
+      canvasWidth;
 
+
+    star.y =
+      (
+        Math.random() -
+        0.5
+      ) *
+      canvasHeight;
+
+
+    star.z =
+      randomDepth
+        ? 0.25 + Math.random() * 1.1
+        : 1.25;
+
+
+    star.size =
+      0.35 +
+      Math.random() *
+      1.05;
+
+
+    star.opacity =
+      0.24 +
+      Math.random() *
+      0.64;
+
+
+    star.phase =
+      Math.random() *
+      Math.PI *
+      2;
+  }
+
+
+  function createStars() {
     stars = [];
 
 
-    const mobile =
-      window.innerWidth < 700;
-
-
-    const particleCount =
-      mobile
-        ? 85
-        : 155;
-
-
     const starCount =
-      mobile
-        ? 100
-        : 190;
+      window.innerWidth < 700
+        ? 45
+        : 70;
 
 
     for (
@@ -748,98 +858,18 @@
       index < starCount;
       index++
     ) {
-      stars.push({
-        x:
-          Math.random() *
-          canvasWidth,
-
-        y:
-          Math.random() *
-          canvasHeight,
-
-        radius:
-          0.25 +
-          Math.random() *
-          1.25,
-
-        opacity:
-          0.2 +
-          Math.random() *
-          0.66,
-
-        phase:
-          Math.random() *
-          Math.PI *
-          2,
-
-        speed:
-          0.35 +
-          Math.random() *
-          1.1,
-
-        depth:
-          0.1 +
-          Math.random() *
-          0.65
-      });
-    }
+      const star = {};
 
 
-    const colors = [
-      "255,248,207",
-      "222,204,255",
-      "190,247,255",
-      "255,199,222"
-    ];
+      resetStar(
+        star,
+        true
+      );
 
 
-    for (
-      let index = 0;
-      index < particleCount;
-      index++
-    ) {
-      particles.push({
-        x:
-          Math.random() *
-          canvasWidth,
-
-        y:
-          Math.random() *
-          canvasHeight,
-
-        radius:
-          0.7 +
-          Math.random() *
-          2.2,
-
-        velocityX:
-          0.05 +
-          Math.random() *
-          0.22,
-
-        velocityY:
-          -0.04 -
-          Math.random() *
-          0.2,
-
-        phase:
-          Math.random() *
-          Math.PI *
-          2,
-
-        glow:
-          0.2 +
-          Math.random() *
-          0.75,
-
-        color:
-          colors[
-            Math.floor(
-              Math.random() *
-              colors.length
-            )
-          ]
-      });
+      stars.push(
+        star
+      );
     }
   }
 
@@ -884,15 +914,15 @@
     );
 
 
-    createWorldParticles();
+    createStars();
   }
 
 
   /* ==========================================
-     DESSIN DU CIEL
+     ANIMATION DES ÉTOILES
   =========================================== */
 
-  function drawMagic(
+  function animateStars(
     currentTime
   ) {
     context.clearRect(
@@ -907,7 +937,7 @@
       lerp(
         pointerX,
         pointerTargetX,
-        0.035
+        0.04
       );
 
 
@@ -915,43 +945,151 @@
       lerp(
         pointerY,
         pointerTargetY,
-        0.035
+        0.04
       );
+
+
+    const flightIntensity =
+      Number(
+        getComputedStyle(
+          page
+        ).getPropertyValue(
+          "--flight"
+        )
+      ) || 0;
+
+
+    const forestIntensity =
+      Number(
+        getComputedStyle(
+          page
+        ).getPropertyValue(
+          "--forest"
+        )
+      ) || 0;
+
+
+    const fallIntensity =
+      Number(
+        getComputedStyle(
+          page
+        ).getPropertyValue(
+          "--fall"
+        )
+      ) || 0;
+
+
+    const starSpeed =
+      0.0015 +
+      flightIntensity *
+      0.011 +
+      fallIntensity *
+      0.007;
+
+
+    const centreX =
+      canvasWidth / 2 +
+      pointerX;
+
+
+    const centreY =
+      canvasHeight / 2 +
+      pointerY;
 
 
     stars.forEach(
       function (star) {
+        star.z -=
+          starSpeed;
+
+
+        if (
+          star.z <= 0.06
+        ) {
+          resetStar(
+            star,
+            false
+          );
+        }
+
+
+        const projection =
+          1 /
+          star.z;
+
+
+        const screenX =
+          centreX +
+          star.x *
+          projection;
+
+
+        const screenY =
+          centreY +
+          star.y *
+          projection;
+
+
+        if (
+          screenX < -30 ||
+          screenX > canvasWidth + 30 ||
+          screenY < -30 ||
+          screenY > canvasHeight + 30
+        ) {
+          resetStar(
+            star,
+            false
+          );
+
+
+          return;
+        }
+
+
         const twinkle =
-          0.62 +
+          0.72 +
 
           Math.sin(
             currentTime *
-            0.001 *
-            star.speed +
+            0.0012 +
             star.phase
           ) *
-          0.38;
+          0.28;
 
 
-        const x =
-          star.x +
-          pointerX *
-          star.depth;
+        const radius =
+          Math.min(
+            2.5,
+            star.size *
+            projection
+          );
 
 
-        const y =
-          star.y +
-          pointerY *
-          star.depth;
+        let red = 255;
+
+        let green = 249;
+
+        let blue = 226;
+
+
+        if (
+          forestIntensity > 0.2
+        ) {
+          red = 215;
+
+          green = 255;
+
+          blue = 224;
+        }
 
 
         context.beginPath();
 
 
         context.arc(
-          x,
-          y,
-          star.radius,
+          screenX,
+          screenY,
+          radius,
           0,
           Math.PI *
           2
@@ -959,7 +1097,13 @@
 
 
         context.fillStyle =
-          "rgba(255,250,235," +
+          "rgba(" +
+          red +
+          "," +
+          green +
+          "," +
+          blue +
+          "," +
           star.opacity *
           twinkle +
           ")";
@@ -970,127 +1114,17 @@
     );
 
 
-    particles.forEach(
-      function (particle) {
-        const flightSpeed =
-          1 +
-          smoothProgress *
-          2.1;
-
-
-        particle.x +=
-          particle.velocityX *
-          flightSpeed;
-
-
-        particle.y +=
-          particle.velocityY *
-          flightSpeed;
-
-
-        particle.x +=
-          Math.sin(
-            currentTime *
-            0.0008 +
-            particle.phase
-          ) *
-          0.09;
-
-
-        if (
-          particle.y < -15
-        ) {
-          particle.y =
-            canvasHeight + 15;
-
-
-          particle.x =
-            Math.random() *
-            canvasWidth;
-        }
-
-
-        if (
-          particle.x > canvasWidth + 15
-        ) {
-          particle.x = -15;
-        }
-
-
-        const pulse =
-          0.55 +
-
-          Math.sin(
-            currentTime *
-            0.002 +
-            particle.phase
-          ) *
-          0.45;
-
-
-        const opacity =
-          particle.glow *
-          pulse;
-
-
-        context.beginPath();
-
-
-        context.arc(
-          particle.x +
-          pointerX *
-          0.28,
-
-          particle.y +
-          pointerY *
-          0.2,
-
-          particle.radius,
-
-          0,
-
-          Math.PI *
-          2
-        );
-
-
-        context.fillStyle =
-          "rgba(" +
-          particle.color +
-          "," +
-          opacity +
-          ")";
-
-
-        context.shadowBlur =
-          9;
-
-
-        context.shadowColor =
-          "rgba(" +
-          particle.color +
-          ",0.62)";
-
-
-        context.fill();
-
-
-        context.shadowBlur = 0;
-      }
-    );
-
-
-    updateAdventure();
+    updateExperience();
 
 
     window.requestAnimationFrame(
-      drawMagic
+      animateStars
     );
   }
 
 
   /* ==========================================
-     SOURIS / PARALLAXE
+     SOURIS
   =========================================== */
 
   window.addEventListener(
@@ -1110,18 +1144,18 @@
 
       pointerTargetX =
         horizontal *
-        18;
+        17;
 
 
       pointerTargetY =
         vertical *
-        13;
+        12;
 
 
       page.style.setProperty(
         "--pointer-x",
         horizontal *
-        15 +
+        14 +
         "px"
       );
 
@@ -1129,7 +1163,7 @@
       page.style.setProperty(
         "--pointer-y",
         vertical *
-        12 +
+        11 +
         "px"
       );
     },
@@ -1140,7 +1174,7 @@
 
 
   /* ==========================================
-     TRANSITION VERS ROMANCE
+     PASSAGE VERS ROMANCE
   =========================================== */
 
   if (
@@ -1171,7 +1205,7 @@
             window.location.href =
               "romance.html";
           },
-          1400
+          1350
         );
       }
     );
@@ -1186,11 +1220,11 @@
 
   calculateProgress();
 
-  updateAdventure();
+  updateExperience();
 
 
   window.requestAnimationFrame(
-    drawMagic
+    animateStars
   );
 
 
