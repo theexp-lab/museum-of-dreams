@@ -126,29 +126,29 @@ a {
 .celestial-light {
   position: absolute;
 
-  top: -29%;
+  top: -25%;
   left: 50%;
 
-  width: 105vw;
-  height: 92vh;
+  width: 90vw;
+  height: 78vh;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       ellipse,
-      rgba(255, 255, 228, 0.81),
-      rgba(255, 211, 192, 0.2) 36%,
-      transparent 69%
+      rgba(255, 255, 228, 0.74),
+      rgba(255, 211, 192, 0.16) 38%,
+      transparent 68%
     );
 
-  filter: blur(35px);
+  filter: blur(16px);
 
   opacity:
     calc(
-      0.86 -
+      0.78 -
       var(--night) *
-      0.56
+      0.5
     );
 
   transform:
@@ -158,41 +158,40 @@ a {
 .soft-aurora {
   position: absolute;
 
-  top: 3%;
-  left: -18%;
+  top: 5%;
+  left: -10%;
 
-  width: 136%;
-  height: 72%;
+  width: 120%;
+  height: 58%;
 
   opacity:
     calc(
-      0.25 +
+      0.16 +
       var(--flight) *
-      0.16
+      0.1
     );
 
   background:
     linear-gradient(
       112deg,
-      transparent 19%,
-      rgba(187, 255, 234, 0.23) 34%,
-      rgba(222, 195, 255, 0.3) 50%,
-      rgba(255, 218, 184, 0.17) 65%,
-      transparent 79%
+      transparent 22%,
+      rgba(187, 255, 234, 0.18) 36%,
+      rgba(222, 195, 255, 0.21) 50%,
+      rgba(255, 218, 184, 0.13) 64%,
+      transparent 78%
     );
 
-  filter: blur(45px);
+  filter: blur(19px);
 
   transform:
     translate(
-      calc(var(--pointer-x) * -0.34),
-      calc(var(--pointer-y) * -0.27)
+      calc(var(--pointer-x) * -0.25),
+      calc(var(--pointer-y) * -0.2)
     )
-    rotate(-7deg);
+    rotate(-5deg);
 
   animation:
-    auroraBreathe
-    14s ease-in-out infinite;
+    auroraBreathe 14s ease-in-out infinite;
 }
 
 
@@ -285,32 +284,31 @@ a {
 
 .cloud-flight {
   position: absolute;
-  inset: -15%;
+  inset: 0;
 
   z-index: 6;
 
   opacity:
     calc(
-      0.15 +
+      0.05 +
       var(--flight) *
-      0.85
+      0.55
     );
 
   transform:
     translate(
-      calc(var(--pointer-x) * -0.27),
-      calc(var(--pointer-y) * -0.2)
+      calc(var(--pointer-x) * -0.2),
+      calc(var(--pointer-y) * -0.15)
     )
     scale(
       calc(
-        0.84 +
+        0.92 +
         var(--flight) *
-        0.34
+        0.18
       )
     );
 
-  transition:
-    opacity 120ms linear;
+  pointer-events: none;
 }
 
 .mist {
@@ -323,88 +321,68 @@ a {
   background:
     radial-gradient(
       ellipse,
-      rgba(255, 255, 255, 0.82),
-      rgba(236, 239, 255, 0.42) 48%,
-      transparent 72%
+      rgba(255, 255, 255, 0.65) 0%,
+      rgba(240, 243, 255, 0.31) 46%,
+      rgba(220, 227, 255, 0.08) 67%,
+      transparent 76%
     );
 
-  filter: blur(17px);
+  filter: blur(7px);
 
   will-change: transform;
 }
 
 .mist-one {
-  top: 7%;
-  left: -18%;
+  top: 5%;
+  left: -25%;
 
-  width: 56vw;
-  height: 30vh;
+  width: 49vw;
+  height: 25vh;
 
   animation:
-    mistLeft 13s ease-in-out infinite;
+    mistLeft 15s ease-in-out infinite;
 }
 
 .mist-two {
-  top: 23%;
-  right: -23%;
+  top: 20%;
+  right: -28%;
 
-  width: 64vw;
-  height: 34vh;
+  width: 53vw;
+  height: 28vh;
 
   animation:
-    mistRight 16s ease-in-out infinite;
+    mistRight 17s ease-in-out infinite;
 }
 
 .mist-three {
-  bottom: 8%;
-  left: -16%;
+  bottom: 2%;
+  left: -27%;
 
-  width: 67vw;
-  height: 37vh;
+  width: 54vw;
+  height: 30vh;
 
-  opacity: 0.77;
+  opacity: 0.7;
 
   animation:
-    mistLeft 18s ease-in-out infinite reverse;
+    mistLeft 19s ease-in-out infinite reverse;
 }
 
 .mist-four {
-  right: -17%;
-  bottom: -3%;
-
-  width: 55vw;
-  height: 33vh;
-
-  opacity: 0.68;
-
-  animation:
-    mistRight 14s ease-in-out infinite reverse;
-}
-
-.mist-five {
-  top: 38%;
-  left: 29%;
-
-  width: 42vw;
-  height: 23vh;
-
-  opacity: 0.38;
-
-  animation:
-    mistCentre 12s ease-in-out infinite;
-}
-
-.mist-six {
-  top: -4%;
-  left: 27%;
+  right: -25%;
+  bottom: 4%;
 
   width: 48vw;
-  height: 25vh;
+  height: 27vh;
 
-  opacity: 0.45;
+  opacity: 0.64;
 
   animation:
-    mistCentre 17s ease-in-out infinite reverse;
+    mistRight 16s ease-in-out infinite reverse;
+}
+
+.mist-five,
+.mist-six {
+  display: none;
 }
 
 
