@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#737fd7"
+  >
+
+  <meta
+    name="description"
+    content="Room 03 — Adventure. A journey through flying, falling and impossible dream landscapes."
+  >
+
+  <title>
+    Adventure — The Museum of Dreams
+  </title>
+
+
+  <!-- POLICES -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Italiana&family=Playfair+Display:ital,wght@0,400;1,400&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- CSS DE LA SALLE -->
+
+  <link
+    rel="stylesheet"
+    href="./adventure.css?v=1"
+  >
+
+</head>
+
+
+<body class="adventure-page">
+
+
+  <!-- ==========================================
+       MONDE FIXE
+  =========================================== -->
+
+  <div
+    class="dream-world"
+    aria-hidden="true"
+  >
+
+    <div class="sky-gradient"></div>
+
+    <div class="sky-light"></div>
+
+    <div class="sky-aurora"></div>
+
+    <canvas id="magic-canvas"></canvas>
+
+
+    <!-- SOLEIL / PORTAIL -->
+
+    <div class="dream-sun">
+
+      <span></span>
+
+    </div>
+
+
+    <!-- NUAGES LOINTAINS -->
+
+    <div class="cloud-layer cloud-layer-far">
+
+      <span class="cloud cloud-a"></span>
+
+      <span class="cloud cloud-b"></span>
+
+      <span class="cloud cloud-c"></span>
+
+      <span class="cloud cloud-d"></span>
+
+    </div>
+
+
+    <!-- ÎLES FLOTTANTES -->
+
+    <div class="island-layer">
+
+      <div class="floating-island island-one">
+
+        <span class="island-top"></span>
+
+        <span class="island-rock"></span>
+
+        <span class="island-waterfall"></span>
+
+      </div>
+
+
+      <div class="floating-island island-two">
+
+        <span class="island-top"></span>
+
+        <span class="island-rock"></span>
+
+      </div>
+
+
+      <div class="floating-island island-three">
+
+        <span class="island-top"></span>
+
+        <span class="island-rock"></span>
+
+        <span class="island-waterfall"></span>
+
+      </div>
+
+    </div>
+
+
+    <!-- FORÊT INVERSÉE -->
+
+    <div class="upside-forest">
+
+      <div class="forest-root root-one"></div>
+
+      <div class="forest-root root-two"></div>
+
+      <div class="forest-root root-three"></div>
+
+      <div class="forest-root root-four"></div>
+
+      <div class="forest-root root-five"></div>
+
+    </div>
+
+
+    <!-- COUCHERS DE SOLEIL DE LA CHUTE -->
+
+    <div class="falling-worlds">
+
+      <span class="sunset-ring ring-one"></span>
+
+      <span class="sunset-ring ring-two"></span>
+
+      <span class="sunset-ring ring-three"></span>
+
+    </div>
+
+
+    <!-- OCÉAN / HORIZON IMPOSSIBLE -->
+
+    <div class="impossible-ocean">
+
+      <div class="ocean-glow"></div>
+
+      <div class="ocean-line line-one"></div>
+
+      <div class="ocean-line line-two"></div>
+
+      <div class="ocean-line line-three"></div>
+
+    </div>
+
+
+    <!-- LUMIÈRE VERS ROMANCE -->
+
+    <div class="romance-light">
+
+      <span class="romance-halo"></span>
+
+      <span class="romance-core"></span>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
+  <header class="adventure-header">
+
+    <a href="childhood.html">
+      ← ROOM 02
+    </a>
+
+
+    <p>
+      THE MUSEUM OF DREAMS
+    </p>
+
+
+    <a href="romance.html">
+      ROOM 04 →
+    </a>
+
+  </header>
+
+
+  <!-- ==========================================
+       INDICATION DE SALLE
+  =========================================== -->
+
+  <aside class="room-marker">
+
+    <span>
+      ROOM 03
+    </span>
+
+    <strong>
+      ADVENTURE
+    </strong>
+
+  </aside>
+
+
+  <!-- ==========================================
+       NARRATION UNIQUE
+
+       Le JS remplace cette phrase au fil
+       du scroll afin d’éviter les chevauchements.
+  =========================================== -->
+
+  <section
+    class="narration-stage"
+    aria-live="polite"
+  >
+
+    <div
+      class="narration"
+      id="adventure-narration"
+    >
+
+      <p class="narration-label">
+        ROOM 03 · ADVENTURE
+      </p>
+
+      <h1>
+        The sky starts here.
+        <em>And gravity ends.</em>
+      </h1>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==========================================
+       OBSERVATIONS SCIENTIFIQUES
+  =========================================== -->
+
+  <aside
+    class="science-note"
+    id="science-note"
+  >
+
+    <p
+      class="science-number"
+      id="science-number"
+    >
+      03.1
+    </p>
+
+
+    <div class="science-content">
+
+      <p
+        class="science-title"
+        id="science-title"
+      >
+        FLYING DREAMS
+      </p>
+
+      <p
+        class="science-text"
+        id="science-text"
+      >
+        In one student sample, 48.3% reported
+        having experienced a flying dream.
+      </p>
+
+      <a
+        id="science-source"
+        href="https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VIEW STUDY ↗
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ==========================================
+       INDICATEUR DE PROGRESSION
+  =========================================== -->
+
+  <div class="adventure-progress">
+
+    <span id="adventure-progress-fill"></span>
+
+  </div>
+
+
+  <p
+    class="scroll-instruction"
+    id="scroll-instruction"
+  >
+    FLY INTO THE DREAM
+  </p>
+
+
+  <!-- ==========================================
+       PASSAGE VERS ROMANCE
+  =========================================== -->
+
+  <section
+    class="romance-gate"
+    id="romance-gate"
+  >
+
+    <p>
+      Everything keeps changing.
+    </p>
+
+    <h2>
+      Except for
+      <em>one small light.</em>
+    </h2>
+
+    <p class="romance-arrival">
+      A moment ago, you were somewhere else.<br>
+      Now, someone is here.
+    </p>
+
+    <a
+      href="romance.html"
+      id="follow-glow"
+    >
+      <span>FOLLOW THE GLOW</span>
+
+      <small>
+        ROOM 04 · ROMANCE
+      </small>
+    </a>
+
+  </section>
+
+
+  <!-- Longueur nécessaire à la narration -->
+
+  <main class="adventure-scroll"></main>
+
+
+  <!-- Transition finale -->
+
+  <div
+    class="romance-transition"
+    aria-hidden="true"
+  ></div>
+
+
+  <script src="./adventure.js?v=1"></script>
+
+</body>
+
+</html>
