@@ -1,562 +1,1599 @@
-<!DOCTYPE html>
+/* ==========================================
+   THE MUSEUM OF DREAMS
+   ROOM 03 — ADVENTURE
+========================================== */
 
-<html lang="en">
 
-<head>
+/* ==========================================
+   VARIABLES
+========================================== */
 
-  <meta charset="UTF-8">
+:root {
+  --cream: #fffaf0;
+  --lavender: #dfd4ff;
+  --pink: #ffd6e7;
+  --deep-blue: #172052;
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  --pointer-x: 0px;
+  --pointer-y: 0px;
 
-  <meta
-    name="theme-color"
-    content="#7f92d5"
-  >
+  --flight: 0;
+  --forest: 0;
+  --fall: 0;
+  --peach: 0;
+  --pink-sunset: 0;
+  --night: 0;
+  --horizon: 0;
+  --romance: 0;
+}
 
-  <meta
-    name="description"
-    content="Adventure — Room 03 of The Museum of Dreams."
-  >
+
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
 
-  <title>
-    Adventure — The Museum of Dreams
-  </title>
+html,
+body {
+  margin: 0;
+
+  min-width: 320px;
+  min-height: 100%;
+}
+
+html {
+  background: var(--deep-blue);
+}
+
+body {
+  overflow-x: hidden;
+
+  color: var(--cream);
+
+  background: var(--deep-blue);
+}
+
+a {
+  color: inherit;
 
+  text-decoration: none;
+}
 
-  <!-- Polices -->
 
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
+/* ==========================================
+   MONDE FIXE
+========================================== */
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+.adventure-world {
+  position: fixed;
+  inset: 0;
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  background: #8498d8;
+}
+
+
+/* ==========================================
+   CIEL PRINCIPAL
+========================================== */
+
+.base-sky {
+  position: absolute;
+  inset: -4%;
+
+  background:
+    radial-gradient(
+      circle at 50% 24%,
+      rgba(255, 248, 211, 0.95),
+      rgba(255, 219, 204, 0.38) 17%,
+      transparent 39%
+    ),
+
+    radial-gradient(
+      circle at 18% 69%,
+      rgba(190, 180, 255, 0.42),
+      transparent 39%
+    ),
+
+    radial-gradient(
+      circle at 81% 58%,
+      rgba(165, 234, 245, 0.33),
+      transparent 36%
+    ),
+
+    linear-gradient(
+      180deg,
+      #9db9e9 0%,
+      #8896dc 37%,
+      #6974bf 68%,
+      #35447d 100%
+    );
+
+  transform:
+    translate(
+      calc(var(--pointer-x) * -0.12),
+      calc(var(--pointer-y) * -0.1)
+    )
+    scale(1.07);
+}
+
+.celestial-light {
+  position: absolute;
+
+  top: -29%;
+  left: 50%;
+
+  width: 105vw;
+  height: 92vh;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 255, 228, 0.81),
+      rgba(255, 211, 192, 0.2) 36%,
+      transparent 69%
+    );
+
+  filter: blur(35px);
+
+  opacity:
+    calc(
+      0.86 -
+      var(--night) *
+      0.56
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+.soft-aurora {
+  position: absolute;
+
+  top: 3%;
+  left: -18%;
+
+  width: 136%;
+  height: 72%;
+
+  opacity:
+    calc(
+      0.25 +
+      var(--flight) *
+      0.16
+    );
+
+  background:
+    linear-gradient(
+      112deg,
+      transparent 19%,
+      rgba(187, 255, 234, 0.23) 34%,
+      rgba(222, 195, 255, 0.3) 50%,
+      rgba(255, 218, 184, 0.17) 65%,
+      transparent 79%
+    );
+
+  filter: blur(45px);
+
+  transform:
+    translate(
+      calc(var(--pointer-x) * -0.34),
+      calc(var(--pointer-y) * -0.27)
+    )
+    rotate(-7deg);
+
+  animation:
+    auroraBreathe
+    14s ease-in-out infinite;
+}
+
+
+/* ==========================================
+   COUCHERS DE SOLEIL
+========================================== */
+
+.sunset-layer {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+}
+
+.sunset-peach {
+  opacity: var(--peach);
+
+  background:
+    radial-gradient(
+      circle at 50% 62%,
+      rgba(255, 244, 186, 0.92),
+      transparent 27%
+    ),
+
+    linear-gradient(
+      180deg,
+      #ffd5ad,
+      #f19b9d 48%,
+      #9a70ba
+    );
+}
+
+.sunset-pink {
+  opacity: var(--pink-sunset);
+
+  background:
+    radial-gradient(
+      circle at 50% 57%,
+      rgba(255, 230, 198, 0.67),
+      transparent 30%
+    ),
+
+    linear-gradient(
+      180deg,
+      #d399cd,
+      #d86fa6 43%,
+      #654f9b 100%
+    );
+}
+
+.sunset-night {
+  opacity: var(--night);
+
+  background:
+    radial-gradient(
+      circle at 50% 52%,
+      rgba(186, 157, 224, 0.3),
+      transparent 34%
+    ),
+
+    linear-gradient(
+      180deg,
+      #554582,
+      #30386e 51%,
+      #131a43
+    );
+}
+
+
+/* ==========================================
+   CANVAS
+========================================== */
+
+#adventure-canvas {
+  position: absolute;
+  inset: 0;
+
+  z-index: 8;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   VOL DANS LES NUAGES
+========================================== */
+
+.cloud-flight {
+  position: absolute;
+  inset: -15%;
+
+  z-index: 6;
+
+  opacity:
+    calc(
+      0.15 +
+      var(--flight) *
+      0.85
+    );
+
+  transform:
+    translate(
+      calc(var(--pointer-x) * -0.27),
+      calc(var(--pointer-y) * -0.2)
+    )
+    scale(
+      calc(
+        0.84 +
+        var(--flight) *
+        0.34
+      )
+    );
+
+  transition:
+    opacity 120ms linear;
+}
+
+.mist {
+  position: absolute;
+
+  display: block;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 255, 255, 0.82),
+      rgba(236, 239, 255, 0.42) 48%,
+      transparent 72%
+    );
+
+  filter: blur(17px);
+
+  will-change: transform;
+}
+
+.mist-one {
+  top: 7%;
+  left: -18%;
+
+  width: 56vw;
+  height: 30vh;
+
+  animation:
+    mistLeft 13s ease-in-out infinite;
+}
+
+.mist-two {
+  top: 23%;
+  right: -23%;
+
+  width: 64vw;
+  height: 34vh;
+
+  animation:
+    mistRight 16s ease-in-out infinite;
+}
+
+.mist-three {
+  bottom: 8%;
+  left: -16%;
+
+  width: 67vw;
+  height: 37vh;
+
+  opacity: 0.77;
+
+  animation:
+    mistLeft 18s ease-in-out infinite reverse;
+}
+
+.mist-four {
+  right: -17%;
+  bottom: -3%;
+
+  width: 55vw;
+  height: 33vh;
+
+  opacity: 0.68;
+
+  animation:
+    mistRight 14s ease-in-out infinite reverse;
+}
+
+.mist-five {
+  top: 38%;
+  left: 29%;
+
+  width: 42vw;
+  height: 23vh;
+
+  opacity: 0.38;
+
+  animation:
+    mistCentre 12s ease-in-out infinite;
+}
+
+.mist-six {
+  top: -4%;
+  left: 27%;
+
+  width: 48vw;
+  height: 25vh;
+
+  opacity: 0.45;
+
+  animation:
+    mistCentre 17s ease-in-out infinite reverse;
+}
+
+
+/* ==========================================
+   FORÊT INVERSÉE
+========================================== */
+
+.inverted-forest {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  z-index: 12;
+
+  width: 100%;
+  height: 76vh;
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Italiana&family=Playfair+Display:ital,wght@0,400;1,400&display=swap"
-    rel="stylesheet"
-  >
+  overflow: hidden;
+
+  opacity: var(--forest);
 
+  transform:
+    translateY(
+      calc(
+        -48vh +
+        var(--forest) *
+        40vh
+      )
+    );
+
+  pointer-events: none;
+}
 
-  <!-- CSS de la salle -->
+.forest-svg {
+  width: 100%;
+  height: 100%;
 
-  <link
-    rel="stylesheet"
-    href="./adventure.css?v=2"
-  >
+  overflow: visible;
+
+  filter:
+    drop-shadow(
+      0 20px 23px
+      rgba(19, 24, 68, 0.26)
+    );
+}
+
+.dream-tree {
+  fill:
+    rgba(27, 50, 77, 0.9);
+}
 
-</head>
+.tree-trunk,
+.tree-branches {
+  stroke:
+    rgba(24, 47, 73, 0.94);
 
+  stroke-width: 21;
 
-<body class="adventure-page">
+  stroke-linecap: round;
 
+  stroke-linejoin: round;
+}
 
-  <!-- ==========================================
-       MONDE DU RÊVE
-  =========================================== -->
+.tree-crown {
+  fill:
+    rgba(42, 86, 97, 0.84);
 
-  <div
-    class="adventure-world"
-    aria-hidden="true"
-  >
+  stroke:
+    rgba(137, 206, 183, 0.18);
 
-    <!-- Ciel principal -->
+  stroke-width: 4;
+}
 
-    <div class="base-sky"></div>
+.tree-one {
+  opacity: 0.72;
 
-    <div class="celestial-light"></div>
+  transform:
+    translateY(
+      calc(var(--forest) * 18px)
+    );
+}
 
-    <div class="soft-aurora"></div>
+.tree-two {
+  opacity: 0.94;
 
+  transform:
+    translateY(
+      calc(var(--forest) * 46px)
+    );
+}
 
-    <!-- Couchers de soleil de la chute -->
+.tree-three {
+  opacity: 0.78;
 
-    <div class="sunset-layer sunset-peach"></div>
+  transform:
+    translateY(
+      calc(var(--forest) * 26px)
+    );
+}
 
-    <div class="sunset-layer sunset-pink"></div>
+.dream-leaf {
+  position: absolute;
 
-    <div class="sunset-layer sunset-night"></div>
+  width: 9px;
+  height: 5px;
 
+  border-radius:
+    90% 10% 90% 10%;
 
-    <!-- Étoiles -->
+  background:
+    #dcffe0;
 
-    <canvas id="adventure-canvas"></canvas>
+  box-shadow:
+    0 0 12px
+    rgba(211, 255, 222, 0.78);
 
+  animation:
+    leafRise 5.5s linear infinite;
+}
 
-    <!-- ======================================
-         VOL DANS LES NUAGES
-    ======================================= -->
+.leaf-one {
+  top: 67%;
+  left: 17%;
+}
 
-    <div class="cloud-flight">
+.leaf-two {
+  top: 73%;
+  left: 38%;
 
-      <span class="mist mist-one"></span>
+  animation-delay: -2s;
+}
 
-      <span class="mist mist-two"></span>
-
-      <span class="mist mist-three"></span>
-
-      <span class="mist mist-four"></span>
-
-      <span class="mist mist-five"></span>
-
-      <span class="mist mist-six"></span>
-
-    </div>
-
-
-    <!-- ======================================
-         FORÊT INVERSÉE
-    ======================================= -->
-
-    <div class="inverted-forest">
-
-      <svg
-        class="forest-svg"
-        viewBox="0 0 1400 720"
-        preserveAspectRatio="xMidYMin slice"
-      >
-
-        <!-- Arbre gauche -->
-
-        <g class="dream-tree tree-one">
-
-          <path
-            class="tree-trunk"
-            d="
-              M120 0
-              C124 85 112 153 126 229
-              C139 295 122 353 146 438
-              L178 438
-              C196 346 176 286 190 217
-              C203 149 190 75 195 0
-              Z
-            "
-          ></path>
-
-          <path
-            class="tree-branches"
-            d="
-              M146 208
-              C97 247 61 283 33 337
-              C82 300 120 284 156 272
-
-              M165 257
-              C219 288 255 330 283 387
-              C233 344 196 328 157 315
-
-              M150 340
-              C95 376 67 420 46 474
-              C96 432 132 420 167 405
-            "
-          ></path>
-
-          <circle
-            class="tree-crown"
-            cx="74"
-            cy="407"
-            r="76"
-          ></circle>
-
-          <circle
-            class="tree-crown"
-            cx="163"
-            cy="445"
-            r="105"
-          ></circle>
-
-          <circle
-            class="tree-crown"
-            cx="245"
-            cy="411"
-            r="79"
-          ></circle>
-
-        </g>
-
-
-        <!-- Arbre central -->
-
-        <g class="dream-tree tree-two">
-
-          <path
-            class="tree-trunk"
-            d="
-              M653 0
-              C660 89 640 158 660 241
-              C676 311 649 391 682 505
-              L721 505
-              C747 400 718 317 740 236
-              C758 161 742 82 747 0
-              Z
-            "
-          ></path>
-
-          <path
-            class="tree-branches"
-            d="
-              M681 226
-              C621 257 570 300 530 369
-              C591 324 632 311 692 292
-
-              M712 278
-              C773 306 817 357 856 425
-              C797 378 756 355 697 340
-
-              M686 381
-              C622 414 584 461 551 533
-              C611 480 655 465 707 444
-            "
-          ></path>
-
-          <circle
-            class="tree-crown"
-            cx="591"
-            cy="469"
-            r="95"
-          ></circle>
-
-          <circle
-            class="tree-crown"
-            cx="698"
-            cy="513"
-            r="128"
-          ></circle>
+.leaf-three {
+  top: 63%;
+  left: 57%;
 
-          <circle
-            class="tree-crown"
-            cx="811"
-            cy="467"
-            r="91"
-          ></circle>
+  animation-delay: -4s;
+}
 
-        </g>
+.leaf-four {
+  top: 76%;
+  left: 76%;
 
+  animation-delay: -1s;
+}
+
+.leaf-five {
+  top: 57%;
+  left: 88%;
 
-        <!-- Arbre droit -->
+  animation-delay: -3s;
+}
 
-        <g class="dream-tree tree-three">
 
-          <path
-            class="tree-trunk"
-            d="
-              M1185 0
-              C1181 95 1200 166 1184 238
-              C1167 313 1195 371 1168 458
-              L1204 458
-              C1227 371 1207 307 1222 235
-              C1238 159 1224 83 1230 0
-              Z
-            "
-          ></path>
+/* ==========================================
+   HORIZON MIROIR
+========================================== */
 
-          <path
-            class="tree-branches"
-            d="
-              M1192 225
-              C1143 257 1098 295 1066 354
-              C1114 316 1150 300 1200 282
+.impossible-horizon {
+  position: absolute;
+  inset: 0;
 
-              M1207 286
-              C1261 314 1300 354 1336 415
-              C1285 373 1249 354 1195 337
+  z-index: 10;
 
-              M1190 354
-              C1140 390 1105 431 1084 487
-              C1129 449 1166 433 1206 414
-            "
-          ></path>
+  opacity: var(--horizon);
 
-          <circle
-            class="tree-crown"
-            cx="1113"
-            cy="426"
-            r="81"
-          ></circle>
+  pointer-events: none;
 
-          <circle
-            class="tree-crown"
-            cx="1190"
-            cy="474"
-            r="111"
-          ></circle>
+  transform:
+    scale(
+      calc(
+        1.04 -
+        var(--horizon) *
+        0.04
+      )
+    );
+}
 
-          <circle
-            class="tree-crown"
-            cx="1294"
-            cy="438"
-            r="87"
-          ></circle>
+.upper-sky-reflection,
+.lower-sky-reflection {
+  position: absolute;
 
-        </g>
+  right: 0;
+  left: 0;
 
-      </svg>
+  height: 50%;
+}
 
+.upper-sky-reflection {
+  top: 0;
 
-      <!-- Feuilles lumineuses -->
+  background:
+    linear-gradient(
+      180deg,
+      #384272,
+      #6f75a9 54%,
+      #d0b5ca 100%
+    );
+}
 
-      <span class="dream-leaf leaf-one"></span>
+.lower-sky-reflection {
+  bottom: 0;
 
-      <span class="dream-leaf leaf-two"></span>
+  background:
+    linear-gradient(
+      180deg,
+      #d0b5ca,
+      #6f75a9 46%,
+      #303867 100%
+    );
 
-      <span class="dream-leaf leaf-three"></span>
+  transform:
+    scaleY(-1);
+}
 
-      <span class="dream-leaf leaf-four"></span>
+.horizon-light {
+  position: absolute;
 
-      <span class="dream-leaf leaf-five"></span>
+  top: 50%;
+  left: 50%;
 
-    </div>
+  z-index: 2;
 
+  width: 115%;
+  height: 4px;
 
-    <!-- ======================================
-         HORIZON IMPOSSIBLE
-    ======================================= -->
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 237, 218, 0.86),
+      transparent
+    );
 
-    <div class="impossible-horizon">
+  box-shadow:
+    0 0 34px
+    rgba(255, 210, 222, 0.62);
 
-      <div class="upper-sky-reflection"></div>
+  transform:
+    translate(-50%, -50%);
+}
 
-      <div class="horizon-light"></div>
+.horizon-star {
+  position: absolute;
+  z-index: 3;
 
-      <div class="lower-sky-reflection"></div>
+  width: 5px;
+  height: 5px;
 
-      <span class="horizon-star star-left"></span>
+  border-radius: 50%;
 
-      <span class="horizon-star star-right"></span>
+  background: #fffbe8;
 
-    </div>
+  box-shadow:
+    0 0 13px #fffbe8;
+}
 
+.star-left {
+  top: 43%;
+  left: 26%;
+}
 
-    <!-- ======================================
-         LUMIÈRE VERS ROMANCE
-    ======================================= -->
+.star-right {
+  top: 57%;
+  right: 24%;
+}
 
-    <div class="romance-light">
 
-      <span class="romance-halo"></span>
+/* ==========================================
+   LUMIÈRE ROMANCE
+========================================== */
 
-      <span class="romance-core"></span>
+.romance-light {
+  position: absolute;
 
-    </div>
+  top: 50%;
+  left: 50%;
 
-  </div>
+  z-index: 17;
 
+  width: 43px;
+  height: 43px;
 
-  <!-- ==========================================
-       NAVIGATION
-  =========================================== -->
+  opacity: var(--romance);
 
-  <header class="adventure-header">
+  transform:
+    translate(-50%, -50%)
+    scale(
+      calc(
+        0.25 +
+        var(--romance) *
+        1.1
+      )
+    );
+}
 
-    <a href="childhood.html">
-      ← ROOM 02
-    </a>
+.romance-core,
+.romance-halo {
+  position: absolute;
 
+  border-radius: 50%;
+}
 
-    <p>
-      THE MUSEUM OF DREAMS
-    </p>
+.romance-core {
+  inset: 0;
 
+  background:
+    radial-gradient(
+      circle,
+      #fffdf2,
+      #ffd2e3 39%,
+      #da8cca 69%,
+      transparent 76%
+    );
 
-    <a href="romance.html">
-      ROOM 04 →
-    </a>
+  box-shadow:
+    0 0 27px
+    rgba(255, 203, 228, 0.91);
+}
 
-  </header>
+.romance-halo {
+  inset: -210%;
 
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 210, 229, 0.57),
+      rgba(209, 141, 203, 0.17) 39%,
+      transparent 70%
+    );
 
-  <!-- ==========================================
-       NUMÉRO DE LA SALLE
-  =========================================== -->
+  filter: blur(10px);
 
-  <aside class="room-index">
+  animation:
+    lightPulse 3.1s ease-in-out infinite;
+}
 
-    <span>
-      ROOM 03
-    </span>
 
-    <strong>
-      ADVENTURE
-    </strong>
+/* ==========================================
+   HEADER
+========================================== */
 
-  </aside>
+.adventure-header {
+  position: fixed;
 
+  top: 0;
+  left: 0;
 
-  <!-- ==========================================
-       NARRATION
-  =========================================== -->
+  z-index: 50;
 
-  <section
-    class="narration-stage"
-    aria-live="polite"
-  >
+  display: grid;
 
-    <div
-      class="adventure-narration"
-      id="adventure-narration"
-    >
+  grid-template-columns:
+    1fr auto 1fr;
 
-      <p class="narration-label">
-        ROOM 03 · ADVENTURE
-      </p>
+  align-items: center;
 
-      <h1>
+  width: 100%;
 
-        The sky starts here.
+  padding:
+    24px 34px;
 
-        <em>
-          And gravity ends.
-        </em>
+  font-family:
+    "DM Mono",
+    monospace;
 
-      </h1>
+  font-size: 9px;
 
-    </div>
+  letter-spacing: 0.14em;
 
-  </section>
+  text-transform: uppercase;
 
+  text-shadow:
+    0 2px 15px
+    rgba(24, 27, 72, 0.48);
+}
 
-  <!-- ==========================================
-       NOTE SCIENTIFIQUE
-  =========================================== -->
+.adventure-header p {
+  margin: 0;
 
-  <aside
-    class="science-note"
-    id="science-note"
-  >
+  text-align: center;
+}
 
-    <span
-      class="science-number"
-      id="science-number"
-    >
-      03.1
-    </span>
+.adventure-header a:last-child {
+  justify-self: end;
+}
 
 
-    <div class="science-content">
+/* ==========================================
+   INDEX DE LA SALLE
+========================================== */
 
-      <strong id="science-title">
-        FLYING DREAMS
-      </strong>
+.room-index {
+  position: fixed;
 
+  top: 50%;
+  right: 29px;
 
-      <p id="science-text">
+  z-index: 45;
 
-        In one student sample, 48.3% reported
-        having experienced a flying dream.
+  display: flex;
+  flex-direction: column;
 
-      </p>
+  font-family:
+    "DM Mono",
+    monospace;
 
+  font-size: 8px;
 
-      <a
-        id="science-source"
-        href="https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        VIEW STUDY ↗
-      </a>
+  letter-spacing: 0.14em;
 
-    </div>
+  text-align: right;
 
-  </aside>
+  text-transform: uppercase;
 
+  transform:
+    translateY(-50%);
+}
 
-  <!-- ==========================================
-       PROGRESSION
-  =========================================== -->
+.room-index span {
+  opacity: 0.5;
+}
 
-  <div class="scroll-progress">
+.room-index strong {
+  margin-top: 6px;
 
-    <span id="scroll-progress-fill"></span>
+  font-weight: 400;
+}
 
-  </div>
 
+/* ==========================================
+   NARRATION
+========================================== */
 
-  <p
-    class="scroll-message"
-    id="scroll-message"
-  >
-    FLY INTO THE DREAM
-  </p>
+.narration-stage {
+  position: fixed;
+  inset: 0;
 
+  z-index: 31;
 
-  <!-- ==========================================
-       TRANSITION VERS ROMANCE
-  =========================================== -->
+  display: grid;
+  place-items: center;
 
-  <section
-    class="romance-gate"
-    id="romance-gate"
-  >
+  padding:
+    92px 28px 165px;
 
-    <p class="romance-introduction">
+  pointer-events: none;
+}
 
-      Everything keeps changing.
+.adventure-narration {
+  width:
+    min(940px, 92vw);
 
-    </p>
+  text-align: center;
 
+  text-shadow:
+    0 7px 32px
+    rgba(26, 27, 77, 0.48);
 
-    <h2>
+  transition:
+    opacity 480ms ease,
+    filter 480ms ease,
+    transform 620ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
 
-      Except for
+.narration-label {
+  margin:
+    0 0 25px;
 
-      <em>
-        one small light.
-      </em>
+  font-family:
+    "DM Mono",
+    monospace;
 
-    </h2>
+  font-size: 9px;
 
+  letter-spacing: 0.17em;
 
-    <p class="romance-sentence">
+  text-transform: uppercase;
 
-      A moment ago, you were somewhere else.
-      <br>
+  opacity: 0.62;
+}
 
-      Now, someone is here.
+.adventure-narration h1 {
+  margin: 0;
 
-    </p>
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
 
+  font-size:
+    clamp(49px, 7vw, 108px);
 
-    <a
-      href="romance.html"
-      id="follow-glow"
-      class="follow-glow"
-    >
+  font-weight: 400;
 
-      <span>
-        FOLLOW THE GLOW
-      </span>
+  line-height: 0.92;
 
-      <small>
-        ROOM 04 · ROMANCE
-      </small>
+  letter-spacing: -0.043em;
+}
 
-    </a>
+.adventure-narration h1 em {
+  display: block;
 
-  </section>
+  margin-top: 9px;
 
+  color: #fff0d8;
 
-  <!-- Espace vertical créant le parcours -->
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
 
-  <main class="adventure-scroll"></main>
+  font-weight: 400;
+}
 
+.adventure-narration.is-changing {
+  opacity: 0;
 
-  <!-- Transition finale -->
+  filter: blur(11px);
 
-  <div
-    class="romance-transition"
-    aria-hidden="true"
-  ></div>
+  transform:
+    translateY(-13px);
+}
 
+.adventure-page.romance-active
+.narration-stage {
+  visibility: hidden;
+}
 
-  <script src="./adventure.js?v=2"></script>
 
-</body>
+/* ==========================================
+   OBSERVATION SCIENTIFIQUE
+========================================== */
 
-</html>
+.science-note {
+  position: fixed;
+
+  bottom: 30px;
+  left: 34px;
+
+  z-index: 45;
+
+  display: grid;
+
+  grid-template-columns:
+    38px 1fr;
+
+  gap: 13px;
+
+  width:
+    min(365px, calc(100vw - 68px));
+
+  padding-top: 13px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.37);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 2px 13px
+    rgba(21, 24, 67, 0.55);
+
+  transition:
+    opacity 390ms ease,
+    filter 390ms ease,
+    transform 390ms ease;
+}
+
+.science-note.is-changing {
+  opacity: 0;
+
+  filter: blur(6px);
+
+  transform:
+    translateY(7px);
+}
+
+.science-number {
+  font-size: 8px;
+
+  letter-spacing: 0.09em;
+
+  opacity: 0.57;
+}
+
+.science-content strong {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 9px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.13em;
+}
+
+.science-content p {
+  margin: 0;
+
+  font-size: 8px;
+
+  line-height: 1.58;
+
+  letter-spacing: 0.045em;
+
+  opacity: 0.74;
+}
+
+.science-content a {
+  display: inline-block;
+
+  margin-top: 9px;
+
+  font-size: 7px;
+
+  letter-spacing: 0.1em;
+
+  opacity: 0.48;
+
+  pointer-events: auto;
+
+  transition:
+    opacity 250ms ease;
+}
+
+.science-content a:hover {
+  opacity: 1;
+}
+
+.adventure-page.romance-active
+.science-note {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   PROGRESSION
+========================================== */
+
+.scroll-progress {
+  position: fixed;
+
+  top: 50%;
+  right: 14px;
+
+  z-index: 47;
+
+  width: 1px;
+  height: 165px;
+
+  background:
+    rgba(255, 255, 255, 0.19);
+
+  transform:
+    translateY(-50%);
+}
+
+.scroll-progress span {
+  display: block;
+
+  width: 100%;
+  height: 0%;
+
+  background:
+    linear-gradient(
+      #fffceb,
+      #dac9ff,
+      #ffcce2
+    );
+
+  box-shadow:
+    0 0 9px
+    rgba(255, 239, 216, 0.75);
+}
+
+.scroll-message {
+  position: fixed;
+
+  right: 34px;
+  bottom: 30px;
+
+  z-index: 45;
+
+  margin: 0;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  opacity: 0.53;
+
+  transition:
+    opacity 350ms ease;
+}
+
+
+/* ==========================================
+   TRANSITION ROMANCE
+========================================== */
+
+.romance-gate {
+  position: fixed;
+  inset: 0;
+
+  z-index: 40;
+
+  display: grid;
+  place-content: center;
+
+  visibility: hidden;
+
+  padding:
+    92px 25px;
+
+  opacity: 0;
+
+  text-align: center;
+
+  pointer-events: none;
+
+  transform:
+    translateY(15px);
+
+  transition:
+    opacity 700ms ease,
+    transform 850ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.adventure-page.romance-active
+.romance-gate {
+  visibility: visible;
+
+  opacity: 1;
+
+  pointer-events: auto;
+
+  transform:
+    translateY(0);
+}
+
+.romance-introduction {
+  margin:
+    0 0 18px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+.romance-gate h2 {
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(57px, 8.6vw, 132px);
+
+  font-weight: 400;
+
+  line-height: 0.86;
+
+  letter-spacing: -0.05em;
+
+  text-shadow:
+    0 0 33px
+    rgba(255, 207, 228, 0.31);
+}
+
+.romance-gate h2 em {
+  display: block;
+
+  color: #ffdce9;
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+}
+
+.romance-sentence {
+  margin:
+    34px 0 30px;
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(16px, 1.7vw, 23px);
+
+  line-height: 1.48;
+
+  opacity: 0.78;
+}
+
+.follow-glow {
+  justify-self: center;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  padding:
+    13px 25px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.53);
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 222, 235, 0.08);
+
+  backdrop-filter:
+    blur(9px);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  text-transform: uppercase;
+
+  transition:
+    background 320ms ease,
+    box-shadow 320ms ease,
+    transform 320ms ease;
+}
+
+.follow-glow span {
+  font-size: 9px;
+
+  letter-spacing: 0.16em;
+}
+
+.follow-glow small {
+  font-size: 7px;
+
+  letter-spacing: 0.11em;
+
+  opacity: 0.55;
+}
+
+.follow-glow:hover {
+  background:
+    rgba(255, 220, 235, 0.18);
+
+  box-shadow:
+    0 0 32px
+    rgba(255, 190, 221, 0.25);
+
+  transform:
+    translateY(-3px);
+}
+
+
+/* ==========================================
+   LONGUEUR DU PARCOURS
+========================================== */
+
+.adventure-scroll {
+  position: relative;
+
+  z-index: 1;
+
+  height: 740vh;
+}
+
+
+/* ==========================================
+   TRANSITION FINALE
+========================================== */
+
+.romance-transition {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  z-index: 100;
+
+  visibility: hidden;
+
+  width: 65px;
+  height: 65px;
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle,
+      #fffdf2,
+      #ffcfe2 27%,
+      #d68ac8 57%,
+      #321e52 100%
+    );
+
+  transform:
+    translate(-50%, -50%)
+    scale(0);
+}
+
+.adventure-page.leaving-adventure
+.romance-transition {
+  visibility: visible;
+
+  animation:
+    enterRomance 1.45s
+    cubic-bezier(
+      0.76,
+      0,
+      0.24,
+      1
+    )
+    forwards;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes auroraBreathe {
+  0%,
+  100% {
+    opacity: 0.23;
+  }
+
+  50% {
+    opacity: 0.42;
+  }
+}
+
+@keyframes mistLeft {
+  0%,
+  100% {
+    transform:
+      translate3d(-5%, 0, 0)
+      scale(0.94);
+  }
+
+  50% {
+    transform:
+      translate3d(8%, -3%, 0)
+      scale(1.08);
+  }
+}
+
+@keyframes mistRight {
+  0%,
+  100% {
+    transform:
+      translate3d(6%, 0, 0)
+      scale(0.95);
+  }
+
+  50% {
+    transform:
+      translate3d(-8%, 3%, 0)
+      scale(1.09);
+  }
+}
+
+@keyframes mistCentre {
+  0%,
+  100% {
+    transform:
+      translate3d(0, -5%, 0)
+      scale(0.85);
+  }
+
+  50% {
+    transform:
+      translate3d(2%, 6%, 0)
+      scale(1.15);
+  }
+}
+
+@keyframes leafRise {
+  0% {
+    opacity: 0;
+
+    transform:
+      translateY(25px)
+      rotate(0deg);
+  }
+
+  24% {
+    opacity: 0.86;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translateY(-170px)
+      translateX(55px)
+      rotate(210deg);
+  }
+}
+
+@keyframes lightPulse {
+  0%,
+  100% {
+    opacity: 0.56;
+
+    transform:
+      scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      scale(1.16);
+  }
+}
+
+@keyframes enterRomance {
+  0% {
+    visibility: visible;
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    visibility: visible;
+
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(45);
+  }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 800px) {
+  .adventure-header {
+    grid-template-columns:
+      1fr 1fr;
+
+    padding:
+      19px 20px;
+  }
+
+  .adventure-header p {
+    display: none;
+  }
+
+  .room-index {
+    top: 73px;
+    right: 20px;
+
+    transform: none;
+  }
+
+  .narration-stage {
+    padding:
+      80px 21px 190px;
+  }
+
+  .adventure-narration h1 {
+    font-size:
+      clamp(46px, 13vw, 76px);
+  }
+
+  .science-note {
+    bottom: 23px;
+    left: 20px;
+
+    width:
+      min(315px, calc(100vw - 67px));
+  }
+
+  .scroll-message {
+    display: none;
+  }
+
+  .scroll-progress {
+    right: 8px;
+  }
+
+  .forest-svg {
+    width: 145%;
+    margin-left: -22%;
+  }
+
+  .romance-gate h2 {
+    font-size:
+      clamp(54px, 16vw, 96px);
+  }
+}
+
+@media (max-width: 520px) {
+  .room-index {
+    display: none;
+  }
+
+  .science-note {
+    grid-template-columns:
+      30px 1fr;
+
+    width:
+      calc(100vw - 53px);
+  }
+
+  .science-content p {
+    font-size: 7px;
+  }
+
+  .romance-sentence br {
+    display: none;
+  }
+}
+
+
+/* ==========================================
+   ACCESSIBILITÉ
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
