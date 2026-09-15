@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#171a43"
+  >
+
+  <meta
+    name="description"
+    content="The Everyday Loop — Room 01 of The Museum of Dreams."
+  >
+
+  <title>
+    The Everyday Loop — Museum of Dreams
+  </title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./everyday.css?v=1"
+  >
+</head>
+
+
+<body class="everyday-page phase-0">
+
+
+  <!-- ==========================================
+       DÉCOR PRINCIPAL
+  =========================================== -->
+
+  <div
+    class="corridor-world"
+    aria-hidden="true"
+  >
+
+    <img
+      class="corridor-image"
+      src="./everyday-corridor.png"
+      alt=""
+    >
+
+    <div class="corridor-colour"></div>
+
+    <div class="corridor-depth"></div>
+
+    <div class="cursor-light"></div>
+
+    <canvas id="dream-dust"></canvas>
+
+  </div>
+
+
+  <!-- ==========================================
+       ANOMALIES DU QUOTIDIEN
+  =========================================== -->
+
+  <div
+    class="dream-anomalies"
+    aria-hidden="true"
+  >
+
+    <div class="repeating-door door-one"></div>
+
+    <div class="repeating-door door-two"></div>
+
+
+    <div class="impossible-clock">
+
+      <span class="clock-hand clock-hour"></span>
+
+      <span class="clock-hand clock-minute"></span>
+
+      <span class="clock-centre"></span>
+
+    </div>
+
+
+    <div class="route-lines">
+
+      <span></span>
+
+      <span></span>
+
+      <span></span>
+
+    </div>
+
+
+    <div class="passing-shadows">
+
+      <span class="shadow shadow-one"></span>
+
+      <span class="shadow shadow-two"></span>
+
+      <span class="shadow shadow-three"></span>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
+  <header class="room-header">
+
+    <a href="brain.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
+
+    <div class="room-location">
+
+      <span class="location-dot"></span>
+
+      <span>
+        ROOM 01 · THE EVERYDAY LOOP
+      </span>
+
+    </div>
+
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
+  </header>
+
+
+  <!-- ==========================================
+       TITRE DE LA SALLE
+  =========================================== -->
+
+  <section
+    class="room-introduction"
+    id="room-introduction"
+  >
+
+    <p>
+      ROOM 01
+    </p>
+
+
+    <h1>
+      THE EVERYDAY
+      <br>
+      <em>LOOP</em>
+    </h1>
+
+
+    <span>
+      FAMILIAR PLACES · IMPOSSIBLE LOGIC
+    </span>
+
+  </section>
+
+
+  <!-- ==========================================
+       NARRATION
+  =========================================== -->
+
+  <section
+    class="room-narration"
+    aria-live="polite"
+  >
+
+    <p
+      class="room-sentence"
+      id="room-sentence"
+    >
+      Everything looks familiar.
+      <em>Almost.</em>
+    </p>
+
+  </section>
+
+
+  <!-- ==========================================
+       CARTEL MUSÉAL
+  =========================================== -->
+
+  <aside
+    class="dream-label"
+    id="dream-label"
+    aria-live="polite"
+  >
+
+    <span id="dream-number">
+      DREAM 014
+    </span>
+
+
+    <strong id="dream-title">
+      THE REPEATING ROOM
+    </strong>
+
+
+    <dl>
+
+      <div>
+
+        <dt>
+          EMOTIONAL CORE
+        </dt>
+
+        <dd id="dream-emotion">
+          CONFUSION
+        </dd>
+
+      </div>
+
+
+      <div>
+
+        <dt>
+          SOURCE
+        </dt>
+
+        <dd id="dream-source">
+          ANONYMOUS SUBMISSION
+        </dd>
+
+      </div>
+
+    </dl>
+
+  </aside>
+
+
+  <!-- ==========================================
+       CONCLUSION CURATORIALE
+  =========================================== -->
+
+  <section
+    class="curatorial-reveal"
+    id="curatorial-reveal"
+  >
+
+    <p class="curatorial-kicker">
+      CURATORIAL PRINCIPLE 01
+    </p>
+
+
+    <h2>
+
+      Different places.
+      <br>
+
+      Different stories.
+      <br>
+
+      <em>
+        The same emotional trace.
+      </em>
+
+    </h2>
+
+
+    <p class="curatorial-note">
+
+      Dreams in this room are connected by
+      disorientation — not by identical images.
+
+    </p>
+
+  </section>
+
+
+  <!-- ==========================================
+       PROCHAINE SALLE
+  =========================================== -->
+
+  <section
+    class="next-room"
+    id="next-room"
+  >
+
+    <div
+      class="next-door"
+      aria-hidden="true"
+    >
+
+      <span class="next-door-light"></span>
+
+      <span class="next-door-frame"></span>
+
+    </div>
+
+
+    <p>
+
+      The familiar world is beginning
+      to dissolve.
+
+    </p>
+
+
+    <a
+      href="recurring.html"
+      id="continue-room"
+    >
+
+      <span>
+        CONTINUE TO
+      </span>
+
+      <strong>
+        ROOM 02
+      </strong>
+
+      <small>
+        ENTER →
+      </small>
+
+    </a>
+
+  </section>
+
+
+  <!-- ==========================================
+       INTERFACE
+  =========================================== -->
+
+  <p
+    class="movement-message"
+    id="movement-message"
+  >
+    WALK INTO THE FAMILIAR
+  </p>
+
+
+  <div class="room-progress">
+
+    <span id="room-progress-fill"></span>
+
+  </div>
+
+
+  <!-- Espace de narration verticale -->
+
+  <main class="everyday-scroll"></main>
+
+
+  <!-- Transitions -->
+
+  <div
+    class="arrival-transition"
+    aria-hidden="true"
+  ></div>
+
+
+  <div
+    class="departure-transition"
+    aria-hidden="true"
+  ></div>
+
+
+  <script src="./everyday.js?v=1"></script>
+
+</body>
+
+</html>
