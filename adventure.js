@@ -31,19 +31,106 @@
   const context = canvas.getContext("2d");
 
   const narrationSteps = [
-    { start: 0, label: "ROOM 03 · ADVENTURE", text: "The sky starts here.<em>And gravity ends.</em>" },
-    { start: 0.09, label: "THE FIRST FLIGHT", text: "You take one step.<em>The clouds take care of the rest.</em>" },
-    { start: 0.2, label: "LEARNING TO FLY", text: "No wings. No instructions.<em>Somehow, you remember how.</em>" },
-    { start: 0.3, label: "ABOVE THE CLOUDS", text: "The stars move aside<em>to let you through.</em>" },
-    { start: 0.39, label: "THE INVERTED FOREST", text: "A forest is growing<em>on the wrong side of the sky.</em>" },
-    { start: 0.49, label: "THE RACE", text: "The forest has decided<em>to race you.</em>" },
-    { start: 0.57, label: "THE FALL", text: "Then the sky opens<em>beneath your feet.</em>" },
-    { start: 0.65, label: "FIRST SUNSET", text: "You fall through<em>a sky made of gold.</em>" },
-    { start: 0.71, label: "SECOND SUNSET", text: "Gold becomes pink.<em>The fall continues.</em>" },
-    { start: 0.77, label: "THIRD SUNSET", text: "Daylight leaves.<em>The stars remain.</em>" },
-    { start: 0.84, label: "A DIFFERENT ENDING", text: "Before you reach the ground,<em>the dream changes the ending.</em>" },
-    { start: 0.89, label: "THE IMPOSSIBLE HORIZON", text: "Nothing stays where it was.<em>Not even the horizon.</em>" }
-  ];
+  {
+    start: 0,
+
+    label:
+      "ROOM 03 · ADVENTURE",
+
+    text:
+      "The sky starts here.<em>And gravity ends.</em>"
+  },
+
+  {
+    start: 0.09,
+
+    label:
+      "THE FIRST FLIGHT",
+
+    text:
+      "You take one step.<em>The clouds take care of the rest.</em>"
+  },
+
+  {
+    start: 0.2,
+
+    label:
+      "LEARNING TO FLY",
+
+    text:
+      "No wings. No instructions.<em>Somehow, you remember how.</em>"
+  },
+
+  {
+    start: 0.3,
+
+    label:
+      "ABOVE THE CLOUDS",
+
+    text:
+      "The stars move aside<em>to let you through.</em>"
+  },
+
+  {
+    start: 0.39,
+
+    label:
+      "THE INVERTED FOREST",
+
+    text:
+      "A forest is growing<em>on the wrong side of the sky.</em>"
+  },
+
+  {
+    start: 0.49,
+
+    label:
+      "THE RACE",
+
+    text:
+      "The forest has decided<em>to race you.</em>"
+  },
+
+  {
+    start: 0.57,
+
+    label:
+      "THE FALL",
+
+    text:
+      "Then the sky opens<em>beneath your feet.</em>"
+  },
+
+  {
+    start: 0.66,
+
+    label:
+      "BETWEEN WORLDS",
+
+    text:
+      "You fall through<em>three different sunsets.</em>"
+  },
+
+  {
+    start: 0.8,
+
+    label:
+      "A DIFFERENT ENDING",
+
+    text:
+      "Before you reach the ground,<em>the dream changes the ending.</em>"
+  },
+
+  {
+    start: 0.88,
+
+    label:
+      "THE IMPOSSIBLE HORIZON",
+
+    text:
+      "Nothing stays where it was.<em>Not even the horizon.</em>"
+  }
+];
 
   const scienceSteps = [
     {
