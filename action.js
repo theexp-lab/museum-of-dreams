@@ -1073,9 +1073,11 @@ function stopHeartbeat() {
 
 function setHeartbeat(
   period,
-  extraPulse = false
+  extraPulse = false,
+  strength = 1
 ) {
   stopHeartbeat();
+
 
   if (
     !soundEnabled ||
@@ -1084,16 +1086,18 @@ function setHeartbeat(
     return;
   }
 
+
   heartbeat(
-    1,
+    strength,
     extraPulse
   );
+
 
   heartbeatTimer =
     window.setInterval(
       function () {
         heartbeat(
-          1,
+          strength,
           extraPulse
         );
       },
@@ -1285,7 +1289,33 @@ function syncAudio(
     "hand",
     "fall"
   ];
+/*
+ * Le cœur hérité de la salle Romance.
+ * Il ralentit progressivement lorsque
+ * l’action prend le contrôle du rêve.
+ */
 
+const jealousyHeartbeat = {
+  intro: {
+    period: 540,
+    strength: 1.18
+  },
+
+  exhibit: {
+    period: 600,
+    strength: 1
+  },
+
+  trouble: {
+    period: 660,
+    strength: 0.82
+  },
+
+  ride: {
+    period: 740,
+    strength: 0.62
+  }
+};
 
   setAtmosphere(
     scene
@@ -1462,11 +1492,38 @@ function syncAudio(
     trainSound.pause();
 
     revealThirdSignal();
+    } else if (
+    jealousyHeartbeat[
+      scene
+    ]
+  ) {
+    /*
+     * Continuité émotionnelle depuis
+     * la jalousie de la salle Romance.
+     */
+
+    const carryover =
+      jealousyHeartbeat[
+        scene
+      ];
+
+
+    setHeartbeat(
+      carryover.period,
+      false,
+      carryover.strength
+    );
+
   } else if (
     heartbeatScenes.includes(
       scene
     )
   ) {
+    /*
+     * Le rythme repart pendant
+     * le saut, le train et le danger.
+     */
+
     const period =
       Math.max(
         470,
@@ -1475,10 +1532,13 @@ function syncAudio(
         24
       );
 
+
     setHeartbeat(
       period,
-      scene === "hand"
+      scene === "hand",
+      1
     );
+
   } else {
     stopHeartbeat();
   }
