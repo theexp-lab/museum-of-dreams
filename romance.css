@@ -2982,3 +2982,37 @@ a {
     opacity: 0;
   }
 }
+/* ==========================================
+   EMPÊCHER LA SUPERPOSITION DU TITRE
+   ET DE LA PREMIÈRE PHRASE
+========================================== */
+
+.romance-narration {
+  visibility: hidden;
+
+  opacity: 0;
+
+  transform:
+    translateY(25px);
+
+  transition:
+    opacity 700ms ease,
+    transform 800ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    ),
+    visibility 700ms;
+}
+
+.romance-page.narration-active
+.romance-narration {
+  visibility: visible;
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
