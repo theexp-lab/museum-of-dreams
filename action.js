@@ -1817,27 +1817,25 @@ window.addEventListener(
 );
 
 
-/* ==========================================
+
+    
+    updateSoundButton();
+
+
+
+    /* ==========================================
    ENTRER DANS LA SALLE AVEC LE SON
 ========================================== */
 
 enterWithSound.addEventListener(
   "click",
 
-  async function () {
-    enterWithSound.disabled =
-      true;
-
-
-    enterWithSound.innerHTML =
-      `
-        <span class="sound-symbol">
-          ◉
-        </span>
-
-        ACTIVATING AUDIO…
-      `;
-
+  function () {
+    /*
+     * La salle s’ouvre immédiatement :
+     * aucun fichier audio ne peut bloquer
+     * le bouton.
+     */
 
     soundEnabled = true;
 
@@ -1848,58 +1846,143 @@ enterWithSound.addEventListener(
     );
 
 
-    ensureAudio();
-
-
-    if (
-      audioContext.state ===
-      "suspended"
-    ) {
-      await audioContext.resume();
-    }
-
-
-    masterGain.gain.setValueAtTime(
-      0.8,
-      audioContext.currentTime
-    );
-
-window.history.scrollRestoration =
-  "manual";
-
-
-window.scrollTo(
-  0,
-  0
-);
-    
     updateSoundButton();
 
 
-    await primeMedia();
+    /* Déverrouiller Web Audio */
+
+    try {
+      ensureAudio();
 
 
-    /*
-     * Petit signal confirmant que
-     * l’environnement sonore fonctionne.
-     */
+      if (
+        audioContext &&
+        audioContext.state ===
+        "suspended"
+      ) {
+        audioContext.resume();
+      }
 
-    tone(
-      220,
-      0.34,
-      0.04,
-      "sine"
+
+      if (
+        masterGain &&
+        audioContext
+      ) {
+        masterGain.gain.setValueAtTime(
+          0.8,
+          audioContext.currentTime
+        );
+      }
+    } catch (error) {
+      console.warn(
+        "Web Audio could not start:",
+        error
+      );
+    }
+
+
+    /* Déverrouiller les deux fichiers MP3 */
+
+    const soundsToUnlock = [
+      {
+        audio: startSound,
+        volume: 0.92
+      },
+
+      {
+        audio: trainSound,
+        volume: 0.95
+      }
+    ];
+
+
+    soundsToUnlock.forEach(
+      function (item) {
+        const audio =
+          item.audio;
+
+
+        if (!audio) {
+          return;
+        }
+
+
+        audio.muted = true;
+
+        audio.volume = 0;
+
+        audio.currentTime = 0;
+
+
+        const playback =
+          audio.play();
+
+
+        if (
+          playback &&
+          typeof playback.catch ===
+          "function"
+        ) {
+          playback.catch(
+            function () {
+              /*
+               * On ne bloque jamais
+               * l’ouverture de la salle.
+               */
+            }
+          );
+        }
+
+
+        window.setTimeout(
+          function () {
+            audio.pause();
+
+            audio.currentTime = 0;
+
+            audio.muted = false;
+
+            audio.volume =
+              item.volume;
+          },
+          120
+        );
+      }
     );
 
 
-    tone(
-      440,
-      0.3,
-      0.025,
-      "sine",
-      0.12
-    );
+    mediaPrimed = true;
 
+    mediaPriming = false;
+
+
+    /* Petit son de confirmation */
+
+    try {
+      tone(
+        220,
+        0.34,
+        0.04,
+        "sine"
+      );
+
+
+      tone(
+        440,
+        0.3,
+        0.025,
+        "sine",
+        0.12
+      );
+    } catch (error) {
+      console.warn(
+        "Confirmation sound unavailable:",
+        error
+      );
+    }
+
+
+    /* Ouvrir immédiatement la salle */
 
     soundEntry.classList.add(
       "is-leaving"
@@ -1914,11 +1997,21 @@ window.scrollTo(
     window.setTimeout(
       function () {
         soundEntry.remove();
+
+
+        syncAudio(
+          sceneNames[
+            activeIndex
+          ],
+
+          activeIndex
+        );
       },
-      950
+      900
     );
   }
 );
+
 /* ==========================================
    SOUND ON / OFF
 ========================================== */
