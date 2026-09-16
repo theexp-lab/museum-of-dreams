@@ -245,7 +245,7 @@ const narrationSteps = [
       "The closer you move, <em>the clearer it becomes.</em>",
 
     title:
-      "THE RED THREAD",
+      "THE RED PRESENCE",
 
     emotion:
       "JEALOUSY",
@@ -332,7 +332,7 @@ const researchSteps = [
       "RESEARCH NOTE 04.4",
 
     text:
-      "In a two-week diary study, jealousy experienced in dreams was associated with greater conflict the following day.",
+      "Jealousy experienced in dreams was associated with greater conflict the following day.",
 
     principle:
       "DREAMED JEALOUSY",
@@ -345,7 +345,7 @@ const researchSteps = [
 
 let currentNarrationIndex = -1;
 
-let sentenceTimeout;
+let narrationTimeout;
 
 let finalImpactPlayed = false;
 
@@ -368,7 +368,7 @@ function displaySentence(index) {
 
 
   window.clearTimeout(
-    sentenceTimeout
+    narrationTimeout
   );
 
 
@@ -377,7 +377,7 @@ function displaySentence(index) {
   );
 
 
-  sentenceTimeout =
+  narrationTimeout =
     window.setTimeout(
       function () {
         const step =
@@ -410,7 +410,7 @@ function displaySentence(index) {
 
 
 /* ==========================================
-   RECHERCHE
+   OBSERVATION SCIENTIFIQUE
 ========================================== */
 
 function updateResearch(progress) {
@@ -466,13 +466,15 @@ let masterGain = null;
 
 let ambienceGain = null;
 
-let warmGain = null;
+let warmthGain = null;
 
 let tensionGain = null;
 
+let compressor = null;
+
 let soundEnabled = false;
 
-let heartbeatTimeout = null;
+let heartbeatTimer = null;
 
 let currentProgress = 0;
 
@@ -481,11 +483,12 @@ let currentWarmth = 0;
 let currentJealousy = 0;
 
 
-/* Créer une piste de bruit */
+/* Bruit continu */
 
-function createNoiseBuffer() {
+function createNoiseBuffer(duration = 3) {
   const length =
-    audioContext.sampleRate * 3;
+    audioContext.sampleRate *
+    duration;
 
 
   const buffer =
@@ -514,12 +517,13 @@ function createNoiseBuffer() {
 }
 
 
-/* Créer une nappe */
+/* Oscillateur continu */
 
 function createDrone(
   frequency,
   volume,
-  destination
+  destination,
+  type = "sine"
 ) {
   const oscillator =
     audioContext.createOscillator();
@@ -530,7 +534,7 @@ function createDrone(
 
 
   oscillator.type =
-    "sine";
+    type;
 
 
   oscillator.frequency.value =
@@ -555,25 +559,49 @@ function createDrone(
 }
 
 
-/* Construire l’installation sonore */
+/* Initialisation */
 
 async function startAudio() {
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+
+  if (!AudioContextClass) {
+    soundControl.textContent =
+      "SOUND UNAVAILABLE";
+
+    return;
+  }
+
+
   if (!audioContext) {
-    const AudioContextClass =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-
-    if (!AudioContextClass) {
-      soundControl.textContent =
-        "SOUND UNAVAILABLE";
-
-      return;
-    }
-
-
     audioContext =
       new AudioContextClass();
+
+
+    compressor =
+      audioContext.createDynamicsCompressor();
+
+
+    compressor.threshold.value =
+      -20;
+
+
+    compressor.knee.value =
+      16;
+
+
+    compressor.ratio.value =
+      8;
+
+
+    compressor.attack.value =
+      0.006;
+
+
+    compressor.release.value =
+      0.28;
 
 
     masterGain =
@@ -585,17 +613,22 @@ async function startAudio() {
 
 
     masterGain.connect(
+      compressor
+    );
+
+
+    compressor.connect(
       audioContext.destination
     );
 
 
-    /* Souffle de la salle */
+    /* Respiration et salle */
 
-    const noise =
+    const ambienceNoise =
       audioContext.createBufferSource();
 
 
-    const noiseFilter =
+    const ambienceFilter =
       audioContext.createBiquadFilter();
 
 
@@ -603,31 +636,35 @@ async function startAudio() {
       audioContext.createGain();
 
 
-    noise.buffer =
+    ambienceNoise.buffer =
       createNoiseBuffer();
 
 
-    noise.loop = true;
+    ambienceNoise.loop = true;
 
 
-    noiseFilter.type =
-      "lowpass";
+    ambienceFilter.type =
+      "bandpass";
 
 
-    noiseFilter.frequency.value =
-      720;
+    ambienceFilter.frequency.value =
+      580;
+
+
+    ambienceFilter.Q.value =
+      0.7;
 
 
     ambienceGain.gain.value =
-      0.055;
+      0.08;
 
 
-    noise.connect(
-      noiseFilter
+    ambienceNoise.connect(
+      ambienceFilter
     );
 
 
-    noiseFilter.connect(
+    ambienceFilter.connect(
       ambienceGain
     );
 
@@ -637,46 +674,46 @@ async function startAudio() {
     );
 
 
-    noise.start();
+    ambienceNoise.start();
 
 
-    /* Nappe chaleureuse */
+    /* Chaleur harmonique */
 
-    warmGain =
+    warmthGain =
       audioContext.createGain();
 
 
-    warmGain.gain.value =
+    warmthGain.gain.value =
       0.0001;
 
 
-    warmGain.connect(
+    warmthGain.connect(
       masterGain
     );
 
 
     createDrone(
       110,
-      0.2,
-      warmGain
+      0.22,
+      warmthGain
     );
 
 
     createDrone(
       164.81,
-      0.09,
-      warmGain
+      0.12,
+      warmthGain
     );
 
 
     createDrone(
       220,
-      0.05,
-      warmGain
+      0.06,
+      warmthGain
     );
 
 
-    /* Tension rouge */
+    /* Tension désaccordée */
 
     tensionGain =
       audioContext.createGain();
@@ -692,16 +729,24 @@ async function startAudio() {
 
 
     createDrone(
-      43,
-      0.32,
+      39,
+      0.42,
       tensionGain
     );
 
 
     createDrone(
-      46,
-      0.18,
+      42.5,
+      0.28,
       tensionGain
+    );
+
+
+    createDrone(
+      76,
+      0.07,
+      tensionGain,
+      "sawtooth"
     );
   }
 
@@ -717,9 +762,15 @@ async function startAudio() {
   );
 
 
-  masterGain.gain.linearRampToValueAtTime(
-    0.42,
-    audioContext.currentTime + 1.4
+  masterGain.gain.setValueAtTime(
+    0.0001,
+    audioContext.currentTime
+  );
+
+
+  masterGain.gain.exponentialRampToValueAtTime(
+    0.7,
+    audioContext.currentTime + 1.2
   );
 
 
@@ -733,13 +784,13 @@ async function startAudio() {
   );
 
 
-  scheduleHeartbeat();
-
   updateAudioScene();
+
+  scheduleHeartbeat();
 }
 
 
-/* Mise à jour sonore */
+/* Mise à jour des ambiances */
 
 function updateAudioScene() {
   if (
@@ -755,34 +806,36 @@ function updateAudioScene() {
 
 
   ambienceGain.gain.setTargetAtTime(
-    0.045 +
-    currentProgress * 0.04,
+    0.065 +
+    currentProgress * 0.045 +
+    currentJealousy * 0.06,
     now,
-    0.35
+    0.25
   );
 
 
-  warmGain.gain.setTargetAtTime(
+  warmthGain.gain.setTargetAtTime(
     0.0001 +
-    currentWarmth * 0.18,
+    currentWarmth * 0.24,
     now,
-    0.5
+    0.4
   );
 
 
   tensionGain.gain.setTargetAtTime(
     0.0001 +
-    currentJealousy * 0.34,
+    currentJealousy * 0.48,
     now,
-    0.22
+    0.16
   );
 }
 
 
-/* Battement du cœur */
+/* Un battement épais */
 
 function playHeartbeat(
-  strength = 1
+  strength = 1,
+  pan = 0
 ) {
   if (
     !audioContext ||
@@ -800,12 +853,18 @@ function playHeartbeat(
     audioContext.createOscillator();
 
 
-  const gain =
+  const oscillatorGain =
     audioContext.createGain();
 
 
-  const filter =
+  const lowFilter =
     audioContext.createBiquadFilter();
+
+
+  const panner =
+    audioContext.createStereoPanner
+      ? audioContext.createStereoPanner()
+      : null;
 
 
   oscillator.type =
@@ -813,62 +872,147 @@ function playHeartbeat(
 
 
   oscillator.frequency.setValueAtTime(
-    72,
+    92,
     now
   );
 
 
   oscillator.frequency.exponentialRampToValueAtTime(
-    42,
-    now + 0.19
+    34,
+    now + 0.3
   );
 
 
-  filter.type =
-    "lowpass";
-
-
-  filter.frequency.value =
-    150;
-
-
-  gain.gain.setValueAtTime(
+  oscillatorGain.gain.setValueAtTime(
     0.0001,
     now
   );
 
 
-  gain.gain.exponentialRampToValueAtTime(
-    0.25 * strength,
-    now + 0.018
+  oscillatorGain.gain.exponentialRampToValueAtTime(
+    Math.min(
+      0.9,
+      0.34 * strength
+    ),
+    now + 0.014
   );
 
 
-  gain.gain.exponentialRampToValueAtTime(
+  oscillatorGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 0.24
+    now + 0.34
   );
+
+
+  lowFilter.type =
+    "lowpass";
+
+
+  lowFilter.frequency.value =
+    170;
 
 
   oscillator.connect(
-    filter
+    lowFilter
   );
 
 
-  filter.connect(
-    gain
+  lowFilter.connect(
+    oscillatorGain
   );
 
 
-  gain.connect(
-    masterGain
-  );
+  if (panner) {
+    panner.pan.value =
+      clamp(
+        pan,
+        -1,
+        1
+      );
+
+
+    oscillatorGain.connect(
+      panner
+    );
+
+
+    panner.connect(
+      masterGain
+    );
+  } else {
+    oscillatorGain.connect(
+      masterGain
+    );
+  }
 
 
   oscillator.start(now);
 
   oscillator.stop(
-    now + 0.26
+    now + 0.36
+  );
+
+
+  /* Impact organique */
+
+  const noise =
+    audioContext.createBufferSource();
+
+
+  const noiseFilter =
+    audioContext.createBiquadFilter();
+
+
+  const noiseGain =
+    audioContext.createGain();
+
+
+  noise.buffer =
+    createNoiseBuffer(0.4);
+
+
+  noiseFilter.type =
+    "lowpass";
+
+
+  noiseFilter.frequency.value =
+    120;
+
+
+  noiseGain.gain.setValueAtTime(
+    Math.min(
+      0.4,
+      0.12 * strength
+    ),
+    now
+  );
+
+
+  noiseGain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 0.22
+  );
+
+
+  noise.connect(
+    noiseFilter
+  );
+
+
+  noiseFilter.connect(
+    noiseGain
+  );
+
+
+  noiseGain.connect(
+    masterGain
+  );
+
+
+  noise.start(now);
+
+  noise.stop(
+    now + 0.25
   );
 }
 
@@ -882,23 +1026,35 @@ function heartbeatSequence() {
 
 
   const strength =
-    0.58 +
+    0.8 +
     currentProgress * 0.45 +
-    currentJealousy * 0.72;
+    currentJealousy * 1.15;
 
 
-  playHeartbeat(strength);
+  const pan =
+    currentJealousy > 0.25
+      ? -0.42
+      : -0.12;
+
+
+  playHeartbeat(
+    strength,
+    pan
+  );
 
 
   window.setTimeout(
     function () {
       playHeartbeat(
-        strength * 0.7
+        strength * 0.78,
+        currentJealousy > 0.25
+          ? 0.5
+          : 0.12
       );
     },
-    currentJealousy > 0.35
-      ? 170
-      : 230
+    currentJealousy > 0.4
+      ? 145
+      : 220
   );
 
 
@@ -906,11 +1062,11 @@ function heartbeatSequence() {
 }
 
 
-/* Rythme selon la narration */
+/* Accélération */
 
 function scheduleHeartbeat() {
   window.clearTimeout(
-    heartbeatTimeout
+    heartbeatTimer
   );
 
 
@@ -920,22 +1076,25 @@ function scheduleHeartbeat() {
 
 
   const delay =
-    1450 -
-    currentProgress * 280 -
-    currentJealousy * 620;
+    1380 -
+    currentProgress * 270 -
+    currentJealousy * 720;
 
 
-  heartbeatTimeout =
+  heartbeatTimer =
     window.setTimeout(
       heartbeatSequence,
-      Math.max(520, delay)
+      Math.max(
+        390,
+        delay
+      )
     );
 }
 
 
-/* Impact final */
+/* Battements extrêmes de fin */
 
-function playFinalImpact() {
+function playFinalHeartbeatStorm() {
   if (
     !audioContext ||
     !soundEnabled
@@ -944,89 +1103,55 @@ function playFinalImpact() {
   }
 
 
-  const now =
-    audioContext.currentTime;
+  const beats = [
+    0,
+    310,
+    560,
+    790,
+    990,
+    1170,
+    1330
+  ];
 
 
-  const oscillator =
-    audioContext.createOscillator();
-
-
-  const gain =
-    audioContext.createGain();
-
-
-  oscillator.type =
-    "sine";
-
-
-  oscillator.frequency.setValueAtTime(
-    95,
-    now
+  beats.forEach(
+    function (delay, index) {
+      window.setTimeout(
+        function () {
+          playHeartbeat(
+            1.75 +
+            index * 0.08,
+            index % 2 === 0
+              ? -0.35
+              : 0.35
+          );
+        },
+        delay
+      );
+    }
   );
-
-
-  oscillator.frequency.exponentialRampToValueAtTime(
-    28,
-    now + 0.85
-  );
-
-
-  gain.gain.setValueAtTime(
-    0.0001,
-    now
-  );
-
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.72,
-    now + 0.025
-  );
-
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 1.05
-  );
-
-
-  oscillator.connect(
-    gain
-  );
-
-
-  gain.connect(
-    masterGain
-  );
-
-
-  oscillator.start(now);
-
-  oscillator.stop(
-    now + 1.1
-  );
-
-
-  playHeartbeat(1.9);
 }
 
 
-/* Couper ou rallumer */
+/* Couper */
 
 function stopAudio() {
   soundEnabled = false;
 
 
   window.clearTimeout(
-    heartbeatTimeout
+    heartbeatTimer
   );
 
 
-  if (audioContext) {
+  if (
+    audioContext &&
+    masterGain
+  ) {
     masterGain.gain.setTargetAtTime(
       0.0001,
       audioContext.currentTime,
-      0.12
+      0.08
     );
   }
 
@@ -1055,17 +1180,12 @@ soundControl.addEventListener(
 
 
 /* ==========================================
-   ENTRÉE
+   ÉCRAN D’ENTRÉE
 ========================================== */
 
 function enterExperience() {
   gate.classList.add(
     "hidden"
-  );
-
-
-  document.body.classList.add(
-    "experience-started"
   );
 }
 
@@ -1123,16 +1243,16 @@ function updateRomance() {
     range(
       progress,
       0.27,
-      0.53
+      0.5
     ) *
     (
       1 -
       range(
         progress,
-        0.62,
-        0.77
+        0.63,
+        0.79
       ) *
-      0.6
+      0.66
     );
 
 
@@ -1144,11 +1264,45 @@ function updateRomance() {
     );
 
 
-  const ending =
+  /* Fin volontairement séparée */
+
+  const endingDesireAppearance =
     range(
       progress,
       0.87,
-      0.96
+      0.9
+    );
+
+
+  const endingDesireDeparture =
+    range(
+      progress,
+      0.915,
+      0.94
+    );
+
+
+  const endingDesire =
+    endingDesireAppearance *
+    (
+      1 -
+      endingDesireDeparture
+    );
+
+
+  const endingPulse =
+    range(
+      progress,
+      0.935,
+      0.965
+    );
+
+
+  const endingButton =
+    range(
+      progress,
+      0.97,
+      0.992
     );
 
 
@@ -1189,8 +1343,20 @@ function updateRomance() {
 
 
   page.style.setProperty(
-    "--ending",
-    ending
+    "--ending-desire",
+    endingDesire
+  );
+
+
+  page.style.setProperty(
+    "--ending-pulse",
+    endingPulse
+  );
+
+
+  page.style.setProperty(
+    "--ending-button",
+    endingButton
   );
 
 
@@ -1223,8 +1389,7 @@ function updateRomance() {
 
 
   if (
-    progress >= 0.62 &&
-    progress < 0.87
+    progress >= 0.62
   ) {
     page.classList.add(
       "phase-jealousy"
@@ -1246,27 +1411,6 @@ function updateRomance() {
 
     sentence.style.visibility =
       "hidden";
-
-
-    if (!finalImpactPlayed) {
-      finalImpactPlayed = true;
-
-
-      finalFlash.classList.remove(
-        "active"
-      );
-
-
-      void finalFlash.offsetWidth;
-
-
-      finalFlash.classList.add(
-        "active"
-      );
-
-
-      playFinalImpact();
-    }
   } else {
     page.classList.remove(
       "phase-ending"
@@ -1275,15 +1419,43 @@ function updateRomance() {
 
     sentence.style.visibility =
       "visible";
+  }
 
 
+  if (
+    progress >= 0.935 &&
+    !finalImpactPlayed
+  ) {
+    finalImpactPlayed = true;
+
+
+    finalFlash.classList.remove(
+      "active"
+    );
+
+
+    void finalFlash.offsetWidth;
+
+
+    finalFlash.classList.add(
+      "active"
+    );
+
+
+    playFinalHeartbeatStorm();
+  }
+
+
+  if (
+    progress < 0.9
+  ) {
     finalImpactPlayed = false;
   }
 
 
   if (progress < 0.12) {
     scrollInstruction.textContent =
-      "APPROACH THE FIGURE";
+      "APPROACH THE LIGHT";
   } else if (progress < 0.36) {
     scrollInstruction.textContent =
       "CROSS THE DISTANCE";
@@ -1292,10 +1464,10 @@ function updateRomance() {
       "STAY IN THE DREAM";
   } else if (progress < 0.87) {
     scrollInstruction.textContent =
-      "FOLLOW THE RED THREAD";
+      "FOLLOW THE PULSE";
   } else {
     scrollInstruction.textContent =
-      "FOLLOW THE PULSE";
+      "KEEP GOING";
   }
 
 
@@ -1332,8 +1504,8 @@ function createParticles() {
 
   const amount =
     window.innerWidth < 700
-      ? 42
-      : 78;
+      ? 38
+      : 68;
 
 
   for (
@@ -1351,14 +1523,14 @@ function createParticles() {
         canvasHeight,
 
       radius:
-        0.6 +
+        0.7 +
         Math.random() *
-        1.6,
+        1.7,
 
       speed:
         0.1 +
         Math.random() *
-        0.35,
+        0.3,
 
       phase:
         Math.random() *
@@ -1366,9 +1538,9 @@ function createParticles() {
         2,
 
       opacity:
-        0.18 +
+        0.2 +
         Math.random() *
-        0.5
+        0.48
     });
   }
 }
@@ -1425,15 +1597,15 @@ function animateParticles(time) {
 
   particles.forEach(
     function (particle) {
-      const speedBoost =
+      const acceleration =
         1 +
         currentJealousy *
-        4;
+        4.2;
 
 
       particle.y -=
         particle.speed *
-        speedBoost;
+        acceleration;
 
 
       particle.x +=
@@ -1444,15 +1616,15 @@ function animateParticles(time) {
         (
           0.08 +
           currentJealousy *
-          0.5
+          0.48
         );
 
 
       if (
-        particle.y < -10
+        particle.y < -15
       ) {
         particle.y =
-          canvasHeight + 10;
+          canvasHeight + 15;
 
 
         particle.x =
@@ -1464,7 +1636,7 @@ function animateParticles(time) {
       const pulse =
         0.62 +
         Math.sin(
-          time * 0.002 +
+          time * 0.0025 +
           particle.phase
         ) *
         0.38;
@@ -1477,7 +1649,7 @@ function animateParticles(time) {
         particle.x,
         particle.y,
         particle.radius +
-        currentJealousy * 0.8,
+        currentJealousy * 0.9,
         0,
         Math.PI * 2
       );
@@ -1486,14 +1658,14 @@ function animateParticles(time) {
       context.fillStyle =
         currentJealousy > 0.05
 
-          ? "rgba(255,53,87," +
+          ? "rgba(255,45,80," +
             particle.opacity *
             pulse +
             ")"
 
           : currentWarmth > 0.2
 
-            ? "rgba(255,201,166," +
+            ? "rgba(255,202,165," +
               particle.opacity *
               pulse +
               ")"
@@ -1536,13 +1708,13 @@ window.addEventListener(
 
     page.style.setProperty(
       "--pointer-x",
-      horizontal * 15 + "px"
+      horizontal * 17 + "px"
     );
 
 
     page.style.setProperty(
       "--pointer-y",
-      vertical * 9 + "px"
+      vertical * 10 + "px"
     );
   },
   {
@@ -1552,7 +1724,7 @@ window.addEventListener(
 
 
 /* ==========================================
-   TRANSITION VERS ACTION
+   PAGE ACTION
 ========================================== */
 
 enterAction.addEventListener(
@@ -1575,7 +1747,7 @@ enterAction.addEventListener(
     );
 
 
-    playFinalImpact();
+    playFinalHeartbeatStorm();
 
 
     window.setTimeout(
