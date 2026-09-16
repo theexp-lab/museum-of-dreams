@@ -241,103 +241,6 @@ function primeMedia() {
   }
 
 
-  mediaPriming = true;
-
-
-  const media = [
-    {
-      audio: startSound,
-      volume: 0.92
-    },
-
-    {
-      audio: trainSound,
-      volume: 0.95
-    }
-  ];
-
-
-  const unlocking =
-    media.map(
-      function (item) {
-        const audio =
-          item.audio;
-
-
-        audio.pause();
-
-        audio.currentTime = 0;
-
-        audio.muted = false;
-
-        audio.volume = 0;
-
-
-        const playback =
-          audio.play();
-
-
-        return Promise.resolve(
-          playback
-        )
-
-          .then(
-            function () {
-              return new Promise(
-                function (resolve) {
-                  window.setTimeout(
-                    function () {
-                      audio.pause();
-
-                      audio.currentTime = 0;
-
-                      audio.volume =
-                        item.volume;
-
-                      resolve();
-                    },
-                    90
-                  );
-                }
-              );
-            }
-          )
-
-          .catch(
-            function () {
-              audio.pause();
-
-              audio.currentTime = 0;
-
-              audio.volume =
-                item.volume;
-            }
-          );
-      }
-    );
-
-
-  return Promise.all(
-    unlocking
-  )
-
-    .then(
-      function () {
-        mediaPrimed = true;
-
-        mediaPriming = false;
-
-
-        syncAudio(
-          sceneNames[
-            activeIndex
-          ],
-
-          activeIndex
-        );
-      }
-    );
-}
 
   mediaPriming =
     true;
@@ -397,8 +300,6 @@ function primeMedia() {
           activeIndex
         );
       }
-    );
-}
 
 
 /* ==========================================
