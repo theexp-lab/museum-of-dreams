@@ -2116,6 +2116,579 @@ a {
   }
 }
 
+/* ==========================================
+   ACTION — DRAMATISATION DU PARCOURS
+========================================== */
+
+
+/* ==========================================
+   TEXTES INTERMÉDIAIRES
+========================================== */
+
+.story-only {
+  width:
+    min(800px, calc(100vw - 500px));
+}
+
+.story-only .main-sentence {
+  margin: 0;
+
+  font-size:
+    clamp(54px, 7.4vw, 112px);
+
+  line-height: 0.88;
+
+  letter-spacing: -0.055em;
+}
+
+.story-only .main-sentence span {
+  color: #ff746b;
+}
+
+
+/* ==========================================
+   COURSE
+========================================== */
+
+.action-page[data-scene="chase"]
+.chase-space::before {
+  content: "";
+
+  position: absolute;
+  inset: -15%;
+
+  opacity: 0.44;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 8%,
+      rgba(255, 79, 67, 0.14) 8.3%,
+      transparent 8.7%
+    );
+
+  filter:
+    blur(1px);
+
+  animation:
+    chaseSpeed
+    550ms linear infinite;
+}
+
+.action-page[data-scene="chase"]
+.chase-frame {
+  animation:
+    corridorPressure
+    1.4s ease-in-out infinite;
+}
+
+.action-page[data-intensity="high"]
+.chase-space {
+  animation:
+    chaseInstability
+    180ms linear infinite;
+}
+
+.action-page[data-intensity="high"]
+.moving-exit {
+  animation-duration:
+    1.8s;
+}
+
+.action-page[data-intensity="high"]
+.room-redness {
+  opacity: 0.88;
+}
+
+
+/* ==========================================
+   CHUTE
+========================================== */
+
+.action-page[data-scene="fall"]
+.fall-space {
+  animation:
+    fallingDepth
+    2.2s ease-in infinite;
+}
+
+.action-page[data-scene="fall"]
+.museum-floor {
+  opacity: 0.25;
+
+  transition:
+    opacity 1000ms ease;
+}
+
+.action-page[data-intensity="high"]
+.fall-space {
+  animation-duration:
+    1.1s;
+}
+
+
+/* ==========================================
+   IMPACT
+========================================== */
+
+.impact-copy p {
+  margin: 0;
+
+  color: var(--ivory);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size:
+    clamp(45px, 7vw, 112px);
+
+  line-height: 0.88;
+
+  letter-spacing: 0.04em;
+
+  text-align: center;
+}
+
+.impact-copy strong {
+  display: block;
+
+  color: #ff544f;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+
+  letter-spacing: -0.05em;
+}
+
+.action-page[data-scene="silence"]
+.impact-space {
+  visibility: visible;
+
+  opacity: 0.12;
+
+  filter:
+    grayscale(1)
+    brightness(0.4);
+
+  transform:
+    translateX(-50%)
+    scale(1.03);
+}
+
+.action-page.impact-event
+.impact-space {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+.action-page.impact-event
+.impact-light {
+  animation:
+    majorImpact
+    1.2s ease-out;
+}
+
+
+/* ==========================================
+   LE CALME DEVIENT INQUIÉTANT
+========================================== */
+
+.action-page[data-scene="silence"]
+.room-background {
+  background:
+    linear-gradient(
+      180deg,
+      #111016,
+      #09080c 55%,
+      #040306
+    );
+}
+
+.action-page[data-scene="silence"]
+.ceiling-light {
+  width: 18%;
+
+  opacity: 0.3;
+}
+
+.action-page[data-scene="silence"]
+.pulse-thread {
+  opacity: 0.18;
+}
+
+.action-page[data-scene="silence"]
+.pulse-source {
+  filter:
+    grayscale(0.5)
+    brightness(0.75);
+}
+
+
+/* ==========================================
+   APPARITION DU SECOND POULS
+========================================== */
+
+.action-page[data-scene="answer"]
+.nightmare-space,
+.action-page[data-scene="nightmare"]
+.nightmare-space {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+.action-page[data-scene="answer"]
+.nightmare-door {
+  opacity: 0.38;
+
+  filter:
+    blur(5px);
+
+  transform:
+    translateX(-50%)
+    scale(0.94);
+}
+
+.action-page[data-scene="nightmare"]
+.nightmare-door {
+  opacity: 1;
+
+  filter:
+    blur(0);
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+.foreign-pulse {
+  position: absolute;
+
+  top: 45%;
+  left: 50%;
+
+  width: 18px;
+  height: 18px;
+
+  opacity: 0;
+
+  transform:
+    translate(-50%, -50%);
+
+  transition:
+    opacity 900ms ease;
+}
+
+.action-page[data-scene="answer"]
+.foreign-pulse,
+.action-page[data-scene="nightmare"]
+.foreign-pulse {
+  opacity: 1;
+}
+
+.foreign-core {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  border-radius: 50%;
+
+  background: #fff0dc;
+
+  box-shadow:
+    0 0 12px #fff0dc,
+    0 0 35px #ff2d32,
+    0 0 100px rgba(255, 23, 38, 0.8),
+    0 0 190px rgba(125, 1, 19, 0.6);
+
+  animation:
+    foreignHeartbeat
+    1.17s ease-in-out infinite;
+}
+
+.foreign-ring {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  display: block;
+
+  width: 50px;
+  height: 50px;
+
+  border:
+    1px solid
+    rgba(255, 43, 48, 0.58);
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.foreign-ring-one {
+  animation:
+    foreignExpansion
+    1.17s ease-out infinite;
+}
+
+.foreign-ring-two {
+  animation:
+    foreignExpansion
+    1.17s 180ms ease-out infinite;
+}
+
+
+/* ==========================================
+   DISPARITION DU MUSÉE
+========================================== */
+
+.action-page[data-scene="answer"]
+.museum-label,
+.action-page[data-scene="answer"]
+.research-note {
+  opacity: 0.2;
+}
+
+.action-page[data-scene="nightmare"]
+.museum-label,
+.action-page[data-scene="nightmare"]
+.research-note,
+.action-page[data-scene="nightmare"]
+.scroll-instruction {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.action-page[data-scene="nightmare"]
+.room-darkness {
+  opacity: 1;
+}
+
+.action-page[data-scene="nightmare"]
+.pulse-source {
+  opacity: 0.2;
+}
+
+
+/* ==========================================
+   DERNIÈRE PHRASE
+========================================== */
+
+.foreign-pulse-line {
+  margin: 0;
+
+  color: rgba(255, 248, 236, 0.75);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size:
+    clamp(30px, 4vw, 61px);
+
+  line-height: 0.95;
+
+  letter-spacing: 0.08em;
+}
+
+.foreign-pulse-line strong {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #ff514e;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(55px, 8.8vw, 138px);
+
+  font-weight: 400;
+
+  line-height: 0.78;
+
+  letter-spacing: -0.06em;
+
+  text-shadow:
+    0 0 30px
+    rgba(255, 40, 43, 0.4),
+
+    0 0 100px
+    rgba(142, 1, 21, 0.4);
+}
+
+.nightmare-room-number {
+  margin-top: 55px;
+}
+
+
+/* ==========================================
+   NOUVELLES ANIMATIONS
+========================================== */
+
+@keyframes chaseSpeed {
+  from {
+    transform:
+      translateX(-8%);
+  }
+
+  to {
+    transform:
+      translateX(8%);
+  }
+}
+
+@keyframes corridorPressure {
+  0%,
+  100% {
+    filter:
+      brightness(0.75);
+  }
+
+  50% {
+    filter:
+      brightness(1.45);
+  }
+}
+
+@keyframes chaseInstability {
+  0% {
+    translate:
+      -2px 0;
+  }
+
+  50% {
+    translate:
+      2px -1px;
+  }
+
+  100% {
+    translate:
+      -1px 1px;
+  }
+}
+
+@keyframes fallingDepth {
+  0% {
+    filter:
+      brightness(1);
+
+    scale: 1;
+  }
+
+  100% {
+    filter:
+      brightness(0.45);
+
+    scale: 1.12;
+  }
+}
+
+@keyframes majorImpact {
+  0% {
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  18% {
+    opacity: 0.15;
+  }
+
+  28% {
+    opacity: 0.85;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes foreignHeartbeat {
+  0%,
+  21%,
+  100% {
+    transform:
+      scale(1);
+  }
+
+  8% {
+    transform:
+      scale(3.3);
+  }
+
+  14% {
+    transform:
+      scale(1.65);
+  }
+}
+
+@keyframes foreignExpansion {
+  0% {
+    opacity: 0.7;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0.2);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(7);
+  }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+  .story-only {
+    width:
+      calc(100vw - 35px);
+  }
+
+  .story-only .main-sentence {
+    font-size:
+      clamp(45px, 13vw, 67px);
+  }
+
+  .impact-copy p {
+    font-size:
+      clamp(38px, 12vw, 59px);
+  }
+
+  .foreign-pulse-line {
+    font-size: 26px;
+  }
+
+  .foreign-pulse-line strong {
+    font-size:
+      clamp(51px, 18vw, 86px);
+  }
+}
 
 /* ==========================================
    ACCESSIBILITÉ
