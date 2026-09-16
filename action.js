@@ -17,6 +17,17 @@ const soundToggle =
     "#sound-toggle"
   );
 
+const soundEntry =
+  document.querySelector(
+    "#sound-entry"
+  );
+
+
+const enterWithSound =
+  document.querySelector(
+    "#enter-with-sound"
+  );
+
 const takeHand =
   document.querySelector(
     "#take-hand"
@@ -139,11 +150,9 @@ const played =
   new Set();
 
 
-startSound.volume =
-  0.72;
+startSound.volume = 0.92;
 
-trainSound.volume =
-  0.72;
+trainSound.volume = 0.95;
 
 
 /* ==========================================
@@ -211,16 +220,124 @@ function ensureAudio() {
  * avant de permettre la lecture.
  */
 
+/* ==========================================
+   DÉVERROUILLER LES FICHIERS AUDIO
+
+   Les sons sont brièvement lancés à volume
+   nul pendant le clic. Le navigateur les
+   autorisera ensuite pendant le scroll.
+========================================== */
+
 function primeMedia() {
   ensureAudio();
+
 
   if (
     mediaPrimed ||
     mediaPriming ||
     !soundEnabled
   ) {
-    return;
+    return Promise.resolve();
   }
+
+
+  mediaPriming = true;
+
+
+  const media = [
+    {
+      audio: startSound,
+      volume: 0.92
+    },
+
+    {
+      audio: trainSound,
+      volume: 0.95
+    }
+  ];
+
+
+  const unlocking =
+    media.map(
+      function (item) {
+        const audio =
+          item.audio;
+
+
+        audio.pause();
+
+        audio.currentTime = 0;
+
+        audio.muted = false;
+
+        audio.volume = 0;
+
+
+        const playback =
+          audio.play();
+
+
+        return Promise.resolve(
+          playback
+        )
+
+          .then(
+            function () {
+              return new Promise(
+                function (resolve) {
+                  window.setTimeout(
+                    function () {
+                      audio.pause();
+
+                      audio.currentTime = 0;
+
+                      audio.volume =
+                        item.volume;
+
+                      resolve();
+                    },
+                    90
+                  );
+                }
+              );
+            }
+          )
+
+          .catch(
+            function () {
+              audio.pause();
+
+              audio.currentTime = 0;
+
+              audio.volume =
+                item.volume;
+            }
+          );
+      }
+    );
+
+
+  return Promise.all(
+    unlocking
+  )
+
+    .then(
+      function () {
+        mediaPrimed = true;
+
+        mediaPriming = false;
+
+
+        syncAudio(
+          sceneNames[
+            activeIndex
+          ],
+
+          activeIndex
+        );
+      }
+    );
+}
 
   mediaPriming =
     true;
@@ -1700,15 +1817,108 @@ window.addEventListener(
 );
 
 
-window.addEventListener(
-  "pointerdown",
-  primeMedia,
-  {
-    once: true
+/* ==========================================
+   ENTRER DANS LA SALLE AVEC LE SON
+========================================== */
+
+enterWithSound.addEventListener(
+  "click",
+
+  async function () {
+    enterWithSound.disabled =
+      true;
+
+
+    enterWithSound.innerHTML =
+      `
+        <span class="sound-symbol">
+          ◉
+        </span>
+
+        ACTIVATING AUDIO…
+      `;
+
+
+    soundEnabled = true;
+
+
+    localStorage.setItem(
+      "museumSound",
+      "on"
+    );
+
+
+    ensureAudio();
+
+
+    if (
+      audioContext.state ===
+      "suspended"
+    ) {
+      await audioContext.resume();
+    }
+
+
+    masterGain.gain.setValueAtTime(
+      0.8,
+      audioContext.currentTime
+    );
+
+window.history.scrollRestoration =
+  "manual";
+
+
+window.scrollTo(
+  0,
+  0
+);
+    
+    updateSoundButton();
+
+
+    await primeMedia();
+
+
+    /*
+     * Petit signal confirmant que
+     * l’environnement sonore fonctionne.
+     */
+
+    tone(
+      220,
+      0.34,
+      0.04,
+      "sine"
+    );
+
+
+    tone(
+      440,
+      0.3,
+      0.025,
+      "sine",
+      0.12
+    );
+
+
+    soundEntry.classList.add(
+      "is-leaving"
+    );
+
+
+    body.classList.remove(
+      "sound-locked"
+    );
+
+
+    window.setTimeout(
+      function () {
+        soundEntry.remove();
+      },
+      950
+    );
   }
 );
-
-
 /* ==========================================
    SOUND ON / OFF
 ========================================== */
