@@ -24,6 +24,29 @@ function range(progress, start, end) {
   );
 }
 
+function smoothRange(
+  progress,
+  start,
+  end
+) {
+  const linearProgress =
+    range(
+      progress,
+      start,
+      end
+    );
+
+
+  return (
+    linearProgress *
+    linearProgress *
+    (
+      3 -
+      2 *
+      linearProgress
+    )
+  );
+}
 
 /* ==========================================
    ÉLÉMENTS
@@ -465,7 +488,7 @@ function displaySentence(index) {
           "changing"
         );
       },
-      420
+      620
     );
 }
 
@@ -693,91 +716,79 @@ async function startAudio() {
     );
 
 
-    /* Souffle de la pièce */
+   /* ==========================================
+   NAPPE DOUCE DU DÉBUT
 
-    const noise =
-      audioContext.createBufferSource();
+   Aucun bruit blanc :
+   uniquement des sons musicaux très doux.
+========================================== */
 
-
-    const noiseFilter =
-      audioContext.createBiquadFilter();
-
-
-    ambienceGain =
-      audioContext.createGain();
+ambienceGain =
+  audioContext.createGain();
 
 
-    noise.buffer =
-      createNoiseBuffer();
+ambienceGain.gain.value =
+  0.055;
 
 
-    noise.loop = true;
+ambienceGain.connect(
+  masterGain
+);
 
 
-    noiseFilter.type =
-      "bandpass";
+createDrone(
+  174.61,
+  0.09,
+  ambienceGain,
+  "sine"
+);
 
 
-    noiseFilter.frequency.value =
-      620;
+createDrone(
+  261.63,
+  0.045,
+  ambienceGain,
+  "sine"
+);
 
 
-    noiseFilter.Q.value =
-      0.72;
+createDrone(
+  349.23,
+  0.018,
+  ambienceGain,
+  "sine"
+);
 
 
-    ambienceGain.gain.value =
-      0.075;
+/* Mouvement très lent de la nappe */
+
+const ambienceMovement =
+  audioContext.createOscillator();
 
 
-    noise.connect(
-      noiseFilter
-    );
+const ambienceDepth =
+  audioContext.createGain();
 
 
-    noiseFilter.connect(
-      ambienceGain
-    );
+ambienceMovement.frequency.value =
+  0.055;
 
 
-    ambienceGain.connect(
-      masterGain
-    );
+ambienceDepth.gain.value =
+  0.018;
 
 
-    noise.start();
+ambienceMovement.connect(
+  ambienceDepth
+);
 
 
-    /* Respiration lente */
-
-    const breathingLFO =
-      audioContext.createOscillator();
-
-
-    const breathingDepth =
-      audioContext.createGain();
+ambienceDepth.connect(
+  ambienceGain.gain
+);
 
 
-    breathingLFO.frequency.value =
-      0.14;
-
-
-    breathingDepth.gain.value =
-      0.035;
-
-
-    breathingLFO.connect(
-      breathingDepth
-    );
-
-
-    breathingDepth.connect(
-      ambienceGain.gain
-    );
-
-
-    breathingLFO.start();
-
+ambienceMovement.start();
 
     /* Harmonie chaude */
 
@@ -946,12 +957,12 @@ function updateAudioScene() {
 
 
   ambienceGain.gain.setTargetAtTime(
-    0.065 +
-    currentProgress * 0.045 +
-    currentJealousy * 0.08,
-    now,
-    0.22
-  );
+  0.045 +
+  currentWarmth * 0.055 -
+  currentJealousy * 0.025,
+  now,
+  0.5
+);
 
 
   warmthGain.gain.setTargetAtTime(
@@ -1489,37 +1500,53 @@ function updateRomance() {
       : 0;
 
 
-  const approach =
-    range(
-      progress,
-      0.07,
-      0.58
-    );
+  /* Rapprochement très progressif */
+
+const approach =
+  smoothRange(
+    progress,
+    0.07,
+    0.61
+  );
 
 
-  const warmth =
-    range(
-      progress,
-      0.13,
-      0.48
-    ) *
-    (
-      1 -
-      range(
-        progress,
-        0.69,
-        0.82
-      ) *
-      0.72
-    );
+/* La chaleur se développe lentement */
+
+const warmthArrival =
+  smoothRange(
+    progress,
+    0.13,
+    0.52
+  );
 
 
-  const jealousy =
-    range(
-      progress,
-      0.67,
-      0.87
-    );
+/* Elle reste encore présente lorsque le doute arrive */
+
+const warmthDeparture =
+  smoothRange(
+    progress,
+    0.68,
+    0.91
+  );
+
+
+const warmth =
+  warmthArrival *
+  (
+    1 -
+    warmthDeparture *
+    0.78
+  );
+
+
+/* Le rouge met beaucoup plus longtemps à envahir la salle */
+
+const jealousy =
+  smoothRange(
+    progress,
+    0.66,
+    0.91
+  );
 
 
   /* You want the dream to be over */
