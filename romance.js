@@ -301,28 +301,16 @@ let activeLine = null;
 
 function updateStoryLines() {
   let strongestLine = null;
-
   let strongestOpacity = 0;
-
 
   storyLines.forEach(
     function (line, index) {
       const correspondingStop =
         storyStops[index];
 
-
       if (!correspondingStop) {
         return;
       }
-
-
-      /*
-       * Distance réelle entre le scroll
-       * et le chapitre de cette phrase.
-       *
-       * Au point d’arrêt :
-       * distance = 0 et opacité = 1.
-       */
 
       const distanceInScreens =
         (
@@ -331,28 +319,19 @@ function updateStoryLines() {
         ) /
         window.innerHeight;
 
-
       const absoluteDistance =
         Math.abs(
           distanceInScreens
         );
 
-
       const visibility =
         smoothValue(
           clamp(
-            1 -
-            absoluteDistance,
+            1 - absoluteDistance,
             0,
             1
           )
         );
-
-
-      /*
-       * La phrase suivante arrive du bas.
-       * La précédente repart vers le haut.
-       */
 
       const verticalPosition =
         clamp(
@@ -362,50 +341,41 @@ function updateStoryLines() {
         ) *
         42;
 
-
       const blur =
         (
-          1 -
-          visibility
+          1 - visibility
         ) *
         11;
-
 
       const scale =
         0.965 +
         visibility *
         0.035;
 
-
       line.style.setProperty(
         "--line-opacity",
         visibility
       );
-
 
       line.style.setProperty(
         "--line-y",
         verticalPosition + "px"
       );
 
-
       line.style.setProperty(
         "--line-blur",
         blur + "px"
       );
-
 
       line.style.setProperty(
         "--line-scale",
         scale
       );
 
-
       line.classList.toggle(
         "is-current",
         visibility > 0.92
       );
-
 
       if (
         visibility >
@@ -414,33 +384,12 @@ function updateStoryLines() {
         strongestOpacity =
           visibility;
 
-
         strongestLine =
           line;
       }
     }
   );
 
-     if (
-    strongestLine &&
-    strongestLine !== activeLine
-  ) {
-    activeLine =
-      strongestLine;
-
-
-    dreamTitle.textContent =
-      strongestLine.dataset.title;
-
-
-    emotionalCore.textContent =
-      strongestLine.dataset.emotion;
-
-
-    dreamMotif.textContent =
-      strongestLine.dataset.motif;
-  }
-}
   if (
     strongestLine &&
     strongestLine !== activeLine
