@@ -1,5 +1,4 @@
 /* ==========================================
-   THE MUSEUM OF DREAMS
    ROOM 04 — ROMANCE
 ========================================== */
 
@@ -33,6 +32,30 @@ function range(progress, start, end) {
 const page =
   document.querySelector(
     ".romance-page"
+  );
+
+
+const gate =
+  document.querySelector(
+    "#experience-gate"
+  );
+
+
+const enterWithSound =
+  document.querySelector(
+    "#enter-with-sound"
+  );
+
+
+const enterWithoutSound =
+  document.querySelector(
+    "#enter-without-sound"
+  );
+
+
+const soundControl =
+  document.querySelector(
+    "#sound-control"
   );
 
 
@@ -92,7 +115,7 @@ const dreamMotif =
 
 const progressFill =
   document.querySelector(
-    "#romance-progress-fill"
+    "#scroll-progress-fill"
   );
 
 
@@ -102,27 +125,9 @@ const scrollInstruction =
   );
 
 
-const informationButton =
+const finalFlash =
   document.querySelector(
-    "#information-button"
-  );
-
-
-const informationPanel =
-  document.querySelector(
-    "#information-panel"
-  );
-
-
-const closeInformation =
-  document.querySelector(
-    "#close-information"
-  );
-
-
-const soundButton =
-  document.querySelector(
-    "#sound-button"
+    "#final-flash"
   );
 
 
@@ -138,7 +143,7 @@ const enterAction =
 
 const narrationSteps = [
   {
-    start: 0.11,
+    start: 0.1,
 
     text:
       "You know them <em>before you see their face.</em>",
@@ -154,10 +159,10 @@ const narrationSteps = [
   },
 
   {
-    start: 0.22,
+    start: 0.21,
 
     text:
-      "The face keeps changing. <em>The feeling recognises it every time.</em>",
+      "The face keeps changing. <em>This feeling… you recognize it every time.</em>",
 
     title:
       "THE CHANGING FACE",
@@ -170,13 +175,13 @@ const narrationSteps = [
   },
 
   {
-    start: 0.35,
+    start: 0.34,
 
     text:
-      "The room becomes smaller <em>as the distance between you disappears.</em>",
+      "The room grows warmer <em>as the distance between you disappears.</em>",
 
     title:
-      "THE DISTANCE BETWEEN US",
+      "THE WARM ROOM",
 
     emotion:
       "INTIMACY",
@@ -186,7 +191,7 @@ const narrationSteps = [
   },
 
   {
-    start: 0.48,
+    start: 0.47,
 
     text:
       "You are standing in the same dream. <em>You may not be having the same one.</em>",
@@ -202,10 +207,10 @@ const narrationSteps = [
   },
 
   {
-    start: 0.58,
+    start: 0.57,
 
     text:
-      "You may only discover what it left behind <em>when you wake.</em>",
+      "You may only discover what it left behind <em>when you wake up.</em>",
 
     title:
       "THE FOLLOWING MORNING",
@@ -218,29 +223,29 @@ const narrationSteps = [
   },
 
   {
-    start: 0.68,
+    start: 0.66,
 
     text:
-      "The closer you move, <em>the clearer the other shadow becomes.</em>",
+      "Then another presence <em>enters the room.</em>",
 
     title:
-      "THE THIRD SHADOW",
+      "THE THIRD PRESENCE",
 
     emotion:
-      "JEALOUSY",
+      "SUSPICION",
 
     motif:
       "INTRUSION"
   },
 
   {
-    start: 0.77,
+    start: 0.74,
 
     text:
-      "No one invited jealousy. <em>The dream made room for it anyway.</em>",
+      "The closer you move, <em>the clearer it becomes.</em>",
 
     title:
-      "THE RED ROOM",
+      "THE RED THREAD",
 
     emotion:
       "JEALOUSY",
@@ -250,35 +255,26 @@ const narrationSteps = [
   },
 
   {
-    start: 0.85,
+    start: 0.82,
 
     text:
-      "The shadow disappears. <em>The feeling takes a little longer.</em>",
+      "It is not <em>a good feeling.</em>",
 
     title:
-      "THE REMAINDER",
+      "THE RED ROOM",
 
     emotion:
-      "UNCERTAINTY",
+      "JEALOUSY",
 
     motif:
-      "AFTERIMAGE"
+      "DISCOMFORT"
   }
 ];
 
 
-let currentStep = -1;
-
-let sentenceTimeout;
-
-
-/* ==========================================
-   RECHERCHES SCIENTIFIQUES
-========================================== */
-
 const researchSteps = [
   {
-    start: 0.14,
+    start: 0.12,
     end: 0.29,
 
     number:
@@ -296,7 +292,7 @@ const researchSteps = [
 
   {
     start: 0.3,
-    end: 0.47,
+    end: 0.46,
 
     number:
       "RESEARCH NOTE 04.2",
@@ -312,14 +308,14 @@ const researchSteps = [
   },
 
   {
-    start: 0.49,
-    end: 0.66,
+    start: 0.47,
+    end: 0.65,
 
     number:
       "RESEARCH NOTE 04.3",
 
     text:
-      "Emotions and interactions involving romantic partners in dreams were associated with relationship behaviour the following day.",
+      "Emotions involving romantic partners in dreams were associated with relationship behaviour the following day.",
 
     principle:
       "AFTER WAKING",
@@ -329,8 +325,8 @@ const researchSteps = [
   },
 
   {
-    start: 0.68,
-    end: 0.84,
+    start: 0.66,
+    end: 0.86,
 
     number:
       "RESEARCH NOTE 04.4",
@@ -347,20 +343,28 @@ const researchSteps = [
 ];
 
 
+let currentNarrationIndex = -1;
+
+let sentenceTimeout;
+
+let finalImpactPlayed = false;
+
+
 /* ==========================================
-   CHANGEMENT DE PHRASE
+   TEXTE
 ========================================== */
 
 function displaySentence(index) {
   if (
-    index === currentStep ||
-    index < 0
+    index < 0 ||
+    index === currentNarrationIndex
   ) {
     return;
   }
 
 
-  currentStep = index;
+  currentNarrationIndex =
+    index;
 
 
   window.clearTimeout(
@@ -406,7 +410,7 @@ function displaySentence(index) {
 
 
 /* ==========================================
-   NOTE SCIENTIFIQUE
+   RECHERCHE
 ========================================== */
 
 function updateResearch(progress) {
@@ -453,6 +457,640 @@ function updateResearch(progress) {
 
 
 /* ==========================================
+   AUDIO
+========================================== */
+
+let audioContext = null;
+
+let masterGain = null;
+
+let ambienceGain = null;
+
+let warmGain = null;
+
+let tensionGain = null;
+
+let soundEnabled = false;
+
+let heartbeatTimeout = null;
+
+let currentProgress = 0;
+
+let currentWarmth = 0;
+
+let currentJealousy = 0;
+
+
+/* Créer une piste de bruit */
+
+function createNoiseBuffer() {
+  const length =
+    audioContext.sampleRate * 3;
+
+
+  const buffer =
+    audioContext.createBuffer(
+      1,
+      length,
+      audioContext.sampleRate
+    );
+
+
+  const data =
+    buffer.getChannelData(0);
+
+
+  for (
+    let index = 0;
+    index < length;
+    index++
+  ) {
+    data[index] =
+      Math.random() * 2 - 1;
+  }
+
+
+  return buffer;
+}
+
+
+/* Créer une nappe */
+
+function createDrone(
+  frequency,
+  volume,
+  destination
+) {
+  const oscillator =
+    audioContext.createOscillator();
+
+
+  const gain =
+    audioContext.createGain();
+
+
+  oscillator.type =
+    "sine";
+
+
+  oscillator.frequency.value =
+    frequency;
+
+
+  gain.gain.value =
+    volume;
+
+
+  oscillator.connect(gain);
+
+  gain.connect(destination);
+
+  oscillator.start();
+
+
+  return {
+    oscillator: oscillator,
+    gain: gain
+  };
+}
+
+
+/* Construire l’installation sonore */
+
+async function startAudio() {
+  if (!audioContext) {
+    const AudioContextClass =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+
+    if (!AudioContextClass) {
+      soundControl.textContent =
+        "SOUND UNAVAILABLE";
+
+      return;
+    }
+
+
+    audioContext =
+      new AudioContextClass();
+
+
+    masterGain =
+      audioContext.createGain();
+
+
+    masterGain.gain.value =
+      0.0001;
+
+
+    masterGain.connect(
+      audioContext.destination
+    );
+
+
+    /* Souffle de la salle */
+
+    const noise =
+      audioContext.createBufferSource();
+
+
+    const noiseFilter =
+      audioContext.createBiquadFilter();
+
+
+    ambienceGain =
+      audioContext.createGain();
+
+
+    noise.buffer =
+      createNoiseBuffer();
+
+
+    noise.loop = true;
+
+
+    noiseFilter.type =
+      "lowpass";
+
+
+    noiseFilter.frequency.value =
+      720;
+
+
+    ambienceGain.gain.value =
+      0.055;
+
+
+    noise.connect(
+      noiseFilter
+    );
+
+
+    noiseFilter.connect(
+      ambienceGain
+    );
+
+
+    ambienceGain.connect(
+      masterGain
+    );
+
+
+    noise.start();
+
+
+    /* Nappe chaleureuse */
+
+    warmGain =
+      audioContext.createGain();
+
+
+    warmGain.gain.value =
+      0.0001;
+
+
+    warmGain.connect(
+      masterGain
+    );
+
+
+    createDrone(
+      110,
+      0.2,
+      warmGain
+    );
+
+
+    createDrone(
+      164.81,
+      0.09,
+      warmGain
+    );
+
+
+    createDrone(
+      220,
+      0.05,
+      warmGain
+    );
+
+
+    /* Tension rouge */
+
+    tensionGain =
+      audioContext.createGain();
+
+
+    tensionGain.gain.value =
+      0.0001;
+
+
+    tensionGain.connect(
+      masterGain
+    );
+
+
+    createDrone(
+      43,
+      0.32,
+      tensionGain
+    );
+
+
+    createDrone(
+      46,
+      0.18,
+      tensionGain
+    );
+  }
+
+
+  await audioContext.resume();
+
+
+  soundEnabled = true;
+
+
+  masterGain.gain.cancelScheduledValues(
+    audioContext.currentTime
+  );
+
+
+  masterGain.gain.linearRampToValueAtTime(
+    0.42,
+    audioContext.currentTime + 1.4
+  );
+
+
+  soundControl.textContent =
+    "SOUND ON";
+
+
+  soundControl.setAttribute(
+    "aria-pressed",
+    "true"
+  );
+
+
+  scheduleHeartbeat();
+
+  updateAudioScene();
+}
+
+
+/* Mise à jour sonore */
+
+function updateAudioScene() {
+  if (
+    !audioContext ||
+    !soundEnabled
+  ) {
+    return;
+  }
+
+
+  const now =
+    audioContext.currentTime;
+
+
+  ambienceGain.gain.setTargetAtTime(
+    0.045 +
+    currentProgress * 0.04,
+    now,
+    0.35
+  );
+
+
+  warmGain.gain.setTargetAtTime(
+    0.0001 +
+    currentWarmth * 0.18,
+    now,
+    0.5
+  );
+
+
+  tensionGain.gain.setTargetAtTime(
+    0.0001 +
+    currentJealousy * 0.34,
+    now,
+    0.22
+  );
+}
+
+
+/* Battement du cœur */
+
+function playHeartbeat(
+  strength = 1
+) {
+  if (
+    !audioContext ||
+    !soundEnabled
+  ) {
+    return;
+  }
+
+
+  const now =
+    audioContext.currentTime;
+
+
+  const oscillator =
+    audioContext.createOscillator();
+
+
+  const gain =
+    audioContext.createGain();
+
+
+  const filter =
+    audioContext.createBiquadFilter();
+
+
+  oscillator.type =
+    "sine";
+
+
+  oscillator.frequency.setValueAtTime(
+    72,
+    now
+  );
+
+
+  oscillator.frequency.exponentialRampToValueAtTime(
+    42,
+    now + 0.19
+  );
+
+
+  filter.type =
+    "lowpass";
+
+
+  filter.frequency.value =
+    150;
+
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.25 * strength,
+    now + 0.018
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 0.24
+  );
+
+
+  oscillator.connect(
+    filter
+  );
+
+
+  filter.connect(
+    gain
+  );
+
+
+  gain.connect(
+    masterGain
+  );
+
+
+  oscillator.start(now);
+
+  oscillator.stop(
+    now + 0.26
+  );
+}
+
+
+/* Double battement */
+
+function heartbeatSequence() {
+  if (!soundEnabled) {
+    return;
+  }
+
+
+  const strength =
+    0.58 +
+    currentProgress * 0.45 +
+    currentJealousy * 0.72;
+
+
+  playHeartbeat(strength);
+
+
+  window.setTimeout(
+    function () {
+      playHeartbeat(
+        strength * 0.7
+      );
+    },
+    currentJealousy > 0.35
+      ? 170
+      : 230
+  );
+
+
+  scheduleHeartbeat();
+}
+
+
+/* Rythme selon la narration */
+
+function scheduleHeartbeat() {
+  window.clearTimeout(
+    heartbeatTimeout
+  );
+
+
+  if (!soundEnabled) {
+    return;
+  }
+
+
+  const delay =
+    1450 -
+    currentProgress * 280 -
+    currentJealousy * 620;
+
+
+  heartbeatTimeout =
+    window.setTimeout(
+      heartbeatSequence,
+      Math.max(520, delay)
+    );
+}
+
+
+/* Impact final */
+
+function playFinalImpact() {
+  if (
+    !audioContext ||
+    !soundEnabled
+  ) {
+    return;
+  }
+
+
+  const now =
+    audioContext.currentTime;
+
+
+  const oscillator =
+    audioContext.createOscillator();
+
+
+  const gain =
+    audioContext.createGain();
+
+
+  oscillator.type =
+    "sine";
+
+
+  oscillator.frequency.setValueAtTime(
+    95,
+    now
+  );
+
+
+  oscillator.frequency.exponentialRampToValueAtTime(
+    28,
+    now + 0.85
+  );
+
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.72,
+    now + 0.025
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 1.05
+  );
+
+
+  oscillator.connect(
+    gain
+  );
+
+
+  gain.connect(
+    masterGain
+  );
+
+
+  oscillator.start(now);
+
+  oscillator.stop(
+    now + 1.1
+  );
+
+
+  playHeartbeat(1.9);
+}
+
+
+/* Couper ou rallumer */
+
+function stopAudio() {
+  soundEnabled = false;
+
+
+  window.clearTimeout(
+    heartbeatTimeout
+  );
+
+
+  if (audioContext) {
+    masterGain.gain.setTargetAtTime(
+      0.0001,
+      audioContext.currentTime,
+      0.12
+    );
+  }
+
+
+  soundControl.textContent =
+    "SOUND OFF";
+
+
+  soundControl.setAttribute(
+    "aria-pressed",
+    "false"
+  );
+}
+
+
+soundControl.addEventListener(
+  "click",
+  async function () {
+    if (soundEnabled) {
+      stopAudio();
+    } else {
+      await startAudio();
+    }
+  }
+);
+
+
+/* ==========================================
+   ENTRÉE
+========================================== */
+
+function enterExperience() {
+  gate.classList.add(
+    "hidden"
+  );
+
+
+  document.body.classList.add(
+    "experience-started"
+  );
+}
+
+
+enterWithSound.addEventListener(
+  "click",
+  async function () {
+    enterExperience();
+
+    await startAudio();
+  }
+);
+
+
+enterWithoutSound.addEventListener(
+  "click",
+  function () {
+    enterExperience();
+
+    stopAudio();
+  }
+);
+
+
+/* ==========================================
    SCROLL
 ========================================== */
 
@@ -476,25 +1114,54 @@ function updateRomance() {
   const approach =
     range(
       progress,
-      0.1,
+      0.08,
       0.58
+    );
+
+
+  const warmth =
+    range(
+      progress,
+      0.27,
+      0.53
+    ) *
+    (
+      1 -
+      range(
+        progress,
+        0.62,
+        0.77
+      ) *
+      0.6
     );
 
 
   const jealousy =
     range(
       progress,
-      0.61,
-      0.79
+      0.62,
+      0.84
     );
 
 
   const ending =
     range(
       progress,
-      0.88,
-      0.98
+      0.87,
+      0.96
     );
+
+
+  currentProgress =
+    progress;
+
+
+  currentWarmth =
+    warmth;
+
+
+  currentJealousy =
+    jealousy;
 
 
   page.style.setProperty(
@@ -506,6 +1173,12 @@ function updateRomance() {
   page.style.setProperty(
     "--approach",
     approach
+  );
+
+
+  page.style.setProperty(
+    "--warmth",
+    warmth
   );
 
 
@@ -525,9 +1198,7 @@ function updateRomance() {
     progress * 100 + "%";
 
 
-  /* Phrase active */
-
-  let nextStep = -1;
+  let nextIndex = -1;
 
 
   narrationSteps.forEach(
@@ -535,22 +1206,25 @@ function updateRomance() {
       if (
         progress >= step.start
       ) {
-        nextStep = index;
+        nextIndex = index;
       }
     }
   );
 
 
-  displaySentence(nextStep);
+  displaySentence(
+    nextIndex
+  );
 
-  updateResearch(progress);
 
+  updateResearch(
+    progress
+  );
 
-  /* Phases visuelles */
 
   if (
-    progress >= 0.61 &&
-    progress < 0.88
+    progress >= 0.62 &&
+    progress < 0.87
   ) {
     page.classList.add(
       "phase-jealousy"
@@ -563,36 +1237,60 @@ function updateRomance() {
 
 
   if (
-    progress >= 0.88
+    progress >= 0.87
   ) {
     page.classList.add(
       "phase-ending"
     );
+
 
     sentence.style.visibility =
       "hidden";
+
+
+    if (!finalImpactPlayed) {
+      finalImpactPlayed = true;
+
+
+      finalFlash.classList.remove(
+        "active"
+      );
+
+
+      void finalFlash.offsetWidth;
+
+
+      finalFlash.classList.add(
+        "active"
+      );
+
+
+      playFinalImpact();
+    }
   } else {
     page.classList.remove(
       "phase-ending"
     );
 
+
     sentence.style.visibility =
       "visible";
+
+
+    finalImpactPlayed = false;
   }
 
-
-  /* Instruction */
 
   if (progress < 0.12) {
     scrollInstruction.textContent =
       "APPROACH THE FIGURE";
-  } else if (progress < 0.47) {
+  } else if (progress < 0.36) {
     scrollInstruction.textContent =
       "CROSS THE DISTANCE";
-  } else if (progress < 0.66) {
+  } else if (progress < 0.62) {
     scrollInstruction.textContent =
       "STAY IN THE DREAM";
-  } else if (progress < 0.86) {
+  } else if (progress < 0.87) {
     scrollInstruction.textContent =
       "FOLLOW THE RED THREAD";
   } else {
@@ -601,12 +1299,7 @@ function updateRomance() {
   }
 
 
-  audioIntensity =
-    approach;
-
-
-  jealousyIntensity =
-    jealousy;
+  updateAudioScene();
 }
 
 
@@ -639,8 +1332,8 @@ function createParticles() {
 
   const amount =
     window.innerWidth < 700
-      ? 35
-      : 65;
+      ? 42
+      : 78;
 
 
   for (
@@ -660,22 +1353,22 @@ function createParticles() {
       radius:
         0.6 +
         Math.random() *
-        1.5,
+        1.6,
 
       speed:
-        0.08 +
+        0.1 +
         Math.random() *
-        0.24,
-
-      opacity:
-        0.15 +
-        Math.random() *
-        0.45,
+        0.35,
 
       phase:
         Math.random() *
         Math.PI *
-        2
+        2,
+
+      opacity:
+        0.18 +
+        Math.random() *
+        0.5
     });
   }
 }
@@ -721,10 +1414,6 @@ function resizeCanvas() {
 }
 
 
-/* ==========================================
-   ANIMATION LÉGÈRE
-========================================== */
-
 function animateParticles(time) {
   context.clearRect(
     0,
@@ -736,16 +1425,27 @@ function animateParticles(time) {
 
   particles.forEach(
     function (particle) {
+      const speedBoost =
+        1 +
+        currentJealousy *
+        4;
+
+
       particle.y -=
-        particle.speed;
+        particle.speed *
+        speedBoost;
 
 
       particle.x +=
         Math.sin(
-          time * 0.0005 +
+          time * 0.001 +
           particle.phase
         ) *
-        0.08;
+        (
+          0.08 +
+          currentJealousy *
+          0.5
+        );
 
 
       if (
@@ -754,6 +1454,7 @@ function animateParticles(time) {
         particle.y =
           canvasHeight + 10;
 
+
         particle.x =
           Math.random() *
           canvasWidth;
@@ -761,12 +1462,12 @@ function animateParticles(time) {
 
 
       const pulse =
-        0.65 +
+        0.62 +
         Math.sin(
-          time * 0.001 +
+          time * 0.002 +
           particle.phase
         ) *
-        0.35;
+        0.38;
 
 
       context.beginPath();
@@ -775,24 +1476,32 @@ function animateParticles(time) {
       context.arc(
         particle.x,
         particle.y,
-        particle.radius,
+        particle.radius +
+        currentJealousy * 0.8,
         0,
         Math.PI * 2
       );
 
 
       context.fillStyle =
-        jealousyIntensity > 0.1
+        currentJealousy > 0.05
 
-          ? "rgba(255,90,112," +
+          ? "rgba(255,53,87," +
             particle.opacity *
             pulse +
             ")"
 
-          : "rgba(255,246,240," +
-            particle.opacity *
-            pulse +
-            ")";
+          : currentWarmth > 0.2
+
+            ? "rgba(255,201,166," +
+              particle.opacity *
+              pulse +
+              ")"
+
+            : "rgba(255,248,238," +
+              particle.opacity *
+              pulse +
+              ")";
 
 
       context.fill();
@@ -807,7 +1516,7 @@ function animateParticles(time) {
 
 
 /* ==========================================
-   PARALLAXE
+   SOURIS
 ========================================== */
 
 window.addEventListener(
@@ -843,362 +1552,6 @@ window.addEventListener(
 
 
 /* ==========================================
-   INFORMATIONS DU MUSÉE
-========================================== */
-
-function openInformation() {
-  informationPanel.classList.add(
-    "open"
-  );
-
-
-  informationPanel.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-
-  document.body.style.overflow =
-    "hidden";
-}
-
-
-function closeInformationPanel() {
-  informationPanel.classList.remove(
-    "open"
-  );
-
-
-  informationPanel.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-
-  document.body.style.overflow =
-    "";
-}
-
-
-informationButton.addEventListener(
-  "click",
-  openInformation
-);
-
-
-closeInformation.addEventListener(
-  "click",
-  closeInformationPanel
-);
-
-
-informationPanel.addEventListener(
-  "click",
-  function (event) {
-    if (
-      event.target ===
-      informationPanel
-    ) {
-      closeInformationPanel();
-    }
-  }
-);
-
-
-window.addEventListener(
-  "keydown",
-  function (event) {
-    if (
-      event.key === "Escape"
-    ) {
-      closeInformationPanel();
-    }
-  }
-);
-
-
-/* ==========================================
-   SON GÉNÉRATIF
-
-   Le son ne commence qu’après un clic.
-========================================== */
-
-let audioContext = null;
-
-let soundEnabled = false;
-
-let audioIntensity = 0;
-
-let jealousyIntensity = 0;
-
-let masterGain = null;
-
-let breathGain = null;
-
-let heartbeatTimer = null;
-
-
-function createNoiseBuffer(contextToUse) {
-  const length =
-    contextToUse.sampleRate * 2;
-
-
-  const buffer =
-    contextToUse.createBuffer(
-      1,
-      length,
-      contextToUse.sampleRate
-    );
-
-
-  const data =
-    buffer.getChannelData(0);
-
-
-  for (
-    let index = 0;
-    index < length;
-    index++
-  ) {
-    data[index] =
-      Math.random() * 2 - 1;
-  }
-
-
-  return buffer;
-}
-
-
-function startSound() {
-  audioContext =
-    new (
-      window.AudioContext ||
-      window.webkitAudioContext
-    )();
-
-
-  masterGain =
-    audioContext.createGain();
-
-
-  masterGain.gain.value =
-    0.12;
-
-
-  masterGain.connect(
-    audioContext.destination
-  );
-
-
-  const noise =
-    audioContext.createBufferSource();
-
-
-  noise.buffer =
-    createNoiseBuffer(
-      audioContext
-    );
-
-
-  noise.loop = true;
-
-
-  const filter =
-    audioContext.createBiquadFilter();
-
-
-  filter.type =
-    "lowpass";
-
-
-  filter.frequency.value =
-    420;
-
-
-  breathGain =
-    audioContext.createGain();
-
-
-  breathGain.gain.value =
-    0.018;
-
-
-  noise.connect(filter);
-
-  filter.connect(breathGain);
-
-  breathGain.connect(masterGain);
-
-  noise.start();
-
-
-  function animateBreath() {
-    if (
-      !soundEnabled ||
-      !audioContext
-    ) {
-      return;
-    }
-
-
-    const time =
-      audioContext.currentTime;
-
-
-    breathGain.gain.setTargetAtTime(
-      0.012 +
-      audioIntensity * 0.026,
-      time,
-      0.4
-    );
-
-
-    window.setTimeout(
-      animateBreath,
-      700
-    );
-  }
-
-
-  animateBreath();
-
-  scheduleHeartbeat();
-}
-
-
-function playHeartbeat() {
-  if (
-    !audioContext ||
-    !soundEnabled
-  ) {
-    return;
-  }
-
-
-  const oscillator =
-    audioContext.createOscillator();
-
-
-  const gain =
-    audioContext.createGain();
-
-
-  oscillator.type =
-    "sine";
-
-
-  oscillator.frequency.setValueAtTime(
-    62,
-    audioContext.currentTime
-  );
-
-
-  oscillator.frequency.exponentialRampToValueAtTime(
-    42,
-    audioContext.currentTime + 0.16
-  );
-
-
-  gain.gain.setValueAtTime(
-    0.0001,
-    audioContext.currentTime
-  );
-
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.1 +
-    jealousyIntensity * 0.12,
-    audioContext.currentTime + 0.018
-  );
-
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    audioContext.currentTime + 0.2
-  );
-
-
-  oscillator.connect(gain);
-
-  gain.connect(masterGain);
-
-
-  oscillator.start();
-
-  oscillator.stop(
-    audioContext.currentTime +
-    0.22
-  );
-}
-
-
-function scheduleHeartbeat() {
-  if (!soundEnabled) {
-    return;
-  }
-
-
-  playHeartbeat();
-
-
-  const delay =
-    1500 -
-    jealousyIntensity * 700;
-
-
-  heartbeatTimer =
-    window.setTimeout(
-      scheduleHeartbeat,
-      delay
-    );
-}
-
-
-soundButton.addEventListener(
-  "click",
-  function () {
-    soundEnabled =
-      !soundEnabled;
-
-
-    soundButton.setAttribute(
-      "aria-pressed",
-      String(soundEnabled)
-    );
-
-
-    soundButton.textContent =
-      soundEnabled
-        ? "SOUND ON"
-        : "ENABLE SOUND";
-
-
-    if (
-      soundEnabled &&
-      !audioContext
-    ) {
-      startSound();
-    } else if (
-      soundEnabled &&
-      audioContext
-    ) {
-      audioContext.resume();
-
-      scheduleHeartbeat();
-    } else if (
-      audioContext
-    ) {
-      window.clearTimeout(
-        heartbeatTimer
-      );
-
-      audioContext.suspend();
-    }
-  }
-);
-
-
-/* ==========================================
    TRANSITION VERS ACTION
 ========================================== */
 
@@ -1220,6 +1573,9 @@ enterAction.addEventListener(
     page.classList.add(
       "entering-action"
     );
+
+
+    playFinalImpact();
 
 
     window.setTimeout(
