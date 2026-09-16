@@ -292,7 +292,7 @@ function primeMedia() {
         mediaPriming =
           false;
 
-        syncAudio(
+                syncAudio(
           sceneNames[
             activeIndex
           ],
@@ -300,6 +300,13 @@ function primeMedia() {
           activeIndex
         );
       }
+    );
+}
+
+
+/* ==========================================
+   AMBIANCE DE LA VILLE
+========================================== */
 
 
 /* ==========================================
