@@ -1807,41 +1807,6 @@ window.addEventListener(
 );
 
 
-/* ==========================================
-   ACTION
-========================================== */
-
-enterAction.addEventListener(
-  "click",
-  function (event) {
-    event.preventDefault();
-
-    if (
-      page.classList.contains(
-        "entering-action"
-      )
-    ) {
-      return;
-    }
-
-    page.classList.add(
-      "entering-action"
-    );
-
-    const destination =
-      enterAction.href;
-
-    window.setTimeout(
-      function () {
-        window.location.assign(
-          destination
-        );
-      },
-      700
-    );
-  }
-);
-
 
 /* ==========================================
    INITIALISATION
