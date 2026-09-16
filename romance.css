@@ -1,0 +1,1724 @@
+/* ==========================================
+   THE MUSEUM OF DREAMS
+   ROOM 04 — ROMANCE
+========================================== */
+
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+:root {
+  --pearl: #f6efeb;
+  --rose: #d7afb4;
+  --red: #b62232;
+  --dark-red: #3c0710;
+  --ink: #211b21;
+
+  --progress: 0;
+  --approach: 0;
+  --jealousy: 0;
+  --ending: 0;
+
+  --pointer-x: 0px;
+  --pointer-y: 0px;
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--pearl);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+
+  overflow-x: hidden;
+
+  color: var(--ink);
+  background: var(--pearl);
+}
+
+button,
+a {
+  color: inherit;
+}
+
+button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* ==========================================
+   MONDE FIXE
+========================================== */
+
+.romance-world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f5eded,
+      #e8dcde 56%,
+      #c9b5b9
+    );
+
+  transition:
+    background 1.4s ease;
+}
+
+
+/* ==========================================
+   ARCHITECTURE DU MUSÉE
+========================================== */
+
+.gallery-ceiling {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 20%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ebe3e1,
+      #f8f1ee
+    );
+
+  clip-path:
+    polygon(
+      0 0,
+      100% 0,
+      73% 100%,
+      27% 100%
+    );
+}
+
+.gallery-back-wall {
+  position: absolute;
+
+  top: 19%;
+  left: 25%;
+
+  width: 50%;
+  height: 54%;
+
+  border:
+    1px solid
+    rgba(70, 47, 52, 0.08);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 251, 247, 0.95),
+      rgba(220, 205, 207, 0.94)
+    );
+
+  box-shadow:
+    0 0 80px
+    rgba(255, 255, 255, 0.5);
+}
+
+.gallery-side {
+  position: absolute;
+  top: 0;
+
+  width: 32%;
+  height: 78%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #cfc0c2,
+      #f4ebea
+    );
+}
+
+.left-wall {
+  left: 0;
+
+  clip-path:
+    polygon(
+      0 0,
+      100% 21%,
+      100% 93%,
+      0 100%
+    );
+}
+
+.right-wall {
+  right: 0;
+
+  clip-path:
+    polygon(
+      0 21%,
+      100% 0,
+      100% 100%,
+      0 93%
+    );
+
+  transform: scaleX(-1);
+}
+
+.gallery-floor {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  height: 34%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #d4c4c5,
+      #a99499
+    );
+
+  clip-path:
+    polygon(
+      25% 0,
+      75% 0,
+      100% 100%,
+      0 100%
+    );
+}
+
+.gallery-floor::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.3;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 12%,
+      rgba(71, 45, 51, 0.12) 12.1%,
+      transparent 12.3%
+    );
+}
+
+.gallery-horizon {
+  position: absolute;
+  top: 72%;
+  left: 25%;
+
+  width: 50%;
+  height: 1px;
+
+  background:
+    rgba(60, 38, 43, 0.14);
+}
+
+
+/* ==========================================
+   LUMIÈRES
+========================================== */
+
+.pearl-light {
+  position: absolute;
+
+  top: 18%;
+  left: 50%;
+
+  width: min(72vw, 900px);
+  height: min(72vw, 900px);
+
+  border-radius: 50%;
+
+  opacity:
+    calc(0.8 - var(--jealousy) * 0.5);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.96),
+      rgba(251, 225, 228, 0.42) 36%,
+      transparent 70%
+    );
+
+  transform:
+    translate(-50%, -50%);
+
+  transition:
+    opacity 800ms ease;
+}
+
+.red-light {
+  position: absolute;
+  inset: 0;
+
+  opacity:
+    calc(var(--jealousy) * 0.9);
+
+  background:
+    radial-gradient(
+      circle at 50% 44%,
+      rgba(235, 49, 66, 0.35),
+      rgba(119, 10, 26, 0.35) 36%,
+      rgba(42, 3, 10, 0.88) 100%
+    );
+
+  transition:
+    opacity 1s ease;
+}
+
+.jealousy-shadow {
+  position: absolute;
+
+  top: 0;
+  right: -10%;
+
+  width: 60%;
+  height: 100%;
+
+  opacity:
+    calc(var(--jealousy) * 0.68);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(61, 0, 10, 0.72)
+    );
+
+  transform:
+    translateX(
+      calc((1 - var(--jealousy)) * 30%)
+    );
+}
+
+
+/* ==========================================
+   VOILES
+========================================== */
+
+.veils {
+  position: absolute;
+  inset: 0;
+
+  perspective: 1000px;
+}
+
+.veil {
+  position: absolute;
+  top: -8%;
+
+  width: 15%;
+  height: 90%;
+
+  opacity:
+    calc(0.58 - var(--approach) * 0.27);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.7) 35%,
+      rgba(249, 224, 226, 0.46) 62%,
+      transparent
+    );
+
+  border-radius:
+    0 0 48% 48%;
+
+  transform-origin:
+    top center;
+
+  animation:
+    veilMovement 8s
+    ease-in-out infinite;
+}
+
+.veil-one {
+  left: 7%;
+
+  animation-delay: -3s;
+}
+
+.veil-two {
+  left: 25%;
+
+  height: 77%;
+
+  animation-delay: -6s;
+}
+
+.veil-three {
+  left: 45%;
+
+  width: 11%;
+  height: 69%;
+
+  animation-delay: -1s;
+}
+
+.veil-four {
+  right: 24%;
+
+  height: 82%;
+
+  animation-delay: -4s;
+}
+
+.veil-five {
+  right: 5%;
+
+  animation-delay: -7s;
+}
+
+
+/* ==========================================
+   SILHOUETTES
+========================================== */
+
+.dream-figure {
+  position: absolute;
+
+  top: 27%;
+  left: 50%;
+
+  width: 210px;
+  height: 470px;
+
+  transform:
+    translate(
+      calc(-50% + var(--pointer-x)),
+      calc(
+        var(--pointer-y) +
+        var(--approach) * -30px
+      )
+    )
+    scale(
+      calc(0.68 + var(--approach) * 0.62)
+    );
+
+  transform-origin:
+    center bottom;
+
+  transition:
+    opacity 800ms ease;
+}
+
+.figure-head {
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  width: 74px;
+  height: 92px;
+
+  border-radius:
+    48% 48% 45% 45%;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(73, 49, 56, 0.96),
+      rgba(31, 21, 28, 0.96)
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+.figure-body {
+  position: absolute;
+
+  top: 78px;
+  left: 50%;
+
+  width: 190px;
+  height: 380px;
+
+  border-radius:
+    48% 48% 16% 16%;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(86, 61, 68, 0.96),
+      rgba(23, 17, 23, 0.98)
+    );
+
+  clip-path:
+    polygon(
+      32% 0,
+      68% 0,
+      100% 22%,
+      83% 100%,
+      17% 100%,
+      0 22%
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+.figure-glow {
+  position: absolute;
+
+  top: -15%;
+  left: -35%;
+
+  width: 170%;
+  height: 120%;
+
+  z-index: -1;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 225, 232, 0.43),
+      transparent 65%
+    );
+}
+
+.main-figure {
+  opacity:
+    calc(0.36 + var(--approach) * 0.64);
+}
+
+.second-figure {
+  left: 61%;
+
+  opacity:
+    calc(var(--jealousy) * 0.82);
+
+  filter:
+    saturate(1.4);
+
+  transform:
+    translate(
+      calc(
+        -50% +
+        var(--pointer-x) * -0.4
+      ),
+      var(--pointer-y)
+    )
+    scale(
+      calc(0.58 + var(--jealousy) * 0.35)
+    );
+}
+
+.second-figure .figure-head,
+.second-figure .figure-body {
+  background:
+    linear-gradient(
+      120deg,
+      #75101e,
+      #250109
+    );
+}
+
+
+/* ==========================================
+   FIL ROUGE
+========================================== */
+
+.connection-thread {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+
+  pointer-events: none;
+}
+
+.connection-thread path {
+  fill: none;
+
+  stroke: rgba(181, 30, 48, 0.9);
+
+  stroke-width:
+    calc(1.2 + var(--approach) * 1.6);
+
+  vector-effect:
+    non-scaling-stroke;
+
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(207, 30, 54, 0.55)
+    );
+}
+
+.thread-echo {
+  opacity:
+    calc(var(--jealousy) * 0.55);
+
+  stroke-width: 8 !important;
+
+  filter:
+    blur(5px)
+    drop-shadow(
+      0 0 15px
+      rgba(255, 31, 66, 0.7)
+    ) !important;
+}
+
+
+/* ==========================================
+   CANVAS
+========================================== */
+
+#romance-canvas {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.museum-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  z-index: 50;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  width: 100%;
+
+  padding:
+    24px 34px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+.museum-location {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.location-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: var(--red);
+
+  box-shadow:
+    0 0 10px
+    rgba(182, 34, 50, 0.8);
+}
+
+.information-button {
+  justify-self: end;
+
+  padding:
+    0 0 5px;
+
+  border-bottom:
+    1px solid
+    rgba(33, 27, 33, 0.35);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+
+/* ==========================================
+   INTRODUCTION
+========================================== */
+
+.romance-introduction {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 20;
+
+  display: grid;
+  place-content: center;
+
+  text-align: center;
+
+  pointer-events: none;
+
+  opacity:
+    calc(1 - var(--progress) * 6);
+
+  transform:
+    translateY(
+      calc(var(--progress) * -80px)
+    );
+}
+
+.room-number,
+.installation-title {
+  margin: 0;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+}
+
+.romance-introduction h1 {
+  margin:
+    20px 0 14px;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(80px, 15vw, 230px);
+
+  font-weight: 400;
+
+  line-height: 0.72;
+
+  letter-spacing: -0.075em;
+}
+
+.romance-introduction h1 em {
+  display: block;
+
+  color: var(--red);
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+}
+
+.introduction-copy {
+  margin:
+    65px 0 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(25px, 3vw, 48px);
+
+  line-height: 1;
+}
+
+.introduction-copy em {
+  display: block;
+
+  color: #8f1c2b;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+}
+
+
+/* ==========================================
+   NARRATION
+========================================== */
+
+.romance-narration {
+  position: fixed;
+
+  right: 0;
+  bottom: 11vh;
+  left: 0;
+
+  z-index: 25;
+
+  display: grid;
+  place-items: center;
+
+  min-height: 160px;
+
+  padding:
+    20px 30px;
+
+  opacity:
+    clamp(
+      0,
+      calc(var(--progress) * 8),
+      1
+    );
+
+  pointer-events: none;
+}
+
+.romance-sentence {
+  max-width: 850px;
+
+  margin: 0;
+
+  color: #fff8f2;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(44px, 6vw, 88px);
+
+  line-height: 0.97;
+
+  letter-spacing: -0.045em;
+
+  text-align: center;
+
+  text-shadow:
+    0 4px 28px
+    rgba(32, 7, 14, 0.38);
+
+  transition:
+    opacity 420ms ease,
+    filter 420ms ease,
+    transform 500ms ease;
+}
+
+.romance-sentence em {
+  display: block;
+
+  color: #9a1e30;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+
+  transition:
+    color 800ms ease;
+}
+
+.phase-jealousy
+.romance-sentence em {
+  color: #ff9da9;
+}
+
+.romance-sentence.changing {
+  opacity: 0;
+
+  filter:
+    blur(9px);
+
+  transform:
+    translateY(-15px);
+}
+
+
+/* ==========================================
+   CARTELS
+========================================== */
+
+.museum-label,
+.dream-label,
+.research-note {
+  position: fixed;
+
+  z-index: 30;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  transition:
+    opacity 600ms ease,
+    color 600ms ease;
+}
+
+.museum-label {
+  top: 27%;
+  left: 34px;
+
+  width: 180px;
+
+  padding-left: 13px;
+
+  border-left:
+    1px solid
+    rgba(33, 27, 33, 0.3);
+}
+
+.museum-label strong,
+.dream-label strong {
+  display: block;
+
+  margin:
+    10px 0;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size: 13px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.02em;
+}
+
+.museum-label p {
+  line-height: 1.7;
+
+  opacity: 0.65;
+}
+
+.museum-label small {
+  color: var(--red);
+
+  font-size: 7px;
+}
+
+.dream-label {
+  right: 34px;
+  bottom: 38px;
+
+  width: 210px;
+}
+
+.dream-label dl {
+  margin: 15px 0 0;
+}
+
+.dream-label dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin:
+    6px 0;
+}
+
+.dream-label dd {
+  margin: 0;
+
+  color: var(--red);
+
+  text-align: right;
+}
+
+.research-note {
+  bottom: 35px;
+  left: 34px;
+
+  width: 285px;
+
+  opacity: 0;
+}
+
+.research-note.visible {
+  opacity: 0.78;
+}
+
+.research-note p {
+  margin:
+    11px 0;
+
+  line-height: 1.55;
+
+  text-transform: none;
+}
+
+.research-note strong {
+  color: var(--red);
+}
+
+.research-note a {
+  display: block;
+
+  width: max-content;
+
+  margin-top: 10px;
+
+  padding-bottom: 3px;
+
+  border-bottom:
+    1px solid
+    currentColor;
+
+  font-size: 7px;
+}
+
+
+/* ==========================================
+   SORTIE ACTION
+========================================== */
+
+.action-exit {
+  position: fixed;
+  inset: 0;
+
+  z-index: 40;
+
+  display: grid;
+  place-content: center;
+
+  visibility: hidden;
+
+  opacity:
+    var(--ending);
+
+  color: #fff3ee;
+
+  padding:
+    80px 25px;
+
+  text-align: center;
+
+  pointer-events: none;
+}
+
+.phase-ending
+.action-exit {
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+.action-exit > p {
+  margin:
+    0 0 20px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(25px, 3vw, 44px);
+}
+
+.action-exit h2 {
+  margin: 0;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(65px, 12vw, 180px);
+
+  font-weight: 400;
+
+  line-height: 0.78;
+
+  letter-spacing: -0.065em;
+}
+
+.action-exit h2 em {
+  display: block;
+
+  color: #ed5b6f;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+}
+
+.exit-heart {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  margin:
+    45px 0 30px;
+}
+
+.exit-heart span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #ff536a;
+
+  box-shadow:
+    0 0 18px
+    rgba(255, 60, 87, 0.9);
+
+  animation:
+    heartbeat 850ms
+    ease-in-out infinite;
+}
+
+.exit-heart span:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.exit-heart span:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.enter-action {
+  justify-self: center;
+
+  display: grid;
+  gap: 8px;
+
+  min-width: 260px;
+
+  padding:
+    18px 25px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.45);
+
+  background:
+    rgba(35, 0, 8, 0.28);
+
+  backdrop-filter:
+    blur(7px);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  text-transform: uppercase;
+
+  transition:
+    background 300ms ease,
+    transform 300ms ease;
+}
+
+.enter-action:hover {
+  background:
+    rgba(174, 21, 43, 0.46);
+
+  transform:
+    translateY(-4px);
+}
+
+.enter-action small {
+  font-size: 7px;
+
+  letter-spacing: 0.2em;
+}
+
+.enter-action strong {
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size: 18px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.04em;
+}
+
+.enter-action span {
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+}
+
+
+/* ==========================================
+   COMMANDES
+========================================== */
+
+.museum-controls {
+  position: fixed;
+
+  right: 34px;
+  bottom: 145px;
+
+  z-index: 50;
+
+  display: grid;
+  justify-items: end;
+  gap: 12px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+.museum-controls button,
+.museum-controls a {
+  font-family: inherit;
+  font-size: inherit;
+
+  letter-spacing: inherit;
+
+  text-transform: inherit;
+
+  opacity: 0.56;
+}
+
+.museum-controls button:hover,
+.museum-controls a:hover {
+  opacity: 1;
+}
+
+.scroll-instruction {
+  position: fixed;
+
+  bottom: 25px;
+  left: 50%;
+
+  z-index: 30;
+
+  margin: 0;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+
+  text-transform: uppercase;
+
+  opacity: 0.55;
+
+  transform:
+    translateX(-50%);
+}
+
+.romance-progress {
+  position: fixed;
+
+  top: 50%;
+  right: 15px;
+
+  z-index: 50;
+
+  width: 1px;
+  height: 170px;
+
+  background:
+    rgba(40, 20, 27, 0.16);
+
+  transform:
+    translateY(-50%);
+}
+
+.romance-progress span {
+  display: block;
+
+  width: 100%;
+  height: 0;
+
+  background:
+    linear-gradient(
+      #6e1522,
+      #ff5b70
+    );
+
+  box-shadow:
+    0 0 8px
+    rgba(202, 28, 54, 0.6);
+}
+
+
+/* ==========================================
+   PANNEAU D’INFORMATION
+========================================== */
+
+.information-panel {
+  position: fixed;
+  inset: 0;
+
+  z-index: 100;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  overflow-y: auto;
+
+  color: #fff5f1;
+
+  background:
+    rgba(27, 9, 16, 0.96);
+
+  transition:
+    opacity 450ms ease,
+    visibility 450ms;
+}
+
+.information-panel.open {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+.close-information {
+  position: fixed;
+
+  top: 25px;
+  right: 34px;
+
+  z-index: 2;
+
+  color: #fff5f1;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+.information-content {
+  width:
+    min(1100px, 100%);
+
+  margin:
+    0 auto;
+
+  padding:
+    110px 35px 90px;
+}
+
+.information-content > p,
+.information-grid span {
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+
+  text-transform: uppercase;
+}
+
+.information-content h2 {
+  margin:
+    28px 0 80px;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(65px, 11vw, 170px);
+
+  font-weight: 400;
+
+  line-height: 0.8;
+
+  letter-spacing: -0.06em;
+}
+
+.information-content h2 em {
+  display: block;
+
+  color: #e05267;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+}
+
+.information-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap:
+    55px 80px;
+}
+
+.information-grid section {
+  padding-top: 15px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.2);
+}
+
+.information-grid section p {
+  max-width: 460px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(18px, 2vw, 28px);
+
+  line-height: 1.25;
+}
+
+
+/* ==========================================
+   SCROLL ET TRANSITION
+========================================== */
+
+.romance-scroll {
+  position: relative;
+
+  z-index: 1;
+
+  height: 820vh;
+
+  pointer-events: none;
+}
+
+.action-transition {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  z-index: 150;
+
+  visibility: hidden;
+
+  width: 50px;
+  height: 50px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #ff9baa,
+      #ad1530 42%,
+      #240008 72%
+    );
+
+  transform:
+    translate(-50%, -50%)
+    scale(0);
+}
+
+.entering-action
+.action-transition {
+  visibility: visible;
+
+  animation:
+    actionEntrance 1.4s
+    cubic-bezier(
+      0.76,
+      0,
+      0.24,
+      1
+    )
+    forwards;
+}
+
+
+/* ==========================================
+   PHASE JALOUSIE
+========================================== */
+
+.phase-jealousy {
+  color: #fff0eb;
+}
+
+.phase-jealousy
+.museum-label,
+
+.phase-jealousy
+.dream-label,
+
+.phase-jealousy
+.research-note,
+
+.phase-jealousy
+.museum-controls,
+
+.phase-jealousy
+.museum-header {
+  color: #fff0eb;
+}
+
+.phase-jealousy
+.information-button {
+  border-color:
+    rgba(255, 255, 255, 0.42);
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes veilMovement {
+  0%,
+  100% {
+    transform:
+      rotateY(-6deg)
+      skewX(-2deg)
+      translateX(-4%);
+  }
+
+  50% {
+    transform:
+      rotateY(7deg)
+      skewX(3deg)
+      translateX(5%);
+  }
+}
+
+@keyframes heartbeat {
+  0%,
+  100% {
+    opacity: 0.25;
+
+    transform:
+      scale(0.65);
+  }
+
+  25% {
+    opacity: 1;
+
+    transform:
+      scale(1.5);
+  }
+
+  38% {
+    transform:
+      scale(0.8);
+  }
+
+  52% {
+    opacity: 0.9;
+
+    transform:
+      scale(1.2);
+  }
+}
+
+@keyframes actionEntrance {
+  0% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(55);
+  }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 800px) {
+  .museum-header {
+    grid-template-columns:
+      1fr auto;
+
+    padding:
+      18px 20px;
+  }
+
+  .museum-location {
+    display: none;
+  }
+
+  .museum-label,
+  .dream-label {
+    display: none;
+  }
+
+  .research-note {
+    bottom: 60px;
+    left: 20px;
+
+    width: 245px;
+
+    font-size: 7px;
+  }
+
+  .romance-introduction h1 {
+    font-size:
+      clamp(75px, 22vw, 145px);
+  }
+
+  .romance-sentence {
+    font-size:
+      clamp(40px, 11vw, 66px);
+  }
+
+  .dream-figure {
+    width: 170px;
+    height: 400px;
+  }
+
+  .figure-body {
+    width: 155px;
+    height: 325px;
+  }
+
+  .second-figure {
+    left: 66%;
+  }
+
+  .museum-controls {
+    right: 20px;
+    bottom: 95px;
+  }
+
+  .information-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-exit h2 {
+    font-size:
+      clamp(60px, 19vw, 120px);
+  }
+}
+
+@media (max-width: 480px) {
+  .information-button {
+    font-size: 7px;
+  }
+
+  .romance-narration {
+    bottom: 13vh;
+  }
+
+  .romance-sentence {
+    font-size: 39px;
+  }
+
+  .research-note {
+    width: 210px;
+  }
+
+  .scroll-instruction {
+    left: 20px;
+
+    transform: none;
+  }
+}
+
+
+/* ==========================================
+   ACCESSIBILITÉ
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
