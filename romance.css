@@ -1931,3 +1931,28 @@ html {
     left: 72%;
   }
 }
+/* ==========================================
+   CORRECTION DU BOUTON ACTION
+========================================== */
+
+#enter-action {
+  position: relative;
+
+  z-index: 500;
+
+  pointer-events: auto !important;
+
+  cursor: pointer;
+}
+
+#enter-action * {
+  pointer-events: none;
+}
+
+.emotion-ripple,
+.final-flash,
+.light-presence,
+.romance-particles,
+.dream-ribbons {
+  pointer-events: none !important;
+}
