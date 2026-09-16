@@ -59,7 +59,7 @@ const researchPrinciple =
 
 
 /* ==========================================
-   FICHIERS AUDIO
+   AUDIO IMPORTÉ
 ========================================== */
 
 const startSound =
@@ -74,7 +74,7 @@ const trainSound =
 
 
 /* ==========================================
-   ÉTAT DE LA PAGE
+   ÉTAT
 ========================================== */
 
 const sceneNames =
@@ -108,10 +108,15 @@ let countdownTimer;
 
 let thirdSignalTimer;
 
+let startSoundCutTimer;
+
 let mediaPrimed =
   false;
 
 let mediaPriming =
+  false;
+
+let atmosphereReady =
   false;
 
 let windSource;
@@ -124,18 +129,9 @@ let rumbleOscillator;
 
 let rumbleGain;
 
-let atmosphereReady =
-  false;
-
-let startSoundCutTimer;
-
 const played =
   new Set();
 
-
-/* ==========================================
-   VOLUMES
-========================================== */
 
 startSound.volume =
   0.72;
@@ -145,7 +141,7 @@ trainSound.volume =
 
 
 /* ==========================================
-   BOUTON DU SON
+   BOUTON AUDIO
 ========================================== */
 
 function updateSoundButton() {
@@ -203,11 +199,6 @@ function ensureAudio() {
   }
 }
 
-
-/*
- * Chrome demande que les fichiers audio
- * soient activés pendant une interaction.
- */
 
 function primeMedia() {
   ensureAudio();
@@ -297,12 +288,9 @@ function createAtmosphere() {
   atmosphereReady =
     true;
 
-  const duration =
-    2;
-
   const frameCount =
     audioContext.sampleRate *
-    duration;
+    2;
 
   const noiseBuffer =
     audioContext.createBuffer(
@@ -331,8 +319,6 @@ function createAtmosphere() {
   }
 
 
-  /* Vent */
-
   windSource =
     audioContext
       .createBufferSource();
@@ -342,6 +328,7 @@ function createAtmosphere() {
 
   windSource.loop =
     true;
+
 
   windFilter =
     audioContext
@@ -356,12 +343,14 @@ function createAtmosphere() {
   windFilter.Q.value =
     0.55;
 
+
   windGain =
     audioContext
       .createGain();
 
   windGain.gain.value =
     0.0001;
+
 
   windSource
     .connect(
@@ -377,8 +366,6 @@ function createAtmosphere() {
   windSource.start();
 
 
-  /* Grondement grave */
-
   rumbleOscillator =
     audioContext
       .createOscillator();
@@ -389,12 +376,14 @@ function createAtmosphere() {
   rumbleOscillator.frequency.value =
     39;
 
+
   rumbleGain =
     audioContext
       .createGain();
 
   rumbleGain.gain.value =
     0.0001;
+
 
   rumbleOscillator
     .connect(
@@ -421,6 +410,7 @@ function setAtmosphere(
   const windLevels = {
     ride: 0.085,
     directions: 0.12,
+    pursuit: 0.155,
     rooftop: 0.018,
     jump: 0.09,
     airborne: 0.16,
@@ -478,7 +468,9 @@ function setAtmosphere(
     scene === "airborne"
       ? 1250
       : 780,
+
     now,
+
     0.3
   );
 }
@@ -593,17 +585,13 @@ function noiseBurst(
 
 
 /* ==========================================
-   ARRÊTER PROGRESSIVEMENT UN SON
+   COUPER LE DÉMARRAGE DE LA MOTO
 ========================================== */
 
 function fadeAndStop(
   audio,
   duration = 650
 ) {
-  window.clearTimeout(
-    startSoundCutTimer
-  );
-
   const startingVolume =
     audio.volume;
 
@@ -730,7 +718,7 @@ function tone(
 
 
 /* ==========================================
-   BATTEMENTS DU CŒUR
+   CŒUR ET IMPACT
 ========================================== */
 
 function heartbeat(
@@ -814,8 +802,7 @@ function safePlay(
     .play()
     .catch(
       function () {
-        /* Le navigateur peut encore
-           refuser avant le premier geste. */
+        /* Bloqué avant la première interaction. */
       }
     );
 }
@@ -857,13 +844,14 @@ function setHeartbeat(
           extraPulse
         );
       },
+
       period
     );
 }
 
 
 /* ==========================================
-   OBSERVATIONS SCIENTIFIQUES
+   NOTES SCIENTIFIQUES
 ========================================== */
 
 function setResearch(
@@ -871,6 +859,7 @@ function setResearch(
 ) {
   const secondNoteScenes = [
     "directions",
+    "pursuit",
     "rooftop",
     "jump",
     "airborne",
@@ -951,6 +940,7 @@ function runCountdown() {
           );
         }
       },
+
       470
     );
 }
@@ -1003,13 +993,14 @@ function revealThirdSignal() {
           true
         );
       },
+
       2800
     );
 }
 
 
 /* ==========================================
-   SYNCHRONISATION AUDIO
+   AUDIO PAR SCÈNE
 ========================================== */
 
 function syncAudio(
@@ -1033,11 +1024,11 @@ function syncAudio(
   );
 
 
-  /* Démarrage court de la moto */
+  /* Démarrage court */
 
   if (
     mediaPrimed &&
-    scene === "exhibit" &&
+    scene === "trouble" &&
     !played.has(
       "start"
     )
@@ -1051,6 +1042,10 @@ function syncAudio(
       "start"
     );
 
+    window.clearTimeout(
+      startSoundCutTimer
+    );
+
     startSoundCutTimer =
       window.setTimeout(
         function () {
@@ -1059,16 +1054,18 @@ function syncAudio(
             700
           );
         },
+
         1900
       );
   }
 
 
-  /* Souffles ponctuels */
+  /* Vitesse */
 
   if (
-    scene === "trouble" ||
     scene === "ride" ||
+    scene === "directions" ||
+    scene === "pursuit" ||
     scene === "jump" ||
     scene === "airborne"
   ) {
@@ -1088,7 +1085,20 @@ function syncAudio(
   }
 
 
-  /* Passage du train */
+  /* Freinage et sortie de la moto */
+
+  if (
+    scene === "rooftop"
+  ) {
+    noiseBurst(
+      0.9,
+      0.07,
+      430
+    );
+  }
+
+
+  /* Train */
 
   if (
     mediaPrimed &&
@@ -1199,6 +1209,7 @@ function activateScene(
 
   body.style.setProperty(
     "--scene-progress",
+
     activeIndex /
     (
       beats.length - 1
@@ -1228,7 +1239,7 @@ function activateScene(
 
 
 /* ==========================================
-   DÉTECTION DES SECTIONS
+   OBSERVER LES SECTIONS
 ========================================== */
 
 const observer =
@@ -1263,6 +1274,7 @@ const observer =
         );
       }
     },
+
     {
       threshold: [
         0.55,
@@ -1270,6 +1282,7 @@ const observer =
       ]
     }
   );
+
 
 beats.forEach(
   function (beat) {
@@ -1281,7 +1294,7 @@ beats.forEach(
 
 
 /* ==========================================
-   NAVIGATION ENTRE LES PHRASES
+   SCROLL GUIDÉ
 ========================================== */
 
 function goToBeat(
@@ -1304,8 +1317,6 @@ function goToBeat(
   });
 }
 
-
-/* Souris ou trackpad */
 
 window.addEventListener(
   "wheel",
@@ -1345,16 +1356,16 @@ window.addEventListener(
         wheelLocked =
           false;
       },
+
       850
     );
   },
+
   {
     passive: false
   }
 );
 
-
-/* Clavier */
 
 window.addEventListener(
   "keydown",
@@ -1395,8 +1406,6 @@ window.addEventListener(
 );
 
 
-/* Premier clic ou geste tactile */
-
 window.addEventListener(
   "pointerdown",
   primeMedia,
@@ -1407,7 +1416,7 @@ window.addEventListener(
 
 
 /* ==========================================
-   SOUND ON / SOUND OFF
+   SOUND ON / OFF
 ========================================== */
 
 soundToggle.addEventListener(
@@ -1420,6 +1429,7 @@ soundToggle.addEventListener(
 
     localStorage.setItem(
       "museumSound",
+
       soundEnabled
         ? "on"
         : "off"
@@ -1458,6 +1468,7 @@ soundToggle.addEventListener(
         sceneNames[
           activeIndex
         ],
+
         activeIndex
       );
     } else {
@@ -1497,7 +1508,7 @@ takeHand.addEventListener(
 
 
 /* ==========================================
-   PLUIE ET VITESSE
+   PLUIE
 ========================================== */
 
 const canvas =
@@ -1524,6 +1535,7 @@ function resizeCanvas() {
     Math.min(
       window.devicePixelRatio ||
       1,
+
       1.5
     );
 
@@ -1560,6 +1572,7 @@ function resizeCanvas() {
       {
         length: count
       },
+
       function () {
         return {
           x:
@@ -1602,6 +1615,7 @@ function animateWeather() {
     [
       "ride",
       "directions",
+      "pursuit",
       "airborne",
       "fall"
     ].includes(
@@ -1612,13 +1626,16 @@ function animateWeather() {
     function (drop) {
       drop.x -=
         fast
-          ? drop.speed * 0.65
-          : drop.speed * 0.12;
+          ? drop.speed *
+            0.65
+          : drop.speed *
+            0.12;
 
       drop.y +=
         fast
           ? drop.speed
-          : drop.speed * 0.35;
+          : drop.speed *
+            0.35;
 
       if (
         drop.y >
@@ -1632,7 +1649,8 @@ function animateWeather() {
           canvasWidth +
           (
             fast
-              ? canvasWidth * 0.35
+              ? canvasWidth *
+                0.35
               : 0
           );
 
@@ -1651,9 +1669,11 @@ function animateWeather() {
         drop.x -
         (
           fast
-            ? drop.length * 0.65
+            ? drop.length *
+              0.65
             : 2
         ),
+
         drop.y +
         drop.length
       );
@@ -1675,7 +1695,7 @@ function animateWeather() {
 
 
 /* ==========================================
-   MOUVEMENT DU COCKPIT
+   DIRECTION DU COCKPIT
 ========================================== */
 
 window.addEventListener(
@@ -1688,6 +1708,7 @@ window.addEventListener(
 
     body.style.setProperty(
       "--steer",
+
       horizontal *
       3.2 +
       "deg"
@@ -1695,11 +1716,13 @@ window.addEventListener(
 
     body.style.setProperty(
       "--cockpit-x",
+
       horizontal *
       14 +
       "px"
     );
   },
+
   {
     passive: true
   }
