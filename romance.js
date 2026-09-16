@@ -441,7 +441,23 @@ function updateStoryLines() {
       strongestLine.dataset.motif;
   }
 }
+  if (
+    strongestLine &&
+    strongestLine !== activeLine
+  ) {
+    activeLine =
+      strongestLine;
 
+    dreamTitle.textContent =
+      strongestLine.dataset.title;
+
+    emotionalCore.textContent =
+      strongestLine.dataset.emotion;
+
+    dreamMotif.textContent =
+      strongestLine.dataset.motif;
+  }
+}
 /* ==========================================
    AUDIO
 ========================================== */
@@ -1851,7 +1867,6 @@ enterAction.addEventListener(
   function (event) {
     event.preventDefault();
 
-
     if (
       page.classList.contains(
         "entering-action"
@@ -1860,21 +1875,20 @@ enterAction.addEventListener(
       return;
     }
 
-
     page.classList.add(
       "entering-action"
     );
 
-
-    playStorm();
-
+    const destination =
+      enterAction.href;
 
     window.setTimeout(
       function () {
-        window.location.href =
-          "action.html";
+        window.location.assign(
+          destination
+        );
       },
-      1350
+      700
     );
   }
 );
