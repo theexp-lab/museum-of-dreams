@@ -1,5 +1,5 @@
 /* ==========================================
-   ROOM 04 — ROMANCE
+   ROOM 04 — ROMANCE V3
 ========================================== */
 
 
@@ -138,18 +138,18 @@ const enterAction =
 
 
 /* ==========================================
-   NARRATION
+   NARRATION DÉFINITIVE
 ========================================== */
 
 const narrationSteps = [
   {
-    start: 0.1,
+    start: 0.09,
 
     text:
-      "You know them <em>before you see their face.</em>",
+      "You cannot see who they are. <em>But something feels familiar.</em>",
 
     title:
-      "THE FAMILIAR STRANGER",
+      "THE FAMILIAR PRESENCE",
 
     emotion:
       "RECOGNITION",
@@ -159,58 +159,74 @@ const narrationSteps = [
   },
 
   {
-    start: 0.21,
+    start: 0.19,
 
     text:
-      "The face keeps changing. <em>This feeling… you recognize it every time.</em>",
-
-    title:
-      "THE CHANGING FACE",
-
-    emotion:
-      "FAMILIARITY",
-
-    motif:
-      "IDENTITY"
-  },
-
-  {
-    start: 0.34,
-
-    text:
-      "The room grows warmer <em>as the distance between you disappears.</em>",
+      "You move closer. <em>The room grows warmer.</em>",
 
     title:
       "THE WARM ROOM",
 
     emotion:
-      "INTIMACY",
+      "ATTRACTION",
 
     motif:
       "APPROACH"
   },
 
   {
-    start: 0.47,
+    start: 0.29,
 
     text:
-      "You are standing in the same dream. <em>You may not be having the same one.</em>",
+      "For a moment, <em>you seem to be in the same dream.</em>",
+
+    title:
+      "THE SHARED DREAM",
+
+    emotion:
+      "INTIMACY",
+
+    motif:
+      "CONNECTION"
+  },
+
+  {
+    start: 0.39,
+
+    text:
+      "But the two lights do not move <em>in quite the same way.</em>",
 
     title:
       "TWO INNER WORLDS",
 
     emotion:
-      "CONNECTION",
+      "UNCERTAINTY",
 
     motif:
       "DIFFERENCE"
   },
 
   {
-    start: 0.57,
+    start: 0.49,
 
     text:
-      "You may only discover what it left behind <em>when you wake up.</em>",
+      "Perhaps you are together. <em>Perhaps you are only dreaming of each other.</em>",
+
+    title:
+      "THE DISTANCE BETWEEN US",
+
+    emotion:
+      "LONGING",
+
+    motif:
+      "SEPARATION"
+  },
+
+  {
+    start: 0.59,
+
+    text:
+      "Whatever happens here <em>may follow you into the morning.</em>",
 
     title:
       "THE FOLLOWING MORNING",
@@ -219,17 +235,17 @@ const narrationSteps = [
       "AFTER-EFFECT",
 
     motif:
-      "WAKING"
+      "MEMORY"
   },
 
   {
-    start: 0.66,
+    start: 0.68,
 
     text:
-      "Then another presence <em>enters the room.</em>",
+      "Then a third light <em>appears.</em>",
 
     title:
-      "THE THIRD PRESENCE",
+      "THE THIRD LIGHT",
 
     emotion:
       "SUSPICION",
@@ -239,23 +255,39 @@ const narrationSteps = [
   },
 
   {
-    start: 0.74,
+    start: 0.745,
 
     text:
-      "The closer you move, <em>the clearer it becomes.</em>",
+      "You do not know <em>who it belongs to.</em>",
 
     title:
-      "THE RED PRESENCE",
+      "THE UNKNOWN PRESENCE",
+
+    emotion:
+      "DOUBT",
+
+    motif:
+      "INTRUSION"
+  },
+
+  {
+    start: 0.795,
+
+    text:
+      "The warmth <em>has changed.</em>",
+
+    title:
+      "THE CHANGING ROOM",
 
     emotion:
       "JEALOUSY",
 
     motif:
-      "DIVISION"
+      "TRANSFORMATION"
   },
 
   {
-    start: 0.82,
+    start: 0.84,
 
     text:
       "It is not <em>a good feeling.</em>",
@@ -268,14 +300,33 @@ const narrationSteps = [
 
     motif:
       "DISCOMFORT"
+  },
+
+  {
+    start: 0.88,
+
+    text:
+      "THAT IS ENOUGH.",
+
+    title:
+      "THAT IS ENOUGH",
+
+    emotion:
+      "OVERLOAD",
+
+    motif:
+      "HEARTBEAT",
+
+    impact:
+      true
   }
 ];
 
 
 const researchSteps = [
   {
-    start: 0.12,
-    end: 0.29,
+    start: 0.1,
+    end: 0.28,
 
     number:
       "RESEARCH NOTE 04.1",
@@ -291,8 +342,8 @@ const researchSteps = [
   },
 
   {
-    start: 0.3,
-    end: 0.46,
+    start: 0.29,
+    end: 0.48,
 
     number:
       "RESEARCH NOTE 04.2",
@@ -308,8 +359,8 @@ const researchSteps = [
   },
 
   {
-    start: 0.47,
-    end: 0.65,
+    start: 0.49,
+    end: 0.675,
 
     number:
       "RESEARCH NOTE 04.3",
@@ -325,8 +376,8 @@ const researchSteps = [
   },
 
   {
-    start: 0.66,
-    end: 0.86,
+    start: 0.68,
+    end: 0.875,
 
     number:
       "RESEARCH NOTE 04.4",
@@ -347,7 +398,11 @@ let currentNarrationIndex = -1;
 
 let narrationTimeout;
 
-let finalImpactPlayed = false;
+let thirdLightImpactPlayed = false;
+
+let enoughImpactPlayed = false;
+
+let finalStormPlayed = false;
 
 
 /* ==========================================
@@ -400,6 +455,12 @@ function displaySentence(index) {
           step.motif;
 
 
+        sentence.classList.toggle(
+          "is-impact",
+          Boolean(step.impact)
+        );
+
+
         sentence.classList.remove(
           "changing"
         );
@@ -410,7 +471,7 @@ function displaySentence(index) {
 
 
 /* ==========================================
-   OBSERVATION SCIENTIFIQUE
+   RECHERCHE
 ========================================== */
 
 function updateResearch(progress) {
@@ -464,13 +525,15 @@ let audioContext = null;
 
 let masterGain = null;
 
+let compressor = null;
+
 let ambienceGain = null;
 
 let warmthGain = null;
 
 let tensionGain = null;
 
-let compressor = null;
+let highTensionGain = null;
 
 let soundEnabled = false;
 
@@ -483,7 +546,7 @@ let currentWarmth = 0;
 let currentJealousy = 0;
 
 
-/* Bruit continu */
+/* Créer du bruit */
 
 function createNoiseBuffer(duration = 3) {
   const length =
@@ -517,7 +580,7 @@ function createNoiseBuffer(duration = 3) {
 }
 
 
-/* Oscillateur continu */
+/* Créer une note continue */
 
 function createDrone(
   frequency,
@@ -545,9 +608,15 @@ function createDrone(
     volume;
 
 
-  oscillator.connect(gain);
+  oscillator.connect(
+    gain
+  );
 
-  gain.connect(destination);
+
+  gain.connect(
+    destination
+  );
+
 
   oscillator.start();
 
@@ -559,7 +628,7 @@ function createDrone(
 }
 
 
-/* Initialisation */
+/* Activer le son */
 
 async function startAudio() {
   const AudioContextClass =
@@ -580,28 +649,30 @@ async function startAudio() {
       new AudioContextClass();
 
 
+    /* Limiteur de sécurité */
+
     compressor =
       audioContext.createDynamicsCompressor();
 
 
     compressor.threshold.value =
-      -20;
+      -19;
 
 
     compressor.knee.value =
-      16;
+      14;
 
 
     compressor.ratio.value =
-      8;
+      9;
 
 
     compressor.attack.value =
-      0.006;
+      0.004;
 
 
     compressor.release.value =
-      0.28;
+      0.26;
 
 
     masterGain =
@@ -622,13 +693,13 @@ async function startAudio() {
     );
 
 
-    /* Respiration et salle */
+    /* Souffle de la pièce */
 
-    const ambienceNoise =
+    const noise =
       audioContext.createBufferSource();
 
 
-    const ambienceFilter =
+    const noiseFilter =
       audioContext.createBiquadFilter();
 
 
@@ -636,35 +707,35 @@ async function startAudio() {
       audioContext.createGain();
 
 
-    ambienceNoise.buffer =
+    noise.buffer =
       createNoiseBuffer();
 
 
-    ambienceNoise.loop = true;
+    noise.loop = true;
 
 
-    ambienceFilter.type =
+    noiseFilter.type =
       "bandpass";
 
 
-    ambienceFilter.frequency.value =
-      580;
+    noiseFilter.frequency.value =
+      620;
 
 
-    ambienceFilter.Q.value =
-      0.7;
+    noiseFilter.Q.value =
+      0.72;
 
 
     ambienceGain.gain.value =
-      0.08;
+      0.075;
 
 
-    ambienceNoise.connect(
-      ambienceFilter
+    noise.connect(
+      noiseFilter
     );
 
 
-    ambienceFilter.connect(
+    noiseFilter.connect(
       ambienceGain
     );
 
@@ -674,10 +745,41 @@ async function startAudio() {
     );
 
 
-    ambienceNoise.start();
+    noise.start();
 
 
-    /* Chaleur harmonique */
+    /* Respiration lente */
+
+    const breathingLFO =
+      audioContext.createOscillator();
+
+
+    const breathingDepth =
+      audioContext.createGain();
+
+
+    breathingLFO.frequency.value =
+      0.14;
+
+
+    breathingDepth.gain.value =
+      0.035;
+
+
+    breathingLFO.connect(
+      breathingDepth
+    );
+
+
+    breathingDepth.connect(
+      ambienceGain.gain
+    );
+
+
+    breathingLFO.start();
+
+
+    /* Harmonie chaude */
 
     warmthGain =
       audioContext.createGain();
@@ -694,26 +796,33 @@ async function startAudio() {
 
     createDrone(
       110,
-      0.22,
+      0.24,
       warmthGain
     );
 
 
     createDrone(
       164.81,
-      0.12,
+      0.13,
       warmthGain
     );
 
 
     createDrone(
       220,
-      0.06,
+      0.065,
       warmthGain
     );
 
 
-    /* Tension désaccordée */
+    createDrone(
+      329.63,
+      0.025,
+      warmthGain
+    );
+
+
+    /* Grondement rouge */
 
     tensionGain =
       audioContext.createGain();
@@ -729,24 +838,55 @@ async function startAudio() {
 
 
     createDrone(
-      39,
-      0.42,
+      36,
+      0.48,
       tensionGain
     );
 
 
     createDrone(
-      42.5,
-      0.28,
+      40.5,
+      0.34,
       tensionGain
     );
 
 
     createDrone(
-      76,
-      0.07,
+      72,
+      0.09,
       tensionGain,
-      "sawtooth"
+      "triangle"
+    );
+
+
+    /* Dissonance aiguë */
+
+    highTensionGain =
+      audioContext.createGain();
+
+
+    highTensionGain.gain.value =
+      0.0001;
+
+
+    highTensionGain.connect(
+      masterGain
+    );
+
+
+    createDrone(
+      182,
+      0.055,
+      highTensionGain,
+      "sine"
+    );
+
+
+    createDrone(
+      187,
+      0.05,
+      highTensionGain,
+      "sine"
     );
   }
 
@@ -769,8 +909,8 @@ async function startAudio() {
 
 
   masterGain.gain.exponentialRampToValueAtTime(
-    0.7,
-    audioContext.currentTime + 1.2
+    0.72,
+    audioContext.currentTime + 1.1
   );
 
 
@@ -790,7 +930,7 @@ async function startAudio() {
 }
 
 
-/* Mise à jour des ambiances */
+/* Adapter l’ambiance au scroll */
 
 function updateAudioScene() {
   if (
@@ -808,30 +948,42 @@ function updateAudioScene() {
   ambienceGain.gain.setTargetAtTime(
     0.065 +
     currentProgress * 0.045 +
-    currentJealousy * 0.06,
+    currentJealousy * 0.08,
     now,
-    0.25
+    0.22
   );
 
 
   warmthGain.gain.setTargetAtTime(
     0.0001 +
-    currentWarmth * 0.24,
+    currentWarmth * 0.29,
     now,
-    0.4
+    0.32
   );
 
 
   tensionGain.gain.setTargetAtTime(
     0.0001 +
-    currentJealousy * 0.48,
+    currentJealousy * 0.56,
     now,
-    0.16
+    0.13
+  );
+
+
+  highTensionGain.gain.setTargetAtTime(
+    0.0001 +
+    Math.pow(
+      currentJealousy,
+      2
+    ) *
+    0.22,
+    now,
+    0.12
   );
 }
 
 
-/* Un battement épais */
+/* Battement */
 
 function playHeartbeat(
   strength = 1,
@@ -853,11 +1005,11 @@ function playHeartbeat(
     audioContext.createOscillator();
 
 
-  const oscillatorGain =
+  const gain =
     audioContext.createGain();
 
 
-  const lowFilter =
+  const filter =
     audioContext.createBiquadFilter();
 
 
@@ -872,53 +1024,53 @@ function playHeartbeat(
 
 
   oscillator.frequency.setValueAtTime(
-    92,
+    96,
     now
   );
 
 
   oscillator.frequency.exponentialRampToValueAtTime(
-    34,
-    now + 0.3
+    31,
+    now + 0.33
   );
 
 
-  oscillatorGain.gain.setValueAtTime(
+  filter.type =
+    "lowpass";
+
+
+  filter.frequency.value =
+    175;
+
+
+  gain.gain.setValueAtTime(
     0.0001,
     now
   );
 
 
-  oscillatorGain.gain.exponentialRampToValueAtTime(
+  gain.gain.exponentialRampToValueAtTime(
     Math.min(
-      0.9,
-      0.34 * strength
+      0.95,
+      0.38 * strength
     ),
-    now + 0.014
+    now + 0.012
   );
 
 
-  oscillatorGain.gain.exponentialRampToValueAtTime(
+  gain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 0.34
+    now + 0.36
   );
-
-
-  lowFilter.type =
-    "lowpass";
-
-
-  lowFilter.frequency.value =
-    170;
 
 
   oscillator.connect(
-    lowFilter
+    filter
   );
 
 
-  lowFilter.connect(
-    oscillatorGain
+  filter.connect(
+    gain
   );
 
 
@@ -931,7 +1083,7 @@ function playHeartbeat(
       );
 
 
-    oscillatorGain.connect(
+    gain.connect(
       panner
     );
 
@@ -940,7 +1092,7 @@ function playHeartbeat(
       masterGain
     );
   } else {
-    oscillatorGain.connect(
+    gain.connect(
       masterGain
     );
   }
@@ -949,11 +1101,11 @@ function playHeartbeat(
   oscillator.start(now);
 
   oscillator.stop(
-    now + 0.36
+    now + 0.38
   );
 
 
-  /* Impact organique */
+  /* Coup organique */
 
   const noise =
     audioContext.createBufferSource();
@@ -968,7 +1120,7 @@ function playHeartbeat(
 
 
   noise.buffer =
-    createNoiseBuffer(0.4);
+    createNoiseBuffer(0.45);
 
 
   noiseFilter.type =
@@ -976,13 +1128,13 @@ function playHeartbeat(
 
 
   noiseFilter.frequency.value =
-    120;
+    135;
 
 
   noiseGain.gain.setValueAtTime(
     Math.min(
-      0.4,
-      0.12 * strength
+      0.46,
+      0.14 * strength
     ),
     now
   );
@@ -990,7 +1142,7 @@ function playHeartbeat(
 
   noiseGain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 0.22
+    now + 0.25
   );
 
 
@@ -1012,12 +1164,12 @@ function playHeartbeat(
   noise.start(now);
 
   noise.stop(
-    now + 0.25
+    now + 0.28
   );
 }
 
 
-/* Double battement */
+/* Double coup du cœur */
 
 function heartbeatSequence() {
   if (!soundEnabled) {
@@ -1026,20 +1178,16 @@ function heartbeatSequence() {
 
 
   const strength =
-    0.8 +
-    currentProgress * 0.45 +
-    currentJealousy * 1.15;
-
-
-  const pan =
-    currentJealousy > 0.25
-      ? -0.42
-      : -0.12;
+    0.78 +
+    currentProgress * 0.48 +
+    currentJealousy * 1.25;
 
 
   playHeartbeat(
     strength,
-    pan
+    currentJealousy > 0.25
+      ? -0.5
+      : -0.12
   );
 
 
@@ -1048,13 +1196,13 @@ function heartbeatSequence() {
       playHeartbeat(
         strength * 0.78,
         currentJealousy > 0.25
-          ? 0.5
+          ? 0.52
           : 0.12
       );
     },
-    currentJealousy > 0.4
-      ? 145
-      : 220
+    currentJealousy > 0.45
+      ? 135
+      : 215
   );
 
 
@@ -1076,25 +1224,29 @@ function scheduleHeartbeat() {
 
 
   const delay =
-    1380 -
-    currentProgress * 270 -
-    currentJealousy * 720;
+    1400 -
+    currentProgress * 250 -
+    currentJealousy * 790;
 
 
   heartbeatTimer =
     window.setTimeout(
       heartbeatSequence,
       Math.max(
-        390,
+        360,
         delay
       )
     );
 }
 
 
-/* Battements extrêmes de fin */
+/* Impact sonore dramatique */
 
-function playFinalHeartbeatStorm() {
+function playImpact(
+  frequency = 40,
+  strength = 1,
+  duration = 1.2
+) {
   if (
     !audioContext ||
     !soundEnabled
@@ -1103,14 +1255,100 @@ function playFinalHeartbeatStorm() {
   }
 
 
+  const now =
+    audioContext.currentTime;
+
+
+  const oscillator =
+    audioContext.createOscillator();
+
+
+  const gain =
+    audioContext.createGain();
+
+
+  oscillator.type =
+    "sine";
+
+
+  oscillator.frequency.setValueAtTime(
+    frequency * 2.2,
+    now
+  );
+
+
+  oscillator.frequency.exponentialRampToValueAtTime(
+    frequency,
+    now + duration
+  );
+
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    Math.min(
+      0.95,
+      0.62 * strength
+    ),
+    now + 0.018
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + duration
+  );
+
+
+  oscillator.connect(
+    gain
+  );
+
+
+  gain.connect(
+    masterGain
+  );
+
+
+  oscillator.start(now);
+
+  oscillator.stop(
+    now + duration + 0.05
+  );
+}
+
+
+/* Tempête finale */
+
+function playHeartbeatStorm() {
+  if (
+    !audioContext ||
+    !soundEnabled
+  ) {
+    return;
+  }
+
+
+  playImpact(
+    27,
+    1.5,
+    1.7
+  );
+
+
   const beats = [
     0,
-    310,
-    560,
-    790,
-    990,
-    1170,
-    1330
+    300,
+    545,
+    755,
+    940,
+    1100,
+    1245,
+    1380
   ];
 
 
@@ -1119,11 +1357,11 @@ function playFinalHeartbeatStorm() {
       window.setTimeout(
         function () {
           playHeartbeat(
-            1.75 +
+            1.85 +
             index * 0.08,
             index % 2 === 0
-              ? -0.35
-              : 0.35
+              ? -0.52
+              : 0.52
           );
         },
         delay
@@ -1133,7 +1371,7 @@ function playFinalHeartbeatStorm() {
 }
 
 
-/* Couper */
+/* Couper le son */
 
 function stopAudio() {
   soundEnabled = false;
@@ -1180,7 +1418,7 @@ soundControl.addEventListener(
 
 
 /* ==========================================
-   ÉCRAN D’ENTRÉE
+   ENTRÉE
 ========================================== */
 
 function enterExperience() {
@@ -1211,6 +1449,26 @@ enterWithoutSound.addEventListener(
 
 
 /* ==========================================
+   FLASH
+========================================== */
+
+function triggerFlash(className) {
+  finalFlash.classList.remove(
+    "enough-flash",
+    "pulse-flash"
+  );
+
+
+  void finalFlash.offsetWidth;
+
+
+  finalFlash.classList.add(
+    className
+  );
+}
+
+
+/* ==========================================
    SCROLL
 ========================================== */
 
@@ -1234,7 +1492,7 @@ function updateRomance() {
   const approach =
     range(
       progress,
-      0.08,
+      0.07,
       0.58
     );
 
@@ -1242,67 +1500,71 @@ function updateRomance() {
   const warmth =
     range(
       progress,
-      0.27,
-      0.5
+      0.13,
+      0.48
     ) *
     (
       1 -
       range(
         progress,
-        0.63,
-        0.79
+        0.69,
+        0.82
       ) *
-      0.66
+      0.72
     );
 
 
   const jealousy =
     range(
       progress,
-      0.62,
-      0.84
+      0.67,
+      0.87
     );
 
 
-  /* Fin volontairement séparée */
+  /* You want the dream to be over */
 
-  const endingDesireAppearance =
+  const desireIn =
     range(
       progress,
-      0.87,
-      0.9
+      0.91,
+      0.925
     );
 
 
-  const endingDesireDeparture =
+  const desireOut =
     range(
       progress,
-      0.915,
-      0.94
+      0.94,
+      0.952
     );
 
 
   const endingDesire =
-    endingDesireAppearance *
+    desireIn *
     (
       1 -
-      endingDesireDeparture
+      desireOut
     );
 
+
+  /* But your pulse disagrees */
 
   const endingPulse =
     range(
       progress,
-      0.935,
-      0.965
+      0.955,
+      0.973
     );
 
+
+  /* Bouton Action */
 
   const endingButton =
     range(
       progress,
-      0.97,
-      0.992
+      0.98,
+      0.994
     );
 
 
@@ -1388,86 +1650,141 @@ function updateRomance() {
   );
 
 
+  /* Phase rouge */
+
+  page.classList.toggle(
+    "phase-jealousy",
+    progress >= 0.67
+  );
+
+
+  /* THAT IS ENOUGH */
+
+  page.classList.toggle(
+    "phase-enough",
+    progress >= 0.88 &&
+    progress < 0.91
+  );
+
+
+  /* Fin */
+
+  page.classList.toggle(
+    "phase-ending",
+    progress >= 0.91
+  );
+
+
+  sentence.style.visibility =
+    progress >= 0.91
+      ? "hidden"
+      : "visible";
+
+
+  /* Impact de la troisième lumière */
+
   if (
-    progress >= 0.62
+    progress >= 0.68 &&
+    !thirdLightImpactPlayed
   ) {
-    page.classList.add(
-      "phase-jealousy"
-    );
-  } else {
-    page.classList.remove(
-      "phase-jealousy"
+    thirdLightImpactPlayed = true;
+
+
+    playImpact(
+      48,
+      0.72,
+      1.1
     );
   }
 
 
   if (
-    progress >= 0.87
+    progress < 0.66
   ) {
-    page.classList.add(
-      "phase-ending"
+    thirdLightImpactPlayed = false;
+  }
+
+
+  /* Impact THAT IS ENOUGH */
+
+  if (
+    progress >= 0.88 &&
+    !enoughImpactPlayed
+  ) {
+    enoughImpactPlayed = true;
+
+
+    triggerFlash(
+      "enough-flash"
     );
 
 
-    sentence.style.visibility =
-      "hidden";
-  } else {
-    page.classList.remove(
-      "phase-ending"
+    playImpact(
+      31,
+      1.35,
+      1.55
     );
 
 
-    sentence.style.visibility =
-      "visible";
+    playHeartbeat(
+      2,
+      0
+    );
   }
 
 
   if (
-    progress >= 0.935 &&
-    !finalImpactPlayed
+    progress < 0.86
   ) {
-    finalImpactPlayed = true;
+    enoughImpactPlayed = false;
+  }
 
 
-    finalFlash.classList.remove(
-      "active"
+  /* Tempête du pouls */
+
+  if (
+    progress >= 0.955 &&
+    !finalStormPlayed
+  ) {
+    finalStormPlayed = true;
+
+
+    triggerFlash(
+      "pulse-flash"
     );
 
 
-    void finalFlash.offsetWidth;
-
-
-    finalFlash.classList.add(
-      "active"
-    );
-
-
-    playFinalHeartbeatStorm();
+    playHeartbeatStorm();
   }
 
 
   if (
-    progress < 0.9
+    progress < 0.94
   ) {
-    finalImpactPlayed = false;
+    finalStormPlayed = false;
   }
 
 
-  if (progress < 0.12) {
+  /* Instructions */
+
+  if (progress < 0.18) {
     scrollInstruction.textContent =
       "APPROACH THE LIGHT";
-  } else if (progress < 0.36) {
+  } else if (progress < 0.39) {
     scrollInstruction.textContent =
       "CROSS THE DISTANCE";
-  } else if (progress < 0.62) {
+  } else if (progress < 0.67) {
     scrollInstruction.textContent =
       "STAY IN THE DREAM";
-  } else if (progress < 0.87) {
+  } else if (progress < 0.88) {
     scrollInstruction.textContent =
-      "FOLLOW THE PULSE";
+      "FOLLOW THE THIRD LIGHT";
+  } else if (progress < 0.955) {
+    scrollInstruction.textContent =
+      "LET THE DREAM END";
   } else {
     scrollInstruction.textContent =
-      "KEEP GOING";
+      "FOLLOW THE PULSE";
   }
 
 
@@ -1504,8 +1821,8 @@ function createParticles() {
 
   const amount =
     window.innerWidth < 700
-      ? 38
-      : 68;
+      ? 40
+      : 72;
 
 
   for (
@@ -1523,14 +1840,14 @@ function createParticles() {
         canvasHeight,
 
       radius:
-        0.7 +
+        0.6 +
         Math.random() *
-        1.7,
+        1.8,
 
       speed:
         0.1 +
         Math.random() *
-        0.3,
+        0.32,
 
       phase:
         Math.random() *
@@ -1538,9 +1855,9 @@ function createParticles() {
         2,
 
       opacity:
-        0.2 +
+        0.18 +
         Math.random() *
-        0.48
+        0.52
     });
   }
 }
@@ -1597,26 +1914,26 @@ function animateParticles(time) {
 
   particles.forEach(
     function (particle) {
-      const acceleration =
+      const speedBoost =
         1 +
         currentJealousy *
-        4.2;
+        5;
 
 
       particle.y -=
         particle.speed *
-        acceleration;
+        speedBoost;
 
 
       particle.x +=
         Math.sin(
-          time * 0.001 +
+          time * 0.0015 +
           particle.phase
         ) *
         (
           0.08 +
           currentJealousy *
-          0.48
+          0.65
         );
 
 
@@ -1634,12 +1951,12 @@ function animateParticles(time) {
 
 
       const pulse =
-        0.62 +
+        0.6 +
         Math.sin(
-          time * 0.0025 +
+          time * 0.003 +
           particle.phase
         ) *
-        0.38;
+        0.4;
 
 
       context.beginPath();
@@ -1649,7 +1966,7 @@ function animateParticles(time) {
         particle.x,
         particle.y,
         particle.radius +
-        currentJealousy * 0.9,
+        currentJealousy,
         0,
         Math.PI * 2
       );
@@ -1658,14 +1975,14 @@ function animateParticles(time) {
       context.fillStyle =
         currentJealousy > 0.05
 
-          ? "rgba(255,45,80," +
+          ? "rgba(255,36,76," +
             particle.opacity *
             pulse +
             ")"
 
           : currentWarmth > 0.2
 
-            ? "rgba(255,202,165," +
+            ? "rgba(255,193,148," +
               particle.opacity *
               pulse +
               ")"
@@ -1708,13 +2025,13 @@ window.addEventListener(
 
     page.style.setProperty(
       "--pointer-x",
-      horizontal * 17 + "px"
+      horizontal * 18 + "px"
     );
 
 
     page.style.setProperty(
       "--pointer-y",
-      vertical * 10 + "px"
+      vertical * 11 + "px"
     );
   },
   {
@@ -1724,7 +2041,7 @@ window.addEventListener(
 
 
 /* ==========================================
-   PAGE ACTION
+   ACTION
 ========================================== */
 
 enterAction.addEventListener(
@@ -1747,7 +2064,7 @@ enterAction.addEventListener(
     );
 
 
-    playFinalHeartbeatStorm();
+    playHeartbeatStorm();
 
 
     window.setTimeout(
