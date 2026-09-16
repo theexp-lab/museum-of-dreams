@@ -667,7 +667,7 @@ function tone(
 
 
 /* ==========================================
-   SIGNAL ROUGE
+   BALISE SONORE DU SIGNAL ROUGE
 ========================================== */
 
 function signalPing() {
@@ -688,15 +688,41 @@ function signalPing() {
 }
 
 
-function setSignalPulse(
-  scene
-) {
+/* Signal urgent sur le toit */
+
+function urgentSignalPing() {
+  tone(
+    930,
+    0.19,
+    0.095,
+    "triangle"
+  );
+
+  tone(
+    1395,
+    0.13,
+    0.045,
+    "sine",
+    0.045
+  );
+
+  tone(
+    1860,
+    0.09,
+    0.022,
+    "sine",
+    0.1
+  );
+}
+
+
+function setSignalPulse(scene) {
   window.clearInterval(
     signalToneTimer
   );
 
-  signalToneTimer =
-    null;
+  signalToneTimer = null;
+
 
   if (
     !soundEnabled ||
@@ -706,7 +732,7 @@ function setSignalPulse(
   }
 
 
-  /* Signal encore lointain */
+  /* Le signal apparaît au loin */
 
   if (
     scene === "directions"
@@ -721,7 +747,7 @@ function setSignalPulse(
   }
 
 
-  /* Signal plus urgent */
+  /* Le signal accélère pendant la poursuite */
 
   if (
     scene === "pursuit"
@@ -731,7 +757,25 @@ function setSignalPulse(
     signalToneTimer =
       window.setInterval(
         signalPing,
-        760
+        720
+      );
+  }
+
+
+  /*
+   * Le signal attend sur le toit :
+   * beaucoup plus rapide et plus puissant.
+   */
+
+  if (
+    scene === "rooftop"
+  ) {
+    urgentSignalPing();
+
+    signalToneTimer =
+      window.setInterval(
+        urgentSignalPing,
+        390
       );
   }
 }
