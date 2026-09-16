@@ -1,2436 +1,610 @@
-/* ==========================================
-   THE MUSEUM OF DREAMS
-   ROOM 04 — ROMANCE
-========================================== */
+<!DOCTYPE html>
 
+<html lang="en">
 
-/* ==========================================
-   VARIABLES
-========================================== */
+<head>
 
-:root {
-  --ivory: #fff8f0;
-  --pearl: #e9e0df;
-  --pink: #ff9da9;
-  --warm-pink: #ff6f76;
-  --red: #ff2f35;
-  --deep-red: #7d0710;
-  --wine: #26050d;
-  --night: #09070d;
+  <meta charset="UTF-8">
 
-  --progress: 0;
-  --intro-opacity: 1;
-  --approach: 0;
-  --warmth: 0;
-  --pink: 0;
-  --jealousy: 0;
-  --darkness: 0;
-  --third-light: 0;
-  --ending-desire: 0;
-  --ending-pulse: 0;
-  --ending-button: 0;
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  --pointer-x: 0px;
-  --pointer-y: 0px;
-}
+  <meta
+    name="theme-color"
+    content="#10070b"
+  >
 
+  <meta
+    name="description"
+    content="Action — Room 05 of The Museum of Dreams."
+  >
 
-/* ==========================================
-   RESET
-========================================== */
+  <title>
+    Action — Museum of Dreams
+  </title>
 
-* {
-  box-sizing: border-box;
-}
 
-html {
-  min-width: 320px;
-  min-height: 100%;
+  <!-- Polices -->
 
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-  background: var(--night);
-}
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
-body {
-  min-width: 320px;
-  min-height: 100%;
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
 
-  margin: 0;
 
-  overflow-x: hidden;
+  <!-- CSS de la salle -->
 
-  color: var(--ivory);
+  <link
+    rel="stylesheet"
+    href="./action.css?v=2"
+  >
 
-  background:
-    var(--night);
+</head>
 
-  font-family:
-    "DM Mono",
-    monospace;
-}
 
-button,
-a {
-  color: inherit;
-  font: inherit;
-}
+<body
+  class="action-page"
+  data-scene="introduction"
+>
 
-button {
-  border: 0;
-}
 
-a {
-  text-decoration: none;
-}
+  <!-- ==========================================
+       MONDE FIXE DE L’INSTALLATION
+  =========================================== -->
 
+  <div
+    class="action-world"
+    aria-hidden="true"
+  >
 
-/* ==========================================
-   ÉCRAN D’ENTRÉE
-========================================== */
+    <div class="room-background"></div>
 
-.experience-gate {
-  position: fixed;
-  inset: 0;
+    <div class="room-redness"></div>
 
-  z-index: 500;
+    <div class="room-darkness"></div>
 
-  display: grid;
-  place-content: center;
+    <div class="ceiling-light"></div>
 
-  padding:
-    50px 24px;
+    <div class="back-wall"></div>
 
-  overflow: hidden;
+    <div class="left-wall"></div>
 
-  text-align: center;
+    <div class="right-wall"></div>
 
-  background:
-    radial-gradient(
-      circle at 50% 54%,
-      rgba(255, 124, 137, 0.16),
-      transparent 25%
-    ),
+    <div class="museum-floor"></div>
 
-    radial-gradient(
-      circle at 50% 50%,
-      #30202d,
-      #130d16 45%,
-      #07060a 82%
-    );
+    <div class="floor-reflection"></div>
 
-  transition:
-    opacity 900ms ease,
-    visibility 900ms ease;
-}
 
-.experience-gate::before {
-  content: "";
+    <!-- Ligne reliant Romance à Action -->
 
-  position: absolute;
+    <div class="pulse-thread">
 
-  top: 50%;
-  left: 50%;
+      <span></span>
 
-  width:
-    min(65vw, 850px);
+    </div>
 
-  aspect-ratio: 1;
 
-  border-radius: 50%;
+    <!-- Installation centrale -->
 
-  opacity: 0.34;
+    <div class="sleeping-installation">
 
-  pointer-events: none;
+      <div class="installation-beam"></div>
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 197, 198, 0.22),
-      rgba(255, 91, 103, 0.08) 34%,
-      transparent 68%
-    );
+      <div class="sleeping-platform"></div>
 
-  filter:
-    blur(25px);
+      <div class="body-trace"></div>
 
-  transform:
-    translate(-50%, -50%);
+    </div>
 
-  animation:
-    gateBreathing
-    5.5s ease-in-out infinite;
-}
 
-.experience-gate.hidden {
-  visibility: hidden;
+    <!-- Source lumineuse persistante -->
 
-  opacity: 0;
+    <div class="pulse-source">
 
-  pointer-events: none;
-}
+      <span class="pulse-core"></span>
 
-.experience-gate > * {
-  position: relative;
+      <span class="pulse-ring ring-one"></span>
 
-  z-index: 2;
-}
+      <span class="pulse-ring ring-two"></span>
 
-.gate-room {
-  margin:
-    0 0 29px;
+      <span class="pulse-ring ring-three"></span>
 
-  font-size: 8px;
+    </div>
 
-  letter-spacing: 0.22em;
 
-  text-transform: uppercase;
+    <!-- Mouvement 01 : poursuite -->
 
-  opacity: 0.56;
-}
+    <div class="chase-space">
 
-.experience-gate h1 {
-  margin: 0;
+      <span class="chase-frame frame-one"></span>
 
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
+      <span class="chase-frame frame-two"></span>
 
-  font-size:
-    clamp(62px, 9vw, 145px);
+      <span class="chase-frame frame-three"></span>
 
-  font-weight: 400;
+      <span class="chase-frame frame-four"></span>
 
-  line-height: 0.82;
+      <span class="chase-frame frame-five"></span>
 
-  letter-spacing: -0.055em;
-}
 
-.experience-gate h1 em {
-  display: block;
+      <div class="moving-exit">
 
-  color: #ffc0c6;
+        <span>
+          EXIT
+        </span>
 
-  font-family:
-    "Gloock",
-    Georgia,
-    serif;
+      </div>
 
-  font-weight: 400;
-}
+    </div>
 
-.gate-description {
-  max-width: 440px;
 
-  margin:
-    48px auto 30px;
+    <!-- Mouvement 02 : chute -->
 
-  font-size: 8px;
+    <div class="fall-space">
 
-  line-height: 1.8;
+      <div class="fall-edge"></div>
 
-  letter-spacing: 0.12em;
+      <div class="fall-layer layer-one"></div>
 
-  text-transform: uppercase;
+      <div class="fall-layer layer-two"></div>
 
-  opacity: 0.48;
-}
+      <div class="fall-layer layer-three"></div>
 
-.gate-description span {
-  display: block;
-}
+      <div class="fall-layer layer-four"></div>
 
-.gate-actions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+      <div class="fall-centre"></div>
 
-  gap: 12px;
-}
+    </div>
 
-.gate-actions button {
-  min-width: 220px;
 
-  padding:
-    15px 21px;
+    <!-- Mouvement 03 : impact -->
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.28);
+    <div class="impact-space">
 
-  color: var(--ivory);
+      <div class="impact-wall"></div>
 
-  background:
-    rgba(255, 255, 255, 0.025);
+      <span class="impact-point point-one"></span>
 
-  font-size: 8px;
+      <span class="impact-point point-two"></span>
 
-  letter-spacing: 0.15em;
+      <span class="impact-point point-three"></span>
 
-  cursor: pointer;
+      <span class="impact-point point-four"></span>
 
-  transition:
-    color 300ms ease,
-    background 300ms ease,
-    border-color 300ms ease,
-    box-shadow 300ms ease;
-}
+      <div class="impact-light"></div>
 
-#enter-with-sound {
-  border-color:
-    rgba(255, 150, 161, 0.68);
+    </div>
 
-  background:
-    rgba(255, 111, 125, 0.09);
-}
 
-.gate-actions button:hover {
-  color: #110a0d;
+    <!-- Sortie vers Nightmare -->
 
-  background:
-    var(--ivory);
+    <div class="nightmare-space">
 
-  border-color:
-    var(--ivory);
+      <div class="nightmare-door">
 
-  box-shadow:
-    0 0 40px
-    rgba(255, 166, 176, 0.18);
-}
+        <div class="door-interior"></div>
 
+        <div class="door-pulse"></div>
 
-/* ==========================================
-   MONDE ABSTRAIT
-========================================== */
+      </div>
 
-.romance-world {
-  position: fixed;
-  inset: 0;
+    </div>
 
-  z-index: 0;
 
-  overflow: hidden;
+    <!-- Quelques particules seulement -->
 
-  pointer-events: none;
+    <div
+      class="action-particles"
+      id="action-particles"
+    ></div>
 
-  background:
-    linear-gradient(
-      180deg,
-      #17131e 0%,
-      #231722 48%,
-      #100911 100%
-    );
+  </div>
 
-  transition:
-    background 1200ms ease;
-}
 
-.romance-world::before {
-  content: "";
+  <!-- ==========================================
+       NAVIGATION DU MUSÉE
+  =========================================== -->
 
-  position: absolute;
-  inset: -15%;
+  <header class="action-header">
 
-  z-index: 20;
+    <a href="romance.html">
+      THE MUSEUM OF DREAMS
+    </a>
 
-  pointer-events: none;
 
-  background:
-    radial-gradient(
-      ellipse at 50% 48%,
-      transparent 22%,
-      rgba(7, 4, 10, 0.08) 55%,
-      rgba(5, 2, 7, 0.72) 112%
-    );
-}
+    <div class="room-location">
 
-.colour-field {
-  position: absolute;
-  inset: -12%;
+      <span class="location-pulse"></span>
 
-  pointer-events: none;
+      <span id="room-location-text">
+        ROOM 05 · ACTION
+      </span>
 
-  transition:
-    opacity 900ms linear,
-    transform 1400ms ease;
-}
+    </div>
 
-.pearl-field {
-  opacity:
-    calc(1 - var(--darkness));
 
-  background:
-    radial-gradient(
-      circle at 50% 42%,
-      rgba(255, 240, 230, 0.2),
-      rgba(216, 183, 193, 0.08) 33%,
-      transparent 69%
-    );
+    <button
+      type="button"
+      id="sound-control"
+      aria-pressed="false"
+    >
+      MOVE TO HEAR THE ROOM
+    </button>
 
-  filter:
-    blur(18px);
+  </header>
 
-  transform:
-    translate(
-      calc(var(--pointer-x) * -0.35),
-      calc(var(--pointer-y) * -0.25)
-    );
-}
 
-.warm-field {
-  opacity:
-    var(--warmth);
+  <!-- ==========================================
+       CARTEL DYNAMIQUE
+  =========================================== -->
 
-  background:
-    radial-gradient(
-      ellipse at 50% 57%,
-      rgba(255, 172, 126, 0.56),
-      rgba(244, 91, 100, 0.18) 39%,
-      transparent 72%
-    );
+  <aside class="museum-label">
 
-  filter:
-    blur(23px);
+    <span id="installation-number">
+      ROOM 05
+    </span>
 
-  transform:
-    scale(
-      calc(0.82 + var(--warmth))
-    );
-}
 
-.pink-field {
-  opacity:
-    var(--pink);
+    <strong id="installation-title">
+      THE BODY THAT NEVER MOVED
+    </strong>
 
-  background:
-    radial-gradient(
-      circle at 48% 48%,
-      rgba(255, 104, 130, 0.44),
-      rgba(185, 29, 70, 0.16) 42%,
-      transparent 73%
-    );
 
-  filter:
-    blur(18px);
+    <p id="installation-medium">
 
-  transform:
-    translate(
-      calc(var(--pointer-x) * 0.25),
-      calc(var(--pointer-y) * 0.2)
-    );
-}
+      KINETIC LIGHT · SPATIAL SOUND
+      <br>
 
-.red-field {
-  opacity:
-    var(--jealousy);
+      RESPONSIVE ARCHITECTURE
 
-  background:
-    radial-gradient(
-      ellipse at 62% 50%,
-      rgba(255, 31, 43, 0.72),
-      rgba(141, 5, 23, 0.46) 35%,
-      transparent 69%
-    ),
+    </p>
 
-    radial-gradient(
-      ellipse at 27% 63%,
-      rgba(255, 65, 70, 0.42),
-      transparent 56%
-    ),
 
-    linear-gradient(
-      150deg,
-      rgba(76, 3, 15, 0.2),
-      rgba(211, 7, 31, 0.29),
-      rgba(35, 1, 8, 0.5)
-    );
+    <dl>
 
-  filter:
-    saturate(1.3)
-    blur(10px);
+      <div>
 
-  transform:
-    scale(
-      calc(0.92 + var(--jealousy))
-    );
-}
+        <dt>
+          SIMULATED PULSE
+        </dt>
 
-.dark-field {
-  opacity:
-    var(--darkness);
+        <dd id="pulse-value">
+          66 BPM
+        </dd>
 
-  background:
-    radial-gradient(
-      circle at 50% 46%,
-      transparent 6%,
-      rgba(46, 0, 10, 0.22) 37%,
-      rgba(5, 1, 6, 0.87) 95%
-    ),
+      </div>
 
-    linear-gradient(
-      180deg,
-      rgba(5, 1, 7, 0.13),
-      rgba(18, 0, 7, 0.64)
-    );
-}
 
+      <div>
 
-/* ==========================================
-   HORIZON ET SOL
-========================================== */
+        <dt>
+          MOVEMENT
+        </dt>
 
-.dream-horizon {
-  position: absolute;
+        <dd id="movement-status">
+          STILLNESS
+        </dd>
 
-  top: 59%;
-  right: -15%;
-  left: -15%;
+      </div>
 
-  height: 1px;
+    </dl>
 
-  opacity:
-    calc(0.16 + var(--warmth));
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 228, 210, 0.45),
-      rgba(255, 117, 125, 0.67),
-      rgba(255, 228, 210, 0.45),
-      transparent
-    );
+    <small>
+      PROPOSED COMMISSION
+    </small>
 
-  box-shadow:
-    0 0 40px
-    rgba(255, 116, 123, 0.22);
+  </aside>
 
-  filter:
-    blur(0.4px);
-}
 
-.reflective-floor {
-  position: absolute;
+  <!-- ==========================================
+       NOTE SCIENTIFIQUE
+  =========================================== -->
 
-  right: -20%;
-  bottom: -25%;
-  left: -20%;
+  <aside class="research-note">
 
-  height: 67%;
+    <span id="research-number">
+      RESEARCH NOTE 05.1
+    </span>
 
-  opacity:
-    calc(0.22 + var(--warmth));
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 178, 165, 0.13),
-      rgba(91, 12, 29, 0.18) 36%,
-      rgba(3, 2, 6, 0.42) 100%
-    );
+    <p id="research-text">
 
-  clip-path:
-    polygon(
-      18% 0,
-      82% 0,
-      100% 100%,
-      0 100%
-    );
+      Changes in cardiac activity may accompany
+      emotionally intense dream experiences.
 
-  transform:
-    perspective(800px)
-    rotateX(58deg);
+    </p>
 
-  transform-origin:
-    bottom;
-}
 
-.reflective-floor::after {
-  content: "";
+    <strong id="research-principle">
+      BODY · DREAM · RESPONSE
+    </strong>
 
-  position: absolute;
 
-  top: 0;
-  left: 50%;
+    <a
+      id="research-source"
+      href="https://pubmed.ncbi.nlm.nih.gov/25565936/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      VIEW SOURCE ↗
+    </a>
 
-  width: 58%;
-  height: 100%;
+  </aside>
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 135, 142, 0.28),
-      transparent 74%
-    );
 
-  filter:
-    blur(26px);
+  <!-- ==========================================
+       PARCOURS
+  =========================================== -->
 
-  transform:
-    translateX(-50%);
-}
+  <main class="action-journey">
 
 
-/* ==========================================
-   RUBANS LUMINEUX
-========================================== */
+    <!-- INTRODUCTION -->
 
-.ambient-ribbons {
-  position: absolute;
-  inset: 0;
+    <section
+      class="action-scene active"
+      data-scene="introduction"
+      data-index="0"
+    >
 
-  pointer-events: none;
+      <div class="scene-content">
 
-  opacity:
-    calc(0.3 + var(--warmth));
-}
+        <p class="scene-room">
+          ROOM 05 · ACTION
+        </p>
 
-.ambient-ribbon {
-  position: absolute;
 
-  display: block;
+        <h1>
 
-  height: 1px;
+          THE BODY
 
-  border-radius: 50%;
+          <em>
+            THAT NEVER MOVED
+          </em>
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 229, 221, 0.58),
-      rgba(255, 105, 122, 0.42),
-      transparent
-    );
+        </h1>
 
-  filter:
-    blur(0.5px);
 
-  transform-origin:
-    center;
+        <p class="main-sentence">
 
-  animation:
-    ribbonDrift
-    11s ease-in-out infinite;
-}
+          The body never left the bed.
 
-.ribbon-one {
-  top: 23%;
-  left: -8%;
+          <span>
+            The pulse went somewhere else.
+          </span>
 
-  width: 52%;
+        </p>
 
-  transform:
-    rotate(11deg);
-}
 
-.ribbon-two {
-  top: 34%;
-  right: -12%;
+        <p class="curatorial-description">
 
-  width: 59%;
+          A kinetic installation about movement
+          experienced by a motionless sleeper.
 
-  animation-delay:
-    -3s;
+        </p>
 
-  transform:
-    rotate(-9deg);
-}
+      </div>
 
-.ribbon-three {
-  bottom: 29%;
-  left: -13%;
+    </section>
 
-  width: 61%;
 
-  animation-delay:
-    -6s;
+    <!-- THE CHASE -->
 
-  transform:
-    rotate(-6deg);
-}
+    <section
+      class="action-scene"
+      data-scene="chase"
+      data-index="1"
+    >
 
-.ribbon-four {
-  right: -5%;
-  bottom: 18%;
+      <div class="scene-content">
 
-  width: 44%;
+        <p class="scene-room">
+          MOVEMENT 01
+        </p>
 
-  animation-delay:
-    -8s;
 
-  transform:
-    rotate(8deg);
-}
+        <h2>
 
+          THE
 
-/* ==========================================
-   PRÉSENCES DE LUMIÈRE
-========================================== */
+          <em>
+            CHASE
+          </em>
 
-.light-presence,
-.visitor-light {
-  position: absolute;
+        </h2>
 
-  top: 47%;
 
-  pointer-events: none;
+        <p class="main-sentence">
 
-  transition:
-    opacity 850ms ease,
-    filter 900ms ease,
-    transform 1100ms
-    cubic-bezier(
-      0.2,
-      0.75,
-      0.2,
-      1
-    );
-}
+          The sleeper
+          does not run.
 
-.light-presence {
-  width:
-    min(31vw, 490px);
+          <span>
+            The dream builds
+            the chase around them.
+          </span>
 
-  aspect-ratio: 0.72;
-}
+        </p>
 
-.first-presence {
-  left: 39%;
+      </div>
 
-  opacity:
-    calc(0.2 + var(--approach));
+    </section>
 
-  transform:
-    translate(
-      calc(-50% + var(--pointer-x)),
-      calc(-50% + var(--pointer-y))
-    )
-    scale(
-      calc(
-        0.34 +
-        var(--approach) +
-        var(--ending-pulse)
-      )
-    );
-}
 
-.visitor-light {
-  left: 61%;
+    <!-- THE FALL -->
 
-  width:
-    min(28vw, 430px);
+    <section
+      class="action-scene"
+      data-scene="fall"
+      data-index="2"
+    >
 
-  aspect-ratio: 0.75;
+      <div class="scene-content">
 
-  border-radius:
-    44% 56% 52% 48% /
-    39% 44% 56% 61%;
+        <p class="scene-room">
+          MOVEMENT 02
+        </p>
 
-  opacity:
-    calc(0.12 + var(--approach));
 
-  background:
-    radial-gradient(
-      ellipse at 50% 45%,
-      rgba(255, 251, 240, 0.92),
-      rgba(255, 197, 188, 0.57) 18%,
-      rgba(255, 102, 121, 0.25) 43%,
-      transparent 72%
-    );
+        <h2>
 
-  filter:
-    blur(19px)
-    drop-shadow(
-      0 0 55px
-      rgba(255, 105, 123, 0.26)
-    );
+          THE
 
-  transform:
-    translate(
-      calc(-50% - var(--pointer-x)),
-      calc(-50% - var(--pointer-y))
-    )
-    scale(
-      calc(
-        0.25 +
-        var(--approach) +
-        var(--ending-pulse)
-      )
-    );
+          <em>
+            FALL
+          </em>
 
-  animation:
-    visitorBreathing
-    6.2s ease-in-out infinite;
-}
-
-.third-presence {
-  top: 42%;
-  left: 72%;
-
-  width:
-    min(25vw, 380px);
-
-  opacity:
-    var(--third-light);
-
-  filter:
-    saturate(1.4);
-
-  transform:
-    translate(-50%, -50%)
-    scale(
-      calc(
-        0.2 +
-        var(--third-light)
-      )
-    );
-}
-
-.presence-glow,
-.presence-core,
-.presence-ring {
-  position: absolute;
-
-  top: 50%;
-  left: 50%;
-
-  border-radius:
-    46% 54% 49% 51% /
-    42% 47% 53% 58%;
-
-  transform:
-    translate(-50%, -50%);
-}
-
-.presence-glow {
-  width: 100%;
-  height: 100%;
-
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(255, 248, 237, 0.76),
-      rgba(255, 184, 178, 0.43) 20%,
-      rgba(255, 91, 116, 0.18) 47%,
-      transparent 72%
-    );
+        </h2>
 
-  filter:
-    blur(22px);
 
-  animation:
-    presenceBreathing
-    5.4s ease-in-out infinite;
-}
+        <p class="main-sentence">
 
-.presence-core {
-  width: 38%;
-  height: 53%;
+          Nothing beneath you
+          has moved.
 
-  background:
-    radial-gradient(
-      ellipse,
-      #fffaf0,
-      rgba(255, 208, 199, 0.88) 27%,
-      rgba(255, 111, 127, 0.25) 64%,
-      transparent 82%
-    );
+          <span>
+            Your body
+            does not believe it.
+          </span>
 
-  filter:
-    blur(9px);
+        </p>
 
-  box-shadow:
-    0 0 70px
-    rgba(255, 156, 163, 0.38);
-}
+      </div>
 
-.third-presence .presence-glow {
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(255, 91, 90, 0.82),
-      rgba(220, 8, 33, 0.47) 27%,
-      rgba(104, 0, 17, 0.25) 57%,
-      transparent 74%
-    );
-}
+    </section>
 
-.third-presence .presence-core {
-  background:
-    radial-gradient(
-      ellipse,
-      #fff1e8,
-      #ff3b43 30%,
-      rgba(145, 2, 24, 0.56) 65%,
-      transparent 82%
-    );
 
-  box-shadow:
-    0 0 90px
-    rgba(255, 24, 42, 0.63);
-}
+    <!-- THE IMPACT -->
 
-.presence-ring {
-  border:
-    1px solid
-    rgba(255, 207, 204, 0.21);
+    <section
+      class="action-scene"
+      data-scene="impact"
+      data-index="3"
+    >
 
-  opacity: 0.54;
-}
+      <div class="scene-content">
 
-.ring-one {
-  width: 54%;
-  height: 66%;
+        <p class="scene-room">
+          MOVEMENT 03
+        </p>
 
-  animation:
-    presenceRing
-    4.8s ease-out infinite;
-}
 
-.ring-two {
-  width: 73%;
-  height: 84%;
+        <h2>
 
-  animation:
-    presenceRing
-    4.8s 1.4s ease-out infinite;
-}
+          THE
 
+          <em>
+            IMPACT
+          </em>
 
-/* ==========================================
-   ONDES ÉMOTIONNELLES
-========================================== */
+        </h2>
 
-.emotion-ripples {
-  position: absolute;
-  inset: 0;
 
-  pointer-events: none;
+        <p class="main-sentence">
 
-  opacity:
-    calc(0.2 + var(--warmth));
-}
+          The body never
+          reached the ground.
 
-.emotion-ripple {
-  position: absolute;
+          <span>
+            The nervous system
+            can still respond.
+          </span>
 
-  top: 50%;
-  left: 50%;
+        </p>
 
-  display: block;
+      </div>
 
-  width: 20vw;
-  height: 20vw;
+    </section>
 
-  border:
-    1px solid
-    rgba(255, 184, 185, 0.19);
 
-  border-radius:
-    47% 53% 52% 48% /
-    48% 43% 57% 52%;
+    <!-- NIGHTMARE -->
 
-  opacity: 0;
+    <section
+      class="action-scene nightmare-scene"
+      data-scene="nightmare"
+      data-index="4"
+    >
 
-  transform:
-    translate(-50%, -50%);
+      <div class="scene-content">
 
-  animation:
-    emotionWave
-    5.2s ease-out infinite;
-}
+        <p class="final-sentence">
 
-.ripple-two {
-  animation-delay:
-    1.7s;
-}
+          The movement
+          has stopped.
 
-.ripple-three {
-  animation-delay:
-    3.4s;
-}
+          <span>
+            The pulse has not.
+          </span>
 
+        </p>
 
-/* ==========================================
-   CANVAS
-========================================== */
 
-#romance-canvas {
-  position: absolute;
-  inset: 0;
+        <p class="nightmare-warning">
 
-  width: 100%;
-  height: 100%;
+          Something has followed it
+          into the next room.
 
-  opacity:
-    calc(0.32 + var(--pink));
+        </p>
 
-  pointer-events: none;
 
-  mix-blend-mode: screen;
-}
+        <h2>
 
+          ROOM 06
 
-/* ==========================================
-   HEADER
-========================================== */
+          <em>
+            NIGHTMARE
+          </em>
 
-.romance-header {
-  position: fixed;
+        </h2>
 
-  top: 0;
-  left: 0;
 
-  z-index: 120;
+        <a
+          href="./nightmare.html"
+          class="enter-nightmare"
+        >
+          DO NOT LET IT CATCH UP →
+        </a>
 
-  display: grid;
+      </div>
 
-  grid-template-columns:
-    1fr auto 1fr;
+    </section>
 
-  align-items: center;
+  </main>
 
-  width: 100%;
 
-  padding:
-    24px 36px;
+  <!-- ==========================================
+       PROGRESSION
+  =========================================== -->
 
-  font-size: 8px;
+  <div class="action-progress">
 
-  letter-spacing: 0.14em;
+    <span id="action-progress-fill"></span>
 
-  text-transform: uppercase;
+  </div>
 
-  pointer-events: none;
-}
 
-.romance-header a,
-.romance-header button {
-  pointer-events: auto;
-}
+  <p class="scroll-instruction">
+    MOVE THROUGH THE INSTALLATION
+  </p>
 
-.room-location {
-  display: flex;
-  align-items: center;
 
-  gap: 10px;
-}
+  <script src="./action.js?v=2"></script>
 
-.location-light {
-  width: 6px;
-  height: 6px;
+</body>
 
-  border-radius: 50%;
-
-  background:
-    #ff9aa6;
-
-  box-shadow:
-    0 0 10px
-    #ff7e8c;
-
-  animation:
-    locationPulse
-    2.1s ease-in-out infinite;
-}
-
-#sound-control {
-  justify-self: end;
-
-  padding:
-    7px 0;
-
-  border: 0;
-
-  color: var(--ivory);
-
-  background: transparent;
-
-  font-size: 8px;
-
-  letter-spacing: 0.14em;
-
-  cursor: pointer;
-
-  opacity: 0.58;
-
-  transition:
-    opacity 300ms ease,
-    color 300ms ease;
-}
-
-#sound-control:hover {
-  color: #ffc1c7;
-
-  opacity: 1;
-}
-
-
-/* ==========================================
-   INTRODUCTION
-========================================== */
-
-.romance-introduction {
-  position: fixed;
-  inset: 0;
-
-  z-index: 55;
-
-  display: grid;
-  place-content: center;
-
-  padding:
-    95px 25px 120px;
-
-  opacity:
-    var(--intro-opacity);
-
-  text-align: center;
-
-  pointer-events: none;
-
-  transform:
-    translateY(
-      calc(
-        var(--approach) * -45px
-      )
-    );
-
-  transition:
-    opacity 120ms linear;
-}
-
-.romance-introduction > p {
-  margin:
-    0 0 24px;
-
-  font-size: 8px;
-
-  letter-spacing: 0.2em;
-
-  text-transform: uppercase;
-
-  opacity: 0.52;
-}
-
-.romance-introduction h1 {
-  margin: 0;
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(76px, 13vw, 205px);
-
-  font-weight: 400;
-
-  line-height: 0.72;
-
-  letter-spacing: -0.065em;
-}
-
-.romance-introduction h1 em {
-  display: block;
-
-  color: #ffc0c5;
-
-  font-family:
-    "Gloock",
-    Georgia,
-    serif;
-
-  font-weight: 400;
-}
-
-.opening-sentence {
-  margin-top: 50px;
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(19px, 2vw, 29px);
-
-  line-height: 1.12;
-
-  opacity: 0.68;
-}
-
-
-/* ==========================================
-   CARTEL DU MUSÉE
-========================================== */
-
-.museum-label {
-  position: fixed;
-
-  right: 35px;
-  bottom: 32px;
-
-  z-index: 85;
-
-  width: 220px;
-
-  padding-top: 17px;
-
-  border-top:
-    1px solid
-    rgba(255, 255, 255, 0.2);
-
-  pointer-events: none;
-
-  transition:
-    opacity 500ms ease;
-}
-
-.museum-label > span {
-  display: block;
-
-  margin-bottom: 9px;
-
-  color: #ff9ba5;
-
-  font-size: 7px;
-
-  letter-spacing: 0.14em;
-
-  text-transform: uppercase;
-}
-
-.museum-label > strong {
-  display: block;
-
-  margin-bottom: 11px;
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size: 21px;
-
-  font-weight: 400;
-}
-
-.museum-label p {
-  margin: 0;
-
-  font-size: 7px;
-
-  line-height: 1.65;
-
-  letter-spacing: 0.07em;
-
-  opacity: 0.49;
-}
-
-.museum-label p span {
-  display: block;
-}
-
-
-/* ==========================================
-   NARRATION
-========================================== */
-
-.romance-narration {
-  position: fixed;
-  inset: 0;
-
-  z-index: 65;
-
-  display: grid;
-  place-items: center;
-
-  padding:
-    110px 270px 150px;
-
-  pointer-events: none;
-}
-
-.story-line {
-  position: absolute;
-
-  top: 50%;
-  left: 50%;
-
-  width:
-    min(780px, calc(100vw - 500px));
-
-  margin: 0;
-
-  opacity:
-    var(--line-opacity, 0);
-
-  filter:
-    blur(
-      var(--line-blur, 10px)
-    );
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(44px, 5.7vw, 88px);
-
-  line-height: 0.96;
-
-  letter-spacing: -0.045em;
-
-  text-align: center;
-
-  text-shadow:
-    0 8px 40px
-    rgba(20, 1, 9, 0.65);
-
-  transform:
-    translate(
-      -50%,
-      calc(
-        -50% +
-        var(--line-y, 40px)
-      )
-    )
-    scale(
-      var(--line-scale, 0.96)
-    );
-
-  transition:
-    opacity 180ms linear,
-    filter 260ms ease,
-    transform 300ms ease;
-}
-
-.story-line em {
-  display: block;
-
-  margin-top: 8px;
-
-  color: #ffc1c7;
-
-  font-family:
-    "Gloock",
-    Georgia,
-    serif;
-
-  font-weight: 400;
-}
-
-.story-line.is-current {
-  text-shadow:
-    0 8px 38px
-    rgba(15, 0, 7, 0.72),
-
-    0 0 50px
-    rgba(255, 104, 119, 0.14);
-}
-
-.impact-line {
-  color: #ffbbb9;
-
-  font-family:
-    "DM Mono",
-    monospace;
-
-  font-size:
-    clamp(38px, 6vw, 91px);
-
-  font-weight: 400;
-
-  line-height: 1;
-
-  letter-spacing: 0.05em;
-
-  text-transform: uppercase;
-}
-
-
-/* ==========================================
-   NOTE SCIENTIFIQUE
-========================================== */
-
-.research-note {
-  position: fixed;
-
-  bottom: 31px;
-  left: 35px;
-
-  z-index: 90;
-
-  width: 310px;
-
-  opacity: 0;
-
-  pointer-events: none;
-
-  transform:
-    translateY(12px);
-
-  transition:
-    opacity 500ms ease,
-    transform 500ms ease;
-}
-
-.research-note.visible {
-  opacity: 0.74;
-
-  transform:
-    translateY(0);
-}
-
-.research-note > span {
-  display: block;
-
-  margin-bottom: 10px;
-
-  color: #ffa0aa;
-
-  font-size: 7px;
-
-  letter-spacing: 0.15em;
-
-  text-transform: uppercase;
-}
-
-.research-note p {
-  margin:
-    0 0 9px;
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size: 12px;
-
-  line-height: 1.42;
-}
-
-.research-note strong {
-  display: block;
-
-  margin-bottom: 10px;
-
-  font-size: 6px;
-
-  font-weight: 400;
-
-  letter-spacing: 0.15em;
-
-  opacity: 0.64;
-}
-
-#research-source {
-  display: inline-block;
-
-  padding-bottom: 3px;
-
-  border-bottom:
-    1px solid
-    rgba(255, 255, 255, 0.28);
-
-  font-size: 6px;
-
-  letter-spacing: 0.12em;
-
-  pointer-events: auto;
-}
-
-
-/* ==========================================
-   DONNÉES DU RÊVE
-========================================== */
-
-.dream-data {
-  position: fixed;
-
-  right: 35px;
-  bottom: 187px;
-
-  z-index: 88;
-
-  width: 220px;
-
-  pointer-events: none;
-}
-
-.dream-data > span {
-  display: block;
-
-  margin-bottom: 8px;
-
-  color: #ff9ca7;
-
-  font-size: 7px;
-
-  letter-spacing: 0.14em;
-}
-
-.dream-data > strong {
-  display: block;
-
-  margin-bottom: 14px;
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size: 17px;
-
-  font-weight: 400;
-}
-
-.dream-data dl {
-  margin: 0;
-}
-
-.dream-data dl div {
-  display: flex;
-  justify-content: space-between;
-
-  gap: 15px;
-
-  margin-top: 5px;
-}
-
-.dream-data dt,
-.dream-data dd {
-  margin: 0;
-
-  font-size: 6px;
-
-  letter-spacing: 0.09em;
-
-  text-transform: uppercase;
-}
-
-.dream-data dt {
-  opacity: 0.38;
-}
-
-.dream-data dd {
-  color: #ffacb4;
-
-  text-align: right;
-}
-
-
-/* ==========================================
-   SORTIE VERS ACTION
-========================================== */
-
-.action-exit {
-  position: fixed;
-  inset: 0;
-
-  z-index: 105;
-
-  width: 100%;
-  height: 100vh;
-
-  pointer-events: none;
-}
-
-.ending-desire,
-.ending-pulse {
-  position: absolute;
-
-  top: 50%;
-  left: 50%;
-
-  width:
-    min(830px, calc(100vw - 100px));
-
-  text-align: center;
-
-  pointer-events: none;
-
-  transform:
-    translate(-50%, -50%);
-}
-
-.ending-desire {
-  opacity:
-    var(--ending-desire);
-
-  filter:
-    blur(
-      calc(
-        7px -
-        var(--ending-desire) * 7px
-      )
-    );
-
-  transition:
-    opacity 170ms linear,
-    filter 250ms ease;
-}
-
-.ending-desire p {
-  margin:
-    0 0 9px;
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(45px, 6vw, 91px);
-
-  line-height: 0.94;
-
-  letter-spacing: -0.045em;
-}
-
-.ending-desire strong {
-  display: block;
-
-  color: #ffaaa9;
-
-  font-family:
-    "Gloock",
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(48px, 6.4vw, 98px);
-
-  font-weight: 400;
-
-  line-height: 0.9;
-}
-
-.ending-pulse {
-  opacity:
-    var(--ending-pulse);
-
-  filter:
-    blur(
-      calc(
-        8px -
-        var(--ending-pulse) * 8px
-      )
-    );
-
-  transition:
-    opacity 170ms linear,
-    filter 250ms ease;
-}
-
-.ending-pulse p {
-  margin:
-    0 0 5px;
-
-  font-size:
-    clamp(19px, 2.1vw, 31px);
-
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-}
-
-.ending-pulse h2 {
-  margin: 0;
-
-  color: #ff5b58;
-
-  font-family:
-    "Gloock",
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(75px, 13vw, 205px);
-
-  font-weight: 400;
-
-  line-height: 0.76;
-
-  letter-spacing: -0.06em;
-
-  text-shadow:
-    0 0 32px
-    rgba(255, 52, 54, 0.42),
-
-    0 0 120px
-    rgba(196, 4, 29, 0.38);
-}
-
-.visual-heartbeat {
-  width: 13px;
-  height: 13px;
-
-  margin:
-    40px auto 0;
-
-  border-radius: 50%;
-
-  background:
-    #ff302e;
-
-  box-shadow:
-    0 0 14px #ff302e,
-    0 0 55px rgba(255, 34, 43, 0.8),
-    0 0 150px rgba(209, 0, 30, 0.56);
-
-  animation:
-    finalHeartbeat
-    0.62s ease-in-out infinite;
-}
-
-
-/* Bouton enfin stable */
-
-#enter-action {
-  position: absolute;
-
-  top: auto;
-  right: auto;
-  bottom: 6vh;
-  left: 50%;
-
-  z-index: 20;
-
-  display: grid;
-
-  gap: 7px;
-
-  width: 270px;
-  max-width:
-    calc(100vw - 40px);
-
-  min-height: 94px;
-
-  padding:
-    17px 22px;
-
-  margin: 0;
-
-  border:
-    1px solid
-    rgba(255, 117, 112, 0.7);
-
-  opacity:
-    var(--ending-button);
-
-  color: var(--ivory);
-
-  background:
-    rgba(57, 2, 12, 0.5);
-
-  box-shadow:
-    0 0 35px
-    rgba(255, 33, 42, 0.13),
-
-    inset 0 0 30px
-    rgba(255, 73, 75, 0.04);
-
-  text-align: center;
-
-  pointer-events: auto;
-
-  cursor: pointer;
-
-  transform:
-    translateX(-50%);
-
-  transition:
-    color 300ms ease,
-    background 300ms ease,
-    border-color 300ms ease,
-    box-shadow 300ms ease,
-    opacity 300ms ease;
-}
-
-#enter-action span {
-  font-size: 7px;
-
-  letter-spacing: 0.18em;
-
-  opacity: 0.6;
-
-  pointer-events: none;
-}
-
-#enter-action strong {
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size: 24px;
-
-  font-weight: 400;
-
-  line-height: 1;
-
-  pointer-events: none;
-}
-
-#enter-action small {
-  font-size: 7px;
-
-  letter-spacing: 0.14em;
-
-  opacity: 0.68;
-
-  pointer-events: none;
-}
-
-#enter-action:hover {
-  color: #140509;
-
-  background: #ff706d;
-
-  border-color: #ff9b94;
-
-  box-shadow:
-    0 0 55px
-    rgba(255, 39, 45, 0.38);
-}
-
-
-/* ==========================================
-   INTERFACE DE PROGRESSION
-========================================== */
-
-.scroll-instruction {
-  position: fixed;
-
-  top: 50%;
-  right: 31px;
-
-  z-index: 94;
-
-  margin: 0;
-
-  font-size: 6px;
-
-  letter-spacing: 0.16em;
-
-  text-transform: uppercase;
-
-  opacity:
-    calc(
-      0.35 -
-      var(--ending-pulse)
-    );
-
-  writing-mode: vertical-rl;
-
-  pointer-events: none;
-
-  transform:
-    translateY(-50%);
-}
-
-.scroll-progress {
-  position: fixed;
-
-  top: 50%;
-  right: 17px;
-
-  z-index: 95;
-
-  width: 1px;
-  height: 170px;
-
-  background:
-    rgba(255, 255, 255, 0.13);
-
-  pointer-events: none;
-
-  transform:
-    translateY(-50%);
-}
-
-.scroll-progress span {
-  display: block;
-
-  width: 100%;
-  height: 0;
-
-  background:
-    linear-gradient(
-      #fff2e8,
-      #ff3941
-    );
-
-  box-shadow:
-    0 0 8px
-    rgba(255, 49, 59, 0.78);
-}
-
-
-/* ==========================================
-   ESPACE DE SCROLL
-========================================== */
-
-.romance-scroll {
-  position: relative;
-
-  z-index: 1;
-}
-
-.story-stop {
-  width: 100%;
-  height: 100vh;
-
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-
-  pointer-events: none;
-}
-
-.intro-stop {
-  height: 100vh;
-}
-
-
-/* ==========================================
-   FLASH FINAL
-========================================== */
-
-.final-flash {
-  position: fixed;
-  inset: 0;
-
-  z-index: 160;
-
-  visibility: hidden;
-
-  opacity: 0;
-
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(255, 238, 218, 0.97),
-      rgba(255, 73, 67, 0.69) 15%,
-      rgba(168, 3, 27, 0.28) 37%,
-      transparent 70%
-    );
-}
-
-.final-flash.active {
-  visibility: visible;
-
-  animation:
-    finalFlash
-    1050ms ease-out forwards;
-}
-
-
-/* ==========================================
-   TRANSITION VERS ACTION
-========================================== */
-
-.action-transition {
-  position: fixed;
-  inset: 0;
-
-  z-index: 600;
-
-  visibility: hidden;
-
-  opacity: 0;
-
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle,
-      #ff403d,
-      #870513 25%,
-      #230108 54%,
-      #050306 78%
-    );
-
-  transform:
-    scale(0.05);
-}
-
-.romance-page.entering-action
-.action-transition {
-  visibility: visible;
-
-  animation:
-    actionEntrance
-    1.2s
-    cubic-bezier(
-      0.76,
-      0,
-      0.24,
-      1
-    )
-    forwards;
-}
-
-
-/* ==========================================
-   ANIMATIONS
-========================================== */
-
-@keyframes gateBreathing {
-  0%,
-  100% {
-    opacity: 0.24;
-
-    transform:
-      translate(-50%, -50%)
-      scale(0.88);
-  }
-
-  50% {
-    opacity: 0.5;
-
-    transform:
-      translate(-50%, -50%)
-      scale(1.08);
-  }
-}
-
-@keyframes ribbonDrift {
-  0%,
-  100% {
-    opacity: 0.22;
-
-    filter:
-      blur(0.7px);
-
-    translate:
-      -12px 0;
-  }
-
-  50% {
-    opacity: 0.66;
-
-    filter:
-      blur(1.5px);
-
-    translate:
-      18px -9px;
-  }
-}
-
-@keyframes visitorBreathing {
-  0%,
-  100% {
-    border-radius:
-      44% 56% 52% 48% /
-      39% 44% 56% 61%;
-  }
-
-  50% {
-    border-radius:
-      53% 47% 43% 57% /
-      48% 58% 42% 52%;
-  }
-}
-
-@keyframes presenceBreathing {
-  0%,
-  100% {
-    border-radius:
-      46% 54% 49% 51% /
-      42% 47% 53% 58%;
-
-    filter:
-      blur(22px);
-
-    opacity: 0.7;
-  }
-
-  50% {
-    border-radius:
-      54% 46% 58% 42% /
-      49% 56% 44% 51%;
-
-    filter:
-      blur(29px);
-
-    opacity: 1;
-  }
-}
-
-@keyframes presenceRing {
-  0% {
-    opacity: 0.58;
-
-    transform:
-      translate(-50%, -50%)
-      scale(0.54);
-  }
-
-  100% {
-    opacity: 0;
-
-    transform:
-      translate(-50%, -50%)
-      scale(1.55);
-  }
-}
-
-@keyframes emotionWave {
-  0% {
-    opacity: 0;
-
-    transform:
-      translate(-50%, -50%)
-      scale(0.3);
-  }
-
-  17% {
-    opacity: 0.36;
-  }
-
-  100% {
-    opacity: 0;
-
-    transform:
-      translate(-50%, -50%)
-      scale(4.3);
-  }
-}
-
-@keyframes locationPulse {
-  0%,
-  100% {
-    opacity: 0.45;
-
-    transform:
-      scale(0.65);
-  }
-
-  50% {
-    opacity: 1;
-
-    transform:
-      scale(1.2);
-  }
-}
-
-@keyframes finalHeartbeat {
-  0%,
-  18%,
-  100% {
-    transform:
-      scale(1);
-  }
-
-  7% {
-    transform:
-      scale(3.1);
-  }
-
-  13% {
-    transform:
-      scale(1.7);
-  }
-}
-
-@keyframes finalFlash {
-  0% {
-    visibility: visible;
-
-    opacity: 0;
-  }
-
-  18% {
-    opacity: 0.88;
-  }
-
-  100% {
-    visibility: hidden;
-
-    opacity: 0;
-  }
-}
-
-@keyframes actionEntrance {
-  0% {
-    visibility: visible;
-
-    opacity: 0;
-
-    transform:
-      scale(0.05);
-  }
-
-  30% {
-    opacity: 1;
-  }
-
-  100% {
-    visibility: visible;
-
-    opacity: 1;
-
-    transform:
-      scale(1.8);
-  }
-}
-
-
-/* ==========================================
-   TABLETTE
-========================================== */
-
-@media (max-width: 950px) {
-  .romance-header {
-    grid-template-columns:
-      1fr auto;
-
-    padding:
-      19px 21px;
-  }
-
-  .room-location {
-    display: none;
-  }
-
-  .romance-narration {
-    padding:
-      95px 45px 180px;
-  }
-
-  .story-line {
-    width:
-      calc(100vw - 70px);
-
-    font-size:
-      clamp(42px, 9vw, 72px);
-  }
-
-  .museum-label {
-    right: 21px;
-    bottom: 25px;
-
-    width: 190px;
-  }
-
-  .dream-data {
-    right: 21px;
-    bottom: 172px;
-
-    width: 190px;
-  }
-
-  .research-note {
-    bottom: 25px;
-    left: 21px;
-
-    width: 260px;
-  }
-
-  .first-presence {
-    left: 34%;
-  }
-
-  .visitor-light {
-    left: 66%;
-  }
-
-  .light-presence {
-    width: 43vw;
-  }
-
-  .visitor-light {
-    width: 40vw;
-  }
-
-  .third-presence {
-    left: 74%;
-
-    width: 35vw;
-  }
-
-  .scroll-instruction {
-    display: none;
-  }
-
-  .scroll-progress {
-    right: 8px;
-  }
-}
-
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 600px) {
-  .experience-gate {
-    padding:
-      34px 20px;
-  }
-
-  .experience-gate h1 {
-    font-size:
-      clamp(58px, 19vw, 85px);
-  }
-
-  .gate-description {
-    margin-top: 38px;
-  }
-
-  .gate-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .gate-actions button {
-    width:
-      min(100%, 300px);
-  }
-
-  .romance-introduction {
-    padding:
-      90px 20px 150px;
-  }
-
-  .romance-introduction h1 {
-    font-size:
-      clamp(67px, 23vw, 110px);
-  }
-
-  .opening-sentence {
-    margin-top: 39px;
-
-    font-size: 19px;
-  }
-
-  .romance-narration {
-    padding:
-      80px 20px 190px;
-  }
-
-  .story-line {
-    width:
-      calc(100vw - 36px);
-
-    font-size:
-      clamp(39px, 12vw, 58px);
-  }
-
-  .story-line em {
-    margin-top: 5px;
-  }
-
-  .impact-line {
-    font-size:
-      clamp(34px, 12vw, 55px);
-  }
-
-  .museum-label,
-  .dream-data {
-    display: none;
-  }
-
-  .research-note {
-    right: 95px;
-    bottom: 21px;
-    left: 20px;
-
-    width: auto;
-  }
-
-  .research-note p {
-    font-size: 10px;
-  }
-
-  .research-note > span,
-  .research-note strong,
-  #research-source {
-    font-size: 5px;
-  }
-
-  .first-presence {
-    left: 28%;
-
-    width: 60vw;
-  }
-
-  .visitor-light {
-    left: 72%;
-
-    width: 57vw;
-  }
-
-  .third-presence {
-    top: 39%;
-    left: 76%;
-
-    width: 51vw;
-  }
-
-  .ending-desire,
-  .ending-pulse {
-    width:
-      calc(100vw - 35px);
-  }
-
-  .ending-desire p {
-    font-size:
-      clamp(41px, 12vw, 61px);
-  }
-
-  .ending-desire strong {
-    font-size:
-      clamp(43px, 13vw, 65px);
-  }
-
-  .ending-pulse h2 {
-    font-size:
-      clamp(72px, 24vw, 120px);
-  }
-
-  #enter-action {
-    bottom: 5vh;
-
-    width:
-      calc(100vw - 40px);
-
-    max-width: 310px;
-  }
-
-  .scroll-progress {
-    display: none;
-  }
-}
-
-
-/* ==========================================
-   ACCESSIBILITÉ
-========================================== */
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration:
-      0.01ms !important;
-
-    animation-iteration-count:
-      1 !important;
-
-    transition-duration:
-      0.01ms !important;
-  }
-}
+</html>
