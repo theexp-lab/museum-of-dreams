@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#eadfe1"
+  >
+
+  <meta
+    name="description"
+    content="Romance — Room 04 of The Museum of Dreams."
+  >
+
+  <title>
+    Romance — Museum of Dreams
+  </title>
+
+
+  <!-- Polices -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- CSS de Romance -->
+
+  <link
+    rel="stylesheet"
+    href="./romance.css?v=1"
+  >
+
+</head>
+
+
+<body class="romance-page phase-0">
+
+
+  <!-- ==========================================
+       SALLE DU MUSÉE
+  =========================================== -->
+
+  <div
+    class="romance-world"
+    aria-hidden="true"
+  >
+
+    <div class="gallery-ceiling"></div>
+
+    <div class="gallery-back-wall"></div>
+
+    <div class="gallery-side left-wall"></div>
+
+    <div class="gallery-side right-wall"></div>
+
+    <div class="gallery-floor"></div>
+
+    <div class="gallery-horizon"></div>
+
+
+    <!-- Lumières -->
+
+    <div class="pearl-light"></div>
+
+    <div class="red-light"></div>
+
+    <div class="jealousy-shadow"></div>
+
+
+    <!-- Voiles suspendus -->
+
+    <div class="veils">
+
+      <span class="veil veil-one"></span>
+
+      <span class="veil veil-two"></span>
+
+      <span class="veil veil-three"></span>
+
+      <span class="veil veil-four"></span>
+
+      <span class="veil veil-five"></span>
+
+    </div>
+
+
+    <!-- Personne principale -->
+
+    <div class="dream-figure main-figure">
+
+      <span class="figure-head"></span>
+
+      <span class="figure-body"></span>
+
+      <span class="figure-glow"></span>
+
+    </div>
+
+
+    <!-- Troisième ombre / jalousie -->
+
+    <div class="dream-figure second-figure">
+
+      <span class="figure-head"></span>
+
+      <span class="figure-body"></span>
+
+      <span class="figure-glow"></span>
+
+    </div>
+
+
+    <!-- Fil rouge -->
+
+    <svg
+      class="connection-thread"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="none"
+    >
+
+      <path
+        id="connection-path"
+        d="M 500 1050 C 480 780, 550 570, 500 330"
+      ></path>
+
+      <path
+        class="thread-echo"
+        d="M 500 1050 C 480 780, 550 570, 500 330"
+      ></path>
+
+    </svg>
+
+
+    <!-- Particules légères -->
+
+    <canvas id="romance-canvas"></canvas>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION DU MUSÉE
+  =========================================== -->
+
+  <header class="museum-header">
+
+    <a href="adventure.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
+
+    <div class="museum-location">
+
+      <span class="location-dot"></span>
+
+      <span>
+        ROOM 04 · ROMANCE
+      </span>
+
+    </div>
+
+
+    <button
+      class="information-button"
+      id="information-button"
+      type="button"
+    >
+      ROOM INFORMATION
+    </button>
+
+  </header>
+
+
+  <!-- ==========================================
+       INTRODUCTION DE LA SALLE
+  =========================================== -->
+
+  <section class="romance-introduction">
+
+    <p class="room-number">
+      ROOM 04
+    </p>
+
+
+    <h1>
+
+      ROM
+
+      <em>
+        ANCE
+      </em>
+
+    </h1>
+
+
+    <p class="installation-title">
+      THE DISTANCE BETWEEN US
+    </p>
+
+
+    <p class="introduction-copy">
+
+      Someone is waiting
+
+      <em>
+        for you.
+      </em>
+
+    </p>
+
+  </section>
+
+
+  <!-- ==========================================
+       CARTEL MUSÉAL
+  =========================================== -->
+
+  <aside class="museum-label">
+
+    <span>
+      INSTALLATION 04
+    </span>
+
+
+    <strong>
+      THE DISTANCE BETWEEN US
+    </strong>
+
+
+    <p>
+      KINETIC TEXTILE<br>
+      RESPONSIVE LIGHT<br>
+      SPATIAL SOUND<br>
+      GENERATIVE PROJECTION
+    </p>
+
+
+    <small>
+      PROPOSED COMMISSION
+    </small>
+
+  </aside>
+
+
+  <!-- ==========================================
+       NARRATION
+  =========================================== -->
+
+  <section
+    class="romance-narration"
+    aria-live="polite"
+  >
+
+    <p
+      class="romance-sentence"
+      id="romance-sentence"
+    >
+
+      You know them
+
+      <em>
+        before you see their face.
+      </em>
+
+    </p>
+
+  </section>
+
+
+  <!-- ==========================================
+       OBSERVATION SCIENTIFIQUE
+  =========================================== -->
+
+  <aside
+    class="research-note"
+    id="research-note"
+  >
+
+    <span id="research-number">
+      RESEARCH NOTE 04.1
+    </span>
+
+
+    <p id="research-text">
+
+      At least one social situation
+      was identified in 83.5% of the
+      analysed dream reports.
+
+    </p>
+
+
+    <strong id="research-principle">
+      SOCIAL DREAMING
+    </strong>
+
+
+    <a
+      id="research-source"
+      href="https://pubmed.ncbi.nlm.nih.gov/30769273/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      VIEW SOURCE ↗
+    </a>
+
+  </aside>
+
+
+  <!-- ==========================================
+       CARTEL DU RÊVE COMPOSITE
+  =========================================== -->
+
+  <aside class="dream-label">
+
+    <span>
+      COMPOSITE DREAM 04
+    </span>
+
+
+    <strong id="dream-title">
+      THE FAMILIAR STRANGER
+    </strong>
+
+
+    <dl>
+
+      <div>
+
+        <dt>
+          EMOTIONAL CORE
+        </dt>
+
+        <dd id="emotional-core">
+          RECOGNITION
+        </dd>
+
+      </div>
+
+
+      <div>
+
+        <dt>
+          DREAM MOTIF
+        </dt>
+
+        <dd id="dream-motif">
+          DISTANCE
+        </dd>
+
+      </div>
+
+    </dl>
+
+  </aside>
+
+
+  <!-- ==========================================
+       SORTIE VERS ACTION
+  =========================================== -->
+
+  <section
+    class="action-exit"
+    id="action-exit"
+  >
+
+    <p>
+      The dream is over.
+    </p>
+
+
+    <h2>
+      THE PULSE
+      <em>DISAGREES.</em>
+    </h2>
+
+
+    <div class="exit-heart">
+
+      <span></span>
+
+      <span></span>
+
+      <span></span>
+
+    </div>
+
+
+    <a
+      href="action.html"
+      class="enter-action"
+      id="enter-action"
+    >
+
+      <small>
+        ROOM 05
+      </small>
+
+      <strong>
+        FOLLOW THE PULSE
+      </strong>
+
+      <span>
+        ENTER ACTION →
+      </span>
+
+    </a>
+
+  </section>
+
+
+  <!-- ==========================================
+       COMMANDES
+  =========================================== -->
+
+  <div class="museum-controls">
+
+    <button
+      id="sound-button"
+      type="button"
+      aria-pressed="false"
+    >
+      ENABLE SOUND
+    </button>
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
+  </div>
+
+
+  <p
+    class="scroll-instruction"
+    id="scroll-instruction"
+  >
+    APPROACH THE FIGURE
+  </p>
+
+
+  <div class="romance-progress">
+
+    <span id="romance-progress-fill"></span>
+
+  </div>
+
+
+  <!-- ==========================================
+       FENÊTRE D’INFORMATION
+  =========================================== -->
+
+  <div
+    class="information-panel"
+    id="information-panel"
+    aria-hidden="true"
+  >
+
+    <button
+      class="close-information"
+      id="close-information"
+      type="button"
+      aria-label="Close room information"
+    >
+      CLOSE ×
+    </button>
+
+
+    <div class="information-content">
+
+      <p>
+        ROOM 04 · CURATORIAL INFORMATION
+      </p>
+
+
+      <h2>
+        THE DISTANCE
+        <em>BETWEEN US</em>
+      </h2>
+
+
+      <div class="information-grid">
+
+        <section>
+
+          <span>
+            INSTALLATION
+          </span>
+
+          <p>
+            An imagined museum environment exploring
+            intimacy, recognition, jealousy and the
+            different emotional realities two people
+            may carry into the same relationship.
+          </p>
+
+        </section>
+
+
+        <section>
+
+          <span>
+            DREAM SELECTION
+          </span>
+
+          <p>
+            Submitted dreams would be anonymised and
+            grouped by emotional core, recurring motif
+            and sensory quality before being transformed
+            into a composite installation.
+          </p>
+
+        </section>
+
+
+        <section>
+
+          <span>
+            CREATIVE DIRECTION
+          </span>
+
+          <p>
+            THE EXPERIENCE LABORATORY
+          </p>
+
+        </section>
+
+
+        <section>
+
+          <span>
+            ARTIST SELECTION
+          </span>
+
+          <p>
+            INTERNATIONAL OPEN CALL<br>
+            PROPOSED COMMISSION
+          </p>
+
+        </section>
+
+
+        <section>
+
+          <span>
+            AI DISCLOSURE
+          </span>
+
+          <p>
+            AI-assisted visualisation may be used to
+            create shifting composite identities.
+            Submitted dreams would never be used for
+            training without explicit consent.
+          </p>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Espace nécessaire au scroll -->
+
+  <main class="romance-scroll"></main>
+
+
+  <!-- Transition vers Action -->
+
+  <div
+    class="action-transition"
+    aria-hidden="true"
+  ></div>
+
+
+  <script src="./romance.js?v=1"></script>
+
+</body>
+
+</html>
