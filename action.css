@@ -1,746 +1,2224 @@
-<!DOCTYPE html>
-<html lang="en">
+:root {
+  --white: #f8f4ec;
+  --red: #ff304f;
+  --cyan: #83e9ff;
+  --black: #05060b;
 
-<head>
-  <meta charset="UTF-8">
+  --scene-progress: 0;
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  --steer: 0deg;
+  --cockpit-x: 0px;
+}
 
-  <meta
-    name="theme-color"
-    content="#05060b"
-  >
 
-  <meta
-    name="description"
-    content="Action — Room 05 of The Museum of Dreams."
-  >
+* {
+  box-sizing: border-box;
+}
 
-  <title>
-    Action — Museum of Dreams
-  </title>
 
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
+html {
+  scroll-behavior: smooth;
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+  scroll-snap-type:
+    y mandatory;
+}
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
-    rel="stylesheet"
-  >
 
-  <link
-    rel="stylesheet"
-    href="./action.css?v=53"
-  >
-</head>
+body {
+  margin: 0;
 
+  min-width: 320px;
 
-<body
-  class="action-page"
-  data-scene="intro"
->
+  color: var(--white);
 
+  background: var(--black);
 
-  <!-- ==========================================
-       MONDE VISUEL
-  =========================================== -->
+  overflow-x: hidden;
+}
 
-  <div
-    class="action-world"
-    aria-hidden="true"
-  >
 
-    <img
-      class="city-plate"
-      src="./action-city.png"
-      alt=""
-    >
+button,
+a {
+  color: inherit;
 
-    <div class="city-depth"></div>
+  font: inherit;
+}
 
-    <div class="museum-room"></div>
 
-    <div class="road-light"></div>
+a {
+  text-decoration: none;
+}
 
-    <canvas id="weather-canvas"></canvas>
 
-    <div class="speed-field"></div>
+button {
+  border: 0;
+}
 
 
-    <!-- Moto exposée -->
+/* ==========================================
+   MONDE VISUEL
+========================================== */
 
-    <div class="motorcycle-wrap">
+.action-world {
+  position: fixed;
 
-      <div class="motorcycle-aura"></div>
+  inset: 0;
 
-      <img
-        class="motorcycle"
-        src="./action-motorcycle.png"
-        alt=""
-      >
+  z-index: 0;
 
-      <div class="motorcycle-shadow"></div>
+  overflow: hidden;
 
-    </div>
+  background: #080a12;
 
+  perspective: 1100px;
+}
 
-    <!-- Cockpit en vue subjective -->
 
-    <div class="cockpit-wrap">
+.action-world::after {
+  content: "";
 
-      <div class="cockpit-speed-glow"></div>
+  position: absolute;
 
-      <img
-        class="action-cockpit"
-        src="./action-cockpit.png"
-        alt=""
-      >
+  z-index: 18;
 
-    </div>
+  inset: 0;
 
+  opacity: 0;
 
-    <div class="pov-speed-lines"></div>
+  pointer-events: none;
 
+  background:
+    radial-gradient(
+      circle,
+      transparent 34%,
+      rgba(110, 0, 16, 0.2) 68%,
+      rgba(255, 0, 40, 0.48) 120%
+    );
 
-    <!-- Signal rouge à poursuivre -->
+  mix-blend-mode: screen;
 
-    <div class="mission-signal">
+  transition:
+    opacity 800ms ease;
+}
 
-      <span class="signal-core"></span>
 
-      <span class="signal-ring"></span>
+/* ==========================================
+   VILLE
+========================================== */
 
-    </div>
+.city-plate {
+  position: absolute;
 
+  inset: -5%;
 
-    <!-- Train -->
+  width: 110%;
+  height: 110%;
 
-    <div class="train-wrap">
+  object-fit: cover;
 
-      <img
-        class="train"
-        src="./action-train.png"
-        alt=""
-      >
+  opacity: 0.14;
 
-    </div>
+  filter:
+    brightness(0.36)
+    saturate(0.7);
 
+  transform:
+    scale(1.03);
 
-    <!-- Personne à sauver -->
+  transition:
+    opacity 1.2s ease,
+    filter 1.2s ease,
+    transform 1.5s
+    cubic-bezier(
+      0.2,
+      0.7,
+      0.2,
+      1
+    );
+}
 
-    <div class="rescue-light">
 
-      <span></span>
+.city-depth {
+  position: absolute;
 
-    </div>
+  inset: 0;
 
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      transparent 15%,
+      rgba(2, 3, 8, 0.22) 55%,
+      rgba(2, 3, 8, 0.76) 100%
+    ),
 
-    <div class="impact-flash"></div>
+    linear-gradient(
+      180deg,
+      rgba(5, 6, 12, 0.05),
+      rgba(5, 6, 12, 0.48)
+    );
+}
 
-    <div class="nightmare-blackout"></div>
 
-  </div>
+/* ==========================================
+   SALLE DU MUSÉE
+========================================== */
 
+.museum-room {
+  position: absolute;
 
-  <!-- ==========================================
-       NAVIGATION
-  =========================================== -->
+  inset: 0;
 
-  <header class="action-header">
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 6, 11, 0.96) 0 10%,
+      transparent 28% 72%,
+      rgba(5, 6, 11, 0.96) 90% 100%
+    ),
 
-    <a href="romance.html">
-      THE MUSEUM OF DREAMS
-    </a>
+    linear-gradient(
+      180deg,
+      rgba(8, 9, 14, 0.8),
+      transparent 35%,
+      rgba(8, 9, 14, 0.65)
+    );
 
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(255, 255, 255, 0.05);
 
-    <div class="action-location">
+  transition:
+    opacity 1.2s ease;
+}
 
-      <span class="location-dot"></span>
 
-      <span>
-        ROOM 05 · ACTION
-      </span>
+.museum-room::before {
+  content: "";
 
-    </div>
+  position: absolute;
 
+  inset: 7% 8%;
 
-    <a href="case-study.html">
-      PROJECT
-    </a>
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
 
-  </header>
+  box-shadow:
+    0 0 80px
+    rgba(107, 126, 255, 0.08);
+}
 
 
-  <button
-    class="sound-toggle"
-    id="sound-toggle"
-    type="button"
-    aria-pressed="true"
-  >
-    SOUND ON
-  </button>
+.road-light {
+  position: absolute;
 
+  left: 10%;
+  bottom: 7%;
 
-  <!-- ==========================================
-       NOTE SCIENTIFIQUE
-  =========================================== -->
+  width: 38%;
+  height: 12%;
 
-  <aside
-    class="research-note"
-    id="research-note"
-  >
+  opacity: 0.15;
 
-    <span id="research-number">
-      RESEARCH NOTE 05.1
-    </span>
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 36, 65, 0.38),
+      transparent 68%
+    );
 
-    <p id="research-text">
+  filter:
+    blur(22px);
+}
 
-      During REM sleep, movement can be
-      vividly simulated while most skeletal
-      muscles remain inhibited.
 
-    </p>
+/* ==========================================
+   PLUIE ET VITESSE
+========================================== */
 
-    <strong id="research-principle">
-      MOTION · WITHOUT MOVEMENT
-    </strong>
+#weather-canvas {
+  position: absolute;
 
-  </aside>
+  inset: 0;
 
+  width: 100%;
+  height: 100%;
 
-  <div
-    class="action-progress"
-    aria-hidden="true"
-  >
-    <span id="action-progress-fill"></span>
-  </div>
+  opacity: 0.2;
 
+  transition:
+    opacity 800ms ease;
+}
 
-  <p
-    class="scroll-cue"
-    id="scroll-cue"
-  >
-    SCROLL TO ACTIVATE THE INSTALLATION
-  </p>
 
+.speed-field {
+  position: absolute;
 
-  <!-- ==========================================
-       HISTOIRE
-  =========================================== -->
+  inset: -20%;
 
-  <main class="action-story">
+  opacity: 0;
 
+  background:
+    repeating-linear-gradient(
+      104deg,
+      transparent 0 9%,
+      rgba(159, 224, 255, 0.13) 9.1%,
+      transparent 9.3% 16%
+    );
 
-    <section
-      class="story-beat intro-beat"
-      data-scene="intro"
-    >
+  filter:
+    blur(2px);
 
-      <div class="intro-copy">
+  transform:
+    translateX(-12%)
+    skewX(-8deg);
 
-        <p class="room-number">
-          ROOM 05
-        </p>
+  animation:
+    speedRush 650ms
+    linear infinite;
+}
 
-        <h1>
-          ACTION
-        </h1>
 
-        <p class="room-subtitle">
-          THE MIND IN MOTION
-        </p>
+/* ==========================================
+   MOTO EXPOSÉE
+========================================== */
 
-        <div class="museum-description">
+.motorcycle-wrap {
+  position: absolute;
 
-          <p>
-            The body remains still.
-          </p>
+  z-index: 5;
 
-          <p>
-            The dream does not.
-          </p>
+  left: 50%;
+  bottom: 8vh;
 
-          <small>
+  width:
+    min(58vw, 760px);
 
-            A kinetic installation exploring
-            how the dreaming mind creates
-            speed, falling and impact.
+  transform:
+    translateX(-50%)
+    scale(0.74);
 
-          </small>
+  transform-origin:
+    center bottom;
+}
 
-        </div>
 
-      </div>
+.motorcycle {
+  position: relative;
 
-    </section>
+  z-index: 2;
 
+  display: block;
 
-    <!-- Moto dans le musée -->
+  width: 100%;
 
-    <section
-      class="story-beat"
-      data-scene="exhibit"
-    >
+  filter:
+    brightness(0.78)
+    saturate(1.15)
+    drop-shadow(
+      0 28px 22px
+      rgba(0, 0, 0, 0.72)
+    );
+}
 
-      <div class="beat-copy">
 
-        <small>
-          COMPOSITE DREAM 05
-        </small>
+.motorcycle-aura {
+  position: absolute;
 
-        <p>
+  inset: 25% 10% 0;
 
-          There is a motorcycle
-          <br>
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 28, 60, 0.35),
+      transparent 67%
+    );
 
-          in the middle of the museum.
+  filter:
+    blur(30px);
 
-        </p>
+  animation:
+    auraPulse 1.8s
+    ease-in-out infinite;
+}
 
-        <em>
-          You know it is yours.
-        </em>
 
-      </div>
+.motorcycle-shadow {
+  position: absolute;
 
-    </section>
+  z-index: 1;
 
+  left: 11%;
+  right: 6%;
+  bottom: 2%;
 
-    <!-- Démarrage -->
+  height: 13%;
 
-    <section
-      class="story-beat"
-      data-scene="trouble"
-    >
+  border-radius: 50%;
 
-      <div class="beat-copy">
+  background:
+    rgba(0, 0, 0, 0.82);
 
-        <p>
+  filter:
+    blur(17px);
+}
 
-          The engine starts
-          <br>
 
-          before you touch it.
+/* ==========================================
+   COCKPIT
+========================================== */
 
-        </p>
+.cockpit-wrap {
+  position: absolute;
 
-        <em>
-          The museum doors open by themselves.
-        </em>
+  z-index: 9;
 
-      </div>
+  left: 50%;
+  bottom: -18%;
 
-    </section>
+  width:
+    min(148vw, 2050px);
 
+  opacity: 0;
 
-    <!-- Passage en vue subjective -->
+  pointer-events: none;
 
-    <section
-      class="story-beat"
-      data-scene="ride"
-    >
+  transform-origin:
+    50% 94%;
 
-      <div class="beat-copy">
+  transform:
+    translate3d(
+      calc(-50% + var(--cockpit-x)),
+      26%,
+      0
+    )
+    scale(0.88)
+    rotate(var(--steer));
+}
 
-        <p>
 
-          One second later,
-          <br>
+.action-cockpit {
+  position: relative;
 
-          the city is moving beneath you.
+  z-index: 2;
 
-        </p>
+  display: block;
 
-      </div>
+  width: 100%;
 
-    </section>
+  filter:
+    brightness(0.72)
+    saturate(1.3)
+    contrast(1.05)
+    drop-shadow(
+      0 -12px 34px
+      rgba(255, 25, 60, 0.3)
+    );
+}
 
 
-    <!-- Signal rouge -->
+.cockpit-speed-glow {
+  position: absolute;
 
-    <section
-      class="story-beat"
-      data-scene="directions"
-    >
+  z-index: 1;
 
-      <div class="beat-copy">
+  left: 25%;
+  right: 25%;
+  bottom: 3%;
 
-        <p>
+  height: 45%;
 
-          A red signal
-          <br>
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 24, 57, 0.42),
+      transparent 67%
+    );
 
-          is crossing the city.
+  filter:
+    blur(35px);
+}
 
-        </p>
 
-        <em>
-          You decide it must be important.
-        </em>
+.pov-speed-lines {
+  position: absolute;
 
-      </div>
+  z-index: 7;
 
-    </section>
+  inset: -20%;
 
+  opacity: 0;
 
-    <!-- Accélération -->
+  overflow: hidden;
 
-    <section
-      class="story-beat"
-      data-scene="pursuit"
-    >
+  pointer-events: none;
 
-      <div class="beat-copy">
+  background:
+    repeating-conic-gradient(
+      from 270deg at 50% 48%,
+      transparent 0deg 2.2deg,
+      rgba(191, 231, 255, 0.16) 2.35deg 2.48deg,
+      transparent 2.65deg 5.5deg
+    );
 
-        <p>
+  -webkit-mask-image:
+    radial-gradient(
+      circle at 50% 48%,
+      transparent 0 18%,
+      black 52%,
+      transparent 82%
+    );
 
-          It is getting
-          <br>
+  mask-image:
+    radial-gradient(
+      circle at 50% 48%,
+      transparent 0 18%,
+      black 52%,
+      transparent 82%
+    );
+}
 
-          further away.
 
-        </p>
+/* ==========================================
+   SIGNAL ROUGE
+========================================== */
 
-        <em>
-          You accelerate.
-        </em>
+.mission-signal {
+  position: absolute;
 
-      </div>
+  z-index: 8;
 
-    </section>
+  left: 72%;
+  top: 43%;
 
+  width: 34px;
 
-    <!-- Fin de la conduite -->
+  aspect-ratio: 1;
 
-    <section
-      class="story-beat"
-      data-scene="rooftop"
-    >
+  opacity: 0;
 
-      <div class="beat-copy">
+  pointer-events: none;
 
-        <p>
+  transform:
+    translate(-50%, -50%)
+    scale(0.35);
 
-          The signal is waiting
-          <br>
+  transition:
+    left 1.2s ease,
+    top 1.2s ease,
+    opacity 450ms ease,
+    transform 1.2s ease;
+}
 
-          on the next rooftop.
 
-        </p>
+.signal-core {
+  position: absolute;
 
-        <em>
-          The motorcycle cannot follow.
-        </em>
+  inset: 34%;
 
-      </div>
+  border-radius: 50%;
 
-    </section>
+  background: #ffffff;
 
+  box-shadow:
+    0 0 7px #ffffff,
+    0 0 18px #ff2449,
+    0 0 48px #ff143d;
 
-    <!-- Saut -->
+  animation:
+    signalCore 1s
+    ease-in-out infinite;
+}
 
-    <section
-      class="story-beat"
-      data-scene="jump"
-    >
 
-      <div class="beat-copy">
+.signal-ring {
+  position: absolute;
 
-        <p>
+  inset: 5%;
 
-          The distance
-          <br>
+  border:
+    1px solid
+    rgba(255, 54, 83, 0.8);
 
-          is impossible.
+  border-radius: 50%;
 
-        </p>
+  box-shadow:
+    0 0 18px
+    rgba(255, 30, 66, 0.55);
 
-        <em>
-          You jump anyway.
-        </em>
+  animation:
+    signalRing 1.45s
+    ease-out infinite;
+}
 
-      </div>
 
-    </section>
+/* ==========================================
+   TRAIN
+========================================== */
 
+.train-wrap {
+  position: absolute;
 
-    <!-- Dans le vide -->
+  z-index: 4;
 
-    <section
-      class="story-beat"
-      data-scene="airborne"
-    >
+  left: -130%;
+  top: 41%;
 
-      <div class="beat-copy">
+  width:
+    min(118vw, 1800px);
 
-        <small>
-          FOR THREE SECONDS
-        </small>
+  opacity: 0;
 
-        <p>
-          The entire city
-        </p>
+  transform:
+    rotate(-4deg)
+    scale(0.76);
 
-        <em>
-          waits below you.
-        </em>
+  transition:
+    left 1.4s
+    cubic-bezier(
+      0.1,
+      0.75,
+      0.15,
+      1
+    ),
+    top 1s ease,
+    opacity 400ms ease,
+    transform 1.3s ease;
+}
 
-      </div>
 
-    </section>
+.train {
+  width: 100%;
 
+  filter:
+    brightness(0.7)
+    drop-shadow(
+      0 30px 20px
+      rgba(0, 0, 0, 0.75)
+    );
+}
 
-    <!-- Train -->
 
-    <section
-      class="story-beat"
-      data-scene="train"
-    >
+/* ==========================================
+   PERSONNE À SAUVER
+========================================== */
 
-      <div class="beat-copy">
+.rescue-light {
+  position: absolute;
 
-        <p>
+  z-index: 7;
 
-          You land
-          <br>
+  top: 41%;
+  right: 13%;
 
-          on a moving train.
+  width: 150px;
 
-        </p>
+  aspect-ratio: 1;
 
-        <em>
-          It was not there a moment ago.
-        </em>
+  opacity: 0;
 
-      </div>
+  border-radius: 50%;
 
-    </section>
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.95),
+      rgba(130, 224, 255, 0.42) 18%,
+      rgba(255, 42, 70, 0.25) 46%,
+      transparent 72%
+    );
 
+  filter:
+    blur(8px);
 
-    <!-- Compte à rebours -->
+  transform:
+    scale(0.25);
 
-    <section
-      class="story-beat"
-      data-scene="countdown"
-    >
+  transition:
+    opacity 800ms ease,
+    transform 1.2s ease;
+}
 
-      <div class="countdown-panel">
 
-        <small>
-          ROUTE FAILURE
-        </small>
+.rescue-light span {
+  position: absolute;
 
-        <p>
-          THE BRIDGE ENDS IN
-        </p>
+  inset: 27%;
 
-        <strong id="countdown-value">
-          08
-        </strong>
+  border-radius: 50%;
 
-        <span>
-          SECONDS
-        </span>
+  background: #ffffff;
 
-      </div>
+  filter:
+    blur(10px);
 
-    </section>
+  animation:
+    rescuePulse 1.15s
+    ease-in-out infinite;
+}
 
 
-    <!-- Passager -->
+/* ==========================================
+   IMPACT ET NOIR FINAL
+========================================== */
 
-    <section
-      class="story-beat"
-      data-scene="passenger"
-    >
+.impact-flash {
+  position: absolute;
 
-      <div class="beat-copy">
+  z-index: 20;
 
-        <p>
+  inset: 0;
 
-          There is someone
-          <br>
+  opacity: 0;
 
-          inside the final carriage.
+  pointer-events: none;
 
-        </p>
+  background:
+    radial-gradient(
+      circle at 62% 40%,
+      white,
+      #ff3150 12%,
+      rgba(255, 36, 58, 0.2) 35%,
+      transparent 63%
+    );
+}
 
-      </div>
 
-    </section>
+.nightmare-blackout {
+  position: absolute;
 
+  z-index: 21;
 
-    <!-- Mission -->
+  inset: 0;
 
-    <section
-      class="story-beat"
-      data-scene="rescue"
-    >
+  opacity: 0;
 
-      <div class="beat-copy">
+  pointer-events: none;
 
-        <p>
+  background: #010104;
 
-          You came here
-          <br>
+  transition:
+    opacity 1.1s ease;
+}
 
-          to rescue someone.
 
-        </p>
+/* ==========================================
+   INTERFACE
+========================================== */
 
-        <em>
-          You still do not know who.
-        </em>
+.action-header {
+  position: fixed;
 
-      </div>
+  z-index: 50;
 
-    </section>
+  top: 0;
+  left: 0;
 
+  display: grid;
 
-    <!-- Prendre la main -->
+  grid-template-columns:
+    1fr auto 1fr;
 
-    <section
-      class="story-beat hand-beat"
-      data-scene="hand"
-    >
+  align-items: center;
 
-      <div class="beat-copy">
+  width: 100%;
 
-        <p>
+  padding:
+    24px 34px;
 
-          There is no time
-          <br>
+  font:
+    9px/1
+    "DM Mono",
+    monospace;
 
-          to ask.
+  letter-spacing: 0.15em;
 
-        </p>
+  text-transform: uppercase;
+}
 
-        <button
-          class="take-hand"
-          id="take-hand"
-          type="button"
-        >
-          TAKE THEIR HAND →
-        </button>
 
-      </div>
+.action-header > a:last-child {
+  justify-self: end;
 
-    </section>
+  padding-bottom: 5px;
 
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.35);
+}
 
-    <!-- Chute finale -->
 
-    <section
-      class="story-beat"
-      data-scene="fall"
-    >
+.action-location {
+  display: flex;
 
-      <div class="beat-copy">
+  align-items: center;
 
-        <small>
-          IMPACT SUSPENDED
-        </small>
+  gap: 10px;
+}
 
-        <p>
-          For one impossible moment,
-        </p>
 
-        <em>
+.location-dot {
+  width: 6px;
+  height: 6px;
 
-          nothing is falling
-          <br>
+  border-radius: 50%;
 
-          at the same speed.
+  background: var(--red);
 
-        </em>
+  box-shadow:
+    0 0 12px
+    var(--red);
 
-      </div>
+  animation:
+    auraPulse 1.5s infinite;
+}
 
-    </section>
 
+.sound-toggle {
+  position: fixed;
 
-    <!-- Troisième signal -->
+  z-index: 60;
 
-    <section
-      class="story-beat pulse-beat"
-      data-scene="pulse"
-    >
+  top: 62px;
+  right: 34px;
 
-      <div class="signal-panel">
+  padding: 0;
 
-        <span>
-          LIFE SIGNALS DETECTED
-        </span>
+  color:
+    rgba(255, 255, 255, 0.58);
 
-        <strong id="signal-count">
-          02
-        </strong>
+  background: none;
 
-        <p id="signal-message">
-          TWO PULSES STABLE
-        </p>
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
 
-        <a
-          href="nightmare.html"
-          class="nightmare-link"
-          id="nightmare-link"
-        >
-          TRACE THE THIRD PULSE →
-        </a>
+  letter-spacing: 0.14em;
 
-      </div>
+  cursor: pointer;
+}
 
-    </section>
 
-  </main>
+.research-note {
+  position: fixed;
 
+  z-index: 40;
 
-  <!-- Cartel du musée -->
+  left: 34px;
+  bottom: 34px;
 
-  <div class="museum-label">
+  width:
+    min(290px, 28vw);
 
-    <strong>
-      THE MISSION WITH NO INSTRUCTIONS
-    </strong>
+  padding-left: 14px;
 
-    <span>
+  border-left:
+    1px solid
+    rgba(255, 255, 255, 0.24);
 
-      IMMERSIVE PROJECTION · KINETIC FLOOR ·
-      SPATIAL SOUND · INTERACTIVE LIGHT
+  font-family:
+    "DM Mono",
+    monospace;
 
-    </span>
+  text-transform: uppercase;
 
-  </div>
+  transition:
+    opacity 500ms ease;
+}
 
 
-  <!-- Sons conservés -->
+.research-note span {
+  color: var(--cyan);
 
-  <audio
-    id="motorcycle-start"
-    src="./motorcycle-start.mp3"
-    preload="auto"
-  ></audio>
+  font-size: 8px;
 
-  <audio
-    id="train-pass"
-    src="./train-pass.mp3"
-    preload="auto"
-  ></audio>
+  letter-spacing: 0.14em;
+}
 
 
-  <script src="./action.js?v=53"></script>
+.research-note p {
+  margin:
+    8px 0;
 
-</body>
-</html>
+  color:
+    rgba(255, 255, 255, 0.55);
+
+  font-size: 8px;
+
+  line-height: 1.55;
+
+  letter-spacing: 0.05em;
+}
+
+
+.research-note strong {
+  color:
+    rgba(255, 255, 255, 0.82);
+
+  font-size: 8px;
+
+  letter-spacing: 0.1em;
+}
+
+
+.action-progress {
+  position: fixed;
+
+  z-index: 50;
+
+  top: 50%;
+  right: 17px;
+
+  width: 1px;
+  height: 160px;
+
+  background:
+    rgba(255, 255, 255, 0.14);
+
+  transform:
+    translateY(-50%);
+}
+
+
+.action-progress span {
+  display: block;
+
+  width: 100%;
+
+  height:
+    calc(
+      var(--scene-progress) *
+      100%
+    );
+
+  background:
+    linear-gradient(
+      #ffffff,
+      var(--red)
+    );
+
+  box-shadow:
+    0 0 9px
+    var(--red);
+
+  transition:
+    height 650ms ease;
+}
+
+
+.scroll-cue {
+  position: fixed;
+
+  z-index: 40;
+
+  right: 34px;
+  bottom: 31px;
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+
+/* ==========================================
+   SECTIONS ET TEXTES
+========================================== */
+
+.action-story {
+  position: relative;
+
+  z-index: 10;
+}
+
+
+.story-beat {
+  display: grid;
+
+  place-items: center;
+
+  min-height: 100svh;
+
+  padding:
+    110px 12vw 130px;
+
+  scroll-snap-align: start;
+
+  scroll-snap-stop: always;
+}
+
+
+.intro-copy {
+  width:
+    min(1050px, 100%);
+
+  text-align: center;
+}
+
+
+.room-number,
+.room-subtitle {
+  margin: 0;
+
+  font:
+    9px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+}
+
+
+.intro-copy h1 {
+  margin:
+    22px 0 14px;
+
+  font:
+    400
+    clamp(95px, 20vw, 285px) / 0.72
+    "Gloock",
+    serif;
+
+  letter-spacing:
+    -0.07em;
+
+  text-shadow:
+    0 0 70px
+    rgba(255, 39, 69, 0.2);
+}
+
+
+.room-subtitle {
+  color: var(--red);
+}
+
+
+.museum-description {
+  width:
+    min(570px, 90%);
+
+  margin:
+    52px auto 0;
+}
+
+
+.museum-description p {
+  margin:
+    2px 0;
+
+  font:
+    clamp(24px, 3.2vw, 48px) / 1.02
+    "Italiana",
+    serif;
+}
+
+
+.museum-description small {
+  display: block;
+
+  margin-top: 24px;
+
+  color:
+    rgba(255, 255, 255, 0.52);
+
+  font:
+    8px/1.7
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.11em;
+
+  text-transform: uppercase;
+}
+
+
+.beat-copy {
+  width:
+    min(920px, 100%);
+
+  text-align: center;
+
+  text-shadow:
+    0 8px 35px
+    rgba(0, 0, 0, 0.9);
+}
+
+
+.beat-copy small {
+  display: block;
+
+  margin-bottom: 22px;
+
+  color: var(--cyan);
+
+  font:
+    9px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.2em;
+}
+
+
+.beat-copy p {
+  margin: 0;
+
+  font:
+    clamp(43px, 6.4vw, 98px) / 0.92
+    "Italiana",
+    serif;
+
+  letter-spacing:
+    -0.035em;
+}
+
+
+.beat-copy em {
+  display: block;
+
+  margin-top: 13px;
+
+  color: #f5b5c0;
+
+  font:
+    400
+    clamp(31px, 4.2vw, 68px) / 1
+    "Gloock",
+    serif;
+}
+
+
+.take-hand,
+.nightmare-link {
+  display: inline-block;
+
+  margin-top: 45px;
+
+  padding:
+    15px 0;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.7);
+
+  color: #ffffff;
+
+  background: none;
+
+  font:
+    10px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.18em;
+
+  cursor: pointer;
+
+  transition:
+    letter-spacing 350ms ease,
+    color 350ms ease;
+}
+
+
+.take-hand:hover,
+.nightmare-link:hover {
+  color: var(--red);
+
+  letter-spacing: 0.27em;
+}
+
+
+/* ==========================================
+   COMPTE À REBOURS
+========================================== */
+
+.countdown-panel,
+.signal-panel {
+  text-align: center;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.16em;
+}
+
+
+.countdown-panel small {
+  color: var(--red);
+}
+
+
+.countdown-panel p {
+  margin:
+    25px 0 5px;
+
+  font-size:
+    clamp(13px, 2vw, 24px);
+}
+
+
+.countdown-panel strong {
+  display: block;
+
+  color: var(--red);
+
+  font:
+    400
+    clamp(140px, 26vw, 380px) / 0.75
+    "Gloock",
+    serif;
+
+  text-shadow:
+    0 0 50px
+    rgba(255, 36, 65, 0.6);
+}
+
+
+.countdown-panel span {
+  font-size: 10px;
+}
+
+
+/* ==========================================
+   SIGNAUX VITAUX
+========================================== */
+
+.signal-panel {
+  position: relative;
+
+  z-index: 30;
+}
+
+
+.signal-panel > span {
+  color:
+    rgba(255, 255, 255, 0.55);
+
+  font-size: 9px;
+}
+
+
+.signal-panel strong {
+  display: block;
+
+  margin:
+    22px 0 10px;
+
+  font:
+    400
+    clamp(150px, 25vw, 360px) / 0.8
+    "Gloock",
+    serif;
+
+  text-shadow:
+    0 0 50px
+    rgba(255, 35, 65, 0.5);
+
+  transition:
+    color 500ms ease,
+    transform 500ms ease;
+}
+
+
+.signal-panel p {
+  margin: 0;
+
+  color: var(--cyan);
+
+  font-size: 9px;
+}
+
+
+.nightmare-link {
+  visibility: hidden;
+
+  opacity: 0;
+
+  transition:
+    opacity 800ms ease 1s,
+    letter-spacing 350ms ease;
+}
+
+
+.pulse-beat.third-signal
+.signal-panel strong {
+  color: var(--red);
+
+  transform:
+    scale(1.08);
+}
+
+
+.pulse-beat.third-signal
+.nightmare-link {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+
+/* ==========================================
+   CARTEL
+========================================== */
+
+.museum-label {
+  position: fixed;
+
+  z-index: 40;
+
+  left: 50%;
+  bottom: 30px;
+
+  display: grid;
+
+  gap: 5px;
+
+  width:
+    min(520px, 44vw);
+
+  text-align: center;
+
+  transform:
+    translateX(-50%);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  text-transform: uppercase;
+
+  transition:
+    opacity 500ms ease;
+}
+
+
+.museum-label strong {
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+}
+
+
+.museum-label span {
+  color:
+    rgba(255, 255, 255, 0.4);
+
+  font-size: 7px;
+
+  letter-spacing: 0.08em;
+}
+
+
+/* ==========================================
+   ÉTATS DES SCÈNES
+========================================== */
+
+body:not([data-scene="intro"])
+:not([data-scene="exhibit"])
+.museum-room {
+  opacity: 0;
+}
+
+
+body:not([data-scene="intro"])
+:not([data-scene="exhibit"])
+.city-plate {
+  opacity: 0.94;
+
+  filter:
+    brightness(0.66)
+    saturate(1.12)
+    contrast(1.06);
+}
+
+
+/* Démarrage de la moto */
+
+body[data-scene="trouble"]
+.motorcycle-wrap {
+  animation:
+    engineAwake 120ms
+    linear infinite alternate;
+}
+
+
+body[data-scene="trouble"]
+.motorcycle-aura {
+  opacity: 0.9;
+}
+
+
+body[data-scene="trouble"]
+.city-plate {
+  transform:
+    scale(1.08)
+    translateX(-2%);
+}
+
+
+/* Conduite */
+
+body[data-scene="ride"]
+.city-plate,
+body[data-scene="directions"]
+.city-plate,
+body[data-scene="pursuit"]
+.city-plate {
+  filter:
+    brightness(0.72)
+    saturate(1.35)
+    contrast(1.08);
+
+  animation:
+    cityRush 1.35s
+    cubic-bezier(
+      0.45,
+      0,
+      0.8,
+      1
+    )
+    infinite alternate;
+}
+
+
+body[data-scene="pursuit"]
+.city-plate {
+  filter:
+    brightness(0.75)
+    saturate(1.55)
+    contrast(1.1);
+
+  animation-duration:
+    720ms;
+}
+
+
+body[data-scene="ride"]
+.speed-field,
+body[data-scene="directions"]
+.speed-field,
+body[data-scene="pursuit"]
+.speed-field {
+  opacity: 0.7;
+}
+
+
+body[data-scene="pursuit"]
+.speed-field {
+  opacity: 0.95;
+
+  animation-duration:
+    380ms;
+}
+
+
+body[data-scene="ride"]
+#weather-canvas,
+body[data-scene="directions"]
+#weather-canvas,
+body[data-scene="pursuit"]
+#weather-canvas {
+  opacity: 0.85;
+}
+
+
+/* Caméra entrant dans la moto */
+
+body[data-scene="ride"]
+.motorcycle-wrap {
+  animation:
+    motorcycleMatchCut 820ms
+    cubic-bezier(
+      0.2,
+      0.75,
+      0.2,
+      1
+    )
+    forwards;
+}
+
+
+body[data-scene="directions"]
+.motorcycle-wrap,
+body[data-scene="pursuit"]
+.motorcycle-wrap,
+body[data-scene="rooftop"]
+.motorcycle-wrap,
+body[data-scene="jump"]
+.motorcycle-wrap,
+body[data-scene="airborne"]
+.motorcycle-wrap,
+body[data-scene="train"]
+.motorcycle-wrap,
+body[data-scene="countdown"]
+.motorcycle-wrap,
+body[data-scene="passenger"]
+.motorcycle-wrap,
+body[data-scene="rescue"]
+.motorcycle-wrap,
+body[data-scene="hand"]
+.motorcycle-wrap,
+body[data-scene="fall"]
+.motorcycle-wrap,
+body[data-scene="pulse"]
+.motorcycle-wrap {
+  visibility: hidden;
+
+  opacity: 0;
+}
+
+
+/* Entrée du cockpit */
+
+body[data-scene="ride"]
+.cockpit-wrap {
+  animation:
+    cockpitEnter 900ms 350ms
+    cubic-bezier(
+      0.16,
+      0.8,
+      0.2,
+      1
+    )
+    both;
+}
+
+
+body[data-scene="ride"]
+.action-cockpit,
+body[data-scene="directions"]
+.action-cockpit,
+body[data-scene="pursuit"]
+.action-cockpit {
+  animation:
+    cockpitVibration 110ms
+    linear infinite alternate;
+}
+
+
+body[data-scene="directions"]
+.cockpit-wrap,
+body[data-scene="pursuit"]
+.cockpit-wrap {
+  bottom: -9%;
+
+  opacity: 1;
+
+  transform:
+    translate3d(
+      calc(-50% + var(--cockpit-x)),
+      0,
+      0
+    )
+    scale(1.04)
+    rotate(var(--steer));
+}
+
+
+body[data-scene="pursuit"]
+.cockpit-wrap {
+  transform:
+    translate3d(
+      calc(-50% + var(--cockpit-x)),
+      1%,
+      0
+    )
+    scale(1.1)
+    rotate(var(--steer));
+}
+
+
+body[data-scene="ride"]
+.pov-speed-lines,
+body[data-scene="directions"]
+.pov-speed-lines,
+body[data-scene="pursuit"]
+.pov-speed-lines {
+  opacity: 0.62;
+
+  animation:
+    povRush 480ms
+    linear infinite;
+}
+
+
+body[data-scene="pursuit"]
+.pov-speed-lines {
+  opacity: 0.85;
+
+  animation-duration:
+    300ms;
+}
+
+
+/* Signal rouge */
+
+body[data-scene="directions"]
+.mission-signal {
+  left: 67%;
+  top: 38%;
+
+  opacity: 1;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1);
+
+  animation:
+    signalCross 2.8s
+    ease-in-out infinite alternate;
+}
+
+
+body[data-scene="pursuit"]
+.mission-signal {
+  left: 74%;
+  top: 31%;
+
+  opacity: 1;
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.68);
+}
+
+
+body[data-scene="rooftop"]
+.mission-signal,
+body[data-scene="jump"]
+.mission-signal {
+  left: 67%;
+  top: 35%;
+
+  opacity: 1;
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.9);
+}
+
+
+/* Sortie naturelle du cockpit */
+
+body[data-scene="rooftop"]
+.cockpit-wrap {
+  bottom: -9%;
+
+  opacity: 1;
+
+  animation:
+    cockpitLeave 1.15s
+    cubic-bezier(
+      0.3,
+      0.05,
+      0.6,
+      1
+    )
+    forwards;
+}
+
+
+/* Toits et saut */
+
+body[data-scene="rooftop"]
+.city-plate,
+body[data-scene="jump"]
+.city-plate {
+  transform:
+    scale(1.15)
+    translateY(5%);
+}
+
+
+body[data-scene="airborne"]
+.city-plate {
+  transform:
+    scale(1.28)
+    translateY(12%)
+    rotate(1.5deg);
+}
+
+
+body[data-scene="airborne"]
+.speed-field {
+  opacity: 0.42;
+
+  transform:
+    rotate(90deg);
+}
+
+
+/* Train */
+
+body[data-scene="train"]
+.train-wrap,
+body[data-scene="countdown"]
+.train-wrap,
+body[data-scene="passenger"]
+.train-wrap,
+body[data-scene="rescue"]
+.train-wrap,
+body[data-scene="hand"]
+.train-wrap {
+  left: -7%;
+
+  opacity: 1;
+
+  transform:
+    rotate(-4deg)
+    scale(0.9);
+}
+
+
+body[data-scene="countdown"]
+.train-wrap {
+  left: 4%;
+
+  transform:
+    rotate(-3deg)
+    scale(1.02);
+}
+
+
+body[data-scene="passenger"]
+.train-wrap,
+body[data-scene="rescue"]
+.train-wrap,
+body[data-scene="hand"]
+.train-wrap {
+  left: 15%;
+  top: 37%;
+
+  filter:
+    brightness(0.62);
+
+  transform:
+    rotate(-2deg)
+    scale(1.12);
+}
+
+
+/* Personne à sauver */
+
+body[data-scene="passenger"]
+.rescue-light,
+body[data-scene="rescue"]
+.rescue-light,
+body[data-scene="hand"]
+.rescue-light {
+  opacity: 1;
+
+  transform:
+    scale(1);
+}
+
+
+body[data-scene="hand"]
+.rescue-light {
+  transform:
+    scale(1.7);
+}
+
+
+/* Chute finale */
+
+body[data-scene="fall"]
+.city-plate {
+  filter:
+    brightness(0.52)
+    saturate(1.65);
+
+  transform:
+    scale(1.3)
+    rotate(15deg)
+    translateY(8%);
+}
+
+
+body[data-scene="fall"]
+.train-wrap {
+  left: 15%;
+  top: 45%;
+
+  opacity: 1;
+
+  transform:
+    rotate(18deg)
+    scale(1.18);
+}
+
+
+body[data-scene="fall"]
+.rescue-light {
+  opacity: 1;
+
+  transform:
+    scale(2.8);
+}
+
+
+body[data-scene="fall"]
+.impact-flash {
+  animation:
+    impactFlash 1.1s
+    ease-out both;
+}
+
+
+/* Danger */
+
+body[data-scene="countdown"]
+.action-world::after,
+body[data-scene="passenger"]
+.action-world::after {
+  opacity: 0.42;
+
+  animation:
+    dangerPulse 1.1s
+    ease-in-out infinite;
+}
+
+
+body[data-scene="rescue"]
+.action-world::after,
+body[data-scene="hand"]
+.action-world::after {
+  opacity: 0.62;
+
+  animation:
+    dangerPulse 720ms
+    ease-in-out infinite;
+}
+
+
+body[data-scene="fall"]
+.action-world::after {
+  opacity: 0.82;
+
+  animation:
+    dangerPulse 380ms
+    ease-in-out infinite;
+}
+
+
+/* Noir final */
+
+body[data-scene="pulse"]
+.nightmare-blackout {
+  opacity: 1;
+}
+
+
+body[data-scene="pulse"]
+.research-note,
+body[data-scene="pulse"]
+.museum-label,
+body[data-scene="pulse"]
+.scroll-cue {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes auraPulse {
+  50% {
+    opacity: 0.45;
+
+    transform:
+      scale(1.08);
+  }
+}
+
+
+@keyframes rescuePulse {
+  50% {
+    opacity: 0.5;
+
+    transform:
+      scale(1.45);
+  }
+}
+
+
+@keyframes speedRush {
+  to {
+    transform:
+      translateX(8%)
+      skewX(-8deg);
+  }
+}
+
+
+@keyframes engineAwake {
+  from {
+    transform:
+      translateX(-50%)
+      scale(0.74)
+      translateY(-1px);
+  }
+
+  to {
+    transform:
+      translateX(-50%)
+      scale(0.74)
+      translateY(1px);
+  }
+}
+
+
+@keyframes motorcycleMatchCut {
+  0% {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      scale(0.74);
+  }
+
+  70% {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      translateY(26%)
+      scale(2.6);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      translateY(38%)
+      scale(3.4);
+  }
+}
+
+
+@keyframes cockpitEnter {
+  0% {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        -50%,
+        45%,
+        0
+      )
+      scale(0.82);
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translate3d(
+        calc(-50% + var(--cockpit-x)),
+        0,
+        0
+      )
+      scale(1.04)
+      rotate(var(--steer));
+  }
+}
+
+
+@keyframes cockpitLeave {
+  0% {
+    opacity: 1;
+
+    transform:
+      translate3d(
+        calc(-50% + var(--cockpit-x)),
+        0,
+        0
+      )
+      scale(1.04)
+      rotate(var(--steer));
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        calc(-50% + var(--cockpit-x)),
+        76%,
+        0
+      )
+      scale(1.02);
+  }
+}
+
+
+@keyframes cityRush {
+  from {
+    transform:
+      scale(1.13)
+      translate3d(
+        -2%,
+        1%,
+        0
+      );
+  }
+
+  to {
+    transform:
+      scale(1.25)
+      translate3d(
+        -6%,
+        3%,
+        0
+      );
+  }
+}
+
+
+@keyframes cockpitVibration {
+  from {
+    transform:
+      translateY(-1px);
+  }
+
+  to {
+    transform:
+      translateY(1px);
+  }
+}
+
+
+@keyframes povRush {
+  from {
+    opacity: 0.2;
+
+    transform:
+      scale(0.72);
+  }
+
+  to {
+    opacity: 0.72;
+
+    transform:
+      scale(1.18);
+  }
+}
+
+
+@keyframes signalCore {
+  50% {
+    opacity: 0.5;
+
+    transform:
+      scale(0.72);
+  }
+}
+
+
+@keyframes signalRing {
+  0% {
+    opacity: 0.9;
+
+    transform:
+      scale(0.45);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      scale(1.55);
+  }
+}
+
+
+@keyframes signalCross {
+  from {
+    margin-left: -5vw;
+
+    margin-top: 2vh;
+  }
+
+  to {
+    margin-left: 5vw;
+
+    margin-top: -3vh;
+  }
+}
+
+
+@keyframes impactFlash {
+  0%,
+  35% {
+    opacity: 0;
+  }
+
+  48% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+
+@keyframes dangerPulse {
+  0%,
+  100% {
+    filter:
+      brightness(0.75);
+  }
+
+  50% {
+    filter:
+      brightness(1.45);
+  }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 760px) {
+  .action-header {
+    grid-template-columns:
+      1fr auto;
+
+    padding:
+      18px 20px;
+  }
+
+  .action-location {
+    display: none;
+  }
+
+  .sound-toggle {
+    top: 52px;
+    right: 20px;
+  }
+
+  .story-beat {
+    padding:
+      90px 24px 120px;
+  }
+
+  .intro-copy h1 {
+    font-size:
+      clamp(
+        83px,
+        27vw,
+        150px
+      );
+  }
+
+  .beat-copy p {
+    font-size:
+      clamp(
+        42px,
+        12vw,
+        65px
+      );
+  }
+
+  .beat-copy em {
+    font-size:
+      clamp(
+        28px,
+        8vw,
+        45px
+      );
+  }
+
+  .motorcycle-wrap {
+    bottom: 14vh;
+
+    width: 100vw;
+  }
+
+  .cockpit-wrap {
+    bottom: -8%;
+
+    width: 205vw;
+  }
+
+  .train-wrap {
+    width: 180vw;
+  }
+
+  .research-note {
+    left: 20px;
+    bottom: 22px;
+
+    width: 220px;
+  }
+
+  .research-note p {
+    display: none;
+  }
+
+  .museum-label {
+    display: none;
+  }
+
+  .scroll-cue {
+    right: 20px;
+    bottom: 22px;
+
+    max-width: 130px;
+
+    line-height: 1.4;
+
+    text-align: right;
+  }
+
+  .rescue-light {
+    right: 5%;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
