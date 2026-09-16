@@ -3016,3 +3016,356 @@ a {
   transform:
     translateY(0);
 }
+/* ==========================================
+   ROMANCE V4
+   ESPACE ABSTRAIT ET TRANSITIONS DOUCES
+========================================== */
+
+
+/* Supprimer l’architecture trop rigide */
+
+.gallery-ceiling,
+.gallery-back-wall,
+.gallery-wall,
+.gallery-floor {
+  display: none !important;
+}
+
+
+/* ==========================================
+   NOUVEAU FOND ABSTRAIT
+========================================== */
+
+.romance-world {
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      #fff8f1 0%,
+      #eadbdc 38%,
+      #bda9b5 72%,
+      #766275 100%
+    );
+}
+
+
+/* Halo froid du début */
+
+.cold-light {
+  opacity:
+    calc(
+      1 -
+      var(--warmth) * 0.82 -
+      var(--jealousy) * 0.72
+    );
+
+  background:
+    radial-gradient(
+      ellipse at 48% 35%,
+      rgba(255, 255, 255, 0.94),
+      rgba(230, 218, 235, 0.55) 35%,
+      rgba(149, 129, 164, 0.2) 66%,
+      transparent 82%
+    );
+
+  filter:
+    blur(32px);
+
+  transform:
+    scale(1.17);
+}
+
+
+/* La chaleur arrive lentement */
+
+.warm-light {
+  opacity:
+    calc(
+      var(--warmth) * 0.92
+    );
+
+  background:
+    radial-gradient(
+      ellipse at 50% 40%,
+      rgba(255, 249, 194, 0.96),
+      rgba(255, 193, 142, 0.7) 28%,
+      rgba(247, 108, 124, 0.45) 54%,
+      rgba(157, 46, 91, 0.17) 73%,
+      transparent 88%
+    );
+
+  filter:
+    blur(42px)
+    saturate(1.35);
+
+  transform:
+    scale(1.15);
+
+  mix-blend-mode: screen;
+}
+
+
+/* Le rouge progresse sans cassure */
+
+.red-invasion {
+  opacity:
+    calc(
+      var(--jealousy) * 0.92
+    );
+
+  background:
+    radial-gradient(
+      ellipse at 53% 43%,
+      rgba(255, 113, 125, 0.76),
+      rgba(230, 35, 76, 0.58) 29%,
+      rgba(151, 5, 54, 0.64) 57%,
+      rgba(58, 0, 27, 0.88) 78%,
+      rgba(17, 0, 12, 0.97) 100%
+    );
+
+  filter:
+    blur(
+      calc(
+        58px -
+        var(--jealousy) * 22px
+      )
+    )
+    saturate(
+      calc(
+        1.2 +
+        var(--jealousy) * 0.65
+      )
+    );
+
+  transform:
+    scale(
+      calc(
+        1.17 -
+        var(--jealousy) * 0.1
+      )
+    );
+}
+
+
+/* Profondeur floue derrière les lumières */
+
+.abstract-presences::before {
+  content: "";
+
+  position: absolute;
+
+  top: 12%;
+  left: 50%;
+
+  width: 90vw;
+  height: 85vh;
+
+  border-radius: 50%;
+
+  opacity:
+    calc(
+      0.22 +
+      var(--warmth) * 0.28 +
+      var(--jealousy) * 0.32
+    );
+
+  background:
+    conic-gradient(
+      from 140deg,
+      rgba(255, 255, 255, 0.13),
+      rgba(255, 181, 163, 0.34),
+      rgba(212, 26, 74, 0.32),
+      rgba(93, 0, 43, 0.38),
+      rgba(255, 255, 255, 0.13)
+    );
+
+  filter:
+    blur(75px);
+
+  transform:
+    translateX(-50%)
+    rotate(
+      calc(
+        var(--progress) * 40deg
+      )
+    );
+
+  animation:
+    abstractBackgroundBreathing 12s
+    ease-in-out infinite;
+}
+
+
+/* Pas de vibration sale pendant toute la partie rouge */
+
+.phase-jealousy .romance-world,
+.phase-jealousy .abstract-presences {
+  animation: none;
+}
+
+
+/* La vibration ne revient que sur THAT IS ENOUGH */
+
+.phase-enough .romance-world {
+  animation:
+    softRoomImpact 850ms
+    cubic-bezier(
+      0.2,
+      0.9,
+      0.3,
+      1
+    );
+}
+
+
+/* Lumières plus diffuses */
+
+.light-presence {
+  filter:
+    blur(
+      calc(
+        8px -
+        var(--approach) * 3px
+      )
+    );
+}
+
+.presence-core {
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 251, 226, 0.96),
+      rgba(255, 200, 171, 0.58) 26%,
+      rgba(218, 86, 116, 0.3) 53%,
+      transparent 76%
+    );
+}
+
+.presence-two .presence-core {
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255, 176, 184, 0.92),
+      rgba(238, 46, 84, 0.56) 29%,
+      rgba(125, 0, 46, 0.48) 58%,
+      transparent 78%
+    );
+}
+
+
+/* Vagues très lentes */
+
+.light-wave {
+  opacity:
+    calc(
+      0.09 +
+      var(--warmth) * 0.22 +
+      var(--jealousy) * 0.18
+    );
+
+  filter:
+    blur(48px);
+
+  animation-duration: 14s;
+}
+
+.phase-jealousy .light-wave {
+  animation-duration: 8s;
+}
+
+
+/* ==========================================
+   PHRASES PLUS FLUIDES
+========================================== */
+
+.romance-sentence {
+  transition:
+    opacity 650ms ease,
+    filter 650ms ease,
+    transform 750ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.romance-sentence.changing {
+  opacity: 0;
+
+  filter:
+    blur(7px);
+
+  transform:
+    translateY(-8px)
+    scale(0.985);
+}
+
+.romance-page.narration-active
+.romance-narration {
+  transition:
+    opacity 900ms ease,
+    transform 1s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes abstractBackgroundBreathing {
+  0%,
+  100% {
+    border-radius:
+      45% 55% 52% 48% /
+      55% 42% 58% 45%;
+
+    scale: 0.94;
+  }
+
+  50% {
+    border-radius:
+      57% 43% 44% 56% /
+      43% 57% 46% 54%;
+
+    scale: 1.06;
+  }
+}
+
+@keyframes softRoomImpact {
+  0% {
+    transform: scale(1);
+  }
+
+  18% {
+    transform:
+      scale(1.025)
+      translateX(-3px);
+  }
+
+  34% {
+    transform:
+      scale(1.018)
+      translateX(3px);
+  }
+
+  55% {
+    transform:
+      scale(1.01)
+      translateX(-1px);
+  }
+
+  100% {
+    transform:
+      scale(1)
+      translateX(0);
+  }
+}
