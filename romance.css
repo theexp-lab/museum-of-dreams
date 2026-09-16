@@ -1786,3 +1786,148 @@ a {
       1 !important;
   }
 }
+/* ==========================================
+   ROMANCE V5
+   SCROLL AIMANTÉ
+========================================== */
+
+html {
+  scroll-snap-type:
+    y mandatory;
+
+  scroll-behavior: smooth;
+}
+
+.romance-scroll {
+  height: auto;
+}
+
+.story-stop {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+
+  scroll-snap-align: start;
+
+  scroll-snap-stop: always;
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   LUMIÈRES PLUS IMPOSANTES
+========================================== */
+
+.light-presence {
+  width:
+    min(48vw, 680px);
+
+  height:
+    min(72vh, 820px);
+}
+
+
+/* Première lumière */
+
+.first-presence {
+  opacity:
+    calc(
+      0.62 +
+      var(--approach) * 0.38
+    );
+
+  transform:
+    translate(
+      calc(
+        -50% +
+        var(--pointer-x)
+      ),
+      calc(
+        var(--pointer-y) -
+        var(--approach) * 5vh
+      )
+    )
+    scale(
+      calc(
+        0.68 +
+        var(--approach) * 0.68 +
+        var(--jealousy) * 0.2 +
+        var(--ending-pulse) * 0.75
+      )
+    );
+}
+
+
+/* Troisième lumière */
+
+.third-presence {
+  left: 69%;
+
+  transform:
+    translate(
+      calc(
+        -50% -
+        var(--pointer-x)
+      ),
+      var(--pointer-y)
+    )
+    scale(
+      calc(
+        0.52 +
+        var(--third-light) * 0.72 +
+        var(--jealousy) * 0.28 +
+        var(--ending-pulse) * 0.72
+      )
+    );
+}
+
+
+/* À la fin, les deux lumières remplissent l’espace */
+
+.phase-ending .first-presence,
+.phase-ending .third-presence {
+  filter:
+    saturate(1.65)
+    contrast(1.1);
+}
+
+.phase-ending .first-presence .presence-core,
+.phase-ending .third-presence .presence-core {
+  box-shadow:
+    0 0 70px
+    rgba(255, 64, 96, 0.92),
+
+    0 0 230px
+    rgba(155, 0, 48, 0.88);
+}
+
+
+/* Le texte reste parfaitement net au point d’arrêt */
+
+.story-line {
+  will-change:
+    opacity,
+    filter,
+    transform;
+}
+
+.story-line.is-current {
+  pointer-events: auto;
+}
+
+
+/* Mobile */
+
+@media (max-width: 800px) {
+  .light-presence {
+    width: 88vw;
+    height: 68vh;
+  }
+
+  .third-presence {
+    left: 72%;
+  }
+}
