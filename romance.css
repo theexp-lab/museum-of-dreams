@@ -2443,3 +2443,542 @@ a {
     transform: scale(1.018);
   }
 }
+/* ==========================================
+   ROMANCE V3
+   SATURATION ET DRAMATURGIE
+========================================== */
+
+
+/* Plus d’espace entre les phrases finales */
+
+.romance-scroll {
+  height: 1050vh;
+}
+
+
+/* ==========================================
+   SATURATION DU DÉCOR
+========================================== */
+
+.romance-world::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 6;
+
+  opacity:
+    calc(
+      var(--warmth) * 0.65
+    );
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(255, 232, 167, 0.55),
+      rgba(255, 120, 122, 0.28) 40%,
+      transparent 72%
+    );
+
+  mix-blend-mode: screen;
+}
+
+.romance-world::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 10;
+
+  opacity:
+    calc(
+      var(--jealousy) * 0.82
+    );
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 44%,
+      transparent 0%,
+      rgba(255, 24, 64, 0.11) 25%,
+      rgba(112, 0, 26, 0.52) 64%,
+      rgba(24, 0, 8, 0.92) 100%
+    );
+
+  mix-blend-mode: multiply;
+}
+
+
+/* Salle chaude beaucoup plus saturée */
+
+.warm-light {
+  filter:
+    saturate(
+      calc(
+        1 +
+        var(--warmth) * 1.8
+      )
+    )
+    contrast(
+      calc(
+        1 +
+        var(--warmth) * 0.18
+      )
+    );
+
+  background:
+    radial-gradient(
+      circle at 50% 43%,
+      rgba(255, 244, 180, 0.96),
+      rgba(255, 159, 120, 0.7) 28%,
+      rgba(239, 74, 102, 0.42) 53%,
+      transparent 77%
+    );
+}
+
+
+/* Passage brutal vers le carmin */
+
+.red-invasion {
+  opacity:
+    calc(
+      var(--jealousy) * 0.96
+    );
+
+  filter:
+    saturate(1.8)
+    contrast(1.16);
+
+  background:
+    radial-gradient(
+      circle at 50% 43%,
+      rgba(255, 80, 99, 0.65),
+      rgba(215, 12, 53, 0.77) 32%,
+      rgba(102, 0, 27, 0.9) 67%,
+      rgba(21, 0, 8, 0.98) 100%
+    );
+}
+
+
+/* Les murs se referment pendant la jalousie */
+
+.phase-jealousy .gallery-wall {
+  width:
+    calc(
+      33% +
+      var(--jealousy) * 13%
+    );
+
+  filter:
+    saturate(1.65)
+    brightness(0.72);
+
+  background:
+    linear-gradient(
+      90deg,
+      #4c0012,
+      #b40a35,
+      #521020
+    );
+}
+
+.phase-jealousy .gallery-back-wall {
+  filter:
+    saturate(1.85)
+    contrast(1.18);
+
+  background:
+    radial-gradient(
+      circle at 50% 44%,
+      #d91847,
+      #72001f 54%,
+      #27000b
+    );
+
+  box-shadow:
+    inset 0 0 130px
+    rgba(24, 0, 8, 0.88),
+
+    0 0 110px
+    rgba(255, 18, 62, 0.36);
+}
+
+.phase-jealousy .gallery-floor {
+  background:
+    linear-gradient(
+      180deg,
+      #7c0927,
+      #26000c
+    );
+}
+
+
+/* ==========================================
+   PRÉSENCES PLUS INTENSES
+========================================== */
+
+.presence-one .presence-core {
+  filter:
+    saturate(
+      calc(
+        1 +
+        var(--warmth) * 1.4
+      )
+    );
+
+  box-shadow:
+    0 0 45px
+    rgba(255, 235, 192, 0.86),
+
+    0 0 145px
+    rgba(255, 93, 119, 0.48);
+}
+
+.phase-jealousy
+.presence-one .presence-core {
+  background:
+    radial-gradient(
+      ellipse at 50% 27%,
+      rgba(255, 205, 186, 0.94),
+      rgba(255, 74, 102, 0.71) 27%,
+      rgba(113, 0, 29, 0.54) 63%,
+      transparent 79%
+    );
+
+  box-shadow:
+    0 0 45px
+    rgba(255, 79, 104, 0.76),
+
+    0 0 170px
+    rgba(170, 0, 38, 0.68);
+}
+
+
+/* Troisième lumière plus visible */
+
+.presence-two {
+  left:
+    calc(
+      72% -
+      var(--jealousy) * 7%
+    );
+
+  opacity:
+    calc(
+      var(--jealousy) * 0.98
+    );
+}
+
+.presence-two .presence-core {
+  box-shadow:
+    0 0 55px
+    rgba(255, 39, 75, 0.98),
+
+    0 0 190px
+    rgba(149, 0, 34, 0.9);
+}
+
+
+/* ==========================================
+   LE DÉCOR RESPIRE ET PULSE
+========================================== */
+
+.phase-jealousy .abstract-presences {
+  animation:
+    emotionalDistortion 2.2s
+    ease-in-out infinite;
+}
+
+.phase-jealousy .red-pulse {
+  animation-duration:
+    calc(
+      1.15s -
+      var(--jealousy) * 0.48s
+    );
+}
+
+.phase-jealousy .room-ripple {
+  border-width: 2px;
+
+  box-shadow:
+    0 0 20px
+    rgba(255, 28, 69, 0.48);
+
+  animation-duration:
+    calc(
+      1.4s -
+      var(--jealousy) * 0.48s
+    );
+}
+
+
+/* ==========================================
+   THAT IS ENOUGH
+========================================== */
+
+.romance-sentence.is-impact {
+  max-width: none;
+
+  color: #fff4ef;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(78px, 15vw, 230px);
+
+  line-height: 0.76;
+
+  letter-spacing: -0.07em;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 0 20px
+    rgba(255, 255, 255, 0.28),
+
+    0 0 55px
+    rgba(255, 31, 71, 0.88),
+
+    0 0 150px
+    rgba(128, 0, 31, 0.82);
+
+  animation:
+    impactTextPulse 610ms
+    ease-in-out infinite;
+}
+
+.phase-enough .romance-world {
+  animation:
+    roomImpact 760ms
+    cubic-bezier(
+      0.2,
+      0.9,
+      0.3,
+      1
+    );
+}
+
+.phase-enough .gallery-back-wall {
+  box-shadow:
+    inset 0 0 190px
+    rgba(255, 29, 70, 0.75),
+
+    0 0 180px
+    rgba(255, 0, 54, 0.54);
+}
+
+.phase-enough .presence-two {
+  filter:
+    blur(5px)
+    saturate(2.2);
+
+  transform:
+    translate(
+      calc(
+        -50% -
+        var(--pointer-x) * 0.45
+      ),
+      calc(
+        2% +
+        var(--pointer-y)
+      )
+    )
+    scale(1.12);
+}
+
+
+/* ==========================================
+   FIN PLUS SOMBRE
+========================================== */
+
+.phase-ending .romance-world {
+  filter:
+    brightness(0.42)
+    saturate(1.55)
+    contrast(1.22);
+}
+
+.phase-ending .museum-label,
+.phase-ending .dream-data,
+.phase-ending .research-note,
+.phase-ending .scroll-instruction {
+  opacity: 0;
+}
+
+.ending-desire {
+  z-index: 3;
+
+  text-shadow:
+    0 5px 35px
+    rgba(20, 0, 7, 0.88);
+}
+
+.ending-pulse {
+  z-index: 4;
+}
+
+.ending-pulse h2 {
+  filter:
+    saturate(1.6);
+
+  animation-duration: 430ms;
+}
+
+.action-exit .enter-action {
+  z-index: 5;
+}
+
+
+/* ==========================================
+   FLASHS
+========================================== */
+
+.final-flash {
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 242, 230, 0.98),
+      rgba(255, 30, 71, 0.76) 25%,
+      rgba(120, 0, 30, 0.44) 58%,
+      transparent 82%
+    );
+}
+
+.final-flash.enough-flash {
+  animation:
+    enoughFlash 900ms
+    ease-out;
+}
+
+.final-flash.pulse-flash {
+  animation:
+    pulseFlash 1.2s
+    ease-out;
+}
+
+
+/* ==========================================
+   NOUVELLES ANIMATIONS
+========================================== */
+
+@keyframes emotionalDistortion {
+  0%,
+  100% {
+    filter:
+      saturate(1.2)
+      contrast(1.02);
+
+    transform:
+      scale(1);
+  }
+
+  50% {
+    filter:
+      saturate(1.65)
+      contrast(1.12);
+
+    transform:
+      scale(1.018);
+  }
+}
+
+@keyframes impactTextPulse {
+  0%,
+  100% {
+    transform: scale(0.985);
+  }
+
+  22% {
+    transform: scale(1.035);
+  }
+
+  42% {
+    transform: scale(0.995);
+  }
+}
+
+@keyframes roomImpact {
+  0% {
+    transform: scale(1);
+  }
+
+  12% {
+    transform:
+      translateX(-7px)
+      scale(1.025);
+  }
+
+  25% {
+    transform:
+      translateX(6px)
+      scale(1.035);
+  }
+
+  42% {
+    transform:
+      translateX(-3px)
+      scale(1.018);
+  }
+
+  100% {
+    transform:
+      translateX(0)
+      scale(1);
+  }
+}
+
+@keyframes enoughFlash {
+  0% {
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  28% {
+    opacity: 0.38;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulseFlash {
+  0% {
+    opacity: 0;
+  }
+
+  9% {
+    opacity: 1;
+  }
+
+  18% {
+    opacity: 0.12;
+  }
+
+  31% {
+    opacity: 0.74;
+  }
+
+  48% {
+    opacity: 0.08;
+  }
+
+  60% {
+    opacity: 0.46;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
