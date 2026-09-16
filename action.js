@@ -59,7 +59,7 @@ const researchPrinciple =
 
 
 /* ==========================================
-   AUDIO IMPORTÉ
+   FICHIERS AUDIO
 ========================================== */
 
 const startSound =
@@ -128,6 +128,12 @@ let windFilter;
 let rumbleOscillator;
 
 let rumbleGain;
+
+let electricOscillator;
+
+let electricGain;
+
+let signalToneTimer;
 
 const played =
   new Set();
@@ -200,6 +206,11 @@ function ensureAudio() {
 }
 
 
+/*
+ * Chrome demande une interaction
+ * avant de permettre la lecture.
+ */
+
 function primeMedia() {
   ensureAudio();
 
@@ -265,6 +276,7 @@ function primeMedia() {
           sceneNames[
             activeIndex
           ],
+
           activeIndex
         );
       }
@@ -273,7 +285,7 @@ function primeMedia() {
 
 
 /* ==========================================
-   ATMOSPHÈRE SONORE
+   AMBIANCE DE LA VILLE
 ========================================== */
 
 function createAtmosphere() {
@@ -287,6 +299,9 @@ function createAtmosphere() {
 
   atmosphereReady =
     true;
+
+
+  /* Créer une texture de vent */
 
   const frameCount =
     audioContext.sampleRate *
@@ -366,6 +381,8 @@ function createAtmosphere() {
   windSource.start();
 
 
+  /* Grondement grave */
+
   rumbleOscillator =
     audioContext
       .createOscillator();
@@ -394,8 +411,44 @@ function createAtmosphere() {
     );
 
   rumbleOscillator.start();
+
+
+  /* Bourdonnement électrique de la ville */
+
+  electricOscillator =
+    audioContext
+      .createOscillator();
+
+  electricOscillator.type =
+    "triangle";
+
+  electricOscillator.frequency.value =
+    96;
+
+
+  electricGain =
+    audioContext
+      .createGain();
+
+  electricGain.gain.value =
+    0.0001;
+
+
+  electricOscillator
+    .connect(
+      electricGain
+    )
+    .connect(
+      masterGain
+    );
+
+  electricOscillator.start();
 }
 
+
+/* ==========================================
+   VOLUME PAR SCÈNE
+========================================== */
 
 function setAtmosphere(
   scene
@@ -407,21 +460,55 @@ function setAtmosphere(
     return;
   }
 
+
+  /*
+   * Le vent reste discret.
+   * Il apparaît surtout pendant
+   * les accélérations et la chute.
+   */
+
   const windLevels = {
-    ride: 0.085,
-    directions: 0.12,
-    pursuit: 0.155,
-    rooftop: 0.018,
-    jump: 0.09,
-    airborne: 0.16,
-    train: 0.06,
-    countdown: 0.045,
-    passenger: 0.035,
-    rescue: 0.05,
-    hand: 0.07,
-    fall: 0.14,
+    ride: 0.035,
+    directions: 0.052,
+    pursuit: 0.09,
+    rooftop: 0.0001,
+    jump: 0.028,
+    airborne: 0.105,
+    train: 0.025,
+    countdown: 0.012,
+    passenger: 0.008,
+    rescue: 0.012,
+    hand: 0.018,
+    fall: 0.075,
     pulse: 0.0001
   };
+
+
+  /*
+   * La texture électrique donne
+   * une présence à la ville sans
+   * produire un souffle permanent.
+   */
+
+  const cityLevels = {
+    intro: 0.018,
+    exhibit: 0.022,
+    trouble: 0.032,
+    ride: 0.025,
+    directions: 0.022,
+    pursuit: 0.018,
+    rooftop: 0.0001,
+    jump: 0.008,
+    airborne: 0.004,
+    train: 0.025,
+    countdown: 0.045,
+    passenger: 0.052,
+    rescue: 0.06,
+    hand: 0.068,
+    fall: 0.08,
+    pulse: 0.0001
+  };
+
 
   const dangerScenes = [
     "countdown",
@@ -430,6 +517,7 @@ function setAtmosphere(
     "hand",
     "fall"
   ];
+
 
   const windLevel =
     soundEnabled
@@ -441,6 +529,18 @@ function setAtmosphere(
         )
       : 0.0001;
 
+
+  const cityLevel =
+    soundEnabled
+      ? (
+          cityLevels[
+            scene
+          ] ||
+          0.0001
+        )
+      : 0.0001;
+
+
   const rumbleLevel =
     soundEnabled &&
     dangerScenes.includes(
@@ -449,8 +549,10 @@ function setAtmosphere(
       ? 0.075
       : 0.0001;
 
+
   const now =
     audioContext.currentTime;
+
 
   windGain.gain.setTargetAtTime(
     windLevel,
@@ -458,11 +560,23 @@ function setAtmosphere(
     0.35
   );
 
+
   rumbleGain.gain.setTargetAtTime(
     rumbleLevel,
     now,
     0.45
   );
+
+
+  electricGain.gain.setTargetAtTime(
+    cityLevel,
+    now,
+
+    scene === "rooftop"
+      ? 0.08
+      : 0.5
+  );
+
 
   windFilter.frequency.setTargetAtTime(
     scene === "airborne"
@@ -472,171 +586,6 @@ function setAtmosphere(
     now,
 
     0.3
-  );
-}
-
-
-/* ==========================================
-   SOUFFLES DE VITESSE
-========================================== */
-
-function noiseBurst(
-  duration = 0.45,
-  volume = 0.1,
-  frequency = 1100
-) {
-  if (
-    !soundEnabled ||
-    !audioContext ||
-    !masterGain
-  ) {
-    return;
-  }
-
-  const frameCount =
-    Math.floor(
-      audioContext.sampleRate *
-      duration
-    );
-
-  const buffer =
-    audioContext.createBuffer(
-      1,
-      frameCount,
-      audioContext.sampleRate
-    );
-
-  const data =
-    buffer.getChannelData(
-      0
-    );
-
-  for (
-    let index = 0;
-    index < frameCount;
-    index += 1
-  ) {
-    data[index] =
-      (
-        Math.random() *
-        2 -
-        1
-      ) *
-      (
-        1 -
-        index /
-        frameCount
-      );
-  }
-
-  const source =
-    audioContext
-      .createBufferSource();
-
-  const filter =
-    audioContext
-      .createBiquadFilter();
-
-  const gain =
-    audioContext
-      .createGain();
-
-  const now =
-    audioContext.currentTime;
-
-  filter.type =
-    "bandpass";
-
-  filter.frequency.value =
-    frequency;
-
-  filter.Q.value =
-    0.8;
-
-  gain.gain.setValueAtTime(
-    volume,
-    now
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now +
-    duration
-  );
-
-  source.buffer =
-    buffer;
-
-  source
-    .connect(
-      filter
-    )
-    .connect(
-      gain
-    )
-    .connect(
-      masterGain
-    );
-
-  source.start(
-    now
-  );
-}
-
-
-/* ==========================================
-   COUPER LE DÉMARRAGE DE LA MOTO
-========================================== */
-
-function fadeAndStop(
-  audio,
-  duration = 650
-) {
-  const startingVolume =
-    audio.volume;
-
-  const startedAt =
-    performance.now();
-
-  function fade(
-    currentTime
-  ) {
-    const progress =
-      Math.min(
-        1,
-        (
-          currentTime -
-          startedAt
-        ) /
-        duration
-      );
-
-    audio.volume =
-      startingVolume *
-      (
-        1 -
-        progress
-      );
-
-    if (
-      progress < 1
-    ) {
-      window.requestAnimationFrame(
-        fade
-      );
-    } else {
-      audio.pause();
-
-      audio.currentTime =
-        0;
-
-      audio.volume =
-        startingVolume;
-    }
-  }
-
-  window.requestAnimationFrame(
-    fade
   );
 }
 
@@ -713,6 +662,248 @@ function tone(
     now +
     duration +
     0.04
+  );
+}
+
+
+/* ==========================================
+   SIGNAL ROUGE
+========================================== */
+
+function signalPing() {
+  tone(
+    880,
+    0.28,
+    0.045,
+    "sine"
+  );
+
+  tone(
+    1320,
+    0.18,
+    0.018,
+    "sine",
+    0.07
+  );
+}
+
+
+function setSignalPulse(
+  scene
+) {
+  window.clearInterval(
+    signalToneTimer
+  );
+
+  signalToneTimer =
+    null;
+
+  if (
+    !soundEnabled ||
+    !audioUnlocked
+  ) {
+    return;
+  }
+
+
+  /* Signal encore lointain */
+
+  if (
+    scene === "directions"
+  ) {
+    signalPing();
+
+    signalToneTimer =
+      window.setInterval(
+        signalPing,
+        1300
+      );
+  }
+
+
+  /* Signal plus urgent */
+
+  if (
+    scene === "pursuit"
+  ) {
+    signalPing();
+
+    signalToneTimer =
+      window.setInterval(
+        signalPing,
+        760
+      );
+  }
+}
+
+
+/* ==========================================
+   SOUFFLES PONCTUELS
+========================================== */
+
+function noiseBurst(
+  duration = 0.45,
+  volume = 0.1,
+  frequency = 1100
+) {
+  if (
+    !soundEnabled ||
+    !audioContext ||
+    !masterGain
+  ) {
+    return;
+  }
+
+  const frameCount =
+    Math.floor(
+      audioContext.sampleRate *
+      duration
+    );
+
+  const buffer =
+    audioContext.createBuffer(
+      1,
+      frameCount,
+      audioContext.sampleRate
+    );
+
+  const data =
+    buffer.getChannelData(
+      0
+    );
+
+  for (
+    let index = 0;
+    index < frameCount;
+    index += 1
+  ) {
+    data[index] =
+      (
+        Math.random() *
+        2 -
+        1
+      ) *
+      (
+        1 -
+        index /
+        frameCount
+      );
+  }
+
+
+  const source =
+    audioContext
+      .createBufferSource();
+
+  const filter =
+    audioContext
+      .createBiquadFilter();
+
+  const gain =
+    audioContext
+      .createGain();
+
+  const now =
+    audioContext.currentTime;
+
+
+  filter.type =
+    "bandpass";
+
+  filter.frequency.value =
+    frequency;
+
+  filter.Q.value =
+    0.8;
+
+
+  gain.gain.setValueAtTime(
+    volume,
+    now
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now +
+    duration
+  );
+
+
+  source.buffer =
+    buffer;
+
+  source
+    .connect(
+      filter
+    )
+    .connect(
+      gain
+    )
+    .connect(
+      masterGain
+    );
+
+  source.start(
+    now
+  );
+}
+
+
+/* ==========================================
+   COUPER LE SON DE DÉMARRAGE
+========================================== */
+
+function fadeAndStop(
+  audio,
+  duration = 650
+) {
+  const startingVolume =
+    audio.volume;
+
+  const startedAt =
+    performance.now();
+
+
+  function fade(
+    currentTime
+  ) {
+    const progress =
+      Math.min(
+        1,
+        (
+          currentTime -
+          startedAt
+        ) /
+        duration
+      );
+
+    audio.volume =
+      startingVolume *
+      (
+        1 -
+        progress
+      );
+
+    if (
+      progress < 1
+    ) {
+      window.requestAnimationFrame(
+        fade
+      );
+    } else {
+      audio.pause();
+
+      audio.currentTime =
+        0;
+
+      audio.volume =
+        startingVolume;
+    }
+  }
+
+
+  window.requestAnimationFrame(
+    fade
   );
 }
 
@@ -925,12 +1116,27 @@ function runCountdown() {
             "0"
           );
 
+
+        /*
+         * Alarme grave plutôt qu’un
+         * bip électronique aigu.
+         */
+
         tone(
-          760,
-          0.08,
-          0.07,
-          "square"
+          155,
+          0.28,
+          0.085,
+          "sawtooth"
         );
+
+        tone(
+          310,
+          0.12,
+          0.026,
+          "sine",
+          0.04
+        );
+
 
         if (
           value === 1
@@ -1023,8 +1229,12 @@ function syncAudio(
     scene
   );
 
+  setSignalPulse(
+    scene
+  );
 
-  /* Démarrage court */
+
+  /* Démarrage court de la moto */
 
   if (
     mediaPrimed &&
@@ -1060,32 +1270,46 @@ function syncAudio(
   }
 
 
-  /* Vitesse */
+  /* Entrée dans le cockpit */
 
   if (
-    scene === "ride" ||
-    scene === "directions" ||
-    scene === "pursuit" ||
-    scene === "jump" ||
-    scene === "airborne"
+    scene === "ride"
   ) {
     noiseBurst(
-      scene === "airborne"
-        ? 0.75
-        : 0.42,
-
-      scene === "airborne"
-        ? 0.16
-        : 0.09,
-
-      scene === "jump"
-        ? 650
-        : 1200
+      0.7,
+      0.11,
+      1450
     );
   }
 
 
-  /* Freinage et sortie de la moto */
+  /* Signal encore lointain */
+
+  if (
+    scene === "directions"
+  ) {
+    noiseBurst(
+      0.38,
+      0.055,
+      1150
+    );
+  }
+
+
+  /* Accélération */
+
+  if (
+    scene === "pursuit"
+  ) {
+    noiseBurst(
+      0.62,
+      0.12,
+      1550
+    );
+  }
+
+
+  /* Arrêt sur le toit */
 
   if (
     scene === "rooftop"
@@ -1098,7 +1322,33 @@ function syncAudio(
   }
 
 
-  /* Train */
+  /* Saut */
+
+  if (
+    scene === "jump"
+  ) {
+    noiseBurst(
+      0.7,
+      0.105,
+      520
+    );
+  }
+
+
+  /* Chute dans le vide */
+
+  if (
+    scene === "airborne"
+  ) {
+    noiseBurst(
+      0.9,
+      0.14,
+      980
+    );
+  }
+
+
+  /* Son réel du train */
 
   if (
     mediaPrimed &&
@@ -1474,6 +1724,10 @@ soundToggle.addEventListener(
     } else {
       stopHeartbeat();
 
+      window.clearInterval(
+        signalToneTimer
+      );
+
       setAtmosphere(
         "pulse"
       );
@@ -1508,7 +1762,7 @@ takeHand.addEventListener(
 
 
 /* ==========================================
-   PLUIE
+   PLUIE ET VITESSE
 ========================================== */
 
 const canvas =
