@@ -1,4 +1,5 @@
-const body = document.body;
+const body =
+  document.body;
 
 const beats = [
   ...document.querySelectorAll(
@@ -58,17 +59,12 @@ const researchPrinciple =
 
 
 /* ==========================================
-   SONS IMPORTÉS
+   FICHIERS AUDIO
 ========================================== */
 
 const startSound =
   document.querySelector(
     "#motorcycle-start"
-  );
-
-const rideSound =
-  document.querySelector(
-    "#motorcycle-ride"
   );
 
 const trainSound =
@@ -88,11 +84,14 @@ const sceneNames =
     }
   );
 
-let activeIndex = -1;
+let activeIndex =
+  -1;
 
-let wheelLocked = false;
+let wheelLocked =
+  false;
 
-let audioUnlocked = false;
+let audioUnlocked =
+  false;
 
 let soundEnabled =
   localStorage.getItem(
@@ -109,9 +108,26 @@ let countdownTimer;
 
 let thirdSignalTimer;
 
-let mediaPrimed = false;
+let mediaPrimed =
+  false;
 
-let mediaPriming = false;
+let mediaPriming =
+  false;
+
+let windSource;
+
+let windGain;
+
+let windFilter;
+
+let rumbleOscillator;
+
+let rumbleGain;
+
+let atmosphereReady =
+  false;
+
+let startSoundCutTimer;
 
 const played =
   new Set();
@@ -121,11 +137,11 @@ const played =
    VOLUMES
 ========================================== */
 
-startSound.volume = 0.72;
+startSound.volume =
+  0.72;
 
-rideSound.volume = 0;
-
-trainSound.volume = 0.72;
+trainSound.volume =
+  0.72;
 
 
 /* ==========================================
@@ -148,14 +164,15 @@ function updateSoundButton() {
 
 
 /* ==========================================
-   DÉBLOQUER LE SON DU NAVIGATEUR
+   DÉBLOQUER LE SON
 ========================================== */
 
 function ensureAudio() {
   if (
     !audioUnlocked
   ) {
-    audioUnlocked = true;
+    audioUnlocked =
+      true;
 
     audioContext =
       new (
@@ -174,6 +191,8 @@ function ensureAudio() {
     masterGain.connect(
       audioContext.destination
     );
+
+    createAtmosphere();
   }
 
   if (
@@ -186,8 +205,8 @@ function ensureAudio() {
 
 
 /*
- * Chrome exige que les fichiers audio
- * soient activés pendant un geste humain.
+ * Chrome demande que les fichiers audio
+ * soient activés pendant une interaction.
  */
 
 function primeMedia() {
@@ -201,18 +220,19 @@ function primeMedia() {
     return;
   }
 
-  mediaPriming = true;
+  mediaPriming =
+    true;
 
   const media = [
     startSound,
-    rideSound,
     trainSound
   ];
 
   const attempts =
     media.map(
       function (audio) {
-        audio.muted = true;
+        audio.muted =
+          true;
 
         audio.load();
 
@@ -236,16 +256,19 @@ function primeMedia() {
           function (audio) {
             audio.pause();
 
-            audio.currentTime = 0;
+            audio.currentTime =
+              0;
 
             audio.muted =
               !soundEnabled;
           }
         );
 
-        mediaPrimed = true;
+        mediaPrimed =
+          true;
 
-        mediaPriming = false;
+        mediaPriming =
+          false;
 
         syncAudio(
           sceneNames[
@@ -259,7 +282,379 @@ function primeMedia() {
 
 
 /* ==========================================
-   SONS CRÉÉS PAR LE NAVIGATEUR
+   ATMOSPHÈRE SONORE
+========================================== */
+
+function createAtmosphere() {
+  if (
+    atmosphereReady ||
+    !audioContext ||
+    !masterGain
+  ) {
+    return;
+  }
+
+  atmosphereReady =
+    true;
+
+  const duration =
+    2;
+
+  const frameCount =
+    audioContext.sampleRate *
+    duration;
+
+  const noiseBuffer =
+    audioContext.createBuffer(
+      1,
+      frameCount,
+      audioContext.sampleRate
+    );
+
+  const channel =
+    noiseBuffer.getChannelData(
+      0
+    );
+
+  for (
+    let index = 0;
+    index < frameCount;
+    index += 1
+  ) {
+    channel[index] =
+      (
+        Math.random() *
+        2 -
+        1
+      ) *
+      0.55;
+  }
+
+
+  /* Vent */
+
+  windSource =
+    audioContext
+      .createBufferSource();
+
+  windSource.buffer =
+    noiseBuffer;
+
+  windSource.loop =
+    true;
+
+  windFilter =
+    audioContext
+      .createBiquadFilter();
+
+  windFilter.type =
+    "bandpass";
+
+  windFilter.frequency.value =
+    780;
+
+  windFilter.Q.value =
+    0.55;
+
+  windGain =
+    audioContext
+      .createGain();
+
+  windGain.gain.value =
+    0.0001;
+
+  windSource
+    .connect(
+      windFilter
+    )
+    .connect(
+      windGain
+    )
+    .connect(
+      masterGain
+    );
+
+  windSource.start();
+
+
+  /* Grondement grave */
+
+  rumbleOscillator =
+    audioContext
+      .createOscillator();
+
+  rumbleOscillator.type =
+    "sine";
+
+  rumbleOscillator.frequency.value =
+    39;
+
+  rumbleGain =
+    audioContext
+      .createGain();
+
+  rumbleGain.gain.value =
+    0.0001;
+
+  rumbleOscillator
+    .connect(
+      rumbleGain
+    )
+    .connect(
+      masterGain
+    );
+
+  rumbleOscillator.start();
+}
+
+
+function setAtmosphere(
+  scene
+) {
+  if (
+    !audioContext ||
+    !atmosphereReady
+  ) {
+    return;
+  }
+
+  const windLevels = {
+    ride: 0.085,
+    directions: 0.12,
+    rooftop: 0.018,
+    jump: 0.09,
+    airborne: 0.16,
+    train: 0.06,
+    countdown: 0.045,
+    passenger: 0.035,
+    rescue: 0.05,
+    hand: 0.07,
+    fall: 0.14,
+    pulse: 0.0001
+  };
+
+  const dangerScenes = [
+    "countdown",
+    "passenger",
+    "rescue",
+    "hand",
+    "fall"
+  ];
+
+  const windLevel =
+    soundEnabled
+      ? (
+          windLevels[
+            scene
+          ] ||
+          0.0001
+        )
+      : 0.0001;
+
+  const rumbleLevel =
+    soundEnabled &&
+    dangerScenes.includes(
+      scene
+    )
+      ? 0.075
+      : 0.0001;
+
+  const now =
+    audioContext.currentTime;
+
+  windGain.gain.setTargetAtTime(
+    windLevel,
+    now,
+    0.35
+  );
+
+  rumbleGain.gain.setTargetAtTime(
+    rumbleLevel,
+    now,
+    0.45
+  );
+
+  windFilter.frequency.setTargetAtTime(
+    scene === "airborne"
+      ? 1250
+      : 780,
+    now,
+    0.3
+  );
+}
+
+
+/* ==========================================
+   SOUFFLES DE VITESSE
+========================================== */
+
+function noiseBurst(
+  duration = 0.45,
+  volume = 0.1,
+  frequency = 1100
+) {
+  if (
+    !soundEnabled ||
+    !audioContext ||
+    !masterGain
+  ) {
+    return;
+  }
+
+  const frameCount =
+    Math.floor(
+      audioContext.sampleRate *
+      duration
+    );
+
+  const buffer =
+    audioContext.createBuffer(
+      1,
+      frameCount,
+      audioContext.sampleRate
+    );
+
+  const data =
+    buffer.getChannelData(
+      0
+    );
+
+  for (
+    let index = 0;
+    index < frameCount;
+    index += 1
+  ) {
+    data[index] =
+      (
+        Math.random() *
+        2 -
+        1
+      ) *
+      (
+        1 -
+        index /
+        frameCount
+      );
+  }
+
+  const source =
+    audioContext
+      .createBufferSource();
+
+  const filter =
+    audioContext
+      .createBiquadFilter();
+
+  const gain =
+    audioContext
+      .createGain();
+
+  const now =
+    audioContext.currentTime;
+
+  filter.type =
+    "bandpass";
+
+  filter.frequency.value =
+    frequency;
+
+  filter.Q.value =
+    0.8;
+
+  gain.gain.setValueAtTime(
+    volume,
+    now
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now +
+    duration
+  );
+
+  source.buffer =
+    buffer;
+
+  source
+    .connect(
+      filter
+    )
+    .connect(
+      gain
+    )
+    .connect(
+      masterGain
+    );
+
+  source.start(
+    now
+  );
+}
+
+
+/* ==========================================
+   ARRÊTER PROGRESSIVEMENT UN SON
+========================================== */
+
+function fadeAndStop(
+  audio,
+  duration = 650
+) {
+  window.clearTimeout(
+    startSoundCutTimer
+  );
+
+  const startingVolume =
+    audio.volume;
+
+  const startedAt =
+    performance.now();
+
+  function fade(
+    currentTime
+  ) {
+    const progress =
+      Math.min(
+        1,
+        (
+          currentTime -
+          startedAt
+        ) /
+        duration
+      );
+
+    audio.volume =
+      startingVolume *
+      (
+        1 -
+        progress
+      );
+
+    if (
+      progress < 1
+    ) {
+      window.requestAnimationFrame(
+        fade
+      );
+    } else {
+      audio.pause();
+
+      audio.currentTime =
+        0;
+
+      audio.volume =
+        startingVolume;
+    }
+  }
+
+  window.requestAnimationFrame(
+    fade
+  );
+}
+
+
+/* ==========================================
+   SONS SYNTHÉTISÉS
 ========================================== */
 
 function tone(
@@ -292,29 +687,27 @@ function tone(
   oscillator.type =
     type;
 
-  oscillator.frequency
-    .setValueAtTime(
-      frequency,
-      now
-    );
+  oscillator.frequency.setValueAtTime(
+    frequency,
+    now
+  );
 
-  gain.gain
-    .setValueAtTime(
-      0.0001,
-      now
-    );
+  gain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
 
-  gain.gain
-    .exponentialRampToValueAtTime(
-      volume,
-      now + 0.02
-    );
+  gain.gain.exponentialRampToValueAtTime(
+    volume,
+    now +
+    0.02
+  );
 
-  gain.gain
-    .exponentialRampToValueAtTime(
-      0.0001,
-      now + duration
-    );
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now +
+    duration
+  );
 
   oscillator
     .connect(
@@ -413,7 +806,8 @@ function safePlay(
   if (
     restart
   ) {
-    audio.currentTime = 0;
+    audio.currentTime =
+      0;
   }
 
   audio
@@ -432,7 +826,8 @@ function stopHeartbeat() {
     heartbeatTimer
   );
 
-  heartbeatTimer = null;
+  heartbeatTimer =
+    null;
 }
 
 
@@ -518,7 +913,8 @@ function runCountdown() {
     countdownTimer
   );
 
-  let value = 8;
+  let value =
+    8;
 
   countdownValue.textContent =
     "08";
@@ -620,11 +1016,6 @@ function syncAudio(
   scene,
   index
 ) {
-  const riding = [
-    "ride",
-    "directions"
-  ];
-
   const heartbeatScenes = [
     "jump",
     "airborne",
@@ -637,7 +1028,12 @@ function syncAudio(
   ];
 
 
-  /* Démarrage de la moto */
+  setAtmosphere(
+    scene
+  );
+
+
+  /* Démarrage court de la moto */
 
   if (
     mediaPrimed &&
@@ -654,34 +1050,41 @@ function syncAudio(
     played.add(
       "start"
     );
+
+    startSoundCutTimer =
+      window.setTimeout(
+        function () {
+          fadeAndStop(
+            startSound,
+            700
+          );
+        },
+        1900
+      );
   }
 
 
-  /* Moto en mouvement */
+  /* Souffles ponctuels */
 
   if (
-    mediaPrimed &&
-    riding.includes(
-      scene
-    )
+    scene === "trouble" ||
+    scene === "ride" ||
+    scene === "jump" ||
+    scene === "airborne"
   ) {
-    rideSound.volume =
-      scene === "ride"
-        ? 0.72
-        : 0.86;
+    noiseBurst(
+      scene === "airborne"
+        ? 0.75
+        : 0.42,
 
-    rideSound.playbackRate =
-      scene === "ride"
-        ? 1
-        : 1.12;
+      scene === "airborne"
+        ? 0.16
+        : 0.09,
 
-    safePlay(
-      rideSound
+      scene === "jump"
+        ? 650
+        : 1200
     );
-  } else if (
-    !rideSound.paused
-  ) {
-    rideSound.pause();
   }
 
 
@@ -733,8 +1136,6 @@ function syncAudio(
     scene === "pulse"
   ) {
     startSound.pause();
-
-    rideSound.pause();
 
     trainSound.pause();
 
@@ -904,7 +1305,7 @@ function goToBeat(
 }
 
 
-/* Scroll de souris ou trackpad */
+/* Souris ou trackpad */
 
 window.addEventListener(
   "wheel",
@@ -927,7 +1328,8 @@ window.addEventListener(
       return;
     }
 
-    wheelLocked = true;
+    wheelLocked =
+      true;
 
     goToBeat(
       activeIndex +
@@ -940,7 +1342,8 @@ window.addEventListener(
 
     window.setTimeout(
       function () {
-        wheelLocked = false;
+        wheelLocked =
+          false;
       },
       850
     );
@@ -951,7 +1354,7 @@ window.addEventListener(
 );
 
 
-/* Navigation au clavier */
+/* Clavier */
 
 window.addEventListener(
   "keydown",
@@ -992,7 +1395,7 @@ window.addEventListener(
 );
 
 
-/* Premier geste tactile ou clic */
+/* Premier clic ou geste tactile */
 
 window.addEventListener(
   "pointerdown",
@@ -1029,14 +1432,15 @@ soundToggle.addEventListener(
         soundEnabled
           ? 0.8
           : 0,
+
         audioContext.currentTime,
+
         0.05
       );
     }
 
     [
       startSound,
-      rideSound,
       trainSound
     ].forEach(
       function (audio) {
@@ -1058,6 +1462,10 @@ soundToggle.addEventListener(
       );
     } else {
       stopHeartbeat();
+
+      setAtmosphere(
+        "pulse"
+      );
     }
 
     updateSoundButton();
@@ -1104,9 +1512,11 @@ const context =
 
 let drops = [];
 
-let canvasWidth = 0;
+let canvasWidth =
+  0;
 
-let canvasHeight = 0;
+let canvasHeight =
+  0;
 
 
 function resizeCanvas() {
