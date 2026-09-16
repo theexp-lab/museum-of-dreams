@@ -422,50 +422,6 @@ function updateStoryLines() {
   );
 
 
-  if (
-    strongestLine &&
-    strongestLine !== activeLine
-  ) {
-    activeLine =
-      strongestLine;
-
-
-    dreamTitle.textContent =
-      strongestLine.dataset.title;
-
-
-    emotionalCore.textContent =
-      strongestLine.dataset.emotion;
-
-
-    dreamMotif.textContent =
-      strongestLine.dataset.motif;
-  }
-}
-
-
-  if (
-    strongestLine &&
-    strongestLine !== activeLine
-  ) {
-    activeLine =
-      strongestLine;
-
-
-    dreamTitle.textContent =
-      strongestLine.dataset.title;
-
-
-    emotionalCore.textContent =
-      strongestLine.dataset.emotion;
-
-
-    dreamMotif.textContent =
-      strongestLine.dataset.motif;
-  }
-}
-
-
 /* ==========================================
    AUDIO
 ========================================== */
