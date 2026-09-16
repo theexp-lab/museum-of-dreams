@@ -1,1995 +1,746 @@
-/* ==========================================
-   VARIABLES
-========================================== */
+<!DOCTYPE html>
+<html lang="en">
 
-:root {
-  --white: #f8f4ec;
-  --red: #ff304f;
-  --cyan: #83e9ff;
-  --black: #05060b;
+<head>
+  <meta charset="UTF-8">
 
-  --scene-progress: 0;
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  --steer: 0deg;
-  --cockpit-x: 0px;
-}
+  <meta
+    name="theme-color"
+    content="#05060b"
+  >
 
+  <meta
+    name="description"
+    content="Action — Room 05 of The Museum of Dreams."
+  >
 
-/* ==========================================
-   RESET
-========================================== */
+  <title>
+    Action — Museum of Dreams
+  </title>
 
-* {
-  box-sizing: border-box;
-}
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-html {
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-}
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
-body {
-  margin: 0;
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
 
-  min-width: 320px;
+  <link
+    rel="stylesheet"
+    href="./action.css?v=53"
+  >
+</head>
 
-  color: var(--white);
 
-  background: var(--black);
+<body
+  class="action-page"
+  data-scene="intro"
+>
 
-  overflow-x: hidden;
-}
 
-button,
-a {
-  color: inherit;
-  font: inherit;
-}
+  <!-- ==========================================
+       MONDE VISUEL
+  =========================================== -->
 
-a {
-  text-decoration: none;
-}
+  <div
+    class="action-world"
+    aria-hidden="true"
+  >
 
-button {
-  border: 0;
-}
+    <img
+      class="city-plate"
+      src="./action-city.png"
+      alt=""
+    >
 
+    <div class="city-depth"></div>
 
-/* ==========================================
-   MONDE VISUEL
-========================================== */
+    <div class="museum-room"></div>
 
-.action-world {
-  position: fixed;
-  inset: 0;
+    <div class="road-light"></div>
 
-  z-index: 0;
+    <canvas id="weather-canvas"></canvas>
 
-  overflow: hidden;
+    <div class="speed-field"></div>
 
-  background: #080a12;
 
-  perspective: 1100px;
-}
+    <!-- Moto exposée -->
 
+    <div class="motorcycle-wrap">
 
-/* Lumière rouge progressive */
+      <div class="motorcycle-aura"></div>
 
-.action-world::after {
-  content: "";
+      <img
+        class="motorcycle"
+        src="./action-motorcycle.png"
+        alt=""
+      >
 
-  position: absolute;
-  z-index: 18;
+      <div class="motorcycle-shadow"></div>
 
-  inset: 0;
+    </div>
 
-  opacity: 0;
 
-  pointer-events: none;
+    <!-- Cockpit en vue subjective -->
 
-  background:
-    radial-gradient(
-      circle,
-      transparent 34%,
-      rgba(110, 0, 16, 0.2) 68%,
-      rgba(255, 0, 40, 0.48) 120%
-    );
+    <div class="cockpit-wrap">
 
-  mix-blend-mode: screen;
+      <div class="cockpit-speed-glow"></div>
 
-  transition:
-    opacity 800ms ease;
-}
+      <img
+        class="action-cockpit"
+        src="./action-cockpit.png"
+        alt=""
+      >
 
+    </div>
 
-/* ==========================================
-   VILLE
-========================================== */
 
-.city-plate {
-  position: absolute;
+    <div class="pov-speed-lines"></div>
 
-  inset: -5%;
 
-  width: 110%;
-  height: 110%;
+    <!-- Signal rouge à poursuivre -->
 
-  object-fit: cover;
+    <div class="mission-signal">
 
-  opacity: 0.14;
+      <span class="signal-core"></span>
 
-  filter:
-    brightness(0.36)
-    saturate(0.7);
+      <span class="signal-ring"></span>
 
-  transform:
-    scale(1.03);
+    </div>
 
-  transition:
-    opacity 1.2s ease,
-    filter 1.2s ease,
-    transform 1.5s
-    cubic-bezier(
-      0.2,
-      0.7,
-      0.2,
-      1
-    );
-}
 
+    <!-- Train -->
 
-.city-depth {
-  position: absolute;
-  inset: 0;
+    <div class="train-wrap">
 
-  background:
-    radial-gradient(
-      circle at 50% 42%,
-      transparent 15%,
-      rgba(2, 3, 8, 0.22) 55%,
-      rgba(2, 3, 8, 0.76) 100%
-    ),
+      <img
+        class="train"
+        src="./action-train.png"
+        alt=""
+      >
 
-    linear-gradient(
-      180deg,
-      rgba(5, 6, 12, 0.05),
-      rgba(5, 6, 12, 0.48)
-    );
+    </div>
 
-  transition:
-    background 1s ease;
-}
 
+    <!-- Personne à sauver -->
 
-/* ==========================================
-   SALLE DU MUSÉE
-========================================== */
+    <div class="rescue-light">
 
-.museum-room {
-  position: absolute;
-  inset: 0;
+      <span></span>
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(5, 6, 11, 0.96) 0 10%,
-      transparent 28% 72%,
-      rgba(5, 6, 11, 0.96) 90% 100%
-    ),
+    </div>
 
-    linear-gradient(
-      180deg,
-      rgba(8, 9, 14, 0.8),
-      transparent 35%,
-      rgba(8, 9, 14, 0.65)
-    );
 
-  box-shadow:
-    inset 0 0 0 1px
-    rgba(255, 255, 255, 0.05);
+    <div class="impact-flash"></div>
 
-  transition:
-    opacity 1.2s ease;
-}
+    <div class="nightmare-blackout"></div>
 
+  </div>
 
-.museum-room::before {
-  content: "";
 
-  position: absolute;
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
 
-  inset: 7% 8%;
+  <header class="action-header">
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
+    <a href="romance.html">
+      THE MUSEUM OF DREAMS
+    </a>
 
-  box-shadow:
-    0 0 80px
-    rgba(107, 126, 255, 0.08);
-}
 
+    <div class="action-location">
 
-.road-light {
-  position: absolute;
+      <span class="location-dot"></span>
 
-  left: 10%;
-  bottom: 7%;
+      <span>
+        ROOM 05 · ACTION
+      </span>
 
-  width: 38%;
-  height: 12%;
+    </div>
 
-  opacity: 0.15;
 
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(255, 36, 65, 0.38),
-      transparent 68%
-    );
+    <a href="case-study.html">
+      PROJECT
+    </a>
 
-  filter:
-    blur(22px);
+  </header>
 
-  transition:
-    opacity 800ms ease;
-}
 
+  <button
+    class="sound-toggle"
+    id="sound-toggle"
+    type="button"
+    aria-pressed="true"
+  >
+    SOUND ON
+  </button>
 
-/* ==========================================
-   PLUIE ET VITESSE
-========================================== */
 
-#weather-canvas {
-  position: absolute;
+  <!-- ==========================================
+       NOTE SCIENTIFIQUE
+  =========================================== -->
 
-  inset: 0;
+  <aside
+    class="research-note"
+    id="research-note"
+  >
 
-  width: 100%;
-  height: 100%;
+    <span id="research-number">
+      RESEARCH NOTE 05.1
+    </span>
 
-  opacity: 0.2;
+    <p id="research-text">
 
-  transition:
-    opacity 800ms ease;
-}
+      During REM sleep, movement can be
+      vividly simulated while most skeletal
+      muscles remain inhibited.
 
+    </p>
 
-.speed-field {
-  position: absolute;
+    <strong id="research-principle">
+      MOTION · WITHOUT MOVEMENT
+    </strong>
 
-  inset: -20%;
+  </aside>
 
-  opacity: 0;
 
-  background:
-    repeating-linear-gradient(
-      104deg,
-      transparent 0 9%,
-      rgba(159, 224, 255, 0.13) 9.1%,
-      transparent 9.3% 16%
-    );
+  <div
+    class="action-progress"
+    aria-hidden="true"
+  >
+    <span id="action-progress-fill"></span>
+  </div>
 
-  filter:
-    blur(2px);
 
-  transform:
-    translateX(-12%)
-    skewX(-8deg);
+  <p
+    class="scroll-cue"
+    id="scroll-cue"
+  >
+    SCROLL TO ACTIVATE THE INSTALLATION
+  </p>
 
-  transition:
-    opacity 500ms ease;
 
-  animation:
-    speedRush 650ms linear infinite;
-}
+  <!-- ==========================================
+       HISTOIRE
+  =========================================== -->
 
+  <main class="action-story">
 
-/* ==========================================
-   MOTO EXPOSÉE
 
-   Elle ne se déplace jamais.
-========================================== */
+    <section
+      class="story-beat intro-beat"
+      data-scene="intro"
+    >
 
-.motorcycle-wrap {
-  position: absolute;
+      <div class="intro-copy">
 
-  z-index: 5;
+        <p class="room-number">
+          ROOM 05
+        </p>
 
-  left: 50%;
-  bottom: 8vh;
+        <h1>
+          ACTION
+        </h1>
 
-  width:
-    min(58vw, 760px);
+        <p class="room-subtitle">
+          THE MIND IN MOTION
+        </p>
 
-  transform:
-    translateX(-50%)
-    scale(0.74);
+        <div class="museum-description">
 
-  transform-origin:
-    center bottom;
+          <p>
+            The body remains still.
+          </p>
 
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease;
-}
+          <p>
+            The dream does not.
+          </p>
 
+          <small>
 
-.motorcycle {
-  position: relative;
+            A kinetic installation exploring
+            how the dreaming mind creates
+            speed, falling and impact.
 
-  z-index: 2;
+          </small>
 
-  display: block;
+        </div>
 
-  width: 100%;
+      </div>
 
-  filter:
-    brightness(0.78)
-    saturate(1.15)
-    drop-shadow(
-      0 28px 22px
-      rgba(0, 0, 0, 0.72)
-    );
-}
+    </section>
 
 
-.motorcycle-aura {
-  position: absolute;
+    <!-- Moto dans le musée -->
 
-  inset: 25% 10% 0;
+    <section
+      class="story-beat"
+      data-scene="exhibit"
+    >
 
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(255, 28, 60, 0.35),
-      transparent 67%
-    );
+      <div class="beat-copy">
 
-  filter:
-    blur(30px);
+        <small>
+          COMPOSITE DREAM 05
+        </small>
 
-  animation:
-    auraPulse 1.8s
-    ease-in-out infinite;
-}
+        <p>
 
+          There is a motorcycle
+          <br>
 
-.motorcycle-shadow {
-  position: absolute;
+          in the middle of the museum.
 
-  z-index: 1;
+        </p>
 
-  left: 11%;
-  right: 6%;
-  bottom: 2%;
+        <em>
+          You know it is yours.
+        </em>
 
-  height: 13%;
+      </div>
 
-  border-radius: 50%;
+    </section>
 
-  background:
-    rgba(0, 0, 0, 0.82);
 
-  filter:
-    blur(17px);
-}
+    <!-- Démarrage -->
 
+    <section
+      class="story-beat"
+      data-scene="trouble"
+    >
 
-/* Flash faisant disparaître la moto */
+      <div class="beat-copy">
 
-.motorcycle-launch-flash {
-  position: absolute;
+        <p>
 
-  z-index: 8;
+          The engine starts
+          <br>
 
-  left: 50%;
-  bottom: 21%;
+          before you touch it.
 
-  width: 20vw;
+        </p>
 
-  aspect-ratio: 1;
+        <em>
+          The museum doors open by themselves.
+        </em>
 
-  border-radius: 50%;
+      </div>
 
-  opacity: 0;
+    </section>
 
-  pointer-events: none;
 
-  background:
-    radial-gradient(
-      circle,
-      white 0 3%,
-      #d9f5ff 5%,
-      #ff2649 15%,
-      rgba(255, 30, 65, 0.25) 38%,
-      transparent 72%
-    );
+    <!-- Passage en vue subjective -->
 
-  filter:
-    blur(5px);
+    <section
+      class="story-beat"
+      data-scene="ride"
+    >
 
-  transform:
-    translateX(-50%)
-    scale(0.2);
-}
+      <div class="beat-copy">
 
+        <p>
 
-/* ==========================================
-   COCKPIT EN VUE SUBJECTIVE
-========================================== */
+          One second later,
+          <br>
 
-.cockpit-wrap {
-  position: absolute;
+          the city is moving beneath you.
 
-  z-index: 9;
+        </p>
 
-  left: 50%;
-  bottom: -18%;
+      </div>
 
-  width:
-    min(148vw, 2050px);
+    </section>
 
-  opacity: 0;
 
-  pointer-events: none;
+    <!-- Signal rouge -->
 
-  transform-origin:
-    50% 94%;
+    <section
+      class="story-beat"
+      data-scene="directions"
+    >
 
-  transform:
-    translate3d(
-      calc(-50% + var(--cockpit-x)),
-      26%,
-      0
-    )
-    scale(0.88)
-    rotate(var(--steer));
+      <div class="beat-copy">
 
-  transition:
-    opacity 340ms ease,
-    transform 750ms
-    cubic-bezier(
-      0.2,
-      0.8,
-      0.2,
-      1
-    ),
-    bottom 750ms ease;
-}
+        <p>
 
+          A red signal
+          <br>
 
-.action-cockpit {
-  position: relative;
+          is crossing the city.
 
-  z-index: 2;
+        </p>
 
-  display: block;
+        <em>
+          You decide it must be important.
+        </em>
 
-  width: 100%;
+      </div>
 
-  filter:
-    brightness(0.72)
-    saturate(1.3)
-    contrast(1.05)
-    drop-shadow(
-      0 -12px 34px
-      rgba(255, 25, 60, 0.3)
-    );
-}
+    </section>
 
 
-.cockpit-speed-glow {
-  position: absolute;
+    <!-- Accélération -->
 
-  z-index: 1;
+    <section
+      class="story-beat"
+      data-scene="pursuit"
+    >
 
-  left: 25%;
-  right: 25%;
-  bottom: 3%;
+      <div class="beat-copy">
 
-  height: 45%;
+        <p>
 
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(255, 24, 57, 0.42),
-      transparent 67%
-    );
+          It is getting
+          <br>
 
-  filter:
-    blur(35px);
-}
+          further away.
 
+        </p>
 
-.pov-speed-lines {
-  position: absolute;
+        <em>
+          You accelerate.
+        </em>
 
-  z-index: 7;
+      </div>
 
-  inset: -20%;
+    </section>
 
-  opacity: 0;
 
-  overflow: hidden;
+    <!-- Fin de la conduite -->
 
-  pointer-events: none;
+    <section
+      class="story-beat"
+      data-scene="rooftop"
+    >
 
-  background:
-    repeating-conic-gradient(
-      from 270deg at 50% 48%,
-      transparent 0deg 2.2deg,
-      rgba(191, 231, 255, 0.16) 2.35deg 2.48deg,
-      transparent 2.65deg 5.5deg
-    );
+      <div class="beat-copy">
 
-  -webkit-mask-image:
-    radial-gradient(
-      circle at 50% 48%,
-      transparent 0 18%,
-      black 52%,
-      transparent 82%
-    );
+        <p>
 
-  mask-image:
-    radial-gradient(
-      circle at 50% 48%,
-      transparent 0 18%,
-      black 52%,
-      transparent 82%
-    );
+          The signal is waiting
+          <br>
 
-  transform:
-    scale(0.85);
-}
+          on the next rooftop.
 
+        </p>
 
-/* ==========================================
-   TRAIN
-========================================== */
+        <em>
+          The motorcycle cannot follow.
+        </em>
 
-.train-wrap {
-  position: absolute;
+      </div>
 
-  z-index: 4;
+    </section>
 
-  left: -130%;
-  top: 41%;
 
-  width:
-    min(118vw, 1800px);
+    <!-- Saut -->
 
-  opacity: 0;
+    <section
+      class="story-beat"
+      data-scene="jump"
+    >
 
-  transform:
-    rotate(-4deg)
-    scale(0.76);
+      <div class="beat-copy">
 
-  transition:
-    left 1.4s
-    cubic-bezier(
-      0.1,
-      0.75,
-      0.15,
-      1
-    ),
-    top 1s ease,
-    opacity 400ms ease,
-    transform 1.3s ease;
-}
+        <p>
 
+          The distance
+          <br>
 
-.train {
-  width: 100%;
+          is impossible.
 
-  filter:
-    brightness(0.7)
-    drop-shadow(
-      0 30px 20px
-      rgba(0, 0, 0, 0.75)
-    );
-}
+        </p>
 
+        <em>
+          You jump anyway.
+        </em>
 
-/* ==========================================
-   PERSONNE À SAUVER
-========================================== */
+      </div>
 
-.rescue-light {
-  position: absolute;
+    </section>
 
-  z-index: 7;
 
-  top: 41%;
-  right: 13%;
+    <!-- Dans le vide -->
 
-  width: 150px;
+    <section
+      class="story-beat"
+      data-scene="airborne"
+    >
 
-  aspect-ratio: 1;
+      <div class="beat-copy">
 
-  opacity: 0;
+        <small>
+          FOR THREE SECONDS
+        </small>
 
-  border-radius: 50%;
+        <p>
+          The entire city
+        </p>
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.95),
-      rgba(130, 224, 255, 0.42) 18%,
-      rgba(255, 42, 70, 0.25) 46%,
-      transparent 72%
-    );
+        <em>
+          waits below you.
+        </em>
 
-  filter:
-    blur(8px);
+      </div>
 
-  transform:
-    scale(0.25);
+    </section>
 
-  transition:
-    opacity 800ms ease,
-    transform 1.2s ease;
-}
 
+    <!-- Train -->
 
-.rescue-light span {
-  position: absolute;
+    <section
+      class="story-beat"
+      data-scene="train"
+    >
 
-  inset: 27%;
+      <div class="beat-copy">
 
-  border-radius: 50%;
+        <p>
 
-  background: #ffffff;
+          You land
+          <br>
 
-  filter:
-    blur(10px);
+          on a moving train.
 
-  animation:
-    rescuePulse 1.15s
-    ease-in-out infinite;
-}
+        </p>
 
+        <em>
+          It was not there a moment ago.
+        </em>
 
-/* ==========================================
-   IMPACT ET NOIR FINAL
-========================================== */
+      </div>
 
-.impact-flash {
-  position: absolute;
+    </section>
 
-  z-index: 20;
 
-  inset: 0;
+    <!-- Compte à rebours -->
 
-  opacity: 0;
+    <section
+      class="story-beat"
+      data-scene="countdown"
+    >
 
-  pointer-events: none;
+      <div class="countdown-panel">
 
-  background:
-    radial-gradient(
-      circle at 62% 40%,
-      white,
-      #ff3150 12%,
-      rgba(255, 36, 58, 0.2) 35%,
-      transparent 63%
-    );
-}
+        <small>
+          ROUTE FAILURE
+        </small>
 
+        <p>
+          THE BRIDGE ENDS IN
+        </p>
 
-.nightmare-blackout {
-  position: absolute;
+        <strong id="countdown-value">
+          08
+        </strong>
 
-  z-index: 21;
+        <span>
+          SECONDS
+        </span>
 
-  inset: 0;
+      </div>
 
-  opacity: 0;
+    </section>
 
-  pointer-events: none;
 
-  background: #010104;
+    <!-- Passager -->
 
-  transition:
-    opacity 1.1s ease;
-}
+    <section
+      class="story-beat"
+      data-scene="passenger"
+    >
 
+      <div class="beat-copy">
 
-/* ==========================================
-   HEADER
-========================================== */
+        <p>
 
-.action-header {
-  position: fixed;
+          There is someone
+          <br>
 
-  z-index: 50;
+          inside the final carriage.
 
-  top: 0;
-  left: 0;
+        </p>
 
-  display: grid;
+      </div>
 
-  grid-template-columns:
-    1fr auto 1fr;
+    </section>
 
-  align-items: center;
 
-  width: 100%;
+    <!-- Mission -->
 
-  padding:
-    24px 34px;
+    <section
+      class="story-beat"
+      data-scene="rescue"
+    >
 
-  font:
-    9px/1
-    "DM Mono",
-    monospace;
+      <div class="beat-copy">
 
-  letter-spacing: 0.15em;
+        <p>
 
-  text-transform: uppercase;
-}
+          You came here
+          <br>
 
+          to rescue someone.
 
-.action-header > a:last-child {
-  justify-self: end;
+        </p>
 
-  padding-bottom: 5px;
+        <em>
+          You still do not know who.
+        </em>
 
-  border-bottom:
-    1px solid
-    rgba(255, 255, 255, 0.35);
-}
+      </div>
 
+    </section>
 
-.action-location {
-  display: flex;
 
-  align-items: center;
+    <!-- Prendre la main -->
 
-  gap: 10px;
-}
+    <section
+      class="story-beat hand-beat"
+      data-scene="hand"
+    >
 
+      <div class="beat-copy">
 
-.location-dot {
-  width: 6px;
-  height: 6px;
+        <p>
 
-  border-radius: 50%;
+          There is no time
+          <br>
 
-  background:
-    var(--red);
+          to ask.
 
-  box-shadow:
-    0 0 12px
-    var(--red);
+        </p>
 
-  animation:
-    auraPulse 1.5s infinite;
-}
+        <button
+          class="take-hand"
+          id="take-hand"
+          type="button"
+        >
+          TAKE THEIR HAND →
+        </button>
 
+      </div>
 
-.sound-toggle {
-  position: fixed;
+    </section>
 
-  z-index: 60;
 
-  top: 62px;
-  right: 34px;
+    <!-- Chute finale -->
 
-  padding: 0;
+    <section
+      class="story-beat"
+      data-scene="fall"
+    >
 
-  color:
-    rgba(255, 255, 255, 0.58);
+      <div class="beat-copy">
 
-  background: none;
+        <small>
+          IMPACT SUSPENDED
+        </small>
 
-  font:
-    8px/1
-    "DM Mono",
-    monospace;
+        <p>
+          For one impossible moment,
+        </p>
 
-  letter-spacing: 0.14em;
+        <em>
 
-  cursor: pointer;
-}
+          nothing is falling
+          <br>
 
+          at the same speed.
 
-/* ==========================================
-   NOTE SCIENTIFIQUE
-========================================== */
+        </em>
 
-.research-note {
-  position: fixed;
+      </div>
 
-  z-index: 40;
+    </section>
 
-  left: 34px;
-  bottom: 34px;
 
-  width:
-    min(290px, 28vw);
+    <!-- Troisième signal -->
 
-  padding-left: 14px;
+    <section
+      class="story-beat pulse-beat"
+      data-scene="pulse"
+    >
 
-  border-left:
-    1px solid
-    rgba(255, 255, 255, 0.24);
+      <div class="signal-panel">
 
-  font-family:
-    "DM Mono",
-    monospace;
+        <span>
+          LIFE SIGNALS DETECTED
+        </span>
 
-  text-transform: uppercase;
+        <strong id="signal-count">
+          02
+        </strong>
 
-  transition:
-    opacity 500ms ease,
-    transform 500ms ease;
-}
+        <p id="signal-message">
+          TWO PULSES STABLE
+        </p>
 
+        <a
+          href="nightmare.html"
+          class="nightmare-link"
+          id="nightmare-link"
+        >
+          TRACE THE THIRD PULSE →
+        </a>
 
-.research-note span {
-  color: var(--cyan);
+      </div>
 
-  font-size: 8px;
+    </section>
 
-  letter-spacing: 0.14em;
-}
+  </main>
 
 
-.research-note p {
-  margin:
-    8px 0;
+  <!-- Cartel du musée -->
 
-  color:
-    rgba(255, 255, 255, 0.55);
+  <div class="museum-label">
 
-  font-size: 8px;
+    <strong>
+      THE MISSION WITH NO INSTRUCTIONS
+    </strong>
 
-  line-height: 1.55;
+    <span>
 
-  letter-spacing: 0.05em;
-}
+      IMMERSIVE PROJECTION · KINETIC FLOOR ·
+      SPATIAL SOUND · INTERACTIVE LIGHT
 
+    </span>
 
-.research-note strong {
-  color:
-    rgba(255, 255, 255, 0.82);
+  </div>
 
-  font-size: 8px;
 
-  letter-spacing: 0.1em;
-}
+  <!-- Sons conservés -->
 
+  <audio
+    id="motorcycle-start"
+    src="./motorcycle-start.mp3"
+    preload="auto"
+  ></audio>
 
-/* ==========================================
-   PROGRESSION
-========================================== */
+  <audio
+    id="train-pass"
+    src="./train-pass.mp3"
+    preload="auto"
+  ></audio>
 
-.action-progress {
-  position: fixed;
 
-  z-index: 50;
+  <script src="./action.js?v=53"></script>
 
-  top: 50%;
-  right: 17px;
-
-  width: 1px;
-  height: 160px;
-
-  background:
-    rgba(255, 255, 255, 0.14);
-
-  transform:
-    translateY(-50%);
-}
-
-
-.action-progress span {
-  display: block;
-
-  width: 100%;
-
-  height:
-    calc(
-      var(--scene-progress) *
-      100%
-    );
-
-  background:
-    linear-gradient(
-      #ffffff,
-      var(--red)
-    );
-
-  box-shadow:
-    0 0 9px
-    var(--red);
-
-  transition:
-    height 650ms ease;
-}
-
-
-.scroll-cue {
-  position: fixed;
-
-  z-index: 40;
-
-  right: 34px;
-  bottom: 31px;
-
-  margin: 0;
-
-  color:
-    rgba(255, 255, 255, 0.42);
-
-  font:
-    8px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-}
-
-
-/* ==========================================
-   SECTIONS
-========================================== */
-
-.action-story {
-  position: relative;
-
-  z-index: 10;
-}
-
-
-.story-beat {
-  display: grid;
-
-  place-items: center;
-
-  min-height: 100svh;
-
-  padding:
-    110px 12vw 130px;
-
-  scroll-snap-align: start;
-
-  scroll-snap-stop: always;
-}
-
-
-/* ==========================================
-   INTRODUCTION
-========================================== */
-
-.intro-copy {
-  width:
-    min(1050px, 100%);
-
-  text-align: center;
-}
-
-
-.room-number,
-.room-subtitle {
-  margin: 0;
-
-  font:
-    9px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.2em;
-
-  text-transform: uppercase;
-}
-
-
-.intro-copy h1 {
-  margin:
-    22px 0 14px;
-
-  font:
-    400
-    clamp(95px, 20vw, 285px) / 0.72
-    "Gloock",
-    serif;
-
-  letter-spacing:
-    -0.07em;
-
-  text-shadow:
-    0 0 70px
-    rgba(255, 39, 69, 0.2);
-}
-
-
-.room-subtitle {
-  color: var(--red);
-}
-
-
-.museum-description {
-  width:
-    min(570px, 90%);
-
-  margin:
-    52px auto 0;
-}
-
-
-.museum-description p {
-  margin:
-    2px 0;
-
-  font:
-    clamp(24px, 3.2vw, 48px) / 1.02
-    "Italiana",
-    serif;
-}
-
-
-.museum-description small {
-  display: block;
-
-  margin-top: 24px;
-
-  color:
-    rgba(255, 255, 255, 0.52);
-
-  font:
-    8px/1.7
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.11em;
-
-  text-transform: uppercase;
-}
-
-
-/* ==========================================
-   TEXTES
-========================================== */
-
-.beat-copy {
-  width:
-    min(920px, 100%);
-
-  text-align: center;
-
-  text-shadow:
-    0 8px 35px
-    rgba(0, 0, 0, 0.9);
-}
-
-
-.beat-copy small {
-  display: block;
-
-  margin-bottom: 22px;
-
-  color: var(--cyan);
-
-  font:
-    9px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.2em;
-}
-
-
-.beat-copy p {
-  margin: 0;
-
-  font:
-    clamp(43px, 6.4vw, 98px) / 0.92
-    "Italiana",
-    serif;
-
-  letter-spacing:
-    -0.035em;
-}
-
-
-.beat-copy em {
-  display: block;
-
-  margin-top: 13px;
-
-  color: #f5b5c0;
-
-  font:
-    400
-    clamp(31px, 4.2vw, 68px) / 1
-    "Gloock",
-    serif;
-}
-
-
-.take-hand,
-.nightmare-link {
-  display: inline-block;
-
-  margin-top: 45px;
-
-  padding:
-    15px 0;
-
-  border-bottom:
-    1px solid
-    rgba(255, 255, 255, 0.7);
-
-  color: white;
-
-  background: none;
-
-  font:
-    10px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.18em;
-
-  cursor: pointer;
-
-  transition:
-    letter-spacing 350ms ease,
-    color 350ms ease;
-}
-
-
-.take-hand:hover,
-.nightmare-link:hover {
-  color: var(--red);
-
-  letter-spacing: 0.27em;
-}
-
-
-/* ==========================================
-   COMPTE À REBOURS
-========================================== */
-
-.countdown-panel,
-.signal-panel {
-  text-align: center;
-
-  font-family:
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.16em;
-}
-
-
-.countdown-panel small {
-  color: var(--red);
-}
-
-
-.countdown-panel p {
-  margin:
-    25px 0 5px;
-
-  font-size:
-    clamp(13px, 2vw, 24px);
-}
-
-
-.countdown-panel strong {
-  display: block;
-
-  color: var(--red);
-
-  font:
-    400
-    clamp(140px, 26vw, 380px) / 0.75
-    "Gloock",
-    serif;
-
-  text-shadow:
-    0 0 50px
-    rgba(255, 36, 65, 0.6);
-}
-
-
-.countdown-panel span {
-  font-size: 10px;
-}
-
-
-/* ==========================================
-   SIGNAUX VITAUX
-========================================== */
-
-.signal-panel {
-  position: relative;
-
-  z-index: 30;
-}
-
-
-.signal-panel > span {
-  color:
-    rgba(255, 255, 255, 0.55);
-
-  font-size: 9px;
-}
-
-
-.signal-panel strong {
-  display: block;
-
-  margin:
-    22px 0 10px;
-
-  font:
-    400
-    clamp(150px, 25vw, 360px) / 0.8
-    "Gloock",
-    serif;
-
-  text-shadow:
-    0 0 50px
-    rgba(255, 35, 65, 0.5);
-
-  transition:
-    color 500ms ease,
-    transform 500ms ease;
-}
-
-
-.signal-panel p {
-  margin: 0;
-
-  color: var(--cyan);
-
-  font-size: 9px;
-}
-
-
-.nightmare-link {
-  visibility: hidden;
-
-  opacity: 0;
-
-  transition:
-    opacity 800ms ease 1s,
-    letter-spacing 350ms ease;
-}
-
-
-.pulse-beat.third-signal
-.signal-panel strong {
-  color: var(--red);
-
-  transform:
-    scale(1.08);
-}
-
-
-.pulse-beat.third-signal
-.nightmare-link {
-  visibility: visible;
-
-  opacity: 1;
-}
-
-
-/* ==========================================
-   CARTEL DU MUSÉE
-========================================== */
-
-.museum-label {
-  position: fixed;
-
-  z-index: 40;
-
-  left: 50%;
-  bottom: 30px;
-
-  display: grid;
-
-  gap: 5px;
-
-  width:
-    min(520px, 44vw);
-
-  text-align: center;
-
-  transform:
-    translateX(-50%);
-
-  font-family:
-    "DM Mono",
-    monospace;
-
-  text-transform: uppercase;
-
-  transition:
-    opacity 500ms ease;
-}
-
-
-.museum-label strong {
-  font-size: 8px;
-
-  letter-spacing: 0.15em;
-}
-
-
-.museum-label span {
-  color:
-    rgba(255, 255, 255, 0.4);
-
-  font-size: 7px;
-
-  letter-spacing: 0.08em;
-}
-
-
-/* ==========================================
-   ÉTATS DES SCÈNES
-========================================== */
-
-body:not([data-scene="intro"])
-:not([data-scene="exhibit"])
-.museum-room {
-  opacity: 0;
-}
-
-
-body:not([data-scene="intro"])
-:not([data-scene="exhibit"])
-.city-plate {
-  opacity: 0.94;
-
-  filter:
-    brightness(0.66)
-    saturate(1.12)
-    contrast(1.06);
-}
-
-
-/* Ouverture de la ville */
-
-body[data-scene="trouble"]
-.city-plate {
-  transform:
-    scale(1.08)
-    translateX(-2%);
-}
-
-
-body[data-scene="trouble"]
-.road-light {
-  opacity: 0.75;
-}
-
-
-/* Conduite */
-
-body[data-scene="ride"]
-.city-plate,
-body[data-scene="directions"]
-.city-plate {
-  filter:
-    brightness(0.72)
-    saturate(1.35)
-    contrast(1.08);
-
-  animation:
-    cityRush 1.35s
-    cubic-bezier(
-      0.45,
-      0,
-      0.8,
-      1
-    )
-    infinite alternate;
-}
-
-
-body[data-scene="ride"]
-.speed-field,
-body[data-scene="directions"]
-.speed-field {
-  opacity: 0.7;
-}
-
-
-body[data-scene="ride"]
-#weather-canvas,
-body[data-scene="directions"]
-#weather-canvas {
-  opacity: 0.85;
-}
-
-
-/* La moto disparaît et ne bouge jamais */
-
-body[data-scene="trouble"]
-.motorcycle-wrap {
-  opacity: 0;
-
-  transform:
-    translateX(-50%)
-    scale(0.82);
-}
-
-
-body[data-scene="trouble"]
-.motorcycle-launch-flash {
-  animation:
-    motorcycleLaunch 950ms
-    cubic-bezier(
-      0.2,
-      0.7,
-      0.2,
-      1
-    )
-    both;
-}
-
-
-body[data-scene="ride"]
-.motorcycle-wrap,
-body[data-scene="directions"]
-.motorcycle-wrap,
-body[data-scene="rooftop"]
-.motorcycle-wrap,
-body[data-scene="jump"]
-.motorcycle-wrap,
-body[data-scene="airborne"]
-.motorcycle-wrap,
-body[data-scene="train"]
-.motorcycle-wrap,
-body[data-scene="countdown"]
-.motorcycle-wrap,
-body[data-scene="passenger"]
-.motorcycle-wrap,
-body[data-scene="rescue"]
-.motorcycle-wrap,
-body[data-scene="hand"]
-.motorcycle-wrap,
-body[data-scene="fall"]
-.motorcycle-wrap,
-body[data-scene="pulse"]
-.motorcycle-wrap {
-  visibility: hidden;
-
-  opacity: 0;
-}
-
-
-/* Cockpit */
-
-body[data-scene="ride"]
-.cockpit-wrap,
-body[data-scene="directions"]
-.cockpit-wrap {
-  bottom: -9%;
-
-  opacity: 1;
-
-  transform:
-    translate3d(
-      calc(-50% + var(--cockpit-x)),
-      0,
-      0
-    )
-    scale(1.04)
-    rotate(var(--steer));
-
-  animation:
-    cockpitVibration 110ms
-    linear infinite alternate;
-}
-
-
-body[data-scene="directions"]
-.cockpit-wrap {
-  transform:
-    translate3d(
-      calc(-50% + var(--cockpit-x)),
-      1%,
-      0
-    )
-    scale(1.08)
-    rotate(
-      calc(
-        var(--steer) -
-        2deg
-      )
-    );
-}
-
-
-body[data-scene="ride"]
-.pov-speed-lines,
-body[data-scene="directions"]
-.pov-speed-lines {
-  opacity: 0.62;
-
-  animation:
-    povRush 480ms
-    linear infinite;
-}
-
-
-/* Toits et chute */
-
-body[data-scene="rooftop"]
-.city-plate,
-body[data-scene="jump"]
-.city-plate {
-  transform:
-    scale(1.15)
-    translateY(5%);
-}
-
-
-body[data-scene="airborne"]
-.city-plate {
-  transform:
-    scale(1.28)
-    translateY(12%)
-    rotate(1.5deg);
-}
-
-
-body[data-scene="airborne"]
-.speed-field {
-  opacity: 0.42;
-
-  transform:
-    rotate(90deg);
-}
-
-
-/* Train */
-
-body[data-scene="train"]
-.train-wrap,
-body[data-scene="countdown"]
-.train-wrap,
-body[data-scene="passenger"]
-.train-wrap,
-body[data-scene="rescue"]
-.train-wrap,
-body[data-scene="hand"]
-.train-wrap {
-  left: -7%;
-
-  opacity: 1;
-
-  transform:
-    rotate(-4deg)
-    scale(0.9);
-}
-
-
-body[data-scene="countdown"]
-.train-wrap {
-  left: 4%;
-
-  transform:
-    rotate(-3deg)
-    scale(1.02);
-}
-
-
-body[data-scene="passenger"]
-.train-wrap,
-body[data-scene="rescue"]
-.train-wrap,
-body[data-scene="hand"]
-.train-wrap {
-  left: 15%;
-  top: 37%;
-
-  filter:
-    brightness(0.62);
-
-  transform:
-    rotate(-2deg)
-    scale(1.12);
-}
-
-
-/* Personne à sauver */
-
-body[data-scene="passenger"]
-.rescue-light,
-body[data-scene="rescue"]
-.rescue-light,
-body[data-scene="hand"]
-.rescue-light {
-  opacity: 1;
-
-  transform:
-    scale(1);
-}
-
-
-body[data-scene="hand"]
-.rescue-light {
-  transform:
-    scale(1.7);
-}
-
-
-/* Chute finale */
-
-body[data-scene="fall"]
-.city-plate {
-  filter:
-    brightness(0.52)
-    saturate(1.65);
-
-  transform:
-    scale(1.3)
-    rotate(15deg)
-    translateY(8%);
-}
-
-
-body[data-scene="fall"]
-.train-wrap {
-  left: 15%;
-  top: 45%;
-
-  opacity: 1;
-
-  transform:
-    rotate(18deg)
-    scale(1.18);
-}
-
-
-body[data-scene="fall"]
-.rescue-light {
-  opacity: 1;
-
-  transform:
-    scale(2.8);
-}
-
-
-body[data-scene="fall"]
-.impact-flash {
-  animation:
-    impactFlash 1.1s
-    ease-out both;
-}
-
-
-/* Danger progressif */
-
-body[data-scene="countdown"]
-.action-world::after,
-body[data-scene="passenger"]
-.action-world::after {
-  opacity: 0.42;
-
-  animation:
-    dangerPulse 1.1s
-    ease-in-out infinite;
-}
-
-
-body[data-scene="rescue"]
-.action-world::after,
-body[data-scene="hand"]
-.action-world::after {
-  opacity: 0.62;
-
-  animation:
-    dangerPulse 720ms
-    ease-in-out infinite;
-}
-
-
-body[data-scene="fall"]
-.action-world::after {
-  opacity: 0.82;
-
-  animation:
-    dangerPulse 380ms
-    ease-in-out infinite;
-}
-
-
-/* Noir final */
-
-body[data-scene="pulse"]
-.nightmare-blackout {
-  opacity: 1;
-}
-
-
-body[data-scene="pulse"]
-.research-note,
-body[data-scene="pulse"]
-.museum-label,
-body[data-scene="pulse"]
-.scroll-cue {
-  opacity: 0;
-
-  pointer-events: none;
-}
-
-
-/* ==========================================
-   ANIMATIONS
-========================================== */
-
-@keyframes auraPulse {
-  50% {
-    opacity: 0.45;
-
-    transform:
-      scale(1.08);
-  }
-}
-
-
-@keyframes rescuePulse {
-  50% {
-    opacity: 0.5;
-
-    transform:
-      scale(1.45);
-  }
-}
-
-
-@keyframes speedRush {
-  to {
-    transform:
-      translateX(8%)
-      skewX(-8deg);
-  }
-}
-
-
-@keyframes impactFlash {
-  0%,
-  35% {
-    opacity: 0;
-  }
-
-  48% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-
-@keyframes motorcycleLaunch {
-  0% {
-    opacity: 0;
-
-    transform:
-      translateX(-50%)
-      scale(0.1);
-  }
-
-  22% {
-    opacity: 1;
-  }
-
-  58% {
-    opacity: 0.92;
-
-    transform:
-      translateX(-50%)
-      scale(2.8);
-  }
-
-  100% {
-    opacity: 0;
-
-    transform:
-      translateX(-50%)
-      scale(7);
-  }
-}
-
-
-@keyframes cityRush {
-  from {
-    transform:
-      scale(1.13)
-      translate3d(
-        -2%,
-        1%,
-        0
-      );
-  }
-
-  to {
-    transform:
-      scale(1.25)
-      translate3d(
-        -6%,
-        3%,
-        0
-      );
-  }
-}
-
-
-@keyframes cockpitVibration {
-  from {
-    margin-bottom: -1px;
-  }
-
-  to {
-    margin-bottom: 1px;
-  }
-}
-
-
-@keyframes povRush {
-  from {
-    opacity: 0.2;
-
-    transform:
-      scale(0.72);
-  }
-
-  to {
-    opacity: 0.72;
-
-    transform:
-      scale(1.18);
-  }
-}
-
-
-@keyframes dangerPulse {
-  0%,
-  100% {
-    filter:
-      brightness(0.75);
-  }
-
-  50% {
-    filter:
-      brightness(1.45);
-  }
-}
-
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 760px) {
-  .action-header {
-    grid-template-columns:
-      1fr auto;
-
-    padding:
-      18px 20px;
-  }
-
-  .action-location {
-    display: none;
-  }
-
-  .sound-toggle {
-    top: 52px;
-    right: 20px;
-  }
-
-  .story-beat {
-    padding:
-      90px 24px 120px;
-  }
-
-  .intro-copy h1 {
-    font-size:
-      clamp(
-        83px,
-        27vw,
-        150px
-      );
-  }
-
-  .beat-copy p {
-    font-size:
-      clamp(
-        42px,
-        12vw,
-        65px
-      );
-  }
-
-  .beat-copy em {
-    font-size:
-      clamp(
-        28px,
-        8vw,
-        45px
-      );
-  }
-
-  .motorcycle-wrap {
-    bottom: 14vh;
-
-    width: 100vw;
-  }
-
-  .cockpit-wrap {
-    bottom: -8%;
-
-    width: 205vw;
-  }
-
-  .train-wrap {
-    width: 180vw;
-  }
-
-  .research-note {
-    left: 20px;
-    bottom: 22px;
-
-    width: 220px;
-  }
-
-  .research-note p {
-    display: none;
-  }
-
-  .museum-label {
-    display: none;
-  }
-
-  .scroll-cue {
-    right: 20px;
-    bottom: 22px;
-
-    max-width: 130px;
-
-    line-height: 1.4;
-
-    text-align: right;
-  }
-
-  .rescue-light {
-    right: 5%;
-  }
-}
-
-
-/* ==========================================
-   ACCESSIBILITÉ
-========================================== */
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration:
-      0.01ms !important;
-
-    animation-iteration-count:
-      1 !important;
-
-    transition-duration:
-      0.01ms !important;
-  }
-}
+</body>
+</html>
