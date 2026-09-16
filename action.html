@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#08080b"
+  >
+
+  <meta
+    name="description"
+    content="The Pulse Room — Room 05 of The Museum of Dreams."
+  >
+
+  <title>
+    Action — Museum of Dreams
+  </title>
+
+
+  <!-- Polices -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- CSS de la salle -->
+
+  <link
+    rel="stylesheet"
+    href="./action.css?v=1"
+  >
+
+</head>
+
+
+<body
+  class="action-page"
+  data-scene="entrance"
+>
+
+
+  <!-- ==========================================
+       ÉCRAN D’ENTRÉE ET ACTIVATION DU SON
+  =========================================== -->
+
+  <div
+    class="sound-gate"
+    id="sound-gate"
+  >
+
+    <div class="gate-pulse"></div>
+
+
+    <p class="gate-room">
+      ROOM 05 · ACTION
+    </p>
+
+
+    <h1>
+
+      FOLLOW
+
+      <em>
+        THE PULSE
+      </em>
+
+    </h1>
+
+
+    <p class="gate-warning">
+
+      This room contains low frequencies,
+      flashes and spatial sound.
+
+    </p>
+
+
+    <div class="gate-actions">
+
+      <button
+        type="button"
+        id="begin-action"
+      >
+        ENTER WITH SOUND
+      </button>
+
+
+      <button
+        type="button"
+        id="begin-silent"
+      >
+        ENTER WITHOUT SOUND
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       ARCHITECTURE FIXE DU MUSÉE
+  =========================================== -->
+
+  <div
+    class="museum-world"
+    aria-hidden="true"
+  >
+
+    <div class="museum-darkness"></div>
+
+    <div class="ceiling-light"></div>
+
+    <div class="back-wall"></div>
+
+    <div class="left-wall"></div>
+
+    <div class="right-wall"></div>
+
+    <div class="museum-floor"></div>
+
+    <div class="floor-reflection"></div>
+
+
+    <!-- Installation principale -->
+
+    <div class="central-installation">
+
+      <div class="installation-light"></div>
+
+      <div class="sleeping-platform">
+
+        <span class="platform-light"></span>
+
+      </div>
+
+      <div class="pulse-source"></div>
+
+      <div class="pulse-wave wave-one"></div>
+
+      <div class="pulse-wave wave-two"></div>
+
+      <div class="pulse-wave wave-three"></div>
+
+    </div>
+
+
+    <!-- Couloir de la poursuite -->
+
+    <div class="chase-installation">
+
+      <div class="chase-frame frame-one"></div>
+
+      <div class="chase-frame frame-two"></div>
+
+      <div class="chase-frame frame-three"></div>
+
+      <div class="chase-frame frame-four"></div>
+
+      <div class="chase-exit">
+
+        <span>
+          EXIT
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- Installation de la chute -->
+
+    <div class="fall-installation">
+
+      <div class="fall-opening"></div>
+
+      <div class="fall-depth depth-one"></div>
+
+      <div class="fall-depth depth-two"></div>
+
+      <div class="fall-depth depth-three"></div>
+
+      <div class="fall-depth depth-four"></div>
+
+    </div>
+
+
+    <!-- Installation de l’impact -->
+
+    <div class="impact-installation">
+
+      <div class="impact-screen">
+
+        <span class="impact-mark mark-one"></span>
+
+        <span class="impact-mark mark-two"></span>
+
+        <span class="impact-mark mark-three"></span>
+
+        <span class="impact-mark mark-four"></span>
+
+      </div>
+
+      <div class="impact-flash"></div>
+
+    </div>
+
+
+    <!-- Lumière annonçant le cauchemar -->
+
+    <div class="nightmare-door">
+
+      <div class="door-darkness"></div>
+
+      <div class="door-red-light"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       PARTICULES LÉGÈRES
+  =========================================== -->
+
+  <div
+    class="action-particles"
+    id="action-particles"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- ==========================================
+       NAVIGATION DU MUSÉE
+  =========================================== -->
+
+  <header class="action-header">
+
+    <a href="romance.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
+
+    <div class="room-location">
+
+      <span class="location-pulse"></span>
+
+      <span id="room-location-text">
+        ROOM 05 · ACTION
+      </span>
+
+    </div>
+
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
+  </header>
+
+
+  <!-- ==========================================
+       PLAN DE LA SALLE
+  =========================================== -->
+
+  <nav
+    class="room-map"
+    aria-label="Action room map"
+  >
+
+    <p>
+      ROOM MAP
+    </p>
+
+
+    <button
+      type="button"
+      data-destination="0"
+    >
+      <span>00</span>
+      ENTRANCE
+    </button>
+
+
+    <button
+      type="button"
+      data-destination="1"
+    >
+      <span>01</span>
+      THE PULSE ROOM
+    </button>
+
+
+    <button
+      type="button"
+      data-destination="2"
+    >
+      <span>02</span>
+      THE CHASE
+    </button>
+
+
+    <button
+      type="button"
+      data-destination="3"
+    >
+      <span>03</span>
+      THE FALL
+    </button>
+
+
+    <button
+      type="button"
+      data-destination="4"
+    >
+      <span>04</span>
+      THE IMPACT
+    </button>
+
+  </nav>
+
+
+  <!-- ==========================================
+       CONTRÔLE DU SON
+  =========================================== -->
+
+  <button
+    class="sound-control"
+    id="sound-control"
+    type="button"
+    aria-pressed="false"
+  >
+
+    <span class="sound-icon">
+
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+
+    </span>
+
+    <span id="sound-label">
+      SOUND OFF
+    </span>
+
+  </button>
+
+
+  <!-- ==========================================
+       CARTEL DYNAMIQUE
+  =========================================== -->
+
+  <aside class="artwork-label">
+
+    <span id="artwork-number">
+      ROOM 05
+    </span>
+
+
+    <strong id="artwork-title">
+      THE PULSE ROOM
+    </strong>
+
+
+    <p id="artwork-medium">
+
+      Responsive light, spatial sound
+      and kinetic installation.
+
+    </p>
+
+
+    <dl>
+
+      <div>
+
+        <dt>
+          SIMULATED PULSE
+        </dt>
+
+        <dd id="pulse-value">
+          62 BPM
+        </dd>
+
+      </div>
+
+
+      <div>
+
+        <dt>
+          STATUS
+        </dt>
+
+        <dd id="installation-status">
+          WAITING
+        </dd>
+
+      </div>
+
+    </dl>
+
+  </aside>
+
+
+  <!-- ==========================================
+       NOTE SCIENTIFIQUE
+  =========================================== -->
+
+  <aside class="research-note">
+
+    <span id="research-number">
+      RESEARCH NOTE 05.1
+    </span>
+
+
+    <p id="research-text">
+
+      Changes in cardiac activity may accompany
+      emotionally intense dream experiences.
+
+    </p>
+
+
+    <strong id="research-principle">
+      BODY · DREAM · RESPONSE
+    </strong>
+
+  </aside>
+
+
+  <!-- ==========================================
+       NARRATION ET PARCOURS
+  =========================================== -->
+
+  <main class="action-journey">
+
+
+    <!-- 00 — Entrée -->
+
+    <section
+      class="action-scene entrance-scene"
+      data-scene-name="entrance"
+      data-index="0"
+    >
+
+      <div class="scene-copy">
+
+        <p class="scene-number">
+          ROOM 05 · ACTION
+        </p>
+
+
+        <h2>
+
+          YOUR HEART
+
+          <em>
+            ENTERED FIRST.
+          </em>
+
+        </h2>
+
+
+        <p class="scene-description">
+
+          Romance ends with a racing pulse.
+          This gallery begins with it.
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- 01 — Pulse Room -->
+
+    <section
+      class="action-scene pulse-scene"
+      data-scene-name="pulse"
+      data-index="1"
+    >
+
+      <div class="scene-copy">
+
+        <p class="scene-number">
+          INSTALLATION 01
+        </p>
+
+
+        <h2>
+
+          THE PULSE
+
+          <em>
+            ROOM
+          </em>
+
+        </h2>
+
+
+        <p class="scene-description">
+
+          Your body is still asleep.
+
+          <span>
+            But something has started running.
+          </span>
+
+        </p>
+
+
+        <p class="scene-secondary">
+
+          Every beat changes the room.
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- 02 — Chase -->
+
+    <section
+      class="action-scene chase-scene"
+      data-scene-name="chase"
+      data-index="2"
+    >
+
+      <div class="scene-copy">
+
+        <p class="scene-number">
+          INSTALLATION 02
+        </p>
+
+
+        <h2>
+
+          THE
+
+          <em>
+            CHASE
+          </em>
+
+        </h2>
+
+
+        <p class="scene-description">
+
+          The exit is right there.
+
+          <span>
+            Until your pulse begins to rise.
+          </span>
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- 03 — Fall -->
+
+    <section
+      class="action-scene fall-scene"
+      data-scene-name="fall"
+      data-index="3"
+    >
+
+      <div class="scene-copy">
+
+        <p class="scene-number">
+          INSTALLATION 03
+        </p>
+
+
+        <h2>
+
+          THE
+
+          <em>
+            FALL
+          </em>
+
+        </h2>
+
+
+        <p class="scene-description">
+
+          The floor has not moved.
+
+          <span>
+            Your body does not believe it.
+          </span>
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- 04 — Impact -->
+
+    <section
+      class="action-scene impact-scene"
+      data-scene-name="impact"
+      data-index="4"
+    >
+
+      <div class="scene-copy">
+
+        <p class="scene-number">
+          INSTALLATION 04
+        </p>
+
+
+        <h2>
+
+          THE
+
+          <em>
+            IMPACT
+          </em>
+
+        </h2>
+
+
+        <p class="scene-description">
+
+          Every beat
+
+          <span>
+            leaves a mark.
+          </span>
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- 05 — Sortie vers Nightmare -->
+
+    <section
+      class="action-scene nightmare-scene"
+      data-scene-name="nightmare"
+      data-index="5"
+    >
+
+      <div class="scene-copy nightmare-copy">
+
+        <p class="scene-number">
+          END OF ROOM 05
+        </p>
+
+
+        <p class="nightmare-introduction">
+
+          The room becomes still.
+
+          <span>
+            The beat continues
+            somewhere ahead.
+          </span>
+
+        </p>
+
+
+        <h2>
+
+          NEXT ROOM
+
+          <em>
+            NIGHTMARE
+          </em>
+
+        </h2>
+
+
+        <a
+          href="nightmare.html"
+          class="enter-nightmare"
+          id="enter-nightmare"
+        >
+          FOLLOW THE BEAT →
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ==========================================
+       PROGRESSION
+  =========================================== -->
+
+  <div class="action-progress">
+
+    <span id="action-progress-fill"></span>
+
+  </div>
+
+
+  <p class="scroll-instruction">
+    MOVE THROUGH THE GALLERY
+  </p>
+
+
+  <!-- Transition finale -->
+
+  <div
+    class="nightmare-transition"
+    aria-hidden="true"
+  ></div>
+
+
+  <script src="./action.js?v=1"></script>
+
+</body>
+
+</html>
