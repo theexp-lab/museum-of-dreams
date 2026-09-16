@@ -143,7 +143,7 @@ const enterAction =
 
 const narrationSteps = [
   {
-    start: 0.09,
+    start: 0.15,
 
     text:
       "You cannot see who they are. <em>But something feels familiar.</em>",
@@ -1625,6 +1625,13 @@ function updateRomance() {
   progressFill.style.height =
     progress * 100 + "%";
 
+   /* Attendre que le titre ait complètement disparu */
+
+page.classList.toggle(
+  "narration-active",
+  progress >= 0.15 &&
+  progress < 0.91
+);
 
   let nextIndex = -1;
 
