@@ -5,1370 +5,2137 @@
 
 
 /* ==========================================
-   ÉLÉMENTS
+   VARIABLES
 ========================================== */
 
-const actionPage =
-  document.querySelector(
-    ".action-page"
-  );
+:root {
+  --ivory: #fff8ec;
+  --red: #ff3636;
+  --warm-red: #ff665b;
+  --deep-red: #7b0812;
+  --blue: #354d82;
+  --night: #07070a;
 
-
-const soundGate =
-  document.querySelector(
-    "#sound-gate"
-  );
-
-
-const beginAction =
-  document.querySelector(
-    "#begin-action"
-  );
-
-
-const beginSilent =
-  document.querySelector(
-    "#begin-silent"
-  );
-
-
-const soundControl =
-  document.querySelector(
-    "#sound-control"
-  );
-
-
-const soundLabel =
-  document.querySelector(
-    "#sound-label"
-  );
-
-
-const scenes =
-  Array.from(
-    document.querySelectorAll(
-      ".action-scene"
-    )
-  );
-
-
-const mapButtons =
-  Array.from(
-    document.querySelectorAll(
-      ".room-map button"
-    )
-  );
-
-
-const progressFill =
-  document.querySelector(
-    "#action-progress-fill"
-  );
-
-
-const roomLocationText =
-  document.querySelector(
-    "#room-location-text"
-  );
-
-
-const artworkNumber =
-  document.querySelector(
-    "#artwork-number"
-  );
-
-
-const artworkTitle =
-  document.querySelector(
-    "#artwork-title"
-  );
-
-
-const artworkMedium =
-  document.querySelector(
-    "#artwork-medium"
-  );
-
-
-const pulseValue =
-  document.querySelector(
-    "#pulse-value"
-  );
-
-
-const installationStatus =
-  document.querySelector(
-    "#installation-status"
-  );
-
-
-const researchNumber =
-  document.querySelector(
-    "#research-number"
-  );
-
-
-const researchText =
-  document.querySelector(
-    "#research-text"
-  );
-
-
-const researchPrinciple =
-  document.querySelector(
-    "#research-principle"
-  );
-
-
-const particleField =
-  document.querySelector(
-    "#action-particles"
-  );
-
-
-const enterNightmare =
-  document.querySelector(
-    "#enter-nightmare"
-  );
+  --pointer-x: 0px;
+  --pointer-y: 0px;
+}
 
 
 /* ==========================================
-   DONNÉES DES INSTALLATIONS
+   RESET
 ========================================== */
 
-const sceneData = [
-  {
-    name: "entrance",
+* {
+  box-sizing: border-box;
+}
 
-    location:
-      "ROOM 05 · ACTION",
+html {
+  min-width: 320px;
+  min-height: 100%;
 
-    number:
-      "ROOM 05",
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
 
-    title:
-      "THE PULSE ROOM",
+  background: var(--night);
+}
 
-    medium:
-      "Responsive light, spatial sound and kinetic installation.",
+body {
+  min-width: 320px;
+  min-height: 100%;
 
-    bpm: 62,
+  margin: 0;
 
-    status:
-      "WAITING",
+  overflow-x: hidden;
 
-    researchNumber:
-      "RESEARCH NOTE 05.1",
+  color: var(--ivory);
+  background: var(--night);
 
-    research:
-      "Changes in cardiac activity may accompany emotionally intense dream experiences.",
+  font-family:
+    "DM Mono",
+    monospace;
+}
 
-    principle:
-      "BODY · DREAM · RESPONSE"
-  },
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
 
-  {
-    name: "pulse",
+button {
+  border: 0;
+}
 
-    location:
-      "INSTALLATION 01 · PULSE",
+a {
+  text-decoration: none;
+}
 
-    number:
-      "INSTALLATION 01",
 
-    title:
-      "THE PULSE ROOM",
+/* ==========================================
+   MONDE DU MUSÉE
+========================================== */
 
-    medium:
-      "Light sculpture, simulated biometric system and spatial sound.",
+.action-world {
+  position: fixed;
+  inset: 0;
 
-    bpm: 68,
+  z-index: 0;
 
-    status:
-      "RESPONDING",
+  overflow: hidden;
 
-    researchNumber:
-      "RESEARCH NOTE 05.1",
+  pointer-events: none;
 
-    research:
-      "The sleeping body remains physically still while autonomic activity continues to change throughout the night.",
+  perspective: 1200px;
 
-    principle:
-      "STILLNESS · NOT SILENCE"
-  },
+  background: #09090d;
+}
 
-  {
-    name: "chase",
+.room-background,
+.room-redness,
+.room-darkness {
+  position: absolute;
+  inset: 0;
 
-    location:
-      "INSTALLATION 02 · CHASE",
+  transition:
+    opacity 1200ms ease,
+    background 1400ms ease;
+}
 
-    number:
-      "INSTALLATION 02",
+.room-background {
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(103, 76, 101, 0.25),
+      transparent 34%
+    ),
 
-    title:
-      "THE CHASE",
+    linear-gradient(
+      180deg,
+      #19151d,
+      #110d14 48%,
+      #08070a
+    );
+}
 
-    medium:
-      "Responsive LED corridor, directional sound and controlled airflow.",
+.room-redness {
+  opacity: 0;
 
-    bpm: 112,
+  background:
+    radial-gradient(
+      circle at 50% 46%,
+      rgba(255, 57, 48, 0.32),
+      rgba(111, 4, 18, 0.18) 39%,
+      transparent 70%
+    ),
 
-    status:
-      "ACCELERATING",
+    linear-gradient(
+      180deg,
+      rgba(80, 4, 17, 0.15),
+      rgba(28, 1, 7, 0.55)
+    );
+}
 
-    researchNumber:
-      "RESEARCH NOTE 05.2",
+.room-darkness {
+  opacity: 0;
 
-    research:
-      "Being chased is repeatedly reported as a common dream theme, although it has no single universal meaning.",
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      transparent 8%,
+      rgba(4, 2, 7, 0.62) 63%,
+      rgba(1, 1, 3, 0.94)
+    );
+}
 
-    principle:
-      "THREAT · WITHOUT CONTACT"
-  },
+.action-page[data-scene="chase"]
+.room-redness {
+  opacity: 0.55;
+}
 
-  {
-    name: "fall",
+.action-page[data-scene="impact"]
+.room-redness {
+  opacity: 1;
+}
 
-    location:
-      "INSTALLATION 03 · FALL",
+.action-page[data-scene="nightmare"]
+.room-redness {
+  opacity: 0.7;
+}
 
-    number:
-      "INSTALLATION 03",
+.action-page[data-scene="nightmare"]
+.room-darkness {
+  opacity: 1;
+}
 
-    title:
-      "THE FALL",
 
-    medium:
-      "Infinite reflection, sub-bass composition and haptic floor.",
+/* ==========================================
+   ARCHITECTURE
+========================================== */
 
-    bpm: 78,
+.ceiling-light {
+  position: absolute;
 
-    status:
-      "DESCENDING",
+  top: 0;
+  left: 50%;
 
-    researchNumber:
-      "RESEARCH NOTE 05.3",
+  width: 36%;
+  height: 2px;
 
-    research:
-      "Dreams can produce convincing sensations of movement even while the sleeper remains in bed.",
+  background:
+    rgba(255, 240, 218, 0.74);
 
-    principle:
-      "MOTION · WITHOUT MOVEMENT"
-  },
+  box-shadow:
+    0 0 18px
+    rgba(255, 235, 212, 0.55),
 
-  {
-    name: "impact",
+    0 0 90px
+    rgba(255, 199, 179, 0.16);
 
-    location:
-      "INSTALLATION 04 · IMPACT",
+  transform:
+    translateX(-50%);
 
-    number:
-      "INSTALLATION 04",
+  transition:
+    width 1200ms ease,
+    opacity 1200ms ease,
+    background 1200ms ease,
+    box-shadow 1200ms ease;
+}
 
-    title:
-      "THE IMPACT",
+.ceiling-light::after {
+  content: "";
 
-    medium:
-      "Motion tracking, responsive projection and stereo percussion.",
+  position: absolute;
 
-    bpm: 126,
+  top: 0;
+  left: 50%;
 
-    status:
-      "OVERLOADED",
+  width: 130%;
+  height: 74vh;
 
-    researchNumber:
-      "RESEARCH NOTE 05.4",
+  opacity: 0.7;
 
-    research:
-      "Experimental recordings have found motor-cortex activity during dreamed movements in lucid REM sleep.",
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 233, 207, 0.12),
+      transparent 77%
+    );
 
-    principle:
-      "IMAGINED · YET ACTIVE"
-  },
+  clip-path:
+    polygon(
+      29% 0,
+      71% 0,
+      100% 100%,
+      0 100%
+    );
 
-  {
-    name: "nightmare",
+  transform:
+    translateX(-50%);
+}
 
-    location:
-      "EXIT · NIGHTMARE",
+.back-wall {
+  position: absolute;
 
-    number:
-      "NEXT ROOM",
+  top: 8%;
+  right: 18%;
+  bottom: 23%;
+  left: 18%;
 
-    title:
-      "NIGHTMARE",
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.07);
 
-    medium:
-      "The pulse continues beyond the visible gallery.",
+  background:
+    linear-gradient(
+      180deg,
+      #191820,
+      #0e0d12
+    );
 
-    bpm: 72,
+  box-shadow:
+    inset 0 -60px 100px
+    rgba(0, 0, 0, 0.5);
+}
 
-    status:
-      "UNRESOLVED",
+.left-wall,
+.right-wall {
+  position: absolute;
 
-    researchNumber:
-      "CURATORIAL TRANSITION",
+  top: 0;
+  bottom: 0;
 
-    research:
-      "Action ends when movement stops. Fear does not always stop with it.",
+  width: 32%;
 
-    principle:
-      "ROOM 06 · NIGHTMARE"
+  background:
+    linear-gradient(
+      90deg,
+      #08080b,
+      #16141b
+    );
+}
+
+.left-wall {
+  left: 0;
+
+  clip-path:
+    polygon(
+      0 0,
+      100% 8%,
+      100% 77%,
+      0 100%
+    );
+}
+
+.right-wall {
+  right: 0;
+
+  clip-path:
+    polygon(
+      0 8%,
+      100% 0,
+      100% 100%,
+      0 77%
+    );
+
+  transform:
+    scaleX(-1);
+}
+
+.museum-floor {
+  position: absolute;
+
+  right: -15%;
+  bottom: -24%;
+  left: -15%;
+
+  height: 60%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #15131a,
+      #060609 86%
+    );
+
+  clip-path:
+    polygon(
+      18% 0,
+      82% 0,
+      100% 100%,
+      0 100%
+    );
+
+  transform:
+    perspective(900px)
+    rotateX(59deg);
+
+  transform-origin:
+    bottom;
+}
+
+.museum-floor::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.17;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 12.4%,
+      rgba(255, 255, 255, 0.09) 12.5%
+    ),
+
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 19.7%,
+      rgba(255, 255, 255, 0.08) 20%
+    );
+}
+
+.floor-reflection {
+  position: absolute;
+
+  right: 25%;
+  bottom: -18%;
+  left: 25%;
+
+  height: 53%;
+
+  opacity: 0.2;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 75, 66, 0.62),
+      transparent 82%
+    );
+
+  filter:
+    blur(22px);
+
+  transform:
+    perspective(700px)
+    rotateX(57deg);
+
+  transition:
+    opacity 900ms ease,
+    background 900ms ease;
+}
+
+
+/* ==========================================
+   FIL DU POULS
+========================================== */
+
+.pulse-thread {
+  position: absolute;
+
+  top: 50%;
+  right: 0;
+  left: 0;
+
+  z-index: 6;
+
+  height: 1px;
+
+  opacity: 0.52;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 52, 52, 0.15) 25%,
+      rgba(255, 85, 73, 0.75) 50%,
+      rgba(255, 52, 52, 0.15) 75%,
+      transparent
+    );
+
+  box-shadow:
+    0 0 15px
+    rgba(255, 44, 45, 0.27);
+}
+
+.pulse-thread span {
+  position: absolute;
+
+  top: 50%;
+  left: -8%;
+
+  width: 7%;
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #fff0dc,
+      #ff4141,
+      transparent
+    );
+
+  filter:
+    blur(0.5px);
+
+  transform:
+    translateY(-50%);
+
+  animation:
+    pulseTravel
+    3.2s linear infinite;
+}
+
+
+/* ==========================================
+   CORPS IMMOBILE
+========================================== */
+
+.sleeping-installation {
+  position: absolute;
+
+  top: 20%;
+  left: 50%;
+
+  z-index: 8;
+
+  width:
+    min(62vw, 810px);
+
+  height: 55vh;
+
+  opacity: 1;
+
+  transform:
+    translate(
+      calc(-50% + var(--pointer-x)),
+      var(--pointer-y)
+    );
+
+  transition:
+    opacity 900ms ease,
+    transform 1200ms ease;
+}
+
+.action-page:not(
+  [data-scene="introduction"]
+)
+.sleeping-installation {
+  opacity: 0;
+
+  transform:
+    translate(-50%, 35px)
+    scale(0.93);
+}
+
+.installation-beam {
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  width: 42%;
+  height: 80%;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 237, 211, 0.17),
+      rgba(255, 92, 71, 0.04),
+      transparent
+    );
+
+  clip-path:
+    polygon(
+      31% 0,
+      69% 0,
+      100% 100%,
+      0 100%
+    );
+
+  filter:
+    blur(5px);
+
+  transform:
+    translateX(-50%);
+}
+
+.sleeping-platform {
+  position: absolute;
+
+  top: 57%;
+  left: 50%;
+
+  width: 68%;
+  height: 12%;
+
+  border-top:
+    1px solid
+    rgba(255, 245, 228, 0.67);
+
+  border-right:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+
+  border-left:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.01)
+    );
+
+  transform:
+    translateX(-50%)
+    perspective(600px)
+    rotateX(63deg);
+}
+
+.body-trace {
+  position: absolute;
+
+  top: 55%;
+  left: 50%;
+
+  width: 54%;
+  height: 4px;
+
+  border-radius: 50%;
+
+  opacity: 0.74;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 242, 224, 0.5),
+      rgba(255, 134, 117, 0.77),
+      rgba(255, 242, 224, 0.5),
+      transparent
+    );
+
+  box-shadow:
+    0 0 17px
+    rgba(255, 170, 147, 0.45),
+
+    0 0 50px
+    rgba(255, 64, 55, 0.15);
+
+  filter:
+    blur(1px);
+
+  transform:
+    translateX(-50%);
+}
+
+
+/* ==========================================
+   SOURCE DU POULS
+========================================== */
+
+.pulse-source {
+  position: absolute;
+
+  top: 49%;
+  left: 50%;
+
+  z-index: 30;
+
+  width: 16px;
+  height: 16px;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.pulse-core {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  border-radius: 50%;
+
+  background:
+    #fff2df;
+
+  box-shadow:
+    0 0 11px #fff2df,
+    0 0 28px #ff443d,
+    0 0 75px rgba(255, 38, 42, 0.75),
+    0 0 150px rgba(166, 3, 24, 0.4);
+}
+
+.action-page.beat
+.pulse-core {
+  animation:
+    pulseImpact
+    430ms ease-out;
+}
+
+.pulse-ring {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  display: block;
+
+  width: 45px;
+  height: 45px;
+
+  border:
+    1px solid
+    rgba(255, 70, 63, 0.65);
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.action-page.beat
+.ring-one {
+  animation:
+    pulseExpansion
+    1000ms ease-out;
+}
+
+.action-page.beat
+.ring-two {
+  animation:
+    pulseExpansion
+    1000ms 100ms ease-out;
+}
+
+.action-page.beat
+.ring-three {
+  animation:
+    pulseExpansion
+    1000ms 200ms ease-out;
+}
+
+
+/* ==========================================
+   THE CHASE
+========================================== */
+
+.chase-space {
+  position: absolute;
+
+  top: 11%;
+  left: 50%;
+
+  z-index: 9;
+
+  width:
+    min(68vw, 950px);
+
+  height: 76vh;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  transform:
+    translateX(-50%)
+    scale(0.94);
+
+  transition:
+    opacity 900ms ease,
+    transform 1200ms ease,
+    visibility 900ms ease;
+}
+
+.action-page[data-scene="chase"]
+.chase-space {
+  visibility: visible;
+
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+.chase-frame {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  display: block;
+
+  border:
+    1px solid
+    rgba(255, 79, 65, 0.43);
+
+  box-shadow:
+    inset 0 0 45px
+    rgba(255, 37, 37, 0.04);
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.frame-one {
+  width: 100%;
+  height: 100%;
+}
+
+.frame-two {
+  width: 78%;
+  height: 80%;
+}
+
+.frame-three {
+  width: 58%;
+  height: 62%;
+}
+
+.frame-four {
+  width: 39%;
+  height: 44%;
+}
+
+.frame-five {
+  width: 23%;
+  height: 28%;
+}
+
+.moving-exit {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  display: grid;
+  place-items: center;
+
+  width: 11%;
+  height: 21%;
+
+  border:
+    1px solid
+    rgba(255, 235, 212, 0.56);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 222, 191, 0.28),
+      rgba(255, 58, 51, 0.09)
+    );
+
+  box-shadow:
+    0 0 35px
+    rgba(255, 65, 54, 0.24);
+
+  transform:
+    translate(-50%, -50%);
+
+  animation:
+    exitRetreat
+    4.2s ease-in-out infinite;
+}
+
+.moving-exit span {
+  font-size: 7px;
+
+  letter-spacing: 0.2em;
+
+  opacity: 0.65;
+}
+
+.action-page[data-scene="chase"]
+.ceiling-light {
+  width: 65%;
+
+  background:
+    #ff5148;
+
+  box-shadow:
+    0 0 20px
+    rgba(255, 67, 57, 0.73),
+
+    0 0 100px
+    rgba(255, 36, 37, 0.24);
+}
+
+
+/* ==========================================
+   THE FALL
+========================================== */
+
+.fall-space {
+  position: absolute;
+
+  top: 47%;
+  left: 50%;
+
+  z-index: 10;
+
+  width:
+    min(57vw, 790px);
+
+  aspect-ratio: 1.55;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  transform:
+    translate(-50%, -42%)
+    perspective(900px)
+    rotateX(65deg)
+    scale(0.72);
+
+  transition:
+    opacity 1000ms ease,
+    transform 1500ms
+    cubic-bezier(
+      0.2,
+      0.8,
+      0.2,
+      1
+    ),
+    visibility 900ms ease;
+}
+
+.action-page[data-scene="fall"]
+.fall-space {
+  visibility: visible;
+
+  opacity: 1;
+
+  transform:
+    translate(-50%, -42%)
+    perspective(900px)
+    rotateX(65deg)
+    scale(1);
+}
+
+.fall-edge,
+.fall-layer,
+.fall-centre {
+  position: absolute;
+
+  border:
+    1px solid
+    rgba(102, 130, 204, 0.46);
+
+  background:
+    transparent;
+
+  box-shadow:
+    inset 0 0 65px
+    rgba(34, 61, 135, 0.16);
+}
+
+.fall-edge {
+  inset: 0;
+
+  background:
+    radial-gradient(
+      ellipse,
+      #020308,
+      #080b17 58%,
+      rgba(39, 58, 110, 0.34)
+    );
+}
+
+.layer-one {
+  inset: 10%;
+}
+
+.layer-two {
+  inset: 21%;
+}
+
+.layer-three {
+  inset: 33%;
+}
+
+.layer-four {
+  inset: 44%;
+}
+
+.fall-centre {
+  inset: 48%;
+
+  min-width: 4%;
+  min-height: 4%;
+
+  background:
+    #000104;
+
+  box-shadow:
+    0 0 50px
+    rgba(51, 79, 160, 0.4);
+}
+
+.action-page[data-scene="fall"]
+.floor-reflection {
+  opacity: 0.35;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(54, 83, 165, 0.78),
+      transparent 82%
+    );
+}
+
+.action-page[data-scene="fall"]
+.pulse-core {
+  box-shadow:
+    0 0 11px #f0edff,
+    0 0 35px #4b69c0,
+    0 0 100px rgba(43, 68, 155, 0.72);
+}
+
+
+/* ==========================================
+   THE IMPACT
+========================================== */
+
+.impact-space {
+  position: absolute;
+
+  top: 11%;
+  left: 50%;
+
+  z-index: 11;
+
+  width:
+    min(68vw, 960px);
+
+  height: 76vh;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  transform:
+    translateX(-50%)
+    scale(0.94);
+
+  transition:
+    opacity 900ms ease,
+    transform 1200ms ease,
+    visibility 900ms ease;
+}
+
+.action-page[data-scene="impact"]
+.impact-space {
+  visibility: visible;
+
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+.impact-wall {
+  position: absolute;
+  inset: 0;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.11);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(37, 17, 22, 0.78),
+      rgba(15, 9, 13, 0.92)
+    );
+
+  box-shadow:
+    0 30px 100px
+    rgba(0, 0, 0, 0.6);
+}
+
+.impact-wall::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.3;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 69px,
+      rgba(255, 255, 255, 0.025) 70px
+    ),
+
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 69px,
+      rgba(255, 255, 255, 0.025) 70px
+    );
+}
+
+.impact-point {
+  position: absolute;
+
+  z-index: 3;
+
+  display: block;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background:
+    #fff2dc;
+
+  box-shadow:
+    0 0 11px #fff2dc,
+    0 0 33px #ff413d,
+    0 0 80px rgba(255, 25, 38, 0.75);
+}
+
+.point-one {
+  top: 26%;
+  left: 29%;
+}
+
+.point-two {
+  top: 63%;
+  left: 42%;
+}
+
+.point-three {
+  top: 32%;
+  left: 69%;
+}
+
+.point-four {
+  top: 72%;
+  left: 77%;
+}
+
+.action-page.beat
+.impact-point {
+  animation:
+    impactMark
+    670ms ease-out;
+}
+
+.impact-light {
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 236, 207, 0.78),
+      rgba(255, 47, 42, 0.22) 20%,
+      transparent 56%
+    );
+}
+
+.action-page[data-scene="impact"].beat
+.impact-light {
+  animation:
+    impactFlash
+    450ms ease-out;
+}
+
+
+/* ==========================================
+   NIGHTMARE
+========================================== */
+
+.nightmare-space {
+  position: absolute;
+  inset: 0;
+
+  z-index: 12;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  transition:
+    opacity 1400ms ease,
+    visibility 1400ms ease;
+}
+
+.action-page[data-scene="nightmare"]
+.nightmare-space {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+.nightmare-door {
+  position: absolute;
+
+  top: 10%;
+  left: 50%;
+
+  width:
+    min(40vw, 520px);
+
+  height: 78vh;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  background:
+    #010102;
+
+  box-shadow:
+    0 40px 140px
+    rgba(0, 0, 0, 0.88);
+
+  transform:
+    translateX(-50%);
+}
+
+.door-interior {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 43%,
+      #180308,
+      #030104 60%,
+      #000 100%
+    );
+}
+
+.door-pulse {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  height: 3px;
+
+  background:
+    #ff3435;
+
+  box-shadow:
+    0 0 18px #ff3435,
+    0 -14px 65px
+    rgba(255, 39, 42, 0.44),
+
+    0 -80px 140px
+    rgba(125, 3, 18, 0.26);
+
+  animation:
+    nightmarePulse
+    1s ease-in-out infinite;
+}
+
+.action-page[data-scene="nightmare"]
+.ceiling-light {
+  width: 9%;
+
+  opacity: 0.17;
+
+  background:
+    #ff3435;
+}
+
+
+/* ==========================================
+   PARTICULES
+========================================== */
+
+.action-particles {
+  position: absolute;
+  inset: 0;
+
+  z-index: 18;
+
+  overflow: hidden;
+}
+
+.action-particle {
+  position: absolute;
+
+  display: block;
+
+  width: 2px;
+  height: 2px;
+
+  border-radius: 50%;
+
+  opacity:
+    var(--particle-opacity);
+
+  background:
+    rgba(255, 237, 219, 0.8);
+
+  box-shadow:
+    0 0 6px
+    rgba(255, 210, 195, 0.5);
+
+  animation:
+    particleRise
+    var(--particle-duration)
+    linear infinite;
+
+  animation-delay:
+    var(--particle-delay);
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.action-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  z-index: 100;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  width: 100%;
+
+  padding:
+    24px 36px;
+
+  font-size: 8px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  pointer-events: none;
+}
+
+.action-header a,
+.action-header button {
+  pointer-events: auto;
+}
+
+.room-location {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.location-pulse {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--red);
+
+  box-shadow:
+    0 0 9px var(--red);
+}
+
+.action-page.beat
+.location-pulse {
+  animation:
+    locationBeat
+    420ms ease-out;
+}
+
+#sound-control {
+  justify-self: end;
+
+  padding: 0;
+
+  border: 0;
+
+  color: var(--ivory);
+  background: transparent;
+
+  font-size: 7px;
+
+  letter-spacing: 0.12em;
+
+  cursor: pointer;
+
+  opacity: 0.52;
+}
+
+
+/* ==========================================
+   CARTEL
+========================================== */
+
+.museum-label {
+  position: fixed;
+
+  right: 35px;
+  bottom: 31px;
+
+  z-index: 90;
+
+  width: 240px;
+
+  padding-top: 17px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.22);
+
+  pointer-events: none;
+}
+
+.museum-label > span {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #ff746b;
+
+  font-size: 7px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+.museum-label > strong {
+  display: block;
+
+  margin-bottom: 10px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 20px;
+
+  font-weight: 400;
+}
+
+.museum-label > p {
+  margin:
+    0 0 14px;
+
+  font-size: 7px;
+
+  line-height: 1.65;
+
+  letter-spacing: 0.07em;
+
+  opacity: 0.51;
+}
+
+.museum-label dl {
+  margin: 0;
+}
+
+.museum-label dl div {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 5px;
+}
+
+.museum-label dt,
+.museum-label dd {
+  margin: 0;
+
+  font-size: 6px;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.museum-label dt {
+  opacity: 0.38;
+}
+
+.museum-label dd {
+  color: #ff7f75;
+
+  text-align: right;
+}
+
+.museum-label small {
+  display: block;
+
+  margin-top: 15px;
+
+  font-size: 6px;
+
+  letter-spacing: 0.12em;
+
+  opacity: 0.32;
+}
+
+
+/* ==========================================
+   RECHERCHE
+========================================== */
+
+.research-note {
+  position: fixed;
+
+  bottom: 31px;
+  left: 35px;
+
+  z-index: 90;
+
+  width: 310px;
+
+  opacity: 0.72;
+}
+
+.research-note > span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #ff776d;
+
+  font-size: 7px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+.research-note p {
+  margin:
+    0 0 9px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 12px;
+
+  line-height: 1.42;
+}
+
+.research-note strong {
+  display: block;
+
+  margin-bottom: 9px;
+
+  font-size: 6px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.14em;
+
+  opacity: 0.55;
+}
+
+#research-source {
+  display: inline-block;
+
+  padding-bottom: 3px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.26);
+
+  font-size: 6px;
+
+  letter-spacing: 0.12em;
+
+  pointer-events: auto;
+}
+
+
+/* ==========================================
+   SECTIONS
+========================================== */
+
+.action-journey {
+  position: relative;
+
+  z-index: 50;
+}
+
+.action-scene {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  min-height: 100vh;
+
+  padding:
+    110px 290px 155px;
+
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.scene-content {
+  width:
+    min(780px, 100%);
+
+  opacity: 0;
+
+  filter:
+    blur(10px);
+
+  text-align: center;
+
+  pointer-events: none;
+
+  transform:
+    translateY(36px)
+    scale(0.97);
+
+  transition:
+    opacity 850ms ease,
+    filter 950ms ease,
+    transform 1050ms
+    cubic-bezier(
+      0.2,
+      0.8,
+      0.2,
+      1
+    );
+}
+
+.action-scene.active
+.scene-content {
+  opacity: 1;
+
+  filter:
+    blur(0);
+
+  pointer-events: auto;
+
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+.scene-room {
+  margin:
+    0 0 29px;
+
+  font-size: 8px;
+
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+
+  opacity: 0.52;
+}
+
+.scene-content h1,
+.scene-content h2 {
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(72px, 10.5vw, 165px);
+
+  font-weight: 400;
+
+  line-height: 0.76;
+
+  letter-spacing: -0.06em;
+}
+
+.scene-content h1 em,
+.scene-content h2 em {
+  display: block;
+
+  color: #ff746b;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+}
+
+.main-sentence,
+.final-sentence {
+  max-width: 600px;
+
+  margin:
+    48px auto 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(23px, 2.6vw, 39px);
+
+  line-height: 1.06;
+}
+
+.main-sentence span,
+.final-sentence span {
+  display: block;
+
+  margin-top: 9px;
+
+  color: #ff978d;
+}
+
+.curatorial-description {
+  max-width: 540px;
+
+  margin:
+    27px auto 0;
+
+  font-size: 8px;
+
+  line-height: 1.75;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  opacity: 0.47;
+}
+
+.nightmare-warning {
+  max-width: 500px;
+
+  margin:
+    34px auto 50px;
+
+  color: #ff8a82;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(19px, 2vw, 29px);
+
+  line-height: 1.12;
+}
+
+.enter-nightmare {
+  display: inline-block;
+
+  margin-top: 48px;
+
+  padding:
+    15px 24px;
+
+  border:
+    1px solid
+    rgba(255, 76, 70, 0.71);
+
+  background:
+    rgba(88, 2, 15, 0.3);
+
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+
+  cursor: pointer;
+
+  pointer-events: auto;
+
+  transition:
+    color 300ms ease,
+    background 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.enter-nightmare:hover {
+  color: #110507;
+
+  background:
+    #ff625a;
+
+  box-shadow:
+    0 0 45px
+    rgba(255, 47, 49, 0.34);
+}
+
+
+/* ==========================================
+   PROGRESSION
+========================================== */
+
+.action-progress {
+  position: fixed;
+
+  top: 50%;
+  right: 17px;
+
+  z-index: 100;
+
+  width: 1px;
+  height: 170px;
+
+  background:
+    rgba(255, 255, 255, 0.13);
+
+  pointer-events: none;
+
+  transform:
+    translateY(-50%);
+}
+
+.action-progress span {
+  display: block;
+
+  width: 100%;
+  height: 0;
+
+  background:
+    linear-gradient(
+      #fff2df,
+      #ff3738
+    );
+
+  box-shadow:
+    0 0 8px
+    #ff3738;
+
+  transition:
+    height 600ms ease;
+}
+
+.scroll-instruction {
+  position: fixed;
+
+  top: 50%;
+  right: 31px;
+
+  z-index: 95;
+
+  margin: 0;
+
+  font-size: 6px;
+
+  letter-spacing: 0.14em;
+
+  opacity: 0.3;
+
+  writing-mode:
+    vertical-rl;
+
+  pointer-events: none;
+
+  transform:
+    translateY(-50%);
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes pulseTravel {
+  from {
+    left: -8%;
   }
-];
 
+  to {
+    left: 105%;
+  }
+}
 
-let activeSceneIndex = 0;
+@keyframes pulseImpact {
+  0% {
+    transform:
+      scale(1);
+  }
 
-let scrollLocked = false;
+  18% {
+    transform:
+      scale(3.2);
+  }
 
-let soundEnabled = false;
+  42% {
+    transform:
+      scale(1.45);
+  }
 
-let experienceStarted = false;
+  100% {
+    transform:
+      scale(1);
+  }
+}
 
+@keyframes pulseExpansion {
+  0% {
+    opacity: 0.72;
 
-/* ==========================================
-   PARTICULES LÉGÈRES
-========================================== */
+    transform:
+      translate(-50%, -50%)
+      scale(0.25);
+  }
 
-function createParticles() {
-  particleField.innerHTML = "";
+  100% {
+    opacity: 0;
 
+    transform:
+      translate(-50%, -50%)
+      scale(8);
+  }
+}
 
-  const particleCount =
-    window.innerWidth < 700
-      ? 18
-      : 34;
+@keyframes exitRetreat {
+  0%,
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(1);
+  }
 
+  50% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.54);
+  }
+}
 
-  for (
-    let index = 0;
-    index < particleCount;
-    index++
-  ) {
-    const particle =
-      document.createElement(
-        "span"
-      );
+@keyframes impactMark {
+  0% {
+    transform:
+      scale(1);
+  }
 
+  30% {
+    transform:
+      scale(4.7);
 
-    particle.className =
-      "action-particle";
+    box-shadow:
+      0 0 20px #fff2dc,
+      0 0 70px #ff413d,
+      0 0 150px
+      rgba(255, 25, 38, 0.82);
+  }
 
+  100% {
+    transform:
+      scale(1);
+  }
+}
 
-    particle.style.left =
-      Math.random() *
-      100 +
-      "%";
+@keyframes impactFlash {
+  0% {
+    opacity: 0;
+  }
 
+  17% {
+    opacity: 0.85;
+  }
 
-    particle.style.top =
-      20 +
-      Math.random() *
-      100 +
-      "%";
+  100% {
+    opacity: 0;
+  }
+}
 
+@keyframes nightmarePulse {
+  0%,
+  20%,
+  100% {
+    opacity: 0.45;
+  }
 
-    particle.style.setProperty(
-      "--particle-opacity",
-      (
-        0.12 +
-        Math.random() *
-        0.48
-      ).toFixed(2)
-    );
+  8% {
+    opacity: 1;
 
+    box-shadow:
+      0 0 26px #ff3435,
+      0 -20px 90px
+      rgba(255, 38, 42, 0.74);
+  }
+}
 
-    particle.style.setProperty(
-      "--particle-speed",
-      12 +
-      Math.random() *
-      18 +
-      "s"
-    );
+@keyframes particleRise {
+  from {
+    transform:
+      translateY(12vh);
+  }
 
+  to {
+    transform:
+      translateY(-115vh);
+  }
+}
 
-    particle.style.setProperty(
-      "--particle-delay",
-      -Math.random() *
-      20 +
-      "s"
-    );
+@keyframes locationBeat {
+  0% {
+    transform:
+      scale(1);
+  }
 
+  25% {
+    transform:
+      scale(2.4);
+  }
 
-    particle.style.setProperty(
-      "--particle-drift",
-      (
-        Math.random() -
-        0.5
-      ) *
-      100 +
-      "px"
-    );
-
-
-    particleField.appendChild(
-      particle
-    );
+  100% {
+    transform:
+      scale(1);
   }
 }
 
 
 /* ==========================================
-   AUDIO
+   TABLETTE
 ========================================== */
 
-let audioContext = null;
+@media (max-width: 950px) {
+  .action-header {
+    grid-template-columns:
+      1fr auto;
 
-let masterGain = null;
-
-let ambientGain = null;
-
-let ambientLow = null;
-
-let ambientHigh = null;
-
-let beatTimeout = null;
-
-
-/* Créer l’environnement sonore */
-
-function createAudio() {
-  if (audioContext) {
-    return;
+    padding:
+      19px 21px;
   }
 
-
-  const AudioContextClass =
-    window.AudioContext ||
-    window.webkitAudioContext;
-
-
-  if (!AudioContextClass) {
-    return;
+  .room-location {
+    display: none;
   }
 
-
-  audioContext =
-    new AudioContextClass();
-
-
-  masterGain =
-    audioContext.createGain();
-
-
-  masterGain.gain.value =
-    0.34;
-
-
-  masterGain.connect(
-    audioContext.destination
-  );
-
-
-  ambientGain =
-    audioContext.createGain();
-
-
-  ambientGain.gain.value =
-    0.025;
-
-
-  ambientGain.connect(
-    masterGain
-  );
-
-
-  ambientLow =
-    audioContext.createOscillator();
-
-
-  ambientLow.type =
-    "sine";
-
-
-  ambientLow.frequency.value =
-    42;
-
-
-  ambientLow.connect(
-    ambientGain
-  );
-
-
-  ambientLow.start();
-
-
-  ambientHigh =
-    audioContext.createOscillator();
-
-
-  ambientHigh.type =
-    "sine";
-
-
-  ambientHigh.frequency.value =
-    86;
-
-
-  const highGain =
-    audioContext.createGain();
-
-
-  highGain.gain.value =
-    0.012;
-
-
-  ambientHigh.connect(
-    highGain
-  );
-
-
-  highGain.connect(
-    masterGain
-  );
-
-
-  ambientHigh.start();
-}
-
-
-/* Créer un battement cardiaque */
-
-function createHeartbeat() {
-  if (
-    !audioContext ||
-    !soundEnabled
-  ) {
-    return;
+  .action-scene {
+    padding:
+      95px 45px 190px;
   }
 
-
-  const now =
-    audioContext.currentTime;
-
-
-  /* Premier impact */
-
-  const firstOscillator =
-    audioContext.createOscillator();
-
-
-  const firstGain =
-    audioContext.createGain();
-
-
-  firstOscillator.type =
-    "sine";
-
-
-  firstOscillator.frequency.setValueAtTime(
-    activeSceneIndex === 3
-      ? 48
-      : 58,
-    now
-  );
-
-
-  firstOscillator.frequency.exponentialRampToValueAtTime(
-    35,
-    now + 0.18
-  );
-
-
-  firstGain.gain.setValueAtTime(
-    0.0001,
-    now
-  );
-
-
-  firstGain.gain.exponentialRampToValueAtTime(
-    activeSceneIndex === 4
-      ? 0.55
-      : 0.38,
-    now + 0.018
-  );
-
-
-  firstGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 0.22
-  );
-
-
-  firstOscillator.connect(
-    firstGain
-  );
-
-
-  firstGain.connect(
-    masterGain
-  );
-
-
-  firstOscillator.start(
-    now
-  );
-
-
-  firstOscillator.stop(
-    now + 0.24
-  );
-
-
-  /* Second impact plus court */
-
-  const secondOscillator =
-    audioContext.createOscillator();
-
-
-  const secondGain =
-    audioContext.createGain();
-
-
-  secondOscillator.type =
-    "sine";
-
-
-  secondOscillator.frequency.value =
-    52;
-
-
-  secondGain.gain.setValueAtTime(
-    0.0001,
-    now + 0.14
-  );
-
-
-  secondGain.gain.exponentialRampToValueAtTime(
-    activeSceneIndex === 4
-      ? 0.34
-      : 0.22,
-    now + 0.155
-  );
-
-
-  secondGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 0.29
-  );
-
-
-  secondOscillator.connect(
-    secondGain
-  );
-
-
-  secondGain.connect(
-    masterGain
-  );
-
-
-  secondOscillator.start(
-    now + 0.14
-  );
-
-
-  secondOscillator.stop(
-    now + 0.31
-  );
-
-
-  /* Impact métallique dans la dernière œuvre */
-
-  if (activeSceneIndex === 4) {
-    const metallicOscillator =
-      audioContext.createOscillator();
-
-
-    const metallicGain =
-      audioContext.createGain();
-
-
-    metallicOscillator.type =
-      "triangle";
-
-
-    metallicOscillator.frequency.value =
-      174;
-
-
-    metallicGain.gain.setValueAtTime(
-      0.0001,
-      now
-    );
-
-
-    metallicGain.gain.exponentialRampToValueAtTime(
-      0.055,
-      now + 0.01
-    );
-
-
-    metallicGain.gain.exponentialRampToValueAtTime(
-      0.0001,
-      now + 0.55
-    );
-
-
-    metallicOscillator.connect(
-      metallicGain
-    );
-
-
-    metallicGain.connect(
-      masterGain
-    );
-
-
-    metallicOscillator.start(
-      now
-    );
-
-
-    metallicOscillator.stop(
-      now + 0.6
-    );
-  }
-}
-
-
-/* Battement visuel */
-
-function triggerVisualBeat() {
-  actionPage.classList.remove(
-    "beat"
-  );
-
-
-  void actionPage.offsetWidth;
-
-
-  actionPage.classList.add(
-    "beat"
-  );
-
-
-  window.setTimeout(
-    function () {
-      actionPage.classList.remove(
-        "beat"
-      );
-    },
-    760
-  );
-}
-
-
-/* Boucle du cœur */
-
-function heartbeatLoop() {
-  window.clearTimeout(
-    beatTimeout
-  );
-
-
-  if (!experienceStarted) {
-    return;
+  .museum-label {
+    right: 21px;
+    bottom: 25px;
+
+    width: 205px;
   }
 
+  .research-note {
+    bottom: 25px;
+    left: 21px;
 
-  createHeartbeat();
-
-  triggerVisualBeat();
-
-
-  const currentBpm =
-    sceneData[
-      activeSceneIndex
-    ].bpm;
-
-
-  const interval =
-    60000 /
-    currentBpm;
-
-
-  beatTimeout =
-    window.setTimeout(
-      heartbeatLoop,
-      interval
-    );
-}
-
-
-/* Activer le son */
-
-async function enableSound() {
-  createAudio();
-
-
-  if (!audioContext) {
-    return;
+    width: 270px;
   }
 
-
-  if (
-    audioContext.state ===
-    "suspended"
-  ) {
-    await audioContext.resume();
+  .chase-space,
+  .impact-space {
+    width: 92vw;
   }
 
-
-  soundEnabled = true;
-
-
-  soundControl.classList.add(
-    "active"
-  );
-
-
-  soundControl.setAttribute(
-    "aria-pressed",
-    "true"
-  );
-
-
-  soundLabel.textContent =
-    "SOUND ON";
-}
-
-
-/* Désactiver le son */
-
-function disableSound() {
-  soundEnabled = false;
-
-
-  soundControl.classList.remove(
-    "active"
-  );
-
-
-  soundControl.setAttribute(
-    "aria-pressed",
-    "false"
-  );
-
-
-  soundLabel.textContent =
-    "SOUND OFF";
-}
-
-
-/* ==========================================
-   COMMENCER L’EXPÉRIENCE
-========================================== */
-
-async function startExperience(
-  withSound
-) {
-  if (experienceStarted) {
-    return;
+  .fall-space {
+    width: 80vw;
   }
 
-
-  experienceStarted = true;
-
-
-  actionPage.classList.add(
-    "experience-started"
-  );
-
-
-  actionPage.classList.remove(
-    "experience-locked"
-  );
-
-
-  if (withSound) {
-    await enableSound();
+  .nightmare-door {
+    width: 64vw;
   }
 
-
-  updateScene(0);
-
-  heartbeatLoop();
-}
-
-
-/* Les deux boutons fonctionnent réellement */
-
-beginAction.addEventListener(
-  "click",
-  function () {
-    startExperience(true);
+  .scroll-instruction {
+    display: none;
   }
-);
 
-
-beginSilent.addEventListener(
-  "click",
-  function () {
-    startExperience(false);
-  }
-);
-
-
-soundControl.addEventListener(
-  "click",
-  async function () {
-    if (soundEnabled) {
-      disableSound();
-    } else {
-      await enableSound();
-    }
-  }
-);
-
-
-/* ==========================================
-   CHANGER DE SCÈNE
-========================================== */
-
-function updateScene(
-  newIndex
-) {
-  const safeIndex =
-    Math.max(
-      0,
-      Math.min(
-        newIndex,
-        scenes.length - 1
-      )
-    );
-
-
-  activeSceneIndex =
-    safeIndex;
-
-
-  const data =
-    sceneData[
-      activeSceneIndex
-    ];
-
-
-  actionPage.dataset.scene =
-    data.name;
-
-
-  actionPage.style.setProperty(
-    "--pulse-duration",
-    60000 /
-    data.bpm +
-    "ms"
-  );
-
-
-  scenes.forEach(
-    function (
-      scene,
-      index
-    ) {
-      scene.classList.toggle(
-        "active",
-        index === activeSceneIndex
-      );
-    }
-  );
-
-
-  mapButtons.forEach(
-    function (
-      button,
-      index
-    ) {
-      button.classList.toggle(
-        "active",
-        index === activeSceneIndex
-      );
-    }
-  );
-
-
-  roomLocationText.textContent =
-    data.location;
-
-
-  artworkNumber.textContent =
-    data.number;
-
-
-  artworkTitle.textContent =
-    data.title;
-
-
-  artworkMedium.textContent =
-    data.medium;
-
-
-  pulseValue.textContent =
-    data.bpm +
-    " BPM";
-
-
-  installationStatus.textContent =
-    data.status;
-
-
-  researchNumber.textContent =
-    data.researchNumber;
-
-
-  researchText.textContent =
-    data.research;
-
-
-  researchPrinciple.textContent =
-    data.principle;
-
-
-  progressFill.style.height =
-    (
-      activeSceneIndex /
-      (
-        scenes.length -
-        1
-      )
-    ) *
-    100 +
-    "%";
-
-
-  if (
-    ambientLow &&
-    audioContext
-  ) {
-    const targetFrequency =
-      activeSceneIndex === 3
-        ? 34
-        : activeSceneIndex === 4
-          ? 49
-          : 42;
-
-
-    ambientLow.frequency.cancelScheduledValues(
-      audioContext.currentTime
-    );
-
-
-    ambientLow.frequency.linearRampToValueAtTime(
-      targetFrequency,
-      audioContext.currentTime + 1
-    );
+  .action-progress {
+    right: 8px;
   }
 }
 
 
 /* ==========================================
-   OBSERVER LES SECTIONS
+   MOBILE
 ========================================== */
 
-const sceneObserver =
-  new IntersectionObserver(
-    function (entries) {
-      let strongestEntry = null;
+@media (max-width: 600px) {
+  .action-header {
+    padding:
+      18px 19px;
 
-
-      entries.forEach(
-        function (entry) {
-          if (
-            entry.isIntersecting &&
-            (
-              !strongestEntry ||
-              entry.intersectionRatio >
-              strongestEntry.intersectionRatio
-            )
-          ) {
-            strongestEntry =
-              entry;
-          }
-        }
-      );
-
-
-      if (strongestEntry) {
-        updateScene(
-          Number(
-            strongestEntry.target.dataset.index
-          )
-        );
-      }
-    },
-    {
-      threshold: [
-        0.35,
-        0.55,
-        0.75
-      ]
-    }
-  );
-
-
-scenes.forEach(
-  function (scene) {
-    sceneObserver.observe(
-      scene
-    );
+    font-size: 7px;
   }
-);
+
+  #sound-control {
+    font-size: 6px;
+  }
+
+  .action-scene {
+    padding:
+      90px 20px 185px;
+  }
+
+  .scene-content h1,
+  .scene-content h2 {
+    font-size:
+      clamp(65px, 21vw, 105px);
+  }
+
+  .main-sentence,
+  .final-sentence {
+    font-size:
+      clamp(23px, 7vw, 32px);
+  }
+
+  .museum-label {
+    display: none;
+  }
+
+  .research-note {
+    right: 80px;
+    bottom: 20px;
+    left: 19px;
+
+    width: auto;
+  }
+
+  .research-note p {
+    font-size: 10px;
+  }
+
+  .research-note > span,
+  .research-note strong,
+  #research-source {
+    font-size: 5px;
+  }
+
+  .sleeping-installation {
+    width: 110vw;
+  }
+
+  .chase-space,
+  .impact-space {
+    width: 96vw;
+  }
+
+  .fall-space {
+    width: 94vw;
+  }
+
+  .nightmare-door {
+    width: 78vw;
+  }
+
+  .action-progress {
+    display: none;
+  }
+
+  .enter-nightmare {
+    margin-top: 38px;
+  }
+}
 
 
 /* ==========================================
-   UN SCROLL = UNE INSTALLATION
+   ACCESSIBILITÉ
 ========================================== */
 
-window.addEventListener(
-  "wheel",
-  function (event) {
-    if (
-      !experienceStarted ||
-      window.innerWidth < 800
-    ) {
-      return;
-    }
-
-
-    if (
-      Math.abs(event.deltaY) < 8
-    ) {
-      return;
-    }
-
-
-    event.preventDefault();
-
-
-    if (scrollLocked) {
-      return;
-    }
-
-
-    const direction =
-      event.deltaY > 0
-        ? 1
-        : -1;
-
-
-    const nextIndex =
-      Math.max(
-        0,
-        Math.min(
-          activeSceneIndex +
-          direction,
-          scenes.length - 1
-        )
-      );
-
-
-    if (
-      nextIndex ===
-      activeSceneIndex
-    ) {
-      return;
-    }
-
-
-    scrollLocked = true;
-
-
-    scenes[
-      nextIndex
-    ].scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-
-
-    window.setTimeout(
-      function () {
-        scrollLocked = false;
-      },
-      950
-    );
-  },
-  {
-    passive: false
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-);
 
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
 
-/* Navigation clavier */
+    animation-iteration-count:
+      1 !important;
 
-window.addEventListener(
-  "keydown",
-  function (event) {
-    if (!experienceStarted) {
-      return;
-    }
-
-
-    let direction = 0;
-
-
-    if (
-      event.key === "ArrowDown" ||
-      event.key === "PageDown"
-    ) {
-      direction = 1;
-    }
-
-
-    if (
-      event.key === "ArrowUp" ||
-      event.key === "PageUp"
-    ) {
-      direction = -1;
-    }
-
-
-    if (!direction) {
-      return;
-    }
-
-
-    event.preventDefault();
-
-
-    const nextIndex =
-      Math.max(
-        0,
-        Math.min(
-          activeSceneIndex +
-          direction,
-          scenes.length - 1
-        )
-      );
-
-
-    scenes[
-      nextIndex
-    ].scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+    transition-duration:
+      0.01ms !important;
   }
-);
-
-
-/* Plan de salle cliquable */
-
-mapButtons.forEach(
-  function (button) {
-    button.addEventListener(
-      "click",
-      function () {
-        const destination =
-          Number(
-            button.dataset.destination
-          );
-
-
-        scenes[
-          destination
-        ].scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
-    );
-  }
-);
-
-
-/* ==========================================
-   PARALLAXE DISCRÈTE
-========================================== */
-
-window.addEventListener(
-  "pointermove",
-  function (event) {
-    const horizontal =
-      event.clientX /
-      window.innerWidth -
-      0.5;
-
-
-    const vertical =
-      event.clientY /
-      window.innerHeight -
-      0.5;
-
-
-    actionPage.style.setProperty(
-      "--pointer-x",
-      horizontal *
-      12 +
-      "px"
-    );
-
-
-    actionPage.style.setProperty(
-      "--pointer-y",
-      vertical *
-      8 +
-      "px"
-    );
-  },
-  {
-    passive: true
-  }
-);
-
-
-/* ==========================================
-   SORTIE VERS LE CAUCHEMAR
-========================================== */
-
-enterNightmare.addEventListener(
-  "click",
-  function (event) {
-    event.preventDefault();
-
-
-    if (
-      actionPage.classList.contains(
-        "leaving-action"
-      )
-    ) {
-      return;
-    }
-
-
-    actionPage.classList.add(
-      "leaving-action"
-    );
-
-
-    window.setTimeout(
-      function () {
-        window.location.href =
-          "nightmare.html";
-      },
-      1250
-    );
-  }
-);
-
-
-/* ==========================================
-   INITIALISATION
-========================================== */
-
-actionPage.classList.add(
-  "experience-locked"
-);
-
-
-createParticles();
-
-updateScene(0);
-
-
-window.addEventListener(
-  "resize",
-  createParticles
-);
+}
