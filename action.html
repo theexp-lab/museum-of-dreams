@@ -1,201 +1,722 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#05060b">
-  <meta name="description" content="Action — Room 05 of The Museum of Dreams.">
-  <title>Action — Museum of Dreams</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./action.css?v=50">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#05060b"
+  >
+
+  <meta
+    name="description"
+    content="Action — Room 05 of The Museum of Dreams."
+  >
+
+  <title>
+    Action — Museum of Dreams
+  </title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./action.css?v=52"
+  >
 </head>
 
-<body class="action-page" data-scene="intro">
 
-  <div class="action-world" aria-hidden="true">
-    <img class="city-plate" src="./action-city.png" alt="">
+<body
+  class="action-page"
+  data-scene="intro"
+>
+
+
+  <!-- ==========================================
+       MONDE VISUEL
+  =========================================== -->
+
+  <div
+    class="action-world"
+    aria-hidden="true"
+  >
+
+    <img
+      class="city-plate"
+      src="./action-city.png"
+      alt=""
+    >
+
     <div class="city-depth"></div>
+
     <div class="museum-room"></div>
+
     <div class="road-light"></div>
+
     <canvas id="weather-canvas"></canvas>
+
     <div class="speed-field"></div>
 
+
+    <!-- Moto exposée -->
+
     <div class="motorcycle-wrap">
+
       <div class="motorcycle-aura"></div>
-      <img class="motorcycle" src="./action-motorcycle.png" alt="">
+
+      <img
+        class="motorcycle"
+        src="./action-motorcycle.png"
+        alt=""
+      >
+
       <div class="motorcycle-shadow"></div>
+
     </div>
+
+
+    <!-- Flash faisant disparaître la moto -->
+
+    <div class="motorcycle-launch-flash"></div>
+
+
+    <!-- Vue subjective -->
+
+    <div class="cockpit-wrap">
+
+      <div class="cockpit-speed-glow"></div>
+
+      <img
+        class="action-cockpit"
+        src="./action-cockpit.png"
+        alt=""
+      >
+
+    </div>
+
+
+    <div class="pov-speed-lines"></div>
+
+
+    <!-- Train -->
 
     <div class="train-wrap">
-      <img class="train" src="./action-train.png" alt="">
+
+      <img
+        class="train"
+        src="./action-train.png"
+        alt=""
+      >
+
     </div>
+
+
+    <!-- Personne à sauver -->
 
     <div class="rescue-light">
+
       <span></span>
+
     </div>
+
 
     <div class="impact-flash"></div>
+
     <div class="nightmare-blackout"></div>
+
   </div>
 
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
   <header class="action-header">
-    <a href="romance.html">THE MUSEUM OF DREAMS</a>
+
+    <a href="romance.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
 
     <div class="action-location">
+
       <span class="location-dot"></span>
-      <span>ROOM 05 · ACTION</span>
+
+      <span>
+        ROOM 05 · ACTION
+      </span>
+
     </div>
 
-    <a href="case-study.html">PROJECT</a>
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
   </header>
 
-  <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="true">
+
+  <!-- Son -->
+
+  <button
+    class="sound-toggle"
+    id="sound-toggle"
+    type="button"
+    aria-pressed="true"
+  >
     SOUND ON
   </button>
 
-  <aside class="research-note" id="research-note">
-    <span id="research-number">RESEARCH NOTE 05.1</span>
-    <p id="research-text">During REM sleep, movement can be vividly simulated while most skeletal muscles remain inhibited.</p>
-    <strong id="research-principle">MOTION · WITHOUT MOVEMENT</strong>
+
+  <!-- ==========================================
+       OBSERVATION SCIENTIFIQUE
+  =========================================== -->
+
+  <aside
+    class="research-note"
+    id="research-note"
+  >
+
+    <span id="research-number">
+      RESEARCH NOTE 05.1
+    </span>
+
+    <p id="research-text">
+
+      During REM sleep, movement can be
+      vividly simulated while most skeletal
+      muscles remain inhibited.
+
+    </p>
+
+    <strong id="research-principle">
+      MOTION · WITHOUT MOVEMENT
+    </strong>
+
   </aside>
 
-  <div class="action-progress" aria-hidden="true">
+
+  <!-- Progression -->
+
+  <div
+    class="action-progress"
+    aria-hidden="true"
+  >
     <span id="action-progress-fill"></span>
   </div>
 
-  <p class="scroll-cue" id="scroll-cue">SCROLL TO ACTIVATE THE INSTALLATION</p>
+
+  <p
+    class="scroll-cue"
+    id="scroll-cue"
+  >
+    SCROLL TO ACTIVATE THE INSTALLATION
+  </p>
+
+
+  <!-- ==========================================
+       HISTOIRE
+  =========================================== -->
 
   <main class="action-story">
-    <section class="story-beat intro-beat" data-scene="intro">
+
+
+    <!-- Introduction -->
+
+    <section
+      class="story-beat intro-beat"
+      data-scene="intro"
+    >
+
       <div class="intro-copy">
-        <p class="room-number">ROOM 05</p>
-        <h1>ACTION</h1>
-        <p class="room-subtitle">THE MIND IN MOTION</p>
+
+        <p class="room-number">
+          ROOM 05
+        </p>
+
+        <h1>
+          ACTION
+        </h1>
+
+        <p class="room-subtitle">
+          THE MIND IN MOTION
+        </p>
+
         <div class="museum-description">
-          <p>The body remains still.</p>
-          <p>The dream does not.</p>
-          <small>A kinetic installation exploring how the dreaming mind creates speed, falling and impact.</small>
+
+          <p>
+            The body remains still.
+          </p>
+
+          <p>
+            The dream does not.
+          </p>
+
+          <small>
+
+            A kinetic installation exploring
+            how the dreaming mind creates
+            speed, falling and impact.
+
+          </small>
+
         </div>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="exhibit">
+
+    <!-- Moto exposée -->
+
+    <section
+      class="story-beat"
+      data-scene="exhibit"
+    >
+
       <div class="beat-copy">
-        <small>COMPOSITE DREAM 05</small>
-        <p>There is a motorcycle<br>in the middle of the museum.</p>
-        <em>You know it is yours.</em>
+
+        <small>
+          COMPOSITE DREAM 05
+        </small>
+
+        <p>
+
+          There is a motorcycle
+          <br>
+
+          in the middle of the museum.
+
+        </p>
+
+        <em>
+          You know it is yours.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="trouble">
+
+    <!-- Ouverture de la ville -->
+
+    <section
+      class="story-beat"
+      data-scene="trouble"
+    >
+
       <div class="beat-copy">
-        <p>The city is already<br>in trouble.</p>
-        <em>Apparently, you are part of the plan.</em>
+
+        <p>
+
+          The city is already
+          <br>
+
+          in trouble.
+
+        </p>
+
+        <em>
+          Apparently, you are part of the plan.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="ride">
+
+    <!-- Conduite -->
+
+    <section
+      class="story-beat"
+      data-scene="ride"
+    >
+
       <div class="beat-copy">
-        <p>The road climbs<br>the side of a building.</p>
-        <em>You follow it.</em>
+
+        <p>
+
+          The road climbs
+          <br>
+
+          the side of a building.
+
+        </p>
+
+        <em>
+          You follow it.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="directions">
+
+    <!-- Directions impossibles -->
+
+    <section
+      class="story-beat"
+      data-scene="directions"
+    >
+
       <div class="beat-copy">
-        <p>Traffic has discovered</p>
-        <em>several new directions.</em>
+
+        <p>
+          Traffic has discovered
+        </p>
+
+        <em>
+          several new directions.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="rooftop">
+
+    <!-- Disparition de la moto -->
+
+    <section
+      class="story-beat"
+      data-scene="rooftop"
+    >
+
       <div class="beat-copy">
-        <p>The motorcycle<br>is gone.</p>
-        <em>The mission is not.</em>
+
+        <p>
+
+          The motorcycle
+          <br>
+
+          is gone.
+
+        </p>
+
+        <em>
+          The mission is not.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="jump">
+
+    <!-- Saut -->
+
+    <section
+      class="story-beat"
+      data-scene="jump"
+    >
+
       <div class="beat-copy">
-        <p>The next rooftop<br>is much too far away.</p>
-        <em>You jump anyway.</em>
+
+        <p>
+
+          The next rooftop
+          <br>
+
+          is much too far away.
+
+        </p>
+
+        <em>
+          You jump anyway.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="airborne">
+
+    <!-- Dans le vide -->
+
+    <section
+      class="story-beat"
+      data-scene="airborne"
+    >
+
       <div class="beat-copy">
-        <small>FOR THREE SECONDS</small>
-        <p>The entire city</p>
-        <em>waits below you.</em>
+
+        <small>
+          FOR THREE SECONDS
+        </small>
+
+        <p>
+          The entire city
+        </p>
+
+        <em>
+          waits below you.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="train">
+
+    <!-- Train -->
+
+    <section
+      class="story-beat"
+      data-scene="train"
+    >
+
       <div class="beat-copy">
-        <p>You land<br>on a moving train.</p>
-        <em>It was not there a moment ago.</em>
+
+        <p>
+
+          You land
+          <br>
+
+          on a moving train.
+
+        </p>
+
+        <em>
+          It was not there a moment ago.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="countdown">
+
+    <!-- Compte à rebours -->
+
+    <section
+      class="story-beat"
+      data-scene="countdown"
+    >
+
       <div class="countdown-panel">
-        <small>ROUTE FAILURE</small>
-        <p>THE BRIDGE ENDS IN</p>
-        <strong id="countdown-value">08</strong>
-        <span>SECONDS</span>
+
+        <small>
+          ROUTE FAILURE
+        </small>
+
+        <p>
+          THE BRIDGE ENDS IN
+        </p>
+
+        <strong id="countdown-value">
+          08
+        </strong>
+
+        <span>
+          SECONDS
+        </span>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="passenger">
+
+    <!-- Passager -->
+
+    <section
+      class="story-beat"
+      data-scene="passenger"
+    >
+
       <div class="beat-copy">
-        <p>There is someone<br>inside the final carriage.</p>
+
+        <p>
+
+          There is someone
+          <br>
+
+          inside the final carriage.
+
+        </p>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="rescue">
+
+    <!-- Mission -->
+
+    <section
+      class="story-beat"
+      data-scene="rescue"
+    >
+
       <div class="beat-copy">
-        <p>You came here<br>to rescue someone.</p>
-        <em>You still do not know who.</em>
+
+        <p>
+
+          You came here
+          <br>
+
+          to rescue someone.
+
+        </p>
+
+        <em>
+          You still do not know who.
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat hand-beat" data-scene="hand">
+
+    <!-- Prendre la main -->
+
+    <section
+      class="story-beat hand-beat"
+      data-scene="hand"
+    >
+
       <div class="beat-copy">
-        <p>There is no time<br>to ask.</p>
-        <button class="take-hand" id="take-hand" type="button">TAKE THEIR HAND →</button>
+
+        <p>
+
+          There is no time
+          <br>
+
+          to ask.
+
+        </p>
+
+        <button
+          class="take-hand"
+          id="take-hand"
+          type="button"
+        >
+          TAKE THEIR HAND →
+        </button>
+
       </div>
+
     </section>
 
-    <section class="story-beat" data-scene="fall">
+
+    <!-- Chute -->
+
+    <section
+      class="story-beat"
+      data-scene="fall"
+    >
+
       <div class="beat-copy">
-        <small>IMPACT SUSPENDED</small>
-        <p>For one impossible moment,</p>
-        <em>nothing is falling<br>at the same speed.</em>
+
+        <small>
+          IMPACT SUSPENDED
+        </small>
+
+        <p>
+          For one impossible moment,
+        </p>
+
+        <em>
+
+          nothing is falling
+          <br>
+
+          at the same speed.
+
+        </em>
+
       </div>
+
     </section>
 
-    <section class="story-beat pulse-beat" data-scene="pulse">
+
+    <!-- Troisième battement -->
+
+    <section
+      class="story-beat pulse-beat"
+      data-scene="pulse"
+    >
+
       <div class="signal-panel">
-        <span>LIFE SIGNALS DETECTED</span>
-        <strong id="signal-count">02</strong>
-        <p id="signal-message">TWO PULSES STABLE</p>
-        <a href="nightmare.html" class="nightmare-link" id="nightmare-link">TRACE THE THIRD PULSE →</a>
+
+        <span>
+          LIFE SIGNALS DETECTED
+        </span>
+
+        <strong id="signal-count">
+          02
+        </strong>
+
+        <p id="signal-message">
+          TWO PULSES STABLE
+        </p>
+
+        <a
+          href="nightmare.html"
+          class="nightmare-link"
+          id="nightmare-link"
+        >
+          TRACE THE THIRD PULSE →
+        </a>
+
       </div>
+
     </section>
+
   </main>
 
+
+  <!-- Cartel du musée -->
+
   <div class="museum-label">
-    <strong>THE MISSION WITH NO INSTRUCTIONS</strong>
-    <span>IMMERSIVE PROJECTION · KINETIC FLOOR · SPATIAL SOUND · INTERACTIVE LIGHT</span>
+
+    <strong>
+      THE MISSION WITH NO INSTRUCTIONS
+    </strong>
+
+    <span>
+
+      IMMERSIVE PROJECTION · KINETIC FLOOR ·
+      SPATIAL SOUND · INTERACTIVE LIGHT
+
+    </span>
+
   </div>
 
-  <audio id="motorcycle-start" src="./motorcycle-start.mp3" preload="auto"></audio>
-  <audio id="motorcycle-ride" src="./motorcycle-ride.mp3" preload="auto" loop></audio>
-  <audio id="train-pass" src="./train-pass.mp3" preload="auto"></audio>
 
-  <script src="./action.js?v=50"></script>
+  <!-- ==========================================
+       FICHIERS AUDIO
+
+       Le son de moto en mouvement a été retiré.
+  =========================================== -->
+
+  <audio
+    id="motorcycle-start"
+    src="./motorcycle-start.mp3"
+    preload="auto"
+  ></audio>
+
+  <audio
+    id="train-pass"
+    src="./train-pass.mp3"
+    preload="auto"
+  ></audio>
+
+
+  <script src="./action.js?v=52"></script>
+
 </body>
 </html>
