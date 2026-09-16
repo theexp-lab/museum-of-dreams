@@ -48,7 +48,7 @@
       "THE FIRST FLIGHT",
 
     text:
-      "You take one step.<em>The clouds take care of the rest.</em>"
+      "You take one step.<em>The ground is already kilometres below.</em>"
   },
 
   {
@@ -88,7 +88,7 @@
       "THE RACE",
 
     text:
-      "The forest has decided<em>to race you.</em>"
+      "You race through it<em>before the branches can catch you.</em>"
   },
 
   {
