@@ -90,6 +90,12 @@ const storyLines =
     )
   );
 
+const storyStops =
+  Array.from(
+    document.querySelectorAll(
+      ".story-stop[data-line]"
+    )
+  );
 
 const researchNote =
   document.querySelector(
@@ -288,93 +294,91 @@ function updateResearch(progress) {
 let activeLine = null;
 
 
-function updateStoryLines(progress) {
+/* ==========================================
+   PHRASES LIÉES AUX ARRÊTS DU SCROLL
+========================================== */
+
+function updateStoryLines() {
   let strongestLine = null;
 
   let strongestOpacity = 0;
 
 
   storyLines.forEach(
-    function (line) {
-      const start =
-        Number(
-          line.dataset.start
-        );
+    function (line, index) {
+      const correspondingStop =
+        storyStops[index];
 
 
-      const end =
-        Number(
-          line.dataset.end
-        );
+      if (!correspondingStop) {
+        return;
+      }
 
 
-      const localProgress =
-        range(
-          progress,
-          start,
-          end
-        );
+      /*
+       * Distance réelle entre le scroll
+       * et le chapitre de cette phrase.
+       *
+       * Au point d’arrêt :
+       * distance = 0 et opacité = 1.
+       */
 
-
-      const entrance =
-        smoothValue(
-          clamp(
-            localProgress / 0.24,
-            0,
-            1
-          )
-        );
-
-
-      const departure =
-        smoothValue(
-          clamp(
-            (
-              localProgress -
-              0.7
-            ) /
-            0.3,
-            0,
-            1
-          )
-        );
-
-
-      const opacity =
-        entrance *
+      const distanceInScreens =
         (
-          1 -
-          departure
+          correspondingStop.offsetTop -
+          window.scrollY
+        ) /
+        window.innerHeight;
+
+
+      const absoluteDistance =
+        Math.abs(
+          distanceInScreens
         );
 
+
+      const visibility =
+        smoothValue(
+          clamp(
+            1 -
+            absoluteDistance,
+            0,
+            1
+          )
+        );
+
+
+      /*
+       * La phrase suivante arrive du bas.
+       * La précédente repart vers le haut.
+       */
 
       const verticalPosition =
-        (
-          1 -
-          entrance
+        clamp(
+          distanceInScreens,
+          -1,
+          1
         ) *
-        32 -
-        departure *
-        30;
+        42;
 
 
       const blur =
         (
           1 -
-          opacity
+          visibility
         ) *
-        10;
+        11;
 
 
       const scale =
-        0.97 +
-        opacity *
-        0.03;
+        0.965 +
+        visibility *
+        0.035;
 
 
       line.style.setProperty(
         "--line-opacity",
-        opacity
+        visibility
       );
 
 
@@ -396,12 +400,18 @@ function updateStoryLines(progress) {
       );
 
 
+      line.classList.toggle(
+        "is-current",
+        visibility > 0.92
+      );
+
+
       if (
-        opacity >
+        visibility >
         strongestOpacity
       ) {
         strongestOpacity =
-          opacity;
+          visibility;
 
 
         strongestLine =
@@ -409,6 +419,28 @@ function updateStoryLines(progress) {
       }
     }
   );
+
+
+  if (
+    strongestLine &&
+    strongestLine !== activeLine
+  ) {
+    activeLine =
+      strongestLine;
+
+
+    dreamTitle.textContent =
+      strongestLine.dataset.title;
+
+
+    emotionalCore.textContent =
+      strongestLine.dataset.emotion;
+
+
+    dreamMotif.textContent =
+      strongestLine.dataset.motif;
+  }
+}
 
 
   if (
@@ -1166,118 +1198,145 @@ function updateRomance() {
       : 0;
 
 
-  const introOpacity =
+  /* ==========================================
+   PROGRESSION CALÉE SUR LES CHAPITRES
+========================================== */
+
+/*
+ * Il existe 15 écrans :
+ *
+ * 0     introduction
+ * 1–11  narration
+ * 12    désir de sortir
+ * 13    pouls
+ * 14    bouton Action
+ */
+
+
+const introOpacity =
+  1 -
+  smoothRange(
+    progress,
+    0.015,
+    0.06
+  );
+
+
+const approach =
+  smoothRange(
+    progress,
+    0.05,
+    0.43
+  );
+
+
+const warmthArrival =
+  smoothRange(
+    progress,
+    0.1,
+    0.4
+  );
+
+
+const warmthDeparture =
+  smoothRange(
+    progress,
+    0.52,
+    0.76
+  );
+
+
+const warmth =
+  warmthArrival *
+  (
     1 -
-    smoothRange(
-      progress,
-      0.04,
-      0.125
-    );
+    warmthDeparture *
+    0.78
+  );
 
 
-  const approach =
-    smoothRange(
-      progress,
-      0.1,
-      0.55
-    );
+const pink =
+  smoothRange(
+    progress,
+    0.25,
+    0.62
+  );
 
 
-  const warmthArrival =
-    smoothRange(
-      progress,
-      0.17,
-      0.5
-    );
+/*
+ * Le rouge apparaît beaucoup plus
+ * progressivement entre la troisième
+ * lumière et THAT IS ENOUGH.
+ */
+
+const jealousy =
+  smoothRange(
+    progress,
+    0.49,
+    0.8
+  );
 
 
-  const warmthDeparture =
-    smoothRange(
-      progress,
-      0.68,
-      0.9
-    );
+const darkness =
+  smoothRange(
+    progress,
+    0.71,
+    0.95
+  );
 
 
-  const warmth =
-    warmthArrival *
-    (
-      1 -
-      warmthDeparture *
-      0.78
-    );
+const thirdLight =
+  smoothRange(
+    progress,
+    0.48,
+    0.58
+  );
 
 
-  const pink =
-    smoothRange(
-      progress,
-      0.35,
-      0.72
-    );
+/* Écran 12 : You want the dream... */
+
+const desireIn =
+  smoothRange(
+    progress,
+    0.835,
+    0.86
+  );
 
 
-  const jealousy =
-    smoothRange(
-      progress,
-      0.63,
-      0.91
-    );
+const desireOut =
+  smoothRange(
+    progress,
+    0.875,
+    0.9
+  );
 
 
-  const darkness =
-    smoothRange(
-      progress,
-      0.84,
-      0.975
-    );
+const endingDesire =
+  desireIn *
+  (
+    1 -
+    desireOut
+  );
 
 
-  const thirdLight =
-    smoothRange(
-      progress,
-      0.62,
-      0.72
-    );
+/* Écran 13 : BUT YOUR PULSE... */
+
+const endingPulse =
+  smoothRange(
+    progress,
+    0.905,
+    0.94
+  );
 
 
-  const desireIn =
-    smoothRange(
-      progress,
-      0.918,
-      0.935
-    );
+/* Écran 14 : bouton Action */
 
-
-  const desireOut =
-    smoothRange(
-      progress,
-      0.945,
-      0.956
-    );
-
-
-  const endingDesire =
-    desireIn *
-    (
-      1 -
-      desireOut
-    );
-
-
-  const endingPulse =
-    smoothRange(
-      progress,
-      0.958,
-      0.978
-    );
-
-
-  const endingButton =
-    smoothRange(
-      progress,
-      0.982,
-      0.997
-    );
+const endingButton =
+  smoothRange(
+    progress,
+    0.965,
+    0.995
+  );
 
 
   currentProgress = progress;
@@ -1357,108 +1416,176 @@ function updateRomance() {
     progress * 100 + "%";
 
 
-  updateStoryLines(progress);
+  updateStoryLines();
 
   updateResearch(progress);
 
   updateAudio();
 
 
-  page.classList.toggle(
-    "phase-jealousy",
-    progress >= 0.63
-  );
-
-
-  page.classList.toggle(
-    "phase-ending",
-    progress >= 0.918
-  );
-
-
-  page.classList.toggle(
-    "phase-button",
-    progress >= 0.982
-  );
-
-
   /* Troisième lumière */
 
-  if (
-    progress >= 0.63 &&
-    !thirdLightPlayed
-  ) {
-    thirdLightPlayed = true;
+if (
+  progress >= 0.5 &&
+  !thirdLightPlayed
+) {
+  thirdLightPlayed = true;
 
 
-    playImpact(
-      48,
-      0.75,
-      1.1
-    );
-  }
+  playImpact(
+    48,
+    0.75,
+    1.1
+  );
+}
 
 
-  if (
-    progress < 0.61
-  ) {
-    thirdLightPlayed = false;
-  }
+if (
+  progress < 0.47
+) {
+  thirdLightPlayed = false;
+}
 
 
-  /* THAT IS ENOUGH */
+/* THAT IS ENOUGH */
 
-  if (
-    progress >= 0.88 &&
-    !enoughPlayed
-  ) {
-    enoughPlayed = true;
-
-
-    triggerFlash();
+if (
+  progress >= 0.785 &&
+  !enoughPlayed
+) {
+  enoughPlayed = true;
 
 
-    playImpact(
-      31,
-      1.35,
-      1.5
-    );
+  triggerFlash();
 
 
-    playHeartbeat(
-      2,
-      0
-    );
-  }
+  playImpact(
+    31,
+    1.35,
+    1.5
+  );
 
 
-  if (
-    progress < 0.86
-  ) {
-    enoughPlayed = false;
-  }
+  playHeartbeat(
+    2,
+    0
+  );
+}
 
 
-  /* Tempête finale */
-
-  if (
-    progress >= 0.958 &&
-    !finalStormPlayed
-  ) {
-    finalStormPlayed = true;
+if (
+  progress < 0.75
+) {
+  enoughPlayed = false;
+}
 
 
-    triggerFlash();
+/* Tempête finale */
 
-    playStorm();
-  }
+if (
+  progress >= 0.91 &&
+  !finalStormPlayed
+) {
+  finalStormPlayed = true;
 
 
-  if (
-    progress < 0.945
-  ) {
-    finalStormPlayed = false;
-  }
+  triggerFlash();
+
+  playStorm();
+}
+
+
+if (
+  progress < 0.88
+) {
+  finalStormPlayed = false;
+}
+
+
+  /* ==========================================
+   IMPACT DE LA TROISIÈME LUMIÈRE
+========================================== */
+
+if (
+  progress >= 0.5 &&
+  !thirdLightPlayed
+) {
+  thirdLightPlayed = true;
+
+
+  playImpact(
+    48,
+    0.75,
+    1.1
+  );
+}
+
+
+if (
+  progress < 0.47
+) {
+  thirdLightPlayed = false;
+}
+
+
+/* ==========================================
+   IMPACT — THAT IS ENOUGH
+========================================== */
+
+if (
+  progress >= 0.785 &&
+  !enoughPlayed
+) {
+  enoughPlayed = true;
+
+
+  triggerFlash();
+
+
+  playImpact(
+    31,
+    1.35,
+    1.5
+  );
+
+
+  playHeartbeat(
+    2,
+    0
+  );
+}
+
+
+if (
+  progress < 0.75
+) {
+  enoughPlayed = false;
+}
+
+
+/* ==========================================
+   TEMPÊTE DU POULS
+========================================== */
+
+if (
+  progress >= 0.91 &&
+  !finalStormPlayed
+) {
+  finalStormPlayed = true;
+
+
+  triggerFlash();
+
+
+  playStorm();
+}
+
+
+if (
+  progress < 0.88
+) {
+  finalStormPlayed = false;
+}
 
 
   if (progress < 0.15) {
