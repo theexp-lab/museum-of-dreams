@@ -1,1315 +1,294 @@
-/* ==========================================
-   THE MUSEUM OF DREAMS
-   ROOM 05 — ACTION
-========================================== */
+const body = document.body;
+const beats = [...document.querySelectorAll(".story-beat")];
+const progressFill = document.querySelector("#action-progress-fill");
+const scrollCue = document.querySelector("#scroll-cue");
+const soundToggle = document.querySelector("#sound-toggle");
+const takeHand = document.querySelector("#take-hand");
+const countdownValue = document.querySelector("#countdown-value");
+const pulseBeat = document.querySelector(".pulse-beat");
+const signalCount = document.querySelector("#signal-count");
+const signalMessage = document.querySelector("#signal-message");
+const researchNumber = document.querySelector("#research-number");
+const researchText = document.querySelector("#research-text");
+const researchPrinciple = document.querySelector("#research-principle");
 
+const startSound = document.querySelector("#motorcycle-start");
+const rideSound = document.querySelector("#motorcycle-ride");
+const trainSound = document.querySelector("#train-pass");
 
-/* ==========================================
-   ÉLÉMENTS
-========================================== */
+const sceneNames = beats.map((beat) => beat.dataset.scene);
+let activeIndex = -1;
+let wheelLocked = false;
+let audioUnlocked = false;
+let soundEnabled = localStorage.getItem("museumSound") !== "off";
+let audioContext;
+let masterGain;
+let heartbeatTimer;
+let countdownTimer;
+let thirdSignalTimer;
+const played = new Set();
 
-const actionPage =
-  document.querySelector(
-    ".action-page"
-  );
+startSound.volume = 0.72;
+rideSound.volume = 0;
+trainSound.volume = 0.72;
 
-const scenes =
-  Array.from(
-    document.querySelectorAll(
-      ".action-scene"
-    )
-  );
+function updateSoundButton() {
+  soundToggle.textContent = soundEnabled ? "SOUND ON" : "SOUND OFF";
+  soundToggle.setAttribute("aria-pressed", String(soundEnabled));
+}
 
-const soundControl =
-  document.querySelector(
-    "#sound-control"
-  );
-
-const roomLocationText =
-  document.querySelector(
-    "#room-location-text"
-  );
-
-const installationNumber =
-  document.querySelector(
-    "#installation-number"
-  );
-
-const installationTitle =
-  document.querySelector(
-    "#installation-title"
-  );
-
-const installationMedium =
-  document.querySelector(
-    "#installation-medium"
-  );
-
-const pulseValue =
-  document.querySelector(
-    "#pulse-value"
-  );
-
-const movementStatus =
-  document.querySelector(
-    "#movement-status"
-  );
-
-const researchNumber =
-  document.querySelector(
-    "#research-number"
-  );
-
-const researchText =
-  document.querySelector(
-    "#research-text"
-  );
-
-const researchPrinciple =
-  document.querySelector(
-    "#research-principle"
-  );
-
-const researchSource =
-  document.querySelector(
-    "#research-source"
-  );
-
-const progressFill =
-  document.querySelector(
-    "#action-progress-fill"
-  );
-
-const particleField =
-  document.querySelector(
-    "#action-particles"
-  );
-
-
-/* ==========================================
-   DONNÉES DU PARCOURS
-========================================== */
-
-const sceneData = [
-  {
-    visual: "introduction",
-    intensity: "low",
-    location: "ROOM 05 · ACTION",
-    number: "ROOM 05",
-    title: "THE BODY THAT NEVER MOVED",
-    medium: "KINETIC LIGHT · SPATIAL SOUND · RESPONSIVE ARCHITECTURE",
-    bpm: 68,
-    movement: "STILLNESS",
-    sound: "introduction",
-    researchNumber: "RESEARCH NOTE 05.1",
-    research: "Changes in cardiac activity may accompany emotionally intense dream experiences.",
-    principle: "BODY · DREAM · RESPONSE",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
-  },
-
-  {
-    visual: "chase",
-    intensity: "low",
-    location: "MOVEMENT 01 · THE CHASE",
-    number: "MOVEMENT 01",
-    title: "THE CHASE",
-    medium: "RESPONSIVE LIGHT CORRIDOR · DIRECTIONAL FOOTSTEPS",
-    bpm: 86,
-    movement: "DETECTED",
-    sound: "chase",
-    researchNumber: "RESEARCH NOTE 05.2",
-    research: "Being chased is repeatedly reported as a common dream theme without having one universal meaning.",
-    principle: "THREAT · WITHOUT CONTACT",
-    source: "https://pubmed.ncbi.nlm.nih.gov/15612605/"
-  },
-
-  {
-    visual: "chase",
-    intensity: "medium",
-    location: "MOVEMENT 01 · THE CHASE",
-    number: "MOVEMENT 01",
-    title: "THE CHASE",
-    medium: "RESPONSIVE LIGHT CORRIDOR · DIRECTIONAL FOOTSTEPS",
-    bpm: 104,
-    movement: "MATCHING PACE",
-    sound: "chase",
-    researchNumber: "RESEARCH NOTE 05.2",
-    research: "Being chased is repeatedly reported as a common dream theme without having one universal meaning.",
-    principle: "THREAT · WITHOUT CONTACT",
-    source: "https://pubmed.ncbi.nlm.nih.gov/15612605/"
-  },
-
-  {
-    visual: "chase",
-    intensity: "high",
-    location: "MOVEMENT 01 · THE CHASE",
-    number: "MOVEMENT 01",
-    title: "THE CHASE",
-    medium: "RESPONSIVE LIGHT CORRIDOR · DIRECTIONAL FOOTSTEPS",
-    bpm: 126,
-    movement: "PURSUIT",
-    sound: "chase-high",
-    researchNumber: "RESEARCH NOTE 05.2",
-    research: "Being chased is repeatedly reported as a common dream theme without having one universal meaning.",
-    principle: "THREAT · WITHOUT CONTACT",
-    source: "https://pubmed.ncbi.nlm.nih.gov/15612605/"
-  },
-
-  {
-    visual: "fall",
-    intensity: "low",
-    location: "MOVEMENT 02 · THE FALL",
-    number: "MOVEMENT 02",
-    title: "THE FALL",
-    medium: "GENERATIVE PROJECTION · SUB-BASS · HAPTIC FLOOR",
-    bpm: 92,
-    movement: "LOSING GROUND",
-    sound: "fall",
-    researchNumber: "RESEARCH NOTE 05.3",
-    research: "Dreams can create convincing sensations of movement while the sleeper remains in bed.",
-    principle: "MOTION · WITHOUT MOVEMENT",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
-  },
-
-  {
-    visual: "fall",
-    intensity: "medium",
-    location: "MOVEMENT 02 · THE FALL",
-    number: "MOVEMENT 02",
-    title: "THE FALL",
-    medium: "GENERATIVE PROJECTION · SUB-BASS · HAPTIC FLOOR",
-    bpm: 80,
-    movement: "DESCENDING",
-    sound: "fall",
-    researchNumber: "RESEARCH NOTE 05.3",
-    research: "Dreams can create convincing sensations of movement while the sleeper remains in bed.",
-    principle: "MOTION · WITHOUT MOVEMENT",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
-  },
-
-  {
-    visual: "fall",
-    intensity: "high",
-    location: "MOVEMENT 02 · THE FALL",
-    number: "MOVEMENT 02",
-    title: "THE FALL",
-    medium: "GENERATIVE PROJECTION · SUB-BASS · HAPTIC FLOOR",
-    bpm: 72,
-    movement: "NO GROUND",
-    sound: "fall-deep",
-    researchNumber: "RESEARCH NOTE 05.3",
-    research: "Dreams can create convincing sensations of movement while the sleeper remains in bed.",
-    principle: "MOTION · WITHOUT MOVEMENT",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
-  },
-
-  {
-    visual: "impact",
-    intensity: "low",
-    location: "MOVEMENT 03 · THE IMPACT",
-    number: "MOVEMENT 03",
-    title: "THE IMPACT",
-    medium: "MOTION TRACKING · RESPONSIVE PROJECTION · PERCUSSION",
-    bpm: 104,
-    movement: "ANTICIPATION",
-    sound: "tension",
-    researchNumber: "RESEARCH NOTE 05.4",
-    research: "Motor-cortex activity has been recorded during dreamed movements in a small lucid-REM experiment.",
-    principle: "IMAGINED · YET ACTIVE",
-    source: "https://pubmed.ncbi.nlm.nih.gov/22036177/"
-  },
-
-  {
-    visual: "impact",
-    intensity: "low",
-    location: "MOVEMENT 03 · THE IMPACT",
-    number: "MOVEMENT 03",
-    title: "THE IMPACT",
-    medium: "MOTION TRACKING · RESPONSIVE PROJECTION · PERCUSSION",
-    bpm: 48,
-    movement: "SUSPENDED",
-    sound: "silence",
-    researchNumber: "RESEARCH NOTE 05.4",
-    research: "Motor-cortex activity has been recorded during dreamed movements in a small lucid-REM experiment.",
-    principle: "IMAGINED · YET ACTIVE",
-    source: "https://pubmed.ncbi.nlm.nih.gov/22036177/"
-  },
-
-  {
-    visual: "impact",
-    intensity: "high",
-    location: "MOVEMENT 03 · THE IMPACT",
-    number: "MOVEMENT 03",
-    title: "THE IMPACT",
-    medium: "MOTION TRACKING · RESPONSIVE PROJECTION · PERCUSSION",
-    bpm: 132,
-    movement: "IMPACT",
-    sound: "impact",
-    researchNumber: "RESEARCH NOTE 05.4",
-    research: "Motor-cortex activity has been recorded during dreamed movements in a small lucid-REM experiment.",
-    principle: "IMAGINED · YET ACTIVE",
-    source: "https://pubmed.ncbi.nlm.nih.gov/22036177/"
-  },
-
-  {
-    visual: "silence",
-    intensity: "low",
-    location: "END OF MOVEMENT",
-    number: "TRANSITION",
-    title: "THE ROOM GOES QUIET",
-    medium: "SPATIAL SILENCE · RESIDUAL LIGHT",
-    bpm: 58,
-    movement: "STILLNESS",
-    sound: "quiet",
-    researchNumber: "CURATORIAL TRANSITION",
-    research: "The installation returns to stillness, but one rhythmic signal remains.",
-    principle: "AFTER · THE · IMPACT",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
-  },
-
-  {
-    visual: "silence",
-    intensity: "low",
-    location: "END OF MOVEMENT",
-    number: "TRANSITION",
-    title: "ONE BEAT",
-    medium: "SPATIAL SILENCE · RESIDUAL LIGHT",
-    bpm: 54,
-    movement: "WAITING",
-    sound: "single",
-    researchNumber: "CURATORIAL TRANSITION",
-    research: "The installation returns to stillness, but one rhythmic signal remains.",
-    principle: "LISTEN",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
-  },
-
-  {
-    visual: "answer",
-    intensity: "medium",
-    location: "UNIDENTIFIED SIGNAL",
-    number: "TRANSITION",
-    title: "SOMETHING ANSWERS",
-    medium: "DUAL PULSE · DIRECTIONAL LOW FREQUENCY",
-    bpm: 62,
-    movement: "SECOND SIGNAL",
-    sound: "answer",
-    researchNumber: "CURATORIAL TRANSITION",
-    research: "A second simulated pulse is introduced as the visitor approaches the next room.",
-    principle: "SIGNAL · WITHOUT SOURCE",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
-  },
-
-  {
-    visual: "nightmare",
-    intensity: "high",
-    location: "ROOM 06 · NIGHTMARE",
-    number: "ROOM 06",
-    title: "THE OTHER PULSE",
-    medium: "DUAL PULSE · DARKNESS · SPATIAL SOUND",
-    bpm: 66,
-    movement: "UNIDENTIFIED",
-    sound: "other",
-    researchNumber: "ROOM 06",
-    research: "The scientific observation ends here. The nightmare begins.",
-    principle: "NIGHTMARE",
-    source: "https://pubmed.ncbi.nlm.nih.gov/25565936/"
+function ensureAudio() {
+  if (!audioUnlocked) {
+    audioUnlocked = true;
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioContext.createGain();
+    masterGain.gain.value = soundEnabled ? 0.8 : 0;
+    masterGain.connect(audioContext.destination);
   }
-];
 
+  if (audioContext?.state === "suspended") audioContext.resume();
+}
 
-let activeSceneIndex = 0;
+function tone(frequency, duration, volume, type = "sine", delay = 0) {
+  if (!soundEnabled || !audioContext || !masterGain) return;
+  const now = audioContext.currentTime + delay;
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, now);
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(volume, now + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  oscillator.connect(gain).connect(masterGain);
+  oscillator.start(now);
+  oscillator.stop(now + duration + 0.04);
+}
 
-let scrollLocked = false;
-
-let previousSoundMode = "";
-
-let stepSide = -1;
-
-
-/* ==========================================
-   PARTICULES
-========================================== */
-
-function createParticles() {
-  particleField.innerHTML = "";
-
-  const count =
-    window.innerWidth < 700
-      ? 12
-      : 24;
-
-  for (
-    let index = 0;
-    index < count;
-    index++
-  ) {
-    const particle =
-      document.createElement(
-        "span"
-      );
-
-    particle.className =
-      "action-particle";
-
-    particle.style.left =
-      Math.random() *
-      100 +
-      "%";
-
-    particle.style.top =
-      25 +
-      Math.random() *
-      100 +
-      "%";
-
-    particle.style.setProperty(
-      "--particle-opacity",
-      (
-        0.15 +
-        Math.random() *
-        0.42
-      ).toFixed(2)
-    );
-
-    particle.style.setProperty(
-      "--particle-duration",
-      15 +
-      Math.random() *
-      20 +
-      "s"
-    );
-
-    particle.style.setProperty(
-      "--particle-delay",
-      -Math.random() *
-      20 +
-      "s"
-    );
-
-    particleField.appendChild(
-      particle
-    );
+function heartbeat(strength = 1, extraPulse = false) {
+  tone(58, 0.16, 0.32 * strength, "sine");
+  tone(46, 0.22, 0.24 * strength, "sine", 0.18);
+  if (extraPulse) {
+    tone(72, 0.13, 0.22 * strength, "sine", 0.34);
+    tone(51, 0.18, 0.17 * strength, "sine", 0.48);
   }
 }
 
-
-/* ==========================================
-   AUDIO
-========================================== */
-
-let audioContext = null;
-
-let masterGain = null;
-
-let droneGain = null;
-
-let drone = null;
-
-let soundEnabled = false;
-
-let heartbeatTimeout = null;
-
-
-function createAudio() {
-  if (audioContext) {
-    return;
-  }
-
-  const AudioContextClass =
-    window.AudioContext ||
-    window.webkitAudioContext;
-
-  if (!AudioContextClass) {
-    soundControl.textContent =
-      "SOUND UNAVAILABLE";
-
-    return;
-  }
-
-  audioContext =
-    new AudioContextClass();
-
-  masterGain =
-    audioContext.createGain();
-
-  masterGain.gain.value =
-    0.0001;
-
-  masterGain.connect(
-    audioContext.destination
-  );
-
-  droneGain =
-    audioContext.createGain();
-
-  droneGain.gain.value =
-    0.025;
-
-  droneGain.connect(
-    masterGain
-  );
-
-  drone =
-    audioContext.createOscillator();
-
-  drone.type =
-    "sine";
-
-  drone.frequency.value =
-    43;
-
-  drone.connect(
-    droneGain
-  );
-
-  drone.start();
+function impact() {
+  tone(42, 0.9, 0.42, "sawtooth");
+  tone(86, 0.45, 0.2, "square", 0.05);
 }
 
-
-async function enableSound() {
-  createAudio();
-
-  if (!audioContext) {
-    return;
-  }
-
-  try {
-    await audioContext.resume();
-  } catch (error) {
-    soundControl.textContent =
-      "SOUND READY";
-
-    return;
-  }
-
-  if (
-    audioContext.state !==
-    "running"
-  ) {
-    soundControl.textContent =
-      "SOUND READY";
-
-    return;
-  }
-
-  soundEnabled = true;
-
-  masterGain.gain.cancelScheduledValues(
-    audioContext.currentTime
-  );
-
-  masterGain.gain.setValueAtTime(
-    Math.max(
-      masterGain.gain.value,
-      0.0001
-    ),
-    audioContext.currentTime
-  );
-
-  masterGain.gain.exponentialRampToValueAtTime(
-    0.46,
-    audioContext.currentTime + 0.7
-  );
-
-  soundControl.textContent =
-    "SOUND ON";
-
-  soundControl.setAttribute(
-    "aria-pressed",
-    "true"
-  );
+function safePlay(audio, restart = false) {
+  if (!soundEnabled || !audioUnlocked) return;
+  if (restart) audio.currentTime = 0;
+  audio.play().catch(() => {});
 }
 
-
-function disableSound() {
-  if (
-    !audioContext ||
-    !masterGain
-  ) {
-    return;
-  }
-
-  soundEnabled = false;
-
-  masterGain.gain.setTargetAtTime(
-    0.0001,
-    audioContext.currentTime,
-    0.08
-  );
-
-  soundControl.textContent =
-    "SOUND OFF";
-
-  soundControl.setAttribute(
-    "aria-pressed",
-    "false"
-  );
+function stopHeartbeat() {
+  window.clearInterval(heartbeatTimer);
+  heartbeatTimer = null;
 }
 
+function setHeartbeat(period, extraPulse = false) {
+  stopHeartbeat();
+  if (!soundEnabled || !audioUnlocked) return;
+  heartbeat(1, extraPulse);
+  heartbeatTimer = window.setInterval(() => heartbeat(1, extraPulse), period);
+}
 
-soundControl.addEventListener(
-  "click",
-  async function () {
-    if (soundEnabled) {
-      disableSound();
-    } else {
-      await enableSound();
-    }
-  }
-);
-
-
-/* ==========================================
-   SONS SYNTHÉTIQUES
-========================================== */
-
-function playThud(
-  frequency,
-  volume,
-  pan = 0
-) {
-  if (
-    !audioContext ||
-    !soundEnabled
-  ) {
-    return;
-  }
-
-  const now =
-    audioContext.currentTime;
-
-  const oscillator =
-    audioContext.createOscillator();
-
-  const gain =
-    audioContext.createGain();
-
-  const panner =
-    audioContext.createStereoPanner
-      ? audioContext.createStereoPanner()
-      : null;
-
-  oscillator.type =
-    "sine";
-
-  oscillator.frequency.setValueAtTime(
-    frequency,
-    now
-  );
-
-  oscillator.frequency.exponentialRampToValueAtTime(
-    28,
-    now + 0.24
-  );
-
-  gain.gain.setValueAtTime(
-    0.0001,
-    now
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    volume,
-    now + 0.014
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 0.27
-  );
-
-  oscillator.connect(
-    gain
-  );
-
-  if (panner) {
-    panner.pan.value = pan;
-
-    gain.connect(
-      panner
-    );
-
-    panner.connect(
-      masterGain
-    );
+function setResearch(scene) {
+  const secondNoteScenes = ["directions", "rooftop", "jump", "airborne", "train", "countdown"];
+  if (secondNoteScenes.includes(scene)) {
+    researchNumber.textContent = "RESEARCH NOTE 05.2";
+    researchText.textContent = "Dream narratives can change location, objective and physical rules without requiring a logical transition.";
+    researchPrinciple.textContent = "DISCONTINUITY Â· ACCEPTED AS REAL";
   } else {
-    gain.connect(
-      masterGain
-    );
+    researchNumber.textContent = "RESEARCH NOTE 05.1";
+    researchText.textContent = "During REM sleep, movement can be vividly simulated while most skeletal muscles remain inhibited.";
+    researchPrinciple.textContent = "MOTION Â· WITHOUT MOVEMENT";
   }
-
-  oscillator.start(
-    now
-  );
-
-  oscillator.stop(
-    now + 0.29
-  );
 }
 
-
-function playOwnHeartbeat() {
-  playThud(
-    activeSceneIndex >= 7
-      ? 58
-      : 64,
-    0.42,
-    -0.12
-  );
-
-  window.setTimeout(
-    function () {
-      playThud(
-        49,
-        0.24,
-        0.08
-      );
-    },
-    145
-  );
+function runCountdown() {
+  window.clearInterval(countdownTimer);
+  let value = 8;
+  countdownValue.textContent = "08";
+  countdownTimer = window.setInterval(() => {
+    value = Math.max(1, value - 1);
+    countdownValue.textContent = String(value).padStart(2, "0");
+    tone(760, 0.08, 0.07, "square");
+    if (value === 1) window.clearInterval(countdownTimer);
+  }, 470);
 }
 
-
-function playFootstep() {
-  stepSide *= -1;
-
-  playThud(
-    75,
-    0.3,
-    stepSide * 0.72
-  );
+function resetThirdSignal() {
+  window.clearTimeout(thirdSignalTimer);
+  pulseBeat.classList.remove("third-signal");
+  signalCount.textContent = "02";
+  signalMessage.textContent = "TWO PULSES STABLE";
 }
 
-
-function playForeignHeartbeat() {
-  playThud(
-    39,
-    0.63,
-    0.78
-  );
-
-  window.setTimeout(
-    function () {
-      playThud(
-        34,
-        0.4,
-        0.84
-      );
-    },
-    180
-  );
+function revealThirdSignal() {
+  resetThirdSignal();
+  setHeartbeat(920, true);
+  thirdSignalTimer = window.setTimeout(() => {
+    pulseBeat.classList.add("third-signal");
+    signalCount.textContent = "03";
+    signalMessage.textContent = "THERE WERE ONLY TWO OF YOU";
+    heartbeat(1.3, true);
+  }, 2800);
 }
 
+function syncAudio(scene, index) {
+  const riding = ["ride", "directions"];
+  const heartbeatScenes = ["jump", "airborne", "train", "countdown", "passenger", "rescue", "hand", "fall"];
 
-function playFallingCue() {
-  if (
-    !audioContext ||
-    !soundEnabled
-  ) {
-    return;
+  if (scene === "exhibit" && !played.has("start")) {
+    safePlay(startSound, true);
+    played.add("start");
   }
 
-  const now =
-    audioContext.currentTime;
+  if (riding.includes(scene)) {
+    rideSound.volume = scene === "ride" ? 0.72 : 0.86;
+    rideSound.playbackRate = scene === "ride" ? 1 : 1.12;
+    safePlay(rideSound);
+  } else if (!rideSound.paused) {
+    rideSound.pause();
+  }
 
-  const oscillator =
-    audioContext.createOscillator();
+  if (scene === "train" && !played.has("train")) {
+    safePlay(trainSound, true);
+    played.add("train");
+  }
 
-  const gain =
-    audioContext.createGain();
+  if (scene === "countdown") runCountdown();
+  else window.clearInterval(countdownTimer);
 
-  oscillator.type =
-    "sine";
-
-  oscillator.frequency.setValueAtTime(
-    105,
-    now
-  );
-
-  oscillator.frequency.exponentialRampToValueAtTime(
-    24,
-    now + 1.7
-  );
-
-  gain.gain.setValueAtTime(
-    0.0001,
-    now
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.16,
-    now + 0.12
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 1.8
-  );
-
-  oscillator.connect(
-    gain
-  );
-
-  gain.connect(
-    masterGain
-  );
-
-  oscillator.start(
-    now
-  );
-
-  oscillator.stop(
-    now + 1.85
-  );
+  if (scene === "fall") {
+    impact();
+    setHeartbeat(430, true);
+  } else if (scene === "pulse") {
+    startSound.pause();
+    rideSound.pause();
+    trainSound.pause();
+    revealThirdSignal();
+  } else if (heartbeatScenes.includes(scene)) {
+    const period = Math.max(470, 780 - index * 24);
+    setHeartbeat(period, scene === "hand");
+  } else {
+    stopHeartbeat();
+  }
 }
 
-
-function playImpactCue() {
-  if (
-    !audioContext ||
-    !soundEnabled
-  ) {
-    return;
-  }
-
-  playThud(
-    105,
-    0.8,
-    0
-  );
-
-  const now =
-    audioContext.currentTime;
-
-  const metallic =
-    audioContext.createOscillator();
-
-  const metallicGain =
-    audioContext.createGain();
-
-  metallic.type =
-    "triangle";
-
-  metallic.frequency.setValueAtTime(
-    230,
-    now
-  );
-
-  metallic.frequency.exponentialRampToValueAtTime(
-    47,
-    now + 0.9
-  );
-
-  metallicGain.gain.setValueAtTime(
-    0.0001,
-    now
-  );
-
-  metallicGain.gain.exponentialRampToValueAtTime(
-    0.22,
-    now + 0.01
-  );
-
-  metallicGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    now + 0.95
-  );
-
-  metallic.connect(
-    metallicGain
-  );
-
-  metallicGain.connect(
-    masterGain
-  );
-
-  metallic.start(
-    now
-  );
-
-  metallic.stop(
-    now + 1
-  );
+function activateScene(index) {
+  const nextIndex = Math.max(0, Math.min(beats.length - 1, index));
+  if (nextIndex === activeIndex) return;
+  activeIndex = nextIndex;
+  const scene = sceneNames[activeIndex];
+  body.dataset.scene = scene;
+  body.style.setProperty("--scene-progress", activeIndex / (beats.length - 1));
+  scrollCue.textContent = scene === "pulse" ? "ROOM 06 SIGNAL DETECTED" : "CONTINUE THROUGH THE INSTALLATION";
+  setResearch(scene);
+  if (scene !== "pulse") resetThirdSignal();
+  syncAudio(scene, activeIndex);
 }
 
+const observer = new IntersectionObserver((entries) => {
+  const visible = entries
+    .filter((entry) => entry.isIntersecting)
+    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  if (visible) activateScene(beats.indexOf(visible.target));
+}, { threshold: [0.55, 0.72] });
 
-/* ==========================================
-   BATTEMENT VISUEL ET SONORE
-========================================== */
+beats.forEach((beat) => observer.observe(beat));
 
-function triggerVisualBeat() {
-  actionPage.classList.remove(
-    "beat"
-  );
-
-  void actionPage.offsetWidth;
-
-  actionPage.classList.add(
-    "beat"
-  );
-
-  window.setTimeout(
-    function () {
-      actionPage.classList.remove(
-        "beat"
-      );
-    },
-    720
-  );
+function goToBeat(index) {
+  const target = Math.max(0, Math.min(beats.length - 1, index));
+  beats[target].scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+window.addEventListener("wheel", (event) => {
+  ensureAudio();
+  if (Math.abs(event.deltaY) < 8) return;
+  event.preventDefault();
+  if (wheelLocked) return;
+  wheelLocked = true;
+  goToBeat(activeIndex + (event.deltaY > 0 ? 1 : -1));
+  window.setTimeout(() => { wheelLocked = false; }, 850);
+}, { passive: false });
 
-function heartbeatLoop() {
-  window.clearTimeout(
-    heartbeatTimeout
-  );
+window.addEventListener("keydown", (event) => {
+  if (!["ArrowDown", "ArrowUp", "PageDown", "PageUp", " "].includes(event.key)) return;
+  ensureAudio();
+  event.preventDefault();
+  const backward = event.key === "ArrowUp" || event.key === "PageUp";
+  goToBeat(activeIndex + (backward ? -1 : 1));
+});
 
-  const data =
-    sceneData[
-      activeSceneIndex
-    ];
+window.addEventListener("pointerdown", ensureAudio, { once: true });
 
-  triggerVisualBeat();
+soundToggle.addEventListener("click", () => {
+  ensureAudio();
+  soundEnabled = !soundEnabled;
+  localStorage.setItem("museumSound", soundEnabled ? "on" : "off");
+  if (masterGain) masterGain.gain.setTargetAtTime(soundEnabled ? 0.8 : 0, audioContext.currentTime, 0.05);
+  [startSound, rideSound, trainSound].forEach((audio) => { audio.muted = !soundEnabled; });
+  if (soundEnabled) syncAudio(sceneNames[activeIndex], activeIndex);
+  else stopHeartbeat();
+  updateSoundButton();
+});
 
-  if (
-    data.sound !== "silence"
-  ) {
-    playOwnHeartbeat();
-  }
+takeHand.addEventListener("click", () => {
+  ensureAudio();
+  heartbeat(1.2, true);
+  goToBeat(sceneNames.indexOf("fall"));
+});
 
-  if (
-    data.sound === "chase" ||
-    data.sound === "chase-high"
-  ) {
-    window.setTimeout(
-      playFootstep,
-      data.sound === "chase-high"
-        ? 230
-        : 350
-    );
-  }
+const canvas = document.querySelector("#weather-canvas");
+const context = canvas.getContext("2d");
+let drops = [];
+let canvasWidth = 0;
+let canvasHeight = 0;
 
-  if (
-    data.sound === "answer" ||
-    data.sound === "other"
-  ) {
-    window.setTimeout(
-      playForeignHeartbeat,
-      data.sound === "other"
-        ? 390
-        : 560
-    );
-  }
-
-  heartbeatTimeout =
-    window.setTimeout(
-      heartbeatLoop,
-      60000 / data.bpm
-    );
+function resizeCanvas() {
+  const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+  canvasWidth = window.innerWidth;
+  canvasHeight = window.innerHeight;
+  canvas.width = canvasWidth * ratio;
+  canvas.height = canvasHeight * ratio;
+  context.setTransform(ratio, 0, 0, ratio, 0, 0);
+  const count = window.innerWidth < 700 ? 45 : 85;
+  drops = Array.from({ length: count }, () => ({
+    x: Math.random() * canvasWidth,
+    y: Math.random() * canvasHeight,
+    length: 12 + Math.random() * 35,
+    speed: 7 + Math.random() * 15,
+    opacity: .08 + Math.random() * .28
+  }));
 }
 
-
-/* ==========================================
-   CHANGEMENT DE SCÈNE
-========================================== */
-
-function updateScene(
-  newIndex
-) {
-  activeSceneIndex =
-    Math.max(
-      0,
-      Math.min(
-        newIndex,
-        scenes.length - 1
-      )
-    );
-
-  const data =
-    sceneData[
-      activeSceneIndex
-    ];
-
-  actionPage.dataset.scene =
-    data.visual;
-
-  actionPage.dataset.intensity =
-    data.intensity;
-
-  scenes.forEach(
-    function (
-      scene,
-      index
-    ) {
-      scene.classList.toggle(
-        "active",
-        index === activeSceneIndex
-      );
+function animateWeather() {
+  context.clearRect(0, 0, canvasWidth, canvasHeight);
+  const fast = ["ride", "directions", "airborne", "fall"].includes(body.dataset.scene);
+  drops.forEach((drop) => {
+    drop.x -= fast ? drop.speed * .65 : drop.speed * .12;
+    drop.y += fast ? drop.speed : drop.speed * .35;
+    if (drop.y > canvasHeight + 40 || drop.x < -40) {
+      drop.x = Math.random() * canvasWidth + (fast ? canvasWidth * .35 : 0);
+      drop.y = -40;
     }
-  );
-
-  roomLocationText.textContent =
-    data.location;
-
-  installationNumber.textContent =
-    data.number;
-
-  installationTitle.textContent =
-    data.title;
-
-  installationMedium.textContent =
-    data.medium;
-
-  pulseValue.textContent =
-    data.bpm +
-    " BPM";
-
-  movementStatus.textContent =
-    data.movement;
-
-  researchNumber.textContent =
-    data.researchNumber;
-
-  researchText.textContent =
-    data.research;
-
-  researchPrinciple.textContent =
-    data.principle;
-
-  researchSource.href =
-    data.source;
-
-  progressFill.style.height =
-    (
-      activeSceneIndex /
-      (
-        scenes.length -
-        1
-      )
-    ) *
-    100 +
-    "%";
-
-  if (
-    audioContext &&
-    drone &&
-    droneGain
-  ) {
-    const now =
-      audioContext.currentTime;
-
-    let frequency = 43;
-    let volume = 0.025;
-
-    if (
-      data.visual === "chase"
-    ) {
-      frequency = 51;
-      volume = 0.04;
-    }
-
-    if (
-      data.visual === "fall"
-    ) {
-      frequency = 29;
-      volume = 0.07;
-    }
-
-    if (
-      data.visual === "impact"
-    ) {
-      frequency = 37;
-      volume =
-        data.sound === "silence"
-          ? 0.0001
-          : 0.035;
-    }
-
-    if (
-      data.visual === "silence"
-    ) {
-      frequency = 32;
-      volume = 0.008;
-    }
-
-    if (
-      data.visual === "answer" ||
-      data.visual === "nightmare"
-    ) {
-      frequency = 35;
-      volume = 0.065;
-    }
-
-    drone.frequency.cancelScheduledValues(
-      now
-    );
-
-    drone.frequency.linearRampToValueAtTime(
-      frequency,
-      now + 0.8
-    );
-
-    droneGain.gain.setTargetAtTime(
-      volume,
-      now,
-      0.35
-    );
-  }
-
-  if (
-    soundEnabled &&
-    data.sound !== previousSoundMode
-  ) {
-    if (
-      data.sound === "fall"
-    ) {
-      playFallingCue();
-    }
-
-    if (
-      data.sound === "impact"
-    ) {
-      actionPage.classList.add(
-        "impact-event"
-      );
-
-      playImpactCue();
-
-      window.setTimeout(
-        function () {
-          actionPage.classList.remove(
-            "impact-event"
-          );
-        },
-        1200
-      );
-    }
-
-    if (
-      data.sound === "answer"
-    ) {
-      window.setTimeout(
-        playForeignHeartbeat,
-        420
-      );
-    }
-  }
-
-  previousSoundMode =
-    data.sound;
-
-  heartbeatLoop();
+    context.beginPath();
+    context.moveTo(drop.x, drop.y);
+    context.lineTo(drop.x - (fast ? drop.length * .65 : 2), drop.y + drop.length);
+    context.strokeStyle = `rgba(178,225,255,${drop.opacity})`;
+    context.lineWidth = .7;
+    context.stroke();
+  });
+  requestAnimationFrame(animateWeather);
 }
 
-
-/* ==========================================
-   OBSERVER LES SECTIONS
-========================================== */
-
-const observer =
-  new IntersectionObserver(
-    function (entries) {
-      const visible =
-        entries
-          .filter(
-            function (entry) {
-              return entry.isIntersecting;
-            }
-          )
-          .sort(
-            function (
-              first,
-              second
-            ) {
-              return (
-                second.intersectionRatio -
-                first.intersectionRatio
-              );
-            }
-          )[0];
-
-      if (visible) {
-        updateScene(
-          Number(
-            visible.target.dataset.index
-          )
-        );
-      }
-    },
-    {
-      threshold: [
-        0.45,
-        0.65,
-        0.82
-      ]
-    }
-  );
-
-
-scenes.forEach(
-  function (scene) {
-    observer.observe(
-      scene
-    );
-  }
-);
-
-
-/* ==========================================
-   UN SCROLL = UNE PHRASE
-========================================== */
-
-window.addEventListener(
-  "wheel",
-  function (event) {
-    if (!soundEnabled) {
-      enableSound();
-    }
-
-    if (
-      window.innerWidth < 800 ||
-      Math.abs(event.deltaY) < 8
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-
-    if (scrollLocked) {
-      return;
-    }
-
-    const direction =
-      event.deltaY > 0
-        ? 1
-        : -1;
-
-    const nextIndex =
-      Math.max(
-        0,
-        Math.min(
-          activeSceneIndex +
-          direction,
-          scenes.length - 1
-        )
-      );
-
-    if (
-      nextIndex ===
-      activeSceneIndex
-    ) {
-      return;
-    }
-
-    scrollLocked = true;
-
-    scenes[
-      nextIndex
-    ].scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-
-    window.setTimeout(
-      function () {
-        scrollLocked = false;
-      },
-      950
-    );
-  },
-  {
-    passive: false
-  }
-);
-
-
-/* ==========================================
-   ACTIVATION NATURELLE DU SON
-========================================== */
-
-window.addEventListener(
-  "pointerdown",
-  function (event) {
-    if (
-      !event.target.closest(
-        "#sound-control"
-      ) &&
-      !soundEnabled
-    ) {
-      enableSound();
-    }
-  }
-);
-
-
-window.addEventListener(
-  "touchstart",
-  function () {
-    if (!soundEnabled) {
-      enableSound();
-    }
-  },
-  {
-    passive: true
-  }
-);
-
-
-/* ==========================================
-   PARALLAXE
-========================================== */
-
-window.addEventListener(
-  "pointermove",
-  function (event) {
-    const horizontal =
-      event.clientX /
-      window.innerWidth -
-      0.5;
-
-    const vertical =
-      event.clientY /
-      window.innerHeight -
-      0.5;
-
-    actionPage.style.setProperty(
-      "--pointer-x",
-      horizontal *
-      10 +
-      "px"
-    );
-
-    actionPage.style.setProperty(
-      "--pointer-y",
-      vertical *
-      7 +
-      "px"
-    );
-  },
-  {
-    passive: true
-  }
-);
-
-
-/* ==========================================
-   INITIALISATION
-========================================== */
-
-createParticles();
-
-updateScene(0);
-
-
-/*
- * Tentative de démarrage immédiat.
- * Si Chrome bloque l’autoplay,
- * le premier scroll reprendra le son.
- */
-
-enableSound();
-
-
-window.addEventListener(
-  "resize",
-  createParticles
-);
+updateSoundButton();
+resizeCanvas();
+activateScene(0);
+requestAnimationFrame(animateWeather);
+window.addEventListener("resize", resizeCanvas);
