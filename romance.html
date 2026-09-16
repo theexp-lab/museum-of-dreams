@@ -12,7 +12,7 @@
 
   <meta
     name="theme-color"
-    content="#f0e7e4"
+    content="#eedfe1"
   >
 
   <meta
@@ -43,9 +43,9 @@
 
 
   <link
-  rel="stylesheet"
-  href="./romance.css?v=3"
->
+    rel="stylesheet"
+    href="./romance.css?v=4"
+  >
 
 </head>
 
@@ -54,10 +54,7 @@
 
 
   <!-- ==========================================
-       ÉCRAN D’ENTRÉE
-
-       Le clic permet au navigateur
-       d’autoriser l’expérience sonore.
+       ACTIVATION DU SON
   =========================================== -->
 
   <div
@@ -65,7 +62,7 @@
     id="experience-gate"
   >
 
-    <p>
+    <p class="gate-room">
       ROOM 04 · ROMANCE
     </p>
 
@@ -77,9 +74,12 @@
 
 
     <p class="gate-description">
+
       This installation contains spatial sound.
       <br>
+
       Headphones are recommended.
+
     </p>
 
 
@@ -106,7 +106,7 @@
 
 
   <!-- ==========================================
-       SALLE DU MUSÉE
+       INSTALLATION ABSTRAITE
   =========================================== -->
 
   <div
@@ -114,86 +114,87 @@
     aria-hidden="true"
   >
 
-    <div class="gallery-ceiling"></div>
+    <!-- Champs colorés -->
 
-    <div class="gallery-back-wall"></div>
+    <div class="colour-field pearl-field"></div>
 
-    <div class="gallery-wall wall-left"></div>
+    <div class="colour-field warm-field"></div>
 
-    <div class="gallery-wall wall-right"></div>
+    <div class="colour-field pink-field"></div>
 
-    <div class="gallery-floor"></div>
+    <div class="colour-field red-field"></div>
 
-
-    <!-- Température émotionnelle -->
-
-    <div class="cold-light"></div>
-
-    <div class="warm-light"></div>
-
-    <div class="red-invasion"></div>
-
-    <div class="red-pulse"></div>
+    <div class="colour-field dark-field"></div>
 
 
-    <!-- ==========================================
-     PRÉSENCES LUMINEUSES ABSTRAITES
-=========================================== -->
+    <!-- Profondeur de la salle -->
 
-<div class="abstract-presences">
+    <div class="dream-horizon"></div>
 
-  <!-- Présence principale -->
-
-  <div class="light-presence presence-one">
-
-    <span class="presence-core"></span>
-
-    <span class="presence-aura aura-one"></span>
-
-    <span class="presence-aura aura-two"></span>
-
-  </div>
+    <div class="reflective-floor"></div>
 
 
-  <!-- Présence secondaire -->
+    <!-- Vagues lumineuses -->
 
-  <div class="light-presence presence-two">
+    <div class="ambient-ribbons">
 
-    <span class="presence-core"></span>
+      <span class="ambient-ribbon ribbon-one"></span>
 
-    <span class="presence-aura aura-one"></span>
+      <span class="ambient-ribbon ribbon-two"></span>
 
-    <span class="presence-aura aura-two"></span>
+      <span class="ambient-ribbon ribbon-three"></span>
 
-  </div>
+      <span class="ambient-ribbon ribbon-four"></span>
 
-
-  <!-- Lumière entre les deux présences -->
-
-  <div class="light-bridge"></div>
+    </div>
 
 
-  <!-- Ondes lumineuses -->
+    <!-- Première présence -->
 
-  <div class="light-wave wave-one"></div>
+    <div class="light-presence first-presence">
 
-  <div class="light-wave wave-two"></div>
+      <span class="presence-glow"></span>
 
-  <div class="light-wave wave-three"></div>
+      <span class="presence-core"></span>
 
+      <span class="presence-ring ring-one"></span>
 
-  <!-- Pulsations dans la pièce -->
+      <span class="presence-ring ring-two"></span>
 
-  <div class="room-ripple ripple-one"></div>
-
-  <div class="room-ripple ripple-two"></div>
-
-  <div class="room-ripple ripple-three"></div>
-
-</div>
+    </div>
 
 
-<canvas id="romance-canvas"></canvas>
+    <!-- Lumière du visiteur -->
+
+    <div class="visitor-light"></div>
+
+
+    <!-- Troisième lumière -->
+
+    <div class="light-presence third-presence">
+
+      <span class="presence-glow"></span>
+
+      <span class="presence-core"></span>
+
+      <span class="presence-ring ring-one"></span>
+
+      <span class="presence-ring ring-two"></span>
+
+    </div>
+
+
+    <!-- Ondes émotionnelles -->
+
+    <div class="emotion-ripples">
+
+      <span class="emotion-ripple ripple-one"></span>
+
+      <span class="emotion-ripple ripple-two"></span>
+
+      <span class="emotion-ripple ripple-three"></span>
+
+    </div>
 
 
     <canvas id="romance-canvas"></canvas>
@@ -214,7 +215,7 @@
 
     <div class="room-location">
 
-      <span></span>
+      <span class="location-light"></span>
 
       ROOM 04 · ROMANCE
 
@@ -233,7 +234,7 @@
 
 
   <!-- ==========================================
-       TITRE
+       INTRODUCTION
   =========================================== -->
 
   <section class="romance-introduction">
@@ -283,7 +284,6 @@
 
 
     <p>
-      KINETIC TEXTILE<br>
       RESPONSIVE LIGHT<br>
       SPATIAL SOUND<br>
       GENERATIVE PROJECTION
@@ -298,7 +298,10 @@
 
 
   <!-- ==========================================
-       NARRATION
+       NARRATION CONTINUE
+
+       Toutes les phrases sont présentes.
+       Le JavaScript ne remplace aucun texte.
   =========================================== -->
 
   <section
@@ -307,21 +310,207 @@
   >
 
     <p
-      class="romance-sentence"
-      id="romance-sentence"
+      class="story-line"
+      data-start="0.15"
+      data-end="0.23"
+      data-title="THE FAMILIAR PRESENCE"
+      data-emotion="RECOGNITION"
+      data-motif="DISTANCE"
     >
-      You know them
+
+      You cannot see
+      <br>
+      who they are.
 
       <em>
-        before you see their face.
+        But something feels familiar.
       </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.23"
+      data-end="0.31"
+      data-title="THE WARM ROOM"
+      data-emotion="ATTRACTION"
+      data-motif="APPROACH"
+    >
+
+      You move closer.
+
+      <em>
+        The room grows warmer.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.31"
+      data-end="0.39"
+      data-title="THE SHARED DREAM"
+      data-emotion="INTIMACY"
+      data-motif="CONNECTION"
+    >
+
+      For a moment,
+
+      <em>
+        you seem to be
+        in the same dream.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.39"
+      data-end="0.47"
+      data-title="TWO INNER WORLDS"
+      data-emotion="UNCERTAINTY"
+      data-motif="DIFFERENCE"
+    >
+
+      But the two lights
+      do not move
+
+      <em>
+        in quite the same way.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.47"
+      data-end="0.55"
+      data-title="THE DISTANCE BETWEEN US"
+      data-emotion="LONGING"
+      data-motif="SEPARATION"
+    >
+
+      Perhaps you are together.
+
+      <em>
+        Perhaps you are only
+        dreaming of each other.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.55"
+      data-end="0.63"
+      data-title="THE FOLLOWING MORNING"
+      data-emotion="AFTER-EFFECT"
+      data-motif="MEMORY"
+    >
+
+      Whatever happens here
+
+      <em>
+        may follow you
+        into the morning.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.63"
+      data-end="0.70"
+      data-title="THE THIRD LIGHT"
+      data-emotion="SUSPICION"
+      data-motif="INTRUSION"
+    >
+
+      Then a third light
+
+      <em>
+        appears.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.70"
+      data-end="0.77"
+      data-title="THE UNKNOWN PRESENCE"
+      data-emotion="DOUBT"
+      data-motif="INTRUSION"
+    >
+
+      You do not know
+
+      <em>
+        who it belongs to.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.77"
+      data-end="0.83"
+      data-title="THE CHANGING ROOM"
+      data-emotion="JEALOUSY"
+      data-motif="TRANSFORMATION"
+    >
+
+      The warmth
+
+      <em>
+        has changed.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line"
+      data-start="0.83"
+      data-end="0.88"
+      data-title="THE RED ROOM"
+      data-emotion="JEALOUSY"
+      data-motif="DISCOMFORT"
+    >
+
+      It is not
+
+      <em>
+        a good feeling.
+      </em>
+
+    </p>
+
+
+    <p
+      class="story-line impact-line"
+      data-start="0.88"
+      data-end="0.915"
+      data-title="THAT IS ENOUGH"
+      data-emotion="OVERLOAD"
+      data-motif="HEARTBEAT"
+    >
+      THAT IS ENOUGH.
     </p>
 
   </section>
 
 
   <!-- ==========================================
-       OBSERVATIONS SCIENTIFIQUES
+       OBSERVATION SCIENTIFIQUE
   =========================================== -->
 
   <aside
@@ -372,7 +561,7 @@
 
 
     <strong id="dream-title">
-      THE FAMILIAR STRANGER
+      THE FAMILIAR PRESENCE
     </strong>
 
 
@@ -409,85 +598,69 @@
 
 
   <!-- ==========================================
-       FIN ET TRANSITION
+       FIN EN TROIS TEMPS
   =========================================== -->
 
-  <!-- ==========================================
-     FIN EN DEUX TEMPS
-=========================================== -->
+  <section class="action-exit">
 
-<section
-  class="action-exit"
-  id="action-exit"
->
+    <div class="ending-desire">
 
-  <!-- Première phrase -->
+      <p>
+        You want the dream
+      </p>
 
-  <div class="ending-desire">
-
-    <p>
-      You want the dream
-    </p>
-
-    <strong>
-      to be over.
-    </strong>
-
-  </div>
-
-
-  <!-- Battement final -->
-
-  <div class="ending-pulse">
-
-    <p>
-      BUT YOUR PULSE
-    </p>
-
-    <h2>
-      DISAGREES.
-    </h2>
-
-
-    <div
-      class="visual-heartbeat"
-      aria-hidden="true"
-    >
-
-      <span></span>
-
-      <span></span>
-
-      <span></span>
+      <strong>
+        to be over.
+      </strong>
 
     </div>
 
-  </div>
+
+    <div class="ending-pulse">
+
+      <p>
+        BUT YOUR PULSE
+      </p>
+
+      <h2>
+        DISAGREES.
+      </h2>
 
 
-  <!-- Bouton, encore plus tard -->
+      <div class="visual-heartbeat">
 
-  <a
-    href="action.html"
-    class="enter-action"
-    id="enter-action"
-  >
+        <span></span>
 
-    <small>
-      ROOM 05
-    </small>
+        <span></span>
 
-    <strong>
-      FOLLOW THE PULSE
-    </strong>
+        <span></span>
 
-    <span>
-      ENTER ACTION →
-    </span>
+      </div>
 
-  </a>
+    </div>
 
-</section>
+
+    <a
+      href="action.html"
+      class="enter-action"
+      id="enter-action"
+    >
+
+      <small>
+        ROOM 05
+      </small>
+
+      <strong>
+        FOLLOW THE PULSE
+      </strong>
+
+      <span>
+        ENTER ACTION →
+      </span>
+
+    </a>
+
+  </section>
 
 
   <!-- ==========================================
@@ -498,7 +671,7 @@
     class="scroll-instruction"
     id="scroll-instruction"
   >
-    APPROACH THE FIGURE
+    APPROACH THE LIGHT
   </p>
 
 
@@ -525,7 +698,7 @@
   ></div>
 
 
-  <script src="./romance.js?v=3"></script>
+  <script src="./romance.js?v=4"></script>
 
 </body>
 
