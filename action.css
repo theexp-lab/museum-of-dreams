@@ -1,0 +1,2204 @@
+/* ==========================================
+   THE MUSEUM OF DREAMS
+   ROOM 05 — ACTION
+========================================== */
+
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+:root {
+  --white: #f4f0e9;
+  --soft-white: #d8d4ce;
+  --red: #ff2d29;
+  --deep-red: #750b0c;
+  --amber: #f1a356;
+  --blue: #384c80;
+  --black: #060609;
+
+  --pulse-duration: 0.968s;
+
+  --pointer-x: 0px;
+  --pointer-y: 0px;
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+
+  background: var(--black);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100%;
+
+  margin: 0;
+
+  overflow-x: hidden;
+
+  color: var(--white);
+  background: var(--black);
+
+  font-family:
+    "DM Mono",
+    monospace;
+}
+
+body.experience-locked {
+  overflow: hidden;
+}
+
+button,
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* ==========================================
+   ÉCRAN D’ENTRÉE
+========================================== */
+
+.sound-gate {
+  position: fixed;
+  inset: 0;
+
+  z-index: 300;
+
+  display: grid;
+  place-content: center;
+
+  padding: 40px 24px;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 52%,
+      rgba(126, 7, 10, 0.35),
+      transparent 24%
+    ),
+    linear-gradient(
+      180deg,
+      #050507,
+      #0b0809 60%,
+      #100607
+    );
+
+  transition:
+    opacity 900ms ease,
+    visibility 900ms ease;
+}
+
+.action-page.experience-started
+.sound-gate {
+  visibility: hidden;
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.gate-pulse {
+  justify-self: center;
+
+  width: 8px;
+  height: 8px;
+
+  margin-bottom: 55px;
+
+  border-radius: 50%;
+
+  background: var(--red);
+
+  box-shadow:
+    0 0 12px var(--red),
+    0 0 40px rgba(255, 45, 41, 0.75),
+    0 0 110px rgba(255, 45, 41, 0.35);
+
+  animation:
+    gateHeartbeat 1.15s ease-in-out infinite;
+}
+
+.gate-room {
+  margin: 0 0 28px;
+
+  font-size: 9px;
+
+  letter-spacing: 0.22em;
+
+  opacity: 0.6;
+}
+
+.sound-gate h1 {
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(64px, 10vw, 155px);
+
+  font-weight: 400;
+
+  line-height: 0.78;
+
+  letter-spacing: -0.055em;
+}
+
+.sound-gate h1 em {
+  display: block;
+
+  color: #ff5c52;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+}
+
+.gate-warning {
+  max-width: 430px;
+
+  margin:
+    50px auto 28px;
+
+  font-size: 8px;
+
+  line-height: 1.8;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+
+  opacity: 0.48;
+}
+
+.gate-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.gate-actions button {
+  min-width: 205px;
+
+  padding: 15px 22px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.3);
+
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.025);
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+
+  cursor: pointer;
+
+  transition:
+    color 300ms ease,
+    background 300ms ease,
+    border-color 300ms ease;
+}
+
+.gate-actions button:first-child {
+  border-color:
+    rgba(255, 73, 66, 0.72);
+
+  background:
+    rgba(255, 45, 41, 0.1);
+}
+
+.gate-actions button:hover {
+  color: #080808;
+  background: var(--white);
+  border-color: var(--white);
+}
+
+
+/* ==========================================
+   MONDE DU MUSÉE
+========================================== */
+
+.museum-world {
+  position: fixed;
+  inset: 0;
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111116,
+      #09090c 65%,
+      #050506
+    );
+
+  perspective: 1100px;
+}
+
+.museum-darkness {
+  position: absolute;
+  inset: 0;
+
+  z-index: 20;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      transparent 20%,
+      rgba(0, 0, 0, 0.15) 58%,
+      rgba(0, 0, 0, 0.72) 115%
+    );
+}
+
+.ceiling-light {
+  position: absolute;
+
+  top: -4%;
+  left: 50%;
+
+  width: 44%;
+  height: 3px;
+
+  background:
+    rgba(255, 246, 228, 0.8);
+
+  box-shadow:
+    0 0 16px rgba(255, 242, 220, 0.75),
+    0 0 80px rgba(255, 235, 204, 0.2);
+
+  transform:
+    translateX(-50%);
+
+  transition:
+    width 1300ms ease,
+    background 1300ms ease,
+    box-shadow 1300ms ease;
+}
+
+.ceiling-light::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  width: 120%;
+  height: 75vh;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 242, 219, 0.09),
+      transparent 75%
+    );
+
+  clip-path:
+    polygon(
+      26% 0,
+      74% 0,
+      100% 100%,
+      0 100%
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+.back-wall {
+  position: absolute;
+
+  top: 8%;
+  right: 18%;
+  bottom: 23%;
+  left: 18%;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  background:
+    linear-gradient(
+      180deg,
+      #18181e,
+      #0d0d11
+    );
+
+  box-shadow:
+    inset 0 -50px 100px
+    rgba(0, 0, 0, 0.42);
+}
+
+.left-wall,
+.right-wall {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  width: 32%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #08080b,
+      #14141a
+    );
+
+  transition:
+    background 1200ms ease;
+}
+
+.left-wall {
+  left: 0;
+
+  clip-path:
+    polygon(
+      0 0,
+      100% 8%,
+      100% 77%,
+      0 100%
+    );
+}
+
+.right-wall {
+  right: 0;
+
+  clip-path:
+    polygon(
+      0 8%,
+      100% 0,
+      100% 100%,
+      0 77%
+    );
+
+  transform:
+    scaleX(-1);
+}
+
+.museum-floor {
+  position: absolute;
+
+  right: -15%;
+  bottom: -20%;
+  left: -15%;
+
+  height: 55%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111116,
+      #050506 88%
+    );
+
+  clip-path:
+    polygon(
+      19% 0,
+      81% 0,
+      100% 100%,
+      0 100%
+    );
+
+  transform:
+    perspective(900px)
+    rotateX(58deg);
+
+  transform-origin:
+    bottom;
+
+  transition:
+    background 1200ms ease;
+}
+
+.museum-floor::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.22;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 12.4%,
+      rgba(255, 255, 255, 0.09) 12.5%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 19.7%,
+      rgba(255, 255, 255, 0.08) 20%
+    );
+}
+
+.floor-reflection {
+  position: absolute;
+
+  right: 22%;
+  bottom: -18%;
+  left: 22%;
+
+  height: 55%;
+
+  opacity: 0.14;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 63, 53, 0.75),
+      transparent 80%
+    );
+
+  filter:
+    blur(18px);
+
+  transform:
+    perspective(700px)
+    rotateX(55deg);
+
+  transition:
+    opacity 1000ms ease,
+    background 1000ms ease;
+}
+
+
+/* ==========================================
+   INSTALLATION PRINCIPALE
+========================================== */
+
+.central-installation {
+  position: absolute;
+
+  top: 17%;
+  left: 50%;
+
+  width:
+    min(54vw, 760px);
+
+  height:
+    min(65vh, 650px);
+
+  opacity: 0;
+
+  transform:
+    translate(
+      calc(-50% + var(--pointer-x)),
+      calc(var(--pointer-y) * 0.25)
+    )
+    scale(0.92);
+
+  transition:
+    opacity 1200ms ease,
+    transform 1500ms
+    cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.action-page[data-scene="pulse"]
+.central-installation {
+  opacity: 1;
+
+  transform:
+    translate(
+      calc(-50% + var(--pointer-x)),
+      calc(var(--pointer-y) * 0.25)
+    )
+    scale(1);
+}
+
+.installation-light {
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  width: 48%;
+  height: 72%;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 246, 225, 0.17),
+      rgba(255, 75, 56, 0.04),
+      transparent
+    );
+
+  clip-path:
+    polygon(
+      34% 0,
+      66% 0,
+      100% 100%,
+      0 100%
+    );
+
+  filter:
+    blur(5px);
+
+  transform:
+    translateX(-50%);
+}
+
+.sleeping-platform {
+  position: absolute;
+
+  top: 47%;
+  left: 50%;
+
+  width: 66%;
+  height: 10%;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.72);
+
+  border-right:
+    1px solid
+    rgba(255, 255, 255, 0.16);
+
+  border-left:
+    1px solid
+    rgba(255, 255, 255, 0.16);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.12),
+      rgba(255, 255, 255, 0.015)
+    );
+
+  box-shadow:
+    0 18px 60px
+    rgba(0, 0, 0, 0.65);
+
+  transform:
+    translateX(-50%)
+    perspective(600px)
+    rotateX(62deg);
+}
+
+.platform-light {
+  position: absolute;
+
+  top: -3px;
+  left: 50%;
+
+  width: 86%;
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 247, 229, 0.9),
+      transparent
+    );
+
+  box-shadow:
+    0 0 18px
+    rgba(255, 239, 215, 0.65);
+
+  transform:
+    translateX(-50%);
+}
+
+.pulse-source {
+  position: absolute;
+
+  top: 44.5%;
+  left: 50%;
+
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: var(--red);
+
+  box-shadow:
+    0 0 12px var(--red),
+    0 0 30px rgba(255, 45, 41, 0.8),
+    0 0 90px rgba(255, 45, 41, 0.55);
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.action-page.beat
+.pulse-source {
+  animation:
+    sourceBeat 430ms ease-out;
+}
+
+.pulse-wave {
+  position: absolute;
+
+  top: 44.5%;
+  left: 50%;
+
+  width: 40px;
+  height: 18px;
+
+  border:
+    1px solid
+    rgba(255, 54, 47, 0.8);
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.action-page.beat
+.wave-one {
+  animation:
+    floorPulse 1050ms ease-out;
+}
+
+.action-page.beat
+.wave-two {
+  animation:
+    floorPulse 1050ms 100ms ease-out;
+}
+
+.action-page.beat
+.wave-three {
+  animation:
+    floorPulse 1050ms 200ms ease-out;
+}
+
+
+/* ==========================================
+   THE CHASE
+========================================== */
+
+.chase-installation {
+  position: absolute;
+
+  top: 13%;
+  left: 50%;
+
+  width:
+    min(64vw, 900px);
+
+  height: 74vh;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transform:
+    translateX(-50%)
+    scale(0.92);
+
+  transition:
+    opacity 900ms ease,
+    transform 1200ms ease,
+    visibility 900ms ease;
+}
+
+.action-page[data-scene="chase"]
+.chase-installation {
+  visibility: visible;
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+.chase-frame {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  border:
+    1px solid
+    rgba(255, 67, 57, 0.52);
+
+  box-shadow:
+    inset 0 0 35px
+    rgba(255, 35, 28, 0.06);
+
+  transform:
+    translate(-50%, -50%);
+
+  transition:
+    width 500ms ease,
+    height 500ms ease;
+}
+
+.frame-one {
+  width: 100%;
+  height: 100%;
+}
+
+.frame-two {
+  width: 72%;
+  height: 76%;
+}
+
+.frame-three {
+  width: 47%;
+  height: 53%;
+}
+
+.frame-four {
+  width: 25%;
+  height: 31%;
+}
+
+.chase-exit {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  display: grid;
+  place-items: center;
+
+  width: 11%;
+  height: 20%;
+
+  border:
+    1px solid
+    rgba(255, 244, 224, 0.65);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 239, 210, 0.3),
+      rgba(255, 61, 48, 0.12)
+    );
+
+  box-shadow:
+    0 0 30px
+    rgba(255, 64, 48, 0.2);
+
+  transform:
+    translate(-50%, -50%);
+
+  animation:
+    retreatingExit 4.8s ease-in-out infinite;
+}
+
+.chase-exit span {
+  font-size: 7px;
+
+  letter-spacing: 0.2em;
+
+  opacity: 0.7;
+}
+
+.action-page[data-scene="chase"]
+.ceiling-light {
+  width: 63%;
+
+  background: #ff5146;
+
+  box-shadow:
+    0 0 25px rgba(255, 55, 47, 0.8),
+    0 0 100px rgba(255, 35, 29, 0.28);
+}
+
+
+/* ==========================================
+   THE FALL
+========================================== */
+
+.fall-installation {
+  position: absolute;
+
+  top: 49%;
+  left: 50%;
+
+  width:
+    min(49vw, 700px);
+
+  aspect-ratio: 1.5;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transform:
+    translate(-50%, -42%)
+    perspective(900px)
+    rotateX(65deg)
+    scale(0.7);
+
+  transition:
+    opacity 1100ms ease,
+    transform 1600ms
+    cubic-bezier(0.2, 0.8, 0.2, 1),
+    visibility 900ms ease;
+}
+
+.action-page[data-scene="fall"]
+.fall-installation {
+  visibility: visible;
+  opacity: 1;
+
+  transform:
+    translate(-50%, -42%)
+    perspective(900px)
+    rotateX(65deg)
+    scale(1);
+}
+
+.fall-opening,
+.fall-depth {
+  position: absolute;
+  inset: 0;
+
+  border:
+    1px solid
+    rgba(111, 138, 215, 0.55);
+
+  background:
+    radial-gradient(
+      ellipse,
+      #030409 0%,
+      #080b17 54%,
+      rgba(31, 44, 85, 0.36) 100%
+    );
+
+  box-shadow:
+    inset 0 0 90px
+    rgba(30, 55, 125, 0.28);
+}
+
+.fall-depth {
+  background: transparent;
+}
+
+.depth-one {
+  inset: 10%;
+}
+
+.depth-two {
+  inset: 21%;
+}
+
+.depth-three {
+  inset: 34%;
+}
+
+.depth-four {
+  inset: 46%;
+
+  background:
+    #000104;
+
+  box-shadow:
+    0 0 55px
+    rgba(61, 87, 160, 0.34);
+}
+
+.action-page[data-scene="fall"]
+.museum-floor {
+  background:
+    linear-gradient(
+      180deg,
+      #10131e,
+      #030408 88%
+    );
+}
+
+.action-page[data-scene="fall"]
+.floor-reflection {
+  opacity: 0.26;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(65, 91, 170, 0.8),
+      transparent 80%
+    );
+}
+
+
+/* ==========================================
+   THE IMPACT
+========================================== */
+
+.impact-installation {
+  position: absolute;
+
+  top: 12%;
+  left: 50%;
+
+  width:
+    min(67vw, 960px);
+
+  height: 70vh;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transform:
+    translateX(-50%)
+    scale(0.94);
+
+  transition:
+    opacity 900ms ease,
+    transform 1200ms ease,
+    visibility 900ms ease;
+}
+
+.action-page[data-scene="impact"]
+.impact-installation {
+  visibility: visible;
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+.impact-screen {
+  position: absolute;
+  inset: 0;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  background:
+    linear-gradient(
+      135deg,
+      #0c0c11,
+      #141116,
+      #08080b
+    );
+
+  box-shadow:
+    0 30px 100px
+    rgba(0, 0, 0, 0.65);
+}
+
+.impact-screen::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.34;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 48px,
+      rgba(255, 255, 255, 0.025) 49px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 48px,
+      rgba(255, 255, 255, 0.025) 49px
+    );
+}
+
+.impact-mark {
+  position: absolute;
+
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background: #fff6e8;
+
+  box-shadow:
+    0 0 10px #fff6e8,
+    0 0 25px #ff4a3f,
+    0 0 70px rgba(255, 44, 35, 0.8);
+
+  opacity: 0.65;
+}
+
+.mark-one {
+  top: 31%;
+  left: 27%;
+}
+
+.mark-two {
+  top: 61%;
+  left: 43%;
+}
+
+.mark-three {
+  top: 23%;
+  left: 68%;
+}
+
+.mark-four {
+  top: 70%;
+  left: 77%;
+}
+
+.action-page.beat
+.impact-mark {
+  animation:
+    impactExpansion 700ms ease-out;
+}
+
+.impact-flash {
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 238, 211, 0.75),
+      rgba(255, 40, 31, 0.18) 18%,
+      transparent 53%
+    );
+}
+
+.action-page[data-scene="impact"].beat
+.impact-flash {
+  animation:
+    impactFlash 440ms ease-out;
+}
+
+
+/* ==========================================
+   PORTE DU CAUCHEMAR
+========================================== */
+
+.nightmare-door {
+  position: absolute;
+
+  top: 13%;
+  left: 50%;
+
+  width:
+    min(39vw, 510px);
+
+  height: 74vh;
+
+  visibility: hidden;
+  opacity: 0;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+
+  background: #010102;
+
+  box-shadow:
+    0 40px 120px
+    rgba(0, 0, 0, 0.9);
+
+  transform:
+    translateX(-50%)
+    scale(0.94);
+
+  transition:
+    opacity 1500ms ease,
+    transform 1800ms ease,
+    visibility 1500ms ease;
+}
+
+.action-page[data-scene="nightmare"]
+.nightmare-door {
+  visibility: visible;
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+.door-darkness {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 45%,
+      #100305,
+      #010102 63%
+    );
+}
+
+.door-red-light {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  height: 3px;
+
+  background: #ff302c;
+
+  box-shadow:
+    0 0 15px #ff302c,
+    0 -10px 55px rgba(255, 38, 34, 0.45),
+    0 -80px 140px rgba(151, 5, 9, 0.24);
+
+  animation:
+    doorHeartbeat 1.25s ease-in-out infinite;
+}
+
+.action-page[data-scene="nightmare"]
+.ceiling-light {
+  width: 10%;
+
+  opacity: 0.22;
+
+  background: #ff302c;
+}
+
+
+/* ==========================================
+   PARTICULES
+========================================== */
+
+.action-particles {
+  position: fixed;
+  inset: 0;
+
+  z-index: 2;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.action-particle {
+  position: absolute;
+
+  width: 2px;
+  height: 2px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 246, 230, 0.82);
+
+  box-shadow:
+    0 0 7px
+    rgba(255, 226, 202, 0.5);
+
+  opacity: var(--particle-opacity);
+
+  animation:
+    particleFloat
+    var(--particle-speed)
+    linear infinite;
+
+  animation-delay:
+    var(--particle-delay);
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.action-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  z-index: 80;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  width: 100%;
+
+  padding:
+    24px 36px;
+
+  font-size: 9px;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+}
+
+.action-header > a:last-child {
+  justify-self: end;
+
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.35);
+}
+
+.room-location {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.location-pulse {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--red);
+
+  box-shadow:
+    0 0 9px var(--red);
+}
+
+.action-page.beat
+.location-pulse {
+  animation:
+    sourceBeat 430ms ease-out;
+}
+
+
+/* ==========================================
+   PLAN DE LA SALLE
+========================================== */
+
+.room-map {
+  position: fixed;
+
+  top: 50%;
+  left: 34px;
+
+  z-index: 70;
+
+  width: 165px;
+
+  transform:
+    translateY(-50%);
+}
+
+.room-map p {
+  margin: 0 0 18px;
+
+  font-size: 8px;
+
+  letter-spacing: 0.17em;
+
+  opacity: 0.4;
+}
+
+.room-map button {
+  display: grid;
+
+  grid-template-columns:
+    26px 1fr;
+
+  width: 100%;
+
+  padding: 8px 0;
+
+  border: 0;
+
+  color:
+    rgba(255, 255, 255, 0.38);
+
+  background: transparent;
+
+  font-size: 7px;
+
+  letter-spacing: 0.1em;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.room-map button span {
+  color: var(--red);
+
+  opacity: 0.62;
+}
+
+.room-map button:hover,
+.room-map button.active {
+  color: var(--white);
+
+  transform:
+    translateX(4px);
+}
+
+
+/* ==========================================
+   SON
+========================================== */
+
+.sound-control {
+  position: fixed;
+
+  right: 34px;
+  bottom: 31px;
+
+  z-index: 90;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 0;
+
+  border: 0;
+
+  color: var(--white);
+  background: transparent;
+
+  font-size: 8px;
+
+  letter-spacing: 0.12em;
+
+  cursor: pointer;
+
+  opacity: 0.55;
+}
+
+.sound-icon {
+  display: flex;
+  align-items: center;
+
+  gap: 2px;
+
+  height: 12px;
+}
+
+.sound-icon i {
+  display: block;
+
+  width: 1px;
+  height: 3px;
+
+  background: var(--white);
+
+  transition:
+    height 200ms ease;
+}
+
+.sound-control.active
+.sound-icon i:nth-child(1) {
+  height: 5px;
+}
+
+.sound-control.active
+.sound-icon i:nth-child(2) {
+  height: 11px;
+}
+
+.sound-control.active
+.sound-icon i:nth-child(3) {
+  height: 7px;
+}
+
+.sound-control.active
+.sound-icon i:nth-child(4) {
+  height: 9px;
+}
+
+
+/* ==========================================
+   CARTELS
+========================================== */
+
+.artwork-label {
+  position: fixed;
+
+  right: 35px;
+  bottom: 76px;
+
+  z-index: 60;
+
+  width: 230px;
+
+  padding:
+    18px 0 0;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.24);
+
+  transition:
+    opacity 500ms ease;
+}
+
+.artwork-label > span,
+.research-note > span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #ff6d62;
+
+  font-size: 7px;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+}
+
+.artwork-label > strong {
+  display: block;
+
+  margin-bottom: 11px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 20px;
+
+  font-weight: 400;
+
+  letter-spacing: -0.02em;
+}
+
+.artwork-label > p {
+  margin: 0 0 17px;
+
+  font-size: 7px;
+
+  line-height: 1.65;
+
+  letter-spacing: 0.04em;
+
+  opacity: 0.6;
+}
+
+.artwork-label dl {
+  margin: 0;
+}
+
+.artwork-label dl div {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-top: 5px;
+}
+
+.artwork-label dt,
+.artwork-label dd {
+  margin: 0;
+
+  font-size: 6px;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.artwork-label dt {
+  opacity: 0.35;
+}
+
+.artwork-label dd {
+  color: #ff7d72;
+}
+
+.research-note {
+  position: fixed;
+
+  bottom: 31px;
+  left: 34px;
+
+  z-index: 60;
+
+  width: 295px;
+
+  transition:
+    opacity 500ms ease,
+    transform 500ms ease;
+}
+
+.research-note p {
+  margin: 0 0 9px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 12px;
+
+  line-height: 1.38;
+
+  opacity: 0.65;
+}
+
+.research-note strong {
+  font-size: 6px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.15em;
+
+  opacity: 0.42;
+}
+
+
+/* ==========================================
+   SCÈNES DE SCROLL
+========================================== */
+
+.action-journey {
+  position: relative;
+
+  z-index: 30;
+}
+
+.action-scene {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  min-height: 100vh;
+
+  padding:
+    110px 270px;
+
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.scene-copy {
+  width: min(760px, 100%);
+
+  text-align: center;
+
+  opacity: 0;
+
+  filter:
+    blur(8px);
+
+  transform:
+    translateY(30px);
+
+  transition:
+    opacity 900ms ease,
+    filter 1000ms ease,
+    transform 1100ms
+    cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.action-scene.active
+.scene-copy {
+  opacity: 1;
+
+  filter:
+    blur(0);
+
+  transform:
+    translateY(0);
+}
+
+.scene-number {
+  margin: 0 0 30px;
+
+  font-size: 8px;
+
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+
+  opacity: 0.5;
+}
+
+.scene-copy h2 {
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(68px, 10vw, 155px);
+
+  font-weight: 400;
+
+  line-height: 0.77;
+
+  letter-spacing: -0.06em;
+}
+
+.scene-copy h2 em {
+  display: block;
+
+  color: #ff5a50;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+}
+
+.scene-description,
+.nightmare-introduction {
+  max-width: 570px;
+
+  margin:
+    47px auto 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(22px, 2.5vw, 38px);
+
+  line-height: 1.05;
+}
+
+.scene-description span,
+.nightmare-introduction span {
+  display: block;
+
+  margin-top: 9px;
+
+  color: #ff867d;
+}
+
+.scene-secondary {
+  margin: 30px 0 0;
+
+  font-size: 9px;
+
+  letter-spacing: 0.15em;
+
+  text-transform: uppercase;
+
+  opacity: 0.55;
+}
+
+.chase-scene .scene-copy,
+.fall-scene .scene-copy,
+.impact-scene .scene-copy {
+  transform:
+    translateY(32px)
+    scale(0.96);
+}
+
+.chase-scene.active .scene-copy,
+.fall-scene.active .scene-copy,
+.impact-scene.active .scene-copy {
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+.nightmare-copy h2 {
+  margin-top: 60px;
+}
+
+.enter-nightmare {
+  display: inline-block;
+
+  margin-top: 55px;
+
+  padding:
+    16px 25px;
+
+  border:
+    1px solid
+    rgba(255, 77, 67, 0.72);
+
+  background:
+    rgba(255, 35, 30, 0.08);
+
+  font-size: 9px;
+
+  letter-spacing: 0.15em;
+
+  transition:
+    color 300ms ease,
+    background 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.enter-nightmare:hover {
+  color: #09090a;
+  background: #ff544b;
+
+  box-shadow:
+    0 0 45px
+    rgba(255, 48, 42, 0.35);
+}
+
+
+/* ==========================================
+   PROGRESSION
+========================================== */
+
+.action-progress {
+  position: fixed;
+
+  top: 50%;
+  right: 17px;
+
+  z-index: 80;
+
+  width: 1px;
+  height: 170px;
+
+  background:
+    rgba(255, 255, 255, 0.13);
+
+  transform:
+    translateY(-50%);
+}
+
+.action-progress span {
+  display: block;
+
+  width: 100%;
+  height: 0;
+
+  background:
+    linear-gradient(
+      #f8eee5,
+      #ff3f38
+    );
+
+  box-shadow:
+    0 0 8px #ff3f38;
+
+  transition:
+    height 650ms ease;
+}
+
+.scroll-instruction {
+  position: fixed;
+
+  top: 50%;
+  right: 30px;
+
+  z-index: 70;
+
+  margin: 0;
+
+  font-size: 6px;
+
+  letter-spacing: 0.14em;
+
+  opacity: 0.3;
+
+  writing-mode: vertical-rl;
+
+  transform:
+    translateY(-50%);
+}
+
+
+/* ==========================================
+   TRANSITION VERS NIGHTMARE
+========================================== */
+
+.nightmare-transition {
+  position: fixed;
+  inset: 0;
+
+  z-index: 400;
+
+  visibility: hidden;
+  opacity: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle,
+      #bb0a0c,
+      #310205 28%,
+      #010102 72%
+    );
+
+  transform:
+    scale(0.1);
+}
+
+.action-page.leaving-action
+.nightmare-transition {
+  visibility: visible;
+
+  animation:
+    enterNightmare 1400ms
+    cubic-bezier(0.76, 0, 0.24, 1)
+    forwards;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes gateHeartbeat {
+  0%,
+  18%,
+  100% {
+    transform:
+      scale(1);
+  }
+
+  8% {
+    transform:
+      scale(2.8);
+  }
+
+  13% {
+    transform:
+      scale(1.65);
+  }
+}
+
+@keyframes sourceBeat {
+  0% {
+    transform:
+      translate(-50%, -50%)
+      scale(1);
+  }
+
+  18% {
+    transform:
+      translate(-50%, -50%)
+      scale(3.2);
+  }
+
+  38% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.5);
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(1);
+  }
+}
+
+@keyframes floorPulse {
+  0% {
+    opacity: 0.8;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0.3);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(18, 10);
+  }
+}
+
+@keyframes retreatingExit {
+  0%,
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.58);
+  }
+}
+
+@keyframes impactExpansion {
+  0% {
+    box-shadow:
+      0 0 8px #fff6e8,
+      0 0 25px #ff4a3f;
+  }
+
+  40% {
+    box-shadow:
+      0 0 18px #fff6e8,
+      0 0 65px #ff4a3f,
+      0 0 170px rgba(255, 44, 35, 0.85);
+  }
+
+  100% {
+    box-shadow:
+      0 0 8px #fff6e8,
+      0 0 25px #ff4a3f;
+  }
+}
+
+@keyframes impactFlash {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.75;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes doorHeartbeat {
+  0%,
+  20%,
+  100% {
+    opacity: 0.55;
+
+    box-shadow:
+      0 0 10px #ff302c,
+      0 -15px 45px
+      rgba(255, 38, 34, 0.25);
+  }
+
+  8% {
+    opacity: 1;
+
+    box-shadow:
+      0 0 25px #ff302c,
+      0 -25px 90px
+      rgba(255, 38, 34, 0.72);
+  }
+}
+
+@keyframes particleFloat {
+  from {
+    transform:
+      translate3d(0, 12vh, 0);
+  }
+
+  to {
+    transform:
+      translate3d(
+        var(--particle-drift),
+        -115vh,
+        0
+      );
+  }
+}
+
+@keyframes enterNightmare {
+  0% {
+    visibility: visible;
+    opacity: 0;
+
+    transform:
+      scale(0.05);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    visibility: visible;
+    opacity: 1;
+
+    transform:
+      scale(1.7);
+  }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 900px) {
+  .action-header {
+    grid-template-columns:
+      1fr auto;
+
+    padding:
+      19px 20px;
+  }
+
+  .room-location {
+    display: none;
+  }
+
+  .room-map {
+    display: none;
+  }
+
+  .action-scene {
+    padding:
+      95px 30px 180px;
+  }
+
+  .artwork-label {
+    right: 20px;
+    bottom: 67px;
+
+    width: 190px;
+  }
+
+  .research-note {
+    bottom: 23px;
+    left: 20px;
+
+    width: 240px;
+  }
+
+  .sound-control {
+    right: 20px;
+    bottom: 24px;
+  }
+
+  .scroll-instruction {
+    display: none;
+  }
+
+  .central-installation {
+    top: 20%;
+
+    width: 100vw;
+  }
+
+  .chase-installation {
+    width: 92vw;
+  }
+
+  .fall-installation {
+    width: 82vw;
+  }
+
+  .impact-installation {
+    width: 92vw;
+  }
+
+  .nightmare-door {
+    width: 70vw;
+  }
+}
+
+@media (max-width: 580px) {
+  .scene-copy h2 {
+    font-size:
+      clamp(60px, 20vw, 100px);
+  }
+
+  .scene-description,
+  .nightmare-introduction {
+    font-size: 24px;
+  }
+
+  .artwork-label {
+    display: none;
+  }
+
+  .research-note {
+    width:
+      calc(100% - 105px);
+  }
+
+  .research-note p {
+    font-size: 10px;
+  }
+
+  .sound-gate h1 {
+    font-size: 69px;
+  }
+
+  .gate-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gate-actions button {
+    width: min(100%, 290px);
+  }
+}
+
+
+/* ==========================================
+   ACCESSIBILITÉ
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
