@@ -2513,7 +2513,7 @@ function updateHold(
       "KEEP HOLDING";
   } else {
     forceLabel.textContent =
-      "HOLD TO FORCE IT OPEN";
+      "OPEN THE EYES";
   }
 
 
@@ -2658,7 +2658,7 @@ function cancelHold() {
 
 
   forceLabel.textContent =
-    "HOLD TO FORCE IT OPEN";
+    "OPEN THE EYES";
 
 
   syncAudio(
