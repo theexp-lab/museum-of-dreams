@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#030306">
+  <meta name="description" content="Nightmare — Room 06 of The Museum of Dreams.">
+
+  <title>Nightmare — Museum of Dreams</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="./nightmare-station.png">
+  <link rel="stylesheet" href="./nightmare.css?v=1">
+</head>
+
+<body class="nightmare-page nightmare-locked" data-scene="arrival">
+
+  <!-- The first click unlocks audio while remaining part of the story. -->
+  <div class="pulse-gate" id="pulse-gate">
+    <div class="gate-scan" aria-hidden="true"></div>
+
+    <div class="gate-copy">
+      <p>UNREGISTERED LIFE SIGNAL</p>
+
+      <div class="gate-counter" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span class="wrong-pulse"></span>
+      </div>
+
+      <strong>03</strong>
+
+      <button type="button" id="follow-pulse">
+        FOLLOW THE THIRD PULSE
+      </button>
+
+      <small>HEADPHONES RECOMMENDED</small>
+    </div>
+  </div>
+
+  <!-- Fixed cinematic world. Only opacity and transforms change. -->
+  <div class="nightmare-world" aria-hidden="true">
+    <img class="world-image station-image" src="./nightmare-station.png" alt="">
+    <img class="world-image corruption-image" src="./nightmare-corruption.png" alt="" decoding="async">
+    <img class="world-image eye-image" src="./nightmare-eye.png" alt="" decoding="async">
+
+    <div class="world-depth"></div>
+    <div class="emergency-wash"></div>
+
+    <div class="faceless-presence">
+      <img src="./nightmare-figure.png" alt="">
+    </div>
+
+    <div class="reflection reflection-one">
+      <img src="./nightmare-figure.png" alt="">
+    </div>
+
+    <div class="reflection reflection-two">
+      <img src="./nightmare-figure.png" alt="">
+    </div>
+
+    <div class="corridor-lights"></div>
+    <div class="speed-tunnel"></div>
+
+    <div class="fog fog-one"></div>
+    <div class="fog fog-two"></div>
+    <div class="fog fog-three"></div>
+
+    <div class="screen-veins"></div>
+    <div class="flash-frame"></div>
+    <div class="cursor-darkness"></div>
+    <div class="wake-white"></div>
+  </div>
+
+  <header class="nightmare-header">
+    <a href="action.html">THE MUSEUM OF DREAMS</a>
+
+    <div class="nightmare-location">
+      <span class="location-signal"></span>
+      <span>ROOM 06 · NIGHTMARE</span>
+    </div>
+
+    <a href="case-study.html">PROJECT</a>
+  </header>
+
+  <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="true">
+    SOUND ON
+  </button>
+
+  <aside class="containment-panel" aria-live="polite">
+    <span>CONTAINMENT STATUS</span>
+    <strong id="containment-status">UNSTABLE</strong>
+
+    <dl>
+      <div>
+        <dt>BODIES</dt>
+        <dd id="body-count">02</dd>
+      </div>
+
+      <div>
+        <dt>HEARTBEATS</dt>
+        <dd id="pulse-count">03</dd>
+      </div>
+
+      <div>
+        <dt>THREAT DISTANCE</dt>
+        <dd id="threat-distance">UNKNOWN</dd>
+      </div>
+
+      <div>
+        <dt>DREAM INTEGRITY</dt>
+        <dd id="dream-integrity">71%</dd>
+      </div>
+    </dl>
+  </aside>
+
+  <aside class="research-note" id="research-note">
+    <span id="research-number">RESEARCH NOTE 06.1</span>
+    <p id="research-text">Fear in dreams has been associated with activity in the insula and midcingulate cortex.</p>
+    <strong id="research-principle">FEAR · SIMULATED, FELT</strong>
+  </aside>
+
+  <div class="nightmare-progress" aria-hidden="true">
+    <span id="nightmare-progress-fill"></span>
+  </div>
+
+  <p class="scroll-cue" id="scroll-cue">FOLLOW THE SIGNAL</p>
+
+  <main class="nightmare-story">
+    <section class="nightmare-beat is-active" data-scene="arrival">
+      <div class="beat-copy">
+        <p>The train<br>has stopped.</p>
+        <em>Something inside it is still moving.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat title-beat" data-scene="title">
+      <div class="title-copy">
+        <small>ROOM 06 · CONTAINMENT FAILED</small>
+        <h1>NIGHT<span>MARE</span></h1>
+        <p>THE THIRD PULSE</p>
+        <div class="museum-description">
+          A reactive body-horror installation exploring how the dreaming mind constructs and experiences threat.
+        </div>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="companion">
+      <div class="beat-copy">
+        <p>The person beside you<br>has stopped breathing.</p>
+        <em>Your own heartbeat is still here.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="monitor">
+      <div class="beat-copy monitor-copy">
+        <small>BODIES DETECTED&nbsp;&nbsp;02</small>
+        <small>HEARTBEATS DETECTED&nbsp;&nbsp;03</small>
+        <p>The monitor<br>is not mistaken.</p>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="faceless">
+      <div class="beat-copy">
+        <p>You still cannot remember<br>who you came to save.</p>
+        <em>It may not have been a person.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="breathing">
+      <div class="beat-copy">
+        <p>The walls<br>are breathing.</p>
+        <em>They stop when you notice.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="again">
+      <div class="beat-copy">
+        <p>Then they begin again.</p>
+        <em>Faster.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="locating">
+      <div class="beat-copy location-copy">
+        <small>PULSE 01&nbsp;&nbsp;DREAMER</small>
+        <small>PULSE 02&nbsp;&nbsp;VISITOR</small>
+        <small>PULSE 03&nbsp;&nbsp;SEARCHING…</small>
+        <p>Locating<br>the third signal.</p>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="inside">
+      <div class="beat-copy">
+        <p>The third pulse<br>is not behind you.</p>
+        <em>It is inside you.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat run-beat" data-scene="run">
+      <div class="run-copy">
+        <small>EXIT ROUTE REMOVED</small>
+        <h2>RUN.</h2>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="narrowing">
+      <div class="beat-copy">
+        <p>The corridor<br>is getting narrower.</p>
+        <em>The footsteps are getting closer.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="waking">
+      <div class="beat-copy">
+        <p>Something is trying<br>to wake up inside you.</p>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="warning">
+      <div class="beat-copy warning-copy">
+        <p>Do not let it<br>open its eyes.</p>
+      </div>
+    </section>
+
+    <section class="nightmare-beat" data-scene="eye">
+      <div class="beat-copy">
+        <p>There is<br>no door.</p>
+        <em>Only an eye refusing to open.</em>
+      </div>
+    </section>
+
+    <section class="nightmare-beat final-beat" data-scene="escape">
+      <div class="escape-copy">
+        <small>EMERGENCY WAKE PROTOCOL</small>
+        <h2>OPEN<br>YOUR EYES.</h2>
+
+        <button class="force-eye" id="force-eye" type="button">
+          <span class="hold-ring" aria-hidden="true"></span>
+          <span class="force-label">HOLD TO FORCE IT OPEN</span>
+        </button>
+
+        <p>DO NOT RELEASE</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="museum-label">
+    <strong>THE THIRD PULSE</strong>
+    <span>IMMERSIVE PROJECTION · SPATIAL SOUND · REACTIVE LIGHT · KINETIC FLOOR</span>
+  </div>
+
+  <audio id="train-remnant" src="./train-pass.mp3" preload="auto"></audio>
+
+  <script src="./nightmare.js?v=1"></script>
+</body>
+
+</html>
