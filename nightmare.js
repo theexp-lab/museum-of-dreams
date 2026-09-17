@@ -3,62 +3,224 @@
    ROOM 06 — NIGHTMARE
 ========================================== */
 
-const body = document.body;
-const beats = [...document.querySelectorAll(".nightmare-beat")];
-const sceneNames = beats.map((beat) => beat.dataset.scene);
 
-const pulseGate = document.querySelector("#pulse-gate");
-const followPulse = document.querySelector("#follow-pulse");
-const soundToggle = document.querySelector("#sound-toggle");
-const progressFill = document.querySelector("#nightmare-progress-fill");
-const scrollCue = document.querySelector("#scroll-cue");
-const containmentStatus = document.querySelector("#containment-status");
-const bodyCount = document.querySelector("#body-count");
-const pulseCount = document.querySelector("#pulse-count");
-const threatDistance = document.querySelector("#threat-distance");
-const dreamIntegrity = document.querySelector("#dream-integrity");
-const researchNumber = document.querySelector("#research-number");
-const researchText = document.querySelector("#research-text");
-const researchPrinciple = document.querySelector("#research-principle");
-const forceEye = document.querySelector("#force-eye");
-const forceLabel = document.querySelector(".force-label");
-const trainRemnant = document.querySelector("#train-remnant");
+/* ==========================================
+   ÉLÉMENTS HTML
+========================================== */
 
-let activeIndex = -1;
-let wheelLocked = false;
-let touchStartY = 0;
-let soundEnabled = localStorage.getItem("museumSound") !== "off";
+const body =
+  document.body;
+
+
+const beats = [
+  ...document.querySelectorAll(
+    ".nightmare-beat"
+  )
+];
+
+
+const sceneNames =
+  beats.map(
+    function (beat) {
+      return beat.dataset.scene;
+    }
+  );
+
+
+const pulseGate =
+  document.querySelector(
+    "#pulse-gate"
+  );
+
+
+const followPulse =
+  document.querySelector(
+    "#follow-pulse"
+  );
+
+
+const soundToggle =
+  document.querySelector(
+    "#sound-toggle"
+  );
+
+
+const progressFill =
+  document.querySelector(
+    "#nightmare-progress-fill"
+  );
+
+
+const scrollCue =
+  document.querySelector(
+    "#scroll-cue"
+  );
+
+
+const containmentStatus =
+  document.querySelector(
+    "#containment-status"
+  );
+
+
+const bodyCount =
+  document.querySelector(
+    "#body-count"
+  );
+
+
+const pulseCount =
+  document.querySelector(
+    "#pulse-count"
+  );
+
+
+const threatDistance =
+  document.querySelector(
+    "#threat-distance"
+  );
+
+
+const dreamIntegrity =
+  document.querySelector(
+    "#dream-integrity"
+  );
+
+
+const researchNumber =
+  document.querySelector(
+    "#research-number"
+  );
+
+
+const researchText =
+  document.querySelector(
+    "#research-text"
+  );
+
+
+const researchPrinciple =
+  document.querySelector(
+    "#research-principle"
+  );
+
+
+const forceEye =
+  document.querySelector(
+    "#force-eye"
+  );
+
+
+const forceLabel =
+  document.querySelector(
+    ".force-label"
+  );
+
+
+/* ==========================================
+   ÉTAT DE LA PAGE
+========================================== */
+
+let activeIndex =
+  -1;
+
+
+let wheelLocked =
+  false;
+
+
+let touchStartY =
+  0;
+
+
+let sceneTimer =
+  null;
+
+
+let soundEnabled =
+  localStorage.getItem(
+    "museumSound"
+  ) !== "off";
+
+
+/* ==========================================
+   ÉTAT AUDIO
+========================================== */
 
 let audioContext;
+
 let masterGain;
+
 let ambienceGain;
+
 let ambienceFilter;
+
 let humGain;
+
 let humOscillator;
+
 let subGain;
+
 let subOscillator;
-let audioReady = false;
 
-let heartbeatTimer;
-let footstepTimer;
-let breathingTimer;
-let countdownTimer;
+let audioReady =
+  false;
 
-let holdFrame;
-let holdStart = 0;
-let isHolding = false;
-let escapeComplete = false;
 
-const HOLD_DURATION = 2400;
+let heartbeatTimer =
+  null;
+
+
+let footstepTimer =
+  null;
+
+
+let breathingTimer =
+  null;
+
+
+let panicTimer =
+  null;
+
+
+/* ==========================================
+   OUVERTURE DE L’ŒIL
+========================================== */
+
+let holdFrame =
+  null;
+
+
+let holdStart =
+  0;
+
+
+let isHolding =
+  false;
+
+
+let escapeComplete =
+  false;
+
+
+const HOLD_DURATION =
+  2800;
 
 
 /* ==========================================
    OUTILS
 ========================================== */
 
-function clamp(value, minimum, maximum) {
+function clamp(
+  value,
+  minimum,
+  maximum
+) {
   return Math.min(
-    Math.max(value, minimum),
+    Math.max(
+      value,
+      minimum
+    ),
     maximum
   );
 }
@@ -70,6 +232,7 @@ function updateSoundButton() {
       ? "SOUND ON"
       : "SOUND OFF";
 
+
   soundToggle.setAttribute(
     "aria-pressed",
     String(soundEnabled)
@@ -78,20 +241,30 @@ function updateSoundButton() {
 
 
 function preloadImages() {
-  [
+  const images = [
+    "./nightmare-reveal.png",
     "./nightmare-corruption.png",
     "./nightmare-eye.png",
+    "./nightmare-eye-open.png",
     "./nightmare-figure.png"
-  ].forEach((source) => {
-    const image = new Image();
+  ];
 
-    image.src = source;
-  });
+
+  images.forEach(
+    function (source) {
+      const image =
+        new Image();
+
+
+      image.src =
+        source;
+    }
+  );
 }
 
 
 /* ==========================================
-   WEB AUDIO
+   INITIALISER LE MOTEUR AUDIO
 ========================================== */
 
 function ensureAudio() {
@@ -102,22 +275,29 @@ function ensureAudio() {
         window.webkitAudioContext
       )();
 
+
     masterGain =
       audioContext.createGain();
 
+
     masterGain.gain.value =
       soundEnabled
-        ? 0.78
+        ? 0.82
         : 0;
+
 
     masterGain.connect(
       audioContext.destination
     );
 
+
     createAtmosphere();
 
-    audioReady = true;
+
+    audioReady =
+      true;
   }
+
 
   if (
     audioContext.state ===
@@ -129,114 +309,159 @@ function ensureAudio() {
 
 
 /* ==========================================
-   ATMOSPHÈRE SONORE
+   ATMOSPHÈRE CONTINUE
 ========================================== */
 
 function createAtmosphere() {
-  const frameCount =
-    audioContext.sampleRate * 2;
+  const length =
+    audioContext.sampleRate *
+    3;
+
 
   const buffer =
     audioContext.createBuffer(
       1,
-      frameCount,
+      length,
       audioContext.sampleRate
     );
+
 
   const data =
     buffer.getChannelData(0);
 
+
+  let lastValue =
+    0;
+
+
   for (
     let index = 0;
-    index < frameCount;
+    index < length;
     index += 1
   ) {
+    const whiteNoise =
+      Math.random() * 2 -
+      1;
+
+
+    lastValue =
+      lastValue * 0.96 +
+      whiteNoise * 0.04;
+
+
     data[index] =
-      (
-        Math.random() * 2 -
-        1
-      ) * 0.46;
+      lastValue * 2.6;
   }
+
 
   const noise =
     audioContext.createBufferSource();
 
-  noise.buffer = buffer;
-  noise.loop = true;
+
+  noise.buffer =
+    buffer;
+
+
+  noise.loop =
+    true;
+
 
   ambienceFilter =
     audioContext.createBiquadFilter();
 
+
   ambienceFilter.type =
     "bandpass";
 
+
   ambienceFilter.frequency.value =
-    430;
+    360;
+
 
   ambienceFilter.Q.value =
-    0.6;
+    0.7;
+
 
   ambienceGain =
     audioContext.createGain();
 
+
   ambienceGain.gain.value =
     0.0001;
+
 
   noise
     .connect(ambienceFilter)
     .connect(ambienceGain)
     .connect(masterGain);
 
+
   noise.start();
 
+
+  /* Ronflement grave */
 
   humOscillator =
     audioContext.createOscillator();
 
+
   humOscillator.type =
     "triangle";
 
+
   humOscillator.frequency.value =
-    54;
+    48;
+
 
   humGain =
     audioContext.createGain();
 
+
   humGain.gain.value =
     0.0001;
+
 
   humOscillator
     .connect(humGain)
     .connect(masterGain);
 
+
   humOscillator.start();
 
+
+  /* Fréquence très basse */
 
   subOscillator =
     audioContext.createOscillator();
 
+
   subOscillator.type =
     "sine";
 
+
   subOscillator.frequency.value =
-    31;
+    28;
+
 
   subGain =
     audioContext.createGain();
 
+
   subGain.gain.value =
     0.0001;
+
 
   subOscillator
     .connect(subGain)
     .connect(masterGain);
+
 
   subOscillator.start();
 }
 
 
 /* ==========================================
-   NOTES SYNTHÉTIQUES
+   CRÉER UNE NOTE
 ========================================== */
 
 function tone(
@@ -254,25 +479,33 @@ function tone(
     return;
   }
 
+
   const now =
     audioContext.currentTime +
     delay;
 
+
   const oscillator =
     audioContext.createOscillator();
+
 
   const gain =
     audioContext.createGain();
 
+
   const panner =
     audioContext.createStereoPanner();
 
-  oscillator.type = type;
+
+  oscillator.type =
+    type;
+
 
   oscillator.frequency.setValueAtTime(
     frequency,
     now
   );
+
 
   panner.pan.value =
     clamp(
@@ -281,10 +514,12 @@ function tone(
       1
     );
 
+
   gain.gain.setValueAtTime(
     0.0001,
     now
   );
+
 
   gain.gain.exponentialRampToValueAtTime(
     Math.max(
@@ -294,28 +529,32 @@ function tone(
     now + 0.018
   );
 
+
   gain.gain.exponentialRampToValueAtTime(
     0.0001,
     now + duration
   );
+
 
   oscillator
     .connect(gain)
     .connect(panner)
     .connect(masterGain);
 
+
   oscillator.start(now);
+
 
   oscillator.stop(
     now +
     duration +
-    0.05
+    0.08
   );
 }
 
 
 /* ==========================================
-   BRUITS ET IMPACTS
+   CRÉER UN BRUIT
 ========================================== */
 
 function noiseBurst(
@@ -331,25 +570,29 @@ function noiseBurst(
     return;
   }
 
-  const frameCount =
+
+  const length =
     Math.floor(
       audioContext.sampleRate *
       duration
     );
 
+
   const buffer =
     audioContext.createBuffer(
       1,
-      frameCount,
+      length,
       audioContext.sampleRate
     );
+
 
   const data =
     buffer.getChannelData(0);
 
+
   for (
     let index = 0;
-    index < frameCount;
+    index < length;
     index += 1
   ) {
     data[index] =
@@ -359,35 +602,46 @@ function noiseBurst(
       ) *
       (
         1 -
-        index / frameCount
+        index / length
       );
   }
+
 
   const source =
     audioContext.createBufferSource();
 
+
   const filter =
     audioContext.createBiquadFilter();
+
 
   const gain =
     audioContext.createGain();
 
+
   const panner =
     audioContext.createStereoPanner();
+
 
   const now =
     audioContext.currentTime;
 
-  source.buffer = buffer;
+
+  source.buffer =
+    buffer;
+
 
   filter.type =
     "bandpass";
 
+
   filter.frequency.value =
     frequency;
 
+
   filter.Q.value =
-    0.8;
+    0.85;
+
 
   panner.pan.value =
     clamp(
@@ -395,6 +649,7 @@ function noiseBurst(
       -1,
       1
     );
+
 
   gain.gain.setValueAtTime(
     Math.max(
@@ -404,10 +659,12 @@ function noiseBurst(
     now
   );
 
+
   gain.gain.exponentialRampToValueAtTime(
     0.0001,
     now + duration
   );
+
 
   source
     .connect(filter)
@@ -415,7 +672,175 @@ function noiseBurst(
     .connect(panner)
     .connect(masterGain);
 
+
   source.start(now);
+}
+
+
+/* ==========================================
+   RESPIRATION HUMAINE
+========================================== */
+
+function humanBreath(
+  speed = 1,
+  strength = 1
+) {
+  if (
+    !soundEnabled ||
+    !audioReady
+  ) {
+    return;
+  }
+
+
+  const duration =
+    1.45 /
+    speed;
+
+
+  const length =
+    Math.floor(
+      audioContext.sampleRate *
+      duration
+    );
+
+
+  const buffer =
+    audioContext.createBuffer(
+      1,
+      length,
+      audioContext.sampleRate
+    );
+
+
+  const data =
+    buffer.getChannelData(0);
+
+
+  for (
+    let index = 0;
+    index < length;
+    index += 1
+  ) {
+    const position =
+      index /
+      length;
+
+
+    const envelope =
+      Math.sin(
+        Math.PI *
+        position
+      );
+
+
+    data[index] =
+      (
+        Math.random() * 2 -
+        1
+      ) *
+      envelope;
+  }
+
+
+  const source =
+    audioContext.createBufferSource();
+
+
+  const filter =
+    audioContext.createBiquadFilter();
+
+
+  const gain =
+    audioContext.createGain();
+
+
+  const panner =
+    audioContext.createStereoPanner();
+
+
+  source.buffer =
+    buffer;
+
+
+  filter.type =
+    "bandpass";
+
+
+  filter.frequency.value =
+    620 +
+    speed * 90;
+
+
+  filter.Q.value =
+    0.55;
+
+
+  gain.gain.value =
+    0.045 *
+    strength;
+
+
+  panner.pan.value =
+    -0.28 +
+    Math.random() *
+    0.12;
+
+
+  source
+    .connect(filter)
+    .connect(gain)
+    .connect(panner)
+    .connect(masterGain);
+
+
+  source.start();
+}
+
+
+function stopBreathing() {
+  window.clearInterval(
+    breathingTimer
+  );
+
+
+  breathingTimer =
+    null;
+}
+
+
+function setBreathing(
+  period,
+  speed = 1,
+  strength = 1
+) {
+  stopBreathing();
+
+
+  if (
+    !soundEnabled ||
+    !audioReady
+  ) {
+    return;
+  }
+
+
+  humanBreath(
+    speed,
+    strength
+  );
+
+
+  breathingTimer =
+    window.setInterval(
+      function () {
+        humanBreath(
+          speed,
+          strength
+        );
+      },
+      period
+    );
 }
 
 
@@ -425,40 +850,43 @@ function noiseBurst(
 
 function heartbeat(
   strength = 1,
-  thirdPulse = true
+  panic = false
 ) {
   tone(
-    54,
-    0.16,
-    0.29 * strength,
+    52,
+    0.17,
+    0.31 * strength,
     "sine"
   );
 
+
   tone(
-    42,
-    0.22,
-    0.2 * strength,
+    39,
+    0.24,
+    0.23 * strength,
     "sine",
-    0.17
+    0.16
   );
 
-  if (thirdPulse) {
+
+  if (panic) {
     tone(
-      35,
-      0.27,
-      0.34 * strength,
-      "sine",
-      0.46,
-      0.18
+      69,
+      0.11,
+      0.12 * strength,
+      "triangle",
+      0.39,
+      0.16
     );
 
+
     tone(
-      76,
-      0.1,
-      0.08 * strength,
-      "triangle",
-      0.48,
-      0.18
+      34,
+      0.26,
+      0.35 * strength,
+      "sine",
+      0.43,
+      0.16
     );
   }
 }
@@ -469,16 +897,19 @@ function stopHeartbeat() {
     heartbeatTimer
   );
 
-  heartbeatTimer = null;
+
+  heartbeatTimer =
+    null;
 }
 
 
 function setHeartbeat(
   period,
   strength = 1,
-  thirdPulse = true
+  panic = false
 ) {
   stopHeartbeat();
+
 
   if (
     !soundEnabled ||
@@ -487,17 +918,19 @@ function setHeartbeat(
     return;
   }
 
+
   heartbeat(
     strength,
-    thirdPulse
+    panic
   );
+
 
   heartbeatTimer =
     window.setInterval(
-      () => {
+      function () {
         heartbeat(
           strength,
-          thirdPulse
+          panic
         );
       },
       period
@@ -506,31 +939,36 @@ function setHeartbeat(
 
 
 /* ==========================================
-   PAS
+   BRUITS DE PAS
 ========================================== */
 
 let nextFootstepSide =
-  -0.65;
+  -0.72;
 
 
-function footstep() {
+function footstep(
+  strength = 1
+) {
   tone(
-    46,
-    0.22,
-    0.17,
+    43,
+    0.2,
+    0.2 * strength,
     "sine",
     0,
     nextFootstepSide
   );
 
+
   noiseBurst(
-    0.18,
-    0.035,
-    180,
+    0.15,
+    0.055 * strength,
+    190,
     nextFootstepSide
   );
 
-  nextFootstepSide *= -1;
+
+  nextFootstepSide *=
+    -1;
 }
 
 
@@ -539,12 +977,18 @@ function stopFootsteps() {
     footstepTimer
   );
 
-  footstepTimer = null;
+
+  footstepTimer =
+    null;
 }
 
 
-function setFootsteps(period) {
+function setFootsteps(
+  period,
+  strength = 1
+) {
   stopFootsteps();
+
 
   if (
     !soundEnabled ||
@@ -553,43 +997,40 @@ function setFootsteps(period) {
     return;
   }
 
-  footstep();
+
+  footstep(strength);
+
 
   footstepTimer =
     window.setInterval(
-      footstep,
+      function () {
+        footstep(strength);
+      },
       period
     );
 }
 
 
 /* ==========================================
-   RESPIRATION
+   SONS DE PANIQUE
 ========================================== */
 
-function breath() {
-  noiseBurst(
-    1.15,
-    0.032,
-    520,
-    -0.35 +
-    Math.random() *
-    0.7
-  );
-}
-
-
-function stopBreathing() {
+function stopPanicSounds() {
   window.clearInterval(
-    breathingTimer
+    panicTimer
   );
 
-  breathingTimer = null;
+
+  panicTimer =
+    null;
 }
 
 
-function setBreathing(period) {
-  stopBreathing();
+function setPanicSounds(
+  period = 780
+) {
+  stopPanicSounds();
+
 
   if (
     !soundEnabled ||
@@ -598,18 +1039,74 @@ function setBreathing(period) {
     return;
   }
 
-  breath();
 
-  breathingTimer =
+  panicTimer =
     window.setInterval(
-      breath,
+      function () {
+        const pan =
+          Math.random() *
+          1.8 -
+          0.9;
+
+
+        const frequency =
+          500 +
+          Math.random() *
+          1300;
+
+
+        noiseBurst(
+          0.08 +
+          Math.random() *
+          0.18,
+
+          0.04,
+
+          frequency,
+
+          pan
+        );
+
+
+        if (
+          Math.random() >
+          0.5
+        ) {
+          tone(
+            80 +
+            Math.random() *
+            160,
+
+            0.12,
+
+            0.035,
+
+            "sawtooth",
+
+            0,
+
+            pan
+          );
+        }
+      },
       period
     );
 }
 
 
+function stopAllAudioLoops() {
+  stopHeartbeat();
+
+  stopFootsteps();
+
+  stopBreathing();
+
+  stopPanicSounds();
+}
+
+
 /* ==========================================
-   INTENSITÉ DE L’ATMOSPHÈRE
+   ATMOSPHÈRE DE CHAQUE SCÈNE
 ========================================== */
 
 function setAtmosphere(scene) {
@@ -617,91 +1114,174 @@ function setAtmosphere(scene) {
     return;
   }
 
-  const ambienceLevels = {
-    arrival: 0.018,
-    title: 0.022,
-    companion: 0.026,
-    monitor: 0.032,
-    faceless: 0.038,
-    breathing: 0.05,
-    again: 0.065,
-    locating: 0.055,
-    inside: 0.075,
-    run: 0.09,
-    narrowing: 0.105,
-    waking: 0.095,
-    warning: 0.06,
-    eye: 0.035,
-    escape: 0.025
+
+  const levels = {
+    arrival: [
+      0.02,
+      0.018,
+      320
+    ],
+
+    title: [
+      0.023,
+      0.021,
+      350
+    ],
+
+    companion: [
+      0.015,
+      0.026,
+      290
+    ],
+
+    monitor: [
+      0.03,
+      0.038,
+      560
+    ],
+
+    faceless: [
+      0.04,
+      0.05,
+      480
+    ],
+
+    breathing: [
+      0.045,
+      0.06,
+      410
+    ],
+
+    again: [
+      0.065,
+      0.085,
+      680
+    ],
+
+    locating: [
+      0.07,
+      0.09,
+      760
+    ],
+
+    inside: [
+      0.085,
+      0.12,
+      850
+    ],
+
+    run: [
+      0.11,
+      0.15,
+      1050
+    ],
+
+    narrowing: [
+      0.13,
+      0.17,
+      1180
+    ],
+
+    waking: [
+      0.14,
+      0.18,
+      1320
+    ],
+
+    warning: [
+      0.09,
+      0.12,
+      520
+    ],
+
+    eye: [
+      0.05,
+      0.08,
+      360
+    ],
+
+    escape: [
+      0.07,
+      0.11,
+      440
+    ]
   };
 
-  const subLevels = {
-    arrival: 0.018,
-    title: 0.022,
-    companion: 0.03,
-    monitor: 0.04,
-    faceless: 0.05,
-    breathing: 0.06,
-    again: 0.075,
-    locating: 0.07,
-    inside: 0.105,
-    run: 0.12,
-    narrowing: 0.14,
-    waking: 0.13,
-    warning: 0.09,
-    eye: 0.06,
-    escape: 0.08
-  };
 
-  const now =
-    audioContext.currentTime;
+  const selected =
+    levels[scene] ||
+    levels.arrival;
+
+
+  const noiseLevel =
+    selected[0];
+
+
+  const subLevel =
+    selected[1];
+
+
+  const filterFrequency =
+    selected[2];
+
 
   const active =
     soundEnabled
       ? 1
       : 0;
 
+
+  const now =
+    audioContext.currentTime;
+
+
   ambienceGain.gain.setTargetAtTime(
-    (
-      ambienceLevels[scene] ||
-      0.01
-    ) * active,
+    noiseLevel *
+    active,
+
     now,
-    0.35
+
+    0.25
   );
+
 
   humGain.gain.setTargetAtTime(
     (
       scene === "run" ||
       scene === "narrowing"
-        ? 0.045
-        : 0.022
-    ) * active,
+        ? 0.065
+        : 0.028
+    ) *
+    active,
+
     now,
-    0.45
+
+    0.3
   );
+
 
   subGain.gain.setTargetAtTime(
-    (
-      subLevels[scene] ||
-      0.02
-    ) * active,
+    subLevel *
+    active,
+
     now,
-    0.28
+
+    0.2
   );
 
+
   ambienceFilter.frequency.setTargetAtTime(
-    scene === "run"
-      ? 860
-      : 430,
+    filterFrequency,
+
     now,
-    0.3
+
+    0.22
   );
 }
 
 
 /* ==========================================
-   SON DE CHAQUE SCÈNE
+   SYNCHRONISER LE SON ET LA SCÈNE
 ========================================== */
 
 function syncAudio(scene) {
@@ -709,195 +1289,480 @@ function syncAudio(scene) {
     return;
   }
 
-  stopFootsteps();
-  stopBreathing();
+
+  stopAllAudioLoops();
+
 
   setAtmosphere(scene);
 
+
   const heartSettings = {
-    arrival: [830, 0.72],
-    title: [780, 0.76],
-    companion: [710, 0.85],
-    monitor: [660, 0.92],
-    faceless: [620, 1],
-    breathing: [590, 1.02],
-    again: [535, 1.06],
-    locating: [500, 1.08],
-    inside: [455, 1.18],
-    run: [380, 1.22],
-    narrowing: [345, 1.3],
-    waking: [330, 1.34],
-    warning: [390, 1.15],
-    eye: [480, 1.02],
-    escape: [440, 1.18]
+    arrival: [
+      880,
+      0.66,
+      false
+    ],
+
+    title: [
+      820,
+      0.72,
+      false
+    ],
+
+    companion: [
+      700,
+      0.88,
+      false
+    ],
+
+    monitor: [
+      630,
+      1,
+      false
+    ],
+
+    faceless: [
+      570,
+      1.08,
+      true
+    ],
+
+    breathing: [
+      520,
+      1.14,
+      true
+    ],
+
+    again: [
+      455,
+      1.22,
+      true
+    ],
+
+    locating: [
+      415,
+      1.3,
+      true
+    ],
+
+    inside: [
+      365,
+      1.4,
+      true
+    ],
+
+    run: [
+      315,
+      1.48,
+      true
+    ],
+
+    narrowing: [
+      285,
+      1.57,
+      true
+    ],
+
+    waking: [
+      260,
+      1.65,
+      true
+    ],
+
+    warning: [
+      330,
+      1.48,
+      true
+    ],
+
+    eye: [
+      420,
+      1.18,
+      true
+    ],
+
+    escape: [
+      350,
+      1.42,
+      true
+    ]
   };
 
-  const [
-    period,
-    strength
-  ] =
+
+  const settings =
     heartSettings[scene] ||
-    [720, 0.8];
+    heartSettings.arrival;
+
+
+  const period =
+    settings[0];
+
+
+  const strength =
+    settings[1];
+
+
+  const panic =
+    settings[2];
+
 
   setHeartbeat(
     period,
     strength,
-    true
+    panic
   );
 
+
+  /*
+   * Le souffle commence dès l’arrivée.
+   */
+
   if (
-    [
-      "breathing",
-      "again",
-      "locating"
-    ].includes(scene)
+    scene === "arrival" ||
+    scene === "title"
   ) {
     setBreathing(
-      scene === "again"
-        ? 1700
-        : 2600
+      2850,
+      0.82,
+      1.1
     );
   }
+
+
+  /*
+   * Le souffle disparaît brutalement
+   * lorsque la personne cesse de respirer.
+   */
 
   if (
-    [
-      "run",
-      "narrowing",
-      "waking"
-    ].includes(scene)
+    scene === "companion"
   ) {
-    setFootsteps(
-      scene === "narrowing"
-        ? 290
-        : 350
+    stopBreathing();
+
+
+    noiseBurst(
+      0.12,
+      0.055,
+      920,
+      -0.3
     );
   }
 
-  if (scene === "monitor") {
+
+  /*
+   * Moniteur médical.
+   */
+
+  if (
+    scene === "monitor"
+  ) {
     tone(
-      1240,
-      0.12,
-      0.05,
+      1280,
+      0.11,
+      0.065,
       "square"
     );
 
+
     tone(
-      1240,
-      0.12,
-      0.05,
+      1280,
+      0.11,
+      0.065,
       "square",
-      0.22
+      0.23
     );
 
+
     tone(
-      690,
-      0.2,
-      0.08,
+      650,
+      0.35,
+      0.11,
       "sawtooth",
-      0.5
+      0.52
     );
   }
 
-  if (scene === "faceless") {
+
+  /*
+   * Apparition de la silhouette.
+   */
+
+  if (
+    scene === "faceless"
+  ) {
     noiseBurst(
-      0.9,
-      0.095,
-      1150
+      1,
+      0.13,
+      1200
+    );
+
+
+    tone(
+      71,
+      1.2,
+      0.1,
+      "sawtooth"
     );
   }
 
-  if (scene === "inside") {
+
+  /*
+   * Les murs respirent une fois,
+   * puis le souffle s’arrête.
+   */
+
+  if (
+    scene === "breathing"
+  ) {
+    setBreathing(
+      3200,
+      0.68,
+      1.25
+    );
+
+
+    window.setTimeout(
+      stopBreathing,
+      2500
+    );
+  }
+
+
+  /*
+   * La respiration recommence,
+   * beaucoup plus rapidement.
+   */
+
+  if (
+    scene === "again"
+  ) {
+    setBreathing(
+      1050,
+      1.75,
+      1.45
+    );
+
+
+    setPanicSounds(
+      1100
+    );
+  }
+
+
+  /*
+   * Le troisième signal se rapproche.
+   */
+
+  if (
+    scene === "locating"
+  ) {
+    setBreathing(
+      980,
+      1.9,
+      1.25
+    );
+
+
+    setPanicSounds(
+      920
+    );
+
+
     tone(
-      30,
-      1.2,
-      0.32,
+      920,
+      0.15,
+      0.07,
+      "square"
+    );
+
+
+    tone(
+      1200,
+      0.13,
+      0.06,
+      "square",
+      0.24
+    );
+  }
+
+
+  /*
+   * Le signal est à l’intérieur.
+   */
+
+  if (
+    scene === "inside"
+  ) {
+    setBreathing(
+      850,
+      2.15,
+      1.4
+    );
+
+
+    setPanicSounds(
+      660
+    );
+
+
+    tone(
+      27,
+      1.4,
+      0.38,
       "sawtooth"
     );
 
+
     noiseBurst(
-      0.85,
-      0.12,
+      1.1,
+      0.17,
       920
     );
   }
 
-  if (scene === "run") {
-    noiseBurst(
-      1.1,
-      0.15,
-      780
+
+  /*
+   * Course.
+   */
+
+  if (
+    scene === "run"
+  ) {
+    setFootsteps(
+      255,
+      1.35
     );
 
+
+    setBreathing(
+      720,
+      2.35,
+      1.55
+    );
+
+
+    setPanicSounds(
+      380
+    );
+
+
+    noiseBurst(
+      1.3,
+      0.19,
+      760
+    );
+
+
     tone(
-      92,
+      88,
+      1.6,
+      0.16,
+      "sawtooth"
+    );
+  }
+
+
+  /*
+   * Le couloir se referme.
+   */
+
+  if (
+    scene === "narrowing"
+  ) {
+    setFootsteps(
+      215,
+      1.5
+    );
+
+
+    setBreathing(
+      620,
+      2.7,
+      1.7
+    );
+
+
+    setPanicSounds(
+      270
+    );
+
+
+    tone(
+      34,
+      1.5,
+      0.28,
+      "sawtooth"
+    );
+  }
+
+
+  /*
+   * Quelque chose se réveille.
+   */
+
+  if (
+    scene === "waking"
+  ) {
+    setFootsteps(
+      190,
+      1.55
+    );
+
+
+    setBreathing(
+      560,
+      2.9,
+      1.8
+    );
+
+
+    setPanicSounds(
+      220
+    );
+
+
+    noiseBurst(
+      1.2,
+      0.2,
+      1450
+    );
+  }
+
+
+  if (
+    scene === "warning"
+  ) {
+    setPanicSounds(
+      440
+    );
+
+
+    tone(
+      115,
       1.4,
       0.1,
       "sawtooth"
     );
   }
 
-  if (scene === "warning") {
+
+  if (
+    scene === "eye"
+  ) {
+    tone(
+      34,
+      2.2,
+      0.22,
+      "sine"
+    );
+
+
     noiseBurst(
-      1.4,
-      0.08,
-      480
+      1.6,
+      0.07,
+      380
     );
   }
-}
-
-
-/* ==========================================
-   DISPARITION DU TRAIN
-========================================== */
-
-function fadeTrain() {
-  const startVolume =
-    trainRemnant.volume;
-
-  let step = 0;
-
-  window.clearInterval(
-    countdownTimer
-  );
-
-  countdownTimer =
-    window.setInterval(
-      () => {
-        step += 1;
-
-        trainRemnant.volume =
-          Math.max(
-            0,
-            startVolume *
-            (
-              1 -
-              step / 18
-            )
-          );
-
-        if (step >= 18) {
-          window.clearInterval(
-            countdownTimer
-          );
-
-          trainRemnant.pause();
-
-          trainRemnant.currentTime =
-            0;
-
-          trainRemnant.volume =
-            0.42;
-        }
-      },
-      110
-    );
-}
-
-
-function stopAllAudioLoops() {
-  stopHeartbeat();
-  stopFootsteps();
-  stopBreathing();
 }
 
 
@@ -918,14 +1783,18 @@ function setResearch(scene) {
     researchNumber.textContent =
       "RESEARCH NOTE 06.1";
 
+
     researchText.textContent =
       "Fear in dreams has been associated with activity in the insula and midcingulate cortex.";
+
 
     researchPrinciple.textContent =
       "FEAR · SIMULATED, FELT";
 
+
     return;
   }
+
 
   if (
     [
@@ -938,20 +1807,26 @@ function setResearch(scene) {
     researchNumber.textContent =
       "RESEARCH NOTE 06.2";
 
+
     researchText.textContent =
       "Threat-simulation theories propose that dreams can construct virtual dangers and possible responses.";
+
 
     researchPrinciple.textContent =
       "THREAT · REHEARSAL HYPOTHESIS";
 
+
     return;
   }
+
 
   researchNumber.textContent =
     "RESEARCH NOTE 06.3";
 
+
   researchText.textContent =
     "The threat is simulated, but fear and bodily arousal can still be experienced as real.";
+
 
   researchPrinciple.textContent =
     "VIRTUAL DANGER · REAL AROUSAL";
@@ -959,7 +1834,7 @@ function setResearch(scene) {
 
 
 /* ==========================================
-   INTERFACE DU LABORATOIRE
+   DONNÉES DE CONFINEMENT
 ========================================== */
 
 function setInterface(
@@ -971,7 +1846,8 @@ function setInterface(
       "breathing"
     );
 
-  const dangerProgress =
+
+  const progress =
     clamp(
       (
         index -
@@ -982,12 +1858,16 @@ function setInterface(
         1 -
         dangerStart
       ),
+
       0,
+
       1
     );
 
+
   bodyCount.textContent =
     "02";
+
 
   pulseCount.textContent =
     scene === "escape" &&
@@ -995,15 +1875,19 @@ function setInterface(
       ? "04"
       : "03";
 
+
   dreamIntegrity.textContent =
-    `${Math.max(
-      7,
+    Math.max(
+      4,
+
       Math.round(
-        71 -
-        dangerProgress *
-        64
+        74 -
+        progress *
+        70
       )
-    )}%`;
+    ) +
+    "%";
+
 
   if (
     [
@@ -1013,6 +1897,7 @@ function setInterface(
   ) {
     containmentStatus.textContent =
       "UNSTABLE";
+
 
     threatDistance.textContent =
       "UNKNOWN";
@@ -1026,6 +1911,7 @@ function setInterface(
     containmentStatus.textContent =
       "BREACHED";
 
+
     threatDistance.textContent =
       "18 M";
   } else if (
@@ -1038,13 +1924,17 @@ function setInterface(
     containmentStatus.textContent =
       "FAILED";
 
+
     threatDistance.textContent =
-      "8 M";
+      scene === "locating"
+        ? "4 M"
+        : "8 M";
   } else if (
     scene === "inside"
   ) {
     containmentStatus.textContent =
       "INTERNAL";
+
 
     threatDistance.textContent =
       "0 M";
@@ -1058,6 +1948,7 @@ function setInterface(
     containmentStatus.textContent =
       "PURSUIT";
 
+
     threatDistance.textContent =
       scene === "narrowing"
         ? "2 M"
@@ -1066,6 +1957,7 @@ function setInterface(
     containmentStatus.textContent =
       "CRITICAL";
 
+
     threatDistance.textContent =
       "INSIDE";
   }
@@ -1073,7 +1965,7 @@ function setInterface(
 
 
 /* ==========================================
-   CONTRÔLE DES SCÈNES
+   ACTIVER UNE SCÈNE
 ========================================== */
 
 function activateScene(index) {
@@ -1084,6 +1976,7 @@ function activateScene(index) {
       beats.length - 1
     );
 
+
   if (
     nextIndex ===
     activeIndex
@@ -1091,17 +1984,27 @@ function activateScene(index) {
     return;
   }
 
+
   activeIndex =
     nextIndex;
 
+
   const scene =
-    sceneNames[activeIndex];
+    sceneNames[
+      activeIndex
+    ];
+
+
+  window.clearTimeout(
+    sceneTimer
+  );
+
 
   beats.forEach(
-    (
+    function (
       beat,
       beatIndex
-    ) => {
+    ) {
       beat.classList.toggle(
         "is-active",
         beatIndex === activeIndex
@@ -1109,11 +2012,14 @@ function activateScene(index) {
     }
   );
 
+
   body.dataset.scene =
     scene;
 
+
   body.style.setProperty(
     "--scene-progress",
+
     activeIndex /
     (
       beats.length -
@@ -1121,55 +2027,66 @@ function activateScene(index) {
     )
   );
 
+
   progressFill.style.height =
-    `${
+    (
+      activeIndex /
       (
-        activeIndex /
-        (
-          beats.length -
-          1
-        )
-      ) *
-      100
-    }%`;
+        beats.length -
+        1
+      )
+    ) *
+    100 +
+    "%";
+
 
   scrollCue.textContent =
     scene === "escape"
       ? "HOLD TO WAKE"
       : "FOLLOW THE SIGNAL";
 
+
   setResearch(scene);
+
 
   setInterface(
     scene,
     activeIndex
   );
 
+
   syncAudio(scene);
 }
 
 
 /* ==========================================
-   OBSERVATION DU SCROLL
+   OBSERVER LES SECTIONS
 ========================================== */
 
 const observer =
   new IntersectionObserver(
-    (entries) => {
+    function (entries) {
       const visible =
         entries
+
           .filter(
-            (entry) =>
-              entry.isIntersecting
+            function (entry) {
+              return entry.isIntersecting;
+            }
           )
+
           .sort(
-            (
-              firstEntry,
-              secondEntry
-            ) =>
-              secondEntry.intersectionRatio -
-              firstEntry.intersectionRatio
+            function (
+              first,
+              second
+            ) {
+              return (
+                second.intersectionRatio -
+                first.intersectionRatio
+              );
+            }
           )[0];
+
 
       if (visible) {
         activateScene(
@@ -1179,6 +2096,7 @@ const observer =
         );
       }
     },
+
     {
       threshold: [
         0.58,
@@ -1187,15 +2105,16 @@ const observer =
     }
   );
 
+
 beats.forEach(
-  (beat) => {
+  function (beat) {
     observer.observe(beat);
   }
 );
 
 
 /* ==========================================
-   ALLER À UNE SCÈNE
+   ALLER À UNE PHRASE
 ========================================== */
 
 function goToBeat(index) {
@@ -1206,6 +2125,7 @@ function goToBeat(index) {
       beats.length - 1
     );
 
+
   beats[target].scrollIntoView({
     behavior: "smooth",
     block: "start"
@@ -1214,12 +2134,13 @@ function goToBeat(index) {
 
 
 /* ==========================================
-   MOLETTE
+   SCROLL À LA MOLETTE
 ========================================== */
 
 window.addEventListener(
   "wheel",
-  (event) => {
+
+  function (event) {
     if (
       body.classList.contains(
         "nightmare-locked"
@@ -1231,20 +2152,28 @@ window.addEventListener(
       return;
     }
 
+
     if (
-      Math.abs(event.deltaY) <
+      Math.abs(
+        event.deltaY
+      ) <
       8
     ) {
       return;
     }
 
+
     event.preventDefault();
+
 
     if (wheelLocked) {
       return;
     }
 
-    wheelLocked = true;
+
+    wheelLocked =
+      true;
+
 
     goToBeat(
       activeIndex +
@@ -1255,13 +2184,17 @@ window.addEventListener(
       )
     );
 
+
     window.setTimeout(
-      () => {
-        wheelLocked = false;
+      function () {
+        wheelLocked =
+          false;
       },
-      900
+
+      820
     );
   },
+
   {
     passive: false
   }
@@ -1269,12 +2202,13 @@ window.addEventListener(
 
 
 /* ==========================================
-   CLAVIER
+   NAVIGATION AU CLAVIER
 ========================================== */
 
 window.addEventListener(
   "keydown",
-  (event) => {
+
+  function (event) {
     if (
       body.classList.contains(
         "nightmare-locked"
@@ -1284,7 +2218,8 @@ window.addEventListener(
       return;
     }
 
-    const accepted = [
+
+    const keys = [
       "ArrowDown",
       "ArrowUp",
       "PageDown",
@@ -1292,26 +2227,25 @@ window.addEventListener(
       " "
     ];
 
-    if (
-      !accepted.includes(
-        event.key
-      )
-    ) {
-      return;
-    }
 
     if (
+      !keys.includes(
+        event.key
+      ) ||
       document.activeElement ===
       forceEye
     ) {
       return;
     }
 
+
     event.preventDefault();
+
 
     const backward =
       event.key === "ArrowUp" ||
       event.key === "PageUp";
+
 
     goToBeat(
       activeIndex +
@@ -1326,16 +2260,19 @@ window.addEventListener(
 
 
 /* ==========================================
-   TACTILE
+   NAVIGATION TACTILE
 ========================================== */
 
 window.addEventListener(
   "touchstart",
-  (event) => {
+
+  function (event) {
     touchStartY =
-      event.changedTouches[0]
+      event
+        .changedTouches[0]
         .clientY;
   },
+
   {
     passive: true
   }
@@ -1344,7 +2281,8 @@ window.addEventListener(
 
 window.addEventListener(
   "touchend",
-  (event) => {
+
+  function (event) {
     if (
       body.classList.contains(
         "nightmare-locked"
@@ -1354,20 +2292,28 @@ window.addEventListener(
       return;
     }
 
+
     const difference =
       touchStartY -
-      event.changedTouches[0]
+      event
+        .changedTouches[0]
         .clientY;
 
+
     if (
-      Math.abs(difference) <
+      Math.abs(
+        difference
+      ) <
       45 ||
       wheelLocked
     ) {
       return;
     }
 
-    wheelLocked = true;
+
+    wheelLocked =
+      true;
+
 
     goToBeat(
       activeIndex +
@@ -1378,13 +2324,17 @@ window.addEventListener(
       )
     );
 
+
     window.setTimeout(
-      () => {
-        wheelLocked = false;
+      function () {
+        wheelLocked =
+          false;
       },
-      900
+
+      820
     );
   },
+
   {
     passive: true
   }
@@ -1392,65 +2342,54 @@ window.addEventListener(
 
 
 /* ==========================================
-   OUVERTURE DE L’EXPÉRIENCE
+   ENTRER DANS LE CAUCHEMAR
 ========================================== */
 
 followPulse.addEventListener(
   "click",
-  () => {
-    soundEnabled = true;
+
+  function () {
+    soundEnabled =
+      true;
+
 
     localStorage.setItem(
       "museumSound",
       "on"
     );
 
+
     updateSoundButton();
+
 
     ensureAudio();
 
-    setHeartbeat(
-      830,
-      0.72,
-      true
-    );
-
-    setAtmosphere(
-      "arrival"
-    );
-
-    trainRemnant.muted =
-      false;
-
-    trainRemnant.volume =
-      0.42;
-
-    trainRemnant.currentTime =
-      0;
-
-    trainRemnant
-      .play()
-      .then(fadeTrain)
-      .catch(() => {});
-
-    pulseGate.classList.add(
-      "is-leaving"
-    );
 
     body.classList.remove(
       "nightmare-locked"
     );
 
-    window.setTimeout(
-      () => {
-        pulseGate.remove();
 
-        syncAudio(
-          sceneNames[
-            activeIndex
-          ]
-        );
+    pulseGate.classList.add(
+      "is-leaving"
+    );
+
+
+    /*
+     * On lance immédiatement le souffle
+     * de la première scène.
+     */
+
+    syncAudio(
+      "arrival"
+    );
+
+
+    window.setTimeout(
+      function () {
+        pulseGate.remove();
       },
+
       1050
     );
   }
@@ -1458,34 +2397,39 @@ followPulse.addEventListener(
 
 
 /* ==========================================
-   BOUTON SOUND ON / OFF
+   SOUND ON / OFF
 ========================================== */
 
 soundToggle.addEventListener(
   "click",
-  () => {
+
+  function () {
     ensureAudio();
+
 
     soundEnabled =
       !soundEnabled;
 
+
     localStorage.setItem(
       "museumSound",
+
       soundEnabled
         ? "on"
         : "off"
     );
 
+
     masterGain.gain.setTargetAtTime(
       soundEnabled
-        ? 0.78
-        : 0,
+        ? 0.82
+        : 0.0001,
+
       audioContext.currentTime,
+
       0.06
     );
 
-    trainRemnant.muted =
-      !soundEnabled;
 
     if (soundEnabled) {
       syncAudio(
@@ -1496,6 +2440,7 @@ soundToggle.addEventListener(
     } else {
       stopAllAudioLoops();
 
+
       setAtmosphere(
         sceneNames[
           activeIndex
@@ -1503,22 +2448,26 @@ soundToggle.addEventListener(
       );
     }
 
+
     updateSoundButton();
   }
 );
 
 
 /* ==========================================
-   MAINTENIR POUR OUVRIR L’ŒIL
+   PROGRESSION DU BOUTON FINAL
 ========================================== */
 
-function updateHold(currentTime) {
+function updateHold(
+  currentTime
+) {
   if (
     !isHolding ||
     escapeComplete
   ) {
     return;
   }
+
 
   const progress =
     clamp(
@@ -1527,26 +2476,57 @@ function updateHold(currentTime) {
         holdStart
       ) /
       HOLD_DURATION,
+
       0,
+
       1
     );
 
+
   body.style.setProperty(
     "--hold-progress",
-    `${progress * 360}deg`
+
+    progress *
+    360 +
+    "deg"
   );
 
-  forceLabel.textContent =
-    progress > 0.72
-      ? "KEEP HOLDING"
-      : "HOLD TO FORCE IT OPEN";
 
-  if (progress >= 1) {
+  body.style.setProperty(
+    "--hold-value",
+
+    progress.toFixed(3)
+  );
+
+
+  if (
+    progress >
+    0.82
+  ) {
+    forceLabel.textContent =
+      "DO NOT LOOK AWAY";
+  } else if (
+    progress >
+    0.5
+  ) {
+    forceLabel.textContent =
+      "KEEP HOLDING";
+  } else {
+    forceLabel.textContent =
+      "HOLD TO FORCE IT OPEN";
+  }
+
+
+  if (
+    progress >=
+    1
+  ) {
     completeEscape();
 
     return;
   }
 
+
   holdFrame =
     window.requestAnimationFrame(
       updateHold
@@ -1554,52 +2534,82 @@ function updateHold(currentTime) {
 }
 
 
+/* ==========================================
+   COMMENCER À OUVRIR L’ŒIL
+========================================== */
+
 function startHold(event) {
   if (
     body.dataset.scene !==
-      "escape" ||
+    "escape" ||
     escapeComplete
   ) {
     return;
   }
 
+
   event.preventDefault();
+
 
   ensureAudio();
 
-  isHolding = true;
+
+  isHolding =
+    true;
+
 
   holdStart =
     performance.now();
+
 
   body.classList.add(
     "is-forcing-eye"
   );
 
+
+  /*
+   * Le cœur, la respiration et les
+   * parasites deviennent incontrôlables.
+   */
+
   setHeartbeat(
-    285,
-    1.42,
+    235,
+    1.75,
     true
   );
 
-  setFootsteps(235);
+
+  setBreathing(
+    500,
+    3.1,
+    1.9
+  );
+
+
+  setPanicSounds(
+    170
+  );
+
 
   tone(
-    29,
-    2.5,
-    0.28,
+    25,
+    3,
+    0.4,
     "sawtooth"
   );
 
+
   noiseBurst(
-    2.2,
-    0.14,
-    520
+    2.7,
+    0.2,
+    620
   );
+
 
   window.cancelAnimationFrame(
     holdFrame
   );
+
 
   holdFrame =
     window.requestAnimationFrame(
@@ -1607,6 +2617,10 @@ function startHold(event) {
     );
 }
 
+
+/* ==========================================
+   RELÂCHER LE BOUTON TROP TÔT
+========================================== */
 
 function cancelHold() {
   if (
@@ -1616,107 +2630,168 @@ function cancelHold() {
     return;
   }
 
-  isHolding = false;
+
+  isHolding =
+    false;
+
 
   window.cancelAnimationFrame(
     holdFrame
   );
 
+
   body.classList.remove(
     "is-forcing-eye"
   );
+
 
   body.style.setProperty(
     "--hold-progress",
     "0deg"
   );
 
+
+  body.style.setProperty(
+    "--hold-value",
+    "0"
+  );
+
+
   forceLabel.textContent =
     "HOLD TO FORCE IT OPEN";
 
-  syncAudio("escape");
+
+  syncAudio(
+    "escape"
+  );
 }
 
 
 /* ==========================================
-   RÉVEIL
+   OUVERTURE COMPLÈTE ET RÉVEIL
 ========================================== */
 
 function completeEscape() {
-  escapeComplete = true;
-  isHolding = false;
+  escapeComplete =
+    true;
+
+
+  isHolding =
+    false;
+
 
   window.cancelAnimationFrame(
     holdFrame
   );
 
+
+  /*
+   * Maintenir définitivement l’image
+   * de l’œil ouvert.
+   */
+
+  body.style.setProperty(
+    "--hold-value",
+    "1"
+  );
+
+
+  body.classList.remove(
+    "is-forcing-eye"
+  );
+
+
   body.classList.add(
     "is-awakening"
   );
 
+
   pulseCount.textContent =
     "04";
+
 
   containmentStatus.textContent =
     "UNKNOWN SIGNAL";
 
+
   dreamIntegrity.textContent =
     "0%";
+
 
   forceLabel.textContent =
     "EYES OPEN";
 
+
   stopAllAudioLoops();
 
+
   tone(
-    27,
-    1.25,
-    0.42,
+    25,
+    1.4,
+    0.48,
     "sawtooth"
   );
 
+
   tone(
-    980,
-    0.34,
-    0.11,
+    1040,
+    0.4,
+    0.13,
     "sine",
-    0.52
+    0.48
   );
+
 
   noiseBurst(
-    1.1,
-    0.22,
-    1200
+    1.25,
+    0.24,
+    1350
   );
 
+
+  /*
+   * Le son disparaît pendant
+   * que la lumière blanche envahit
+   * progressivement l’écran.
+   */
+
   window.setTimeout(
-    () => {
+    function () {
       if (
         masterGain &&
         audioContext
       ) {
         masterGain.gain.setTargetAtTime(
           0.0001,
+
           audioContext.currentTime,
-          0.18
+
+          0.16
         );
       }
     },
-    650
+
+    520
   );
 
+
+  /*
+   * Aller vers la page du réveil.
+   */
+
   window.setTimeout(
-    () => {
+    function () {
       window.location.href =
         "awakening.html";
     },
-    1450
+
+    1650
   );
 }
 
 
 /* ==========================================
-   INTERACTIONS DE L’ŒIL
+   ÉVÉNEMENTS DU BOUTON FINAL
 ========================================== */
 
 forceEye.addEventListener(
@@ -1724,10 +2799,12 @@ forceEye.addEventListener(
   startHold
 );
 
+
 window.addEventListener(
   "pointerup",
   cancelHold
 );
+
 
 window.addEventListener(
   "pointercancel",
@@ -1737,7 +2814,8 @@ window.addEventListener(
 
 forceEye.addEventListener(
   "keydown",
-  (event) => {
+
+  function (event) {
     if (
       (
         event.key === "Enter" ||
@@ -1753,7 +2831,8 @@ forceEye.addEventListener(
 
 forceEye.addEventListener(
   "keyup",
-  (event) => {
+
+  function (event) {
     if (
       event.key === "Enter" ||
       event.key === " "
@@ -1765,23 +2844,32 @@ forceEye.addEventListener(
 
 
 /* ==========================================
-   LUMIÈRE QUI SUIT LA SOURIS
+   LAMPE QUI SUIT LA SOURIS
 ========================================== */
 
-let pointerFrame = null;
-let pointerX = 50;
-let pointerY = 50;
+let pointerFrame =
+  null;
+
+
+let pointerX =
+  50;
+
+
+let pointerY =
+  50;
 
 
 window.addEventListener(
   "pointermove",
-  (event) => {
+
+  function (event) {
     pointerX =
       (
         event.clientX /
         window.innerWidth
       ) *
       100;
+
 
     pointerY =
       (
@@ -1790,27 +2878,37 @@ window.addEventListener(
       ) *
       100;
 
+
     if (pointerFrame) {
       return;
     }
 
+
     pointerFrame =
       window.requestAnimationFrame(
-        () => {
+        function () {
           body.style.setProperty(
             "--pointer-x",
-            `${pointerX}%`
+
+            pointerX +
+            "%"
           );
+
 
           body.style.setProperty(
             "--pointer-y",
-            `${pointerY}%`
+
+            pointerY +
+            "%"
           );
 
-          pointerFrame = null;
+
+          pointerFrame =
+            null;
         }
       );
   },
+
   {
     passive: true
   }
@@ -1824,13 +2922,17 @@ window.addEventListener(
 window.history.scrollRestoration =
   "manual";
 
+
 window.scrollTo(
   0,
   0
 );
 
+
 preloadImages();
 
+
 updateSoundButton();
+
 
 activateScene(0);
