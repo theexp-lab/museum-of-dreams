@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#f5f3ed"
+  >
+
+  <meta
+    name="description"
+    content="Awakening — the final room of The Museum of Dreams."
+  >
+
+  <title>
+    Awakening — Museum of Dreams
+  </title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="preload"
+    as="image"
+    href="./awakening-room.png"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./awakening.css?v=1"
+  >
+</head>
+
+<body
+  class="awakening-page"
+  data-scene="light"
+>
+
+  <div
+    class="awakening-world"
+    aria-hidden="true"
+  >
+
+    <img
+      class="room-image"
+      src="./awakening-room.png"
+      alt=""
+    >
+
+    <div class="morning-haze"></div>
+
+    <div class="focus-layer"></div>
+
+    <div class="dream-echo echo-one"></div>
+
+    <div class="dream-echo echo-two"></div>
+
+    <div
+      class="dust-field"
+      id="dust-field"
+    ></div>
+
+    <div class="arrival-white"></div>
+
+  </div>
+
+
+  <header class="awakening-header">
+
+    <a href="index.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
+    <div class="awakening-location">
+
+      <span></span>
+
+      FINAL ROOM · AWAKENING
+
+    </div>
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
+  </header>
+
+
+  <aside class="wake-monitor">
+
+    <strong>
+      07:12 AM
+    </strong>
+
+    <dl>
+
+      <div>
+
+        <dt>
+          SLEEP STAGE
+        </dt>
+
+        <dd id="sleep-state">
+          REM
+        </dd>
+
+      </div>
+
+      <div>
+
+        <dt>
+          HEART RATE
+        </dt>
+
+        <dd id="heart-state">
+          SETTLING
+        </dd>
+
+      </div>
+
+      <div>
+
+        <dt>
+          DREAM RECALL
+        </dt>
+
+        <dd id="recall-state">
+          FADING
+        </dd>
+
+      </div>
+
+    </dl>
+
+  </aside>
+
+
+  <aside
+    class="awakening-research"
+    id="awakening-research"
+  >
+
+    <span>
+      RESEARCH NOTE 07.1
+    </span>
+
+    <p>
+
+      Dream memories can fade rapidly after
+      waking, especially when attention moves
+      immediately to another task.
+
+    </p>
+
+    <strong>
+      RECALL · FRAGILE
+    </strong>
+
+  </aside>
+
+
+  <div
+    class="awakening-progress"
+    aria-hidden="true"
+  >
+
+    <span id="awakening-progress-fill"></span>
+
+  </div>
+
+
+  <p
+    class="awakening-cue"
+    id="awakening-cue"
+  >
+    LET YOUR EYES ADJUST
+  </p>
+
+
+  <main class="awakening-story">
+
+
+    <section
+      class="awakening-beat is-active"
+      data-scene="light"
+    >
+
+      <p class="simple-line">
+
+        At first, there is only light.
+
+      </p>
+
+    </section>
+
+
+    <section
+      class="awakening-beat"
+      data-scene="return"
+    >
+
+      <p class="simple-line">
+
+        Then the world returns.
+
+      </p>
+
+    </section>
+
+
+    <section
+      class="awakening-beat title-beat"
+      data-scene="title"
+    >
+
+      <div class="awakening-title">
+
+        <small>
+          FINAL ROOM
+        </small>
+
+        <h1>
+          AWAKENING
+        </h1>
+
+        <p>
+          The moment a dream becomes a memory.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <section
+      class="awakening-beat"
+      data-scene="feeling"
+    >
+
+      <p class="main-thought">
+
+        You remember the feeling
+        <br>
+
+        <em>
+          before you remember the dream.
+        </em>
+
+      </p>
+
+    </section>
+
+
+    <section
+      class="awakening-beat"
+      data-scene="fragments"
+    >
+
+      <div
+        class="fragment-installation"
+        aria-label="Fragments of the dream disappearing"
+      >
+
+        <span style="--x:12%; --y:25%; --delay:0s;">
+          A FACE
+        </span>
+
+        <span style="--x:68%; --y:18%; --delay:0.5s;">
+          A CORRIDOR
+        </span>
+
+        <span style="--x:76%; --y:63%; --delay:1s;">
+          A RED LIGHT
+        </span>
+
+        <span style="--x:18%; --y:70%; --delay:1.4s;">
+          A VOICE
+        </span>
+
+        <span style="--x:43%; --y:12%; --delay:0.8s;">
+          A HOUSE
+        </span>
+
+        <span style="--x:55%; --y:76%; --delay:1.8s;">
+          AN ENDLESS SKY
+        </span>
+
+        <span style="--x:37%; --y:52%; --delay:2.2s;">
+          SOMEONE WAITING
+        </span>
+
+      </div>
+
+
+      <div class="fragment-copy">
+
+        <p>
+          Some details remain.
+        </p>
+
+        <em>
+          Others are already leaving.
+        </em>
+
+      </div>
+
+    </section>
+
+
+    <section
+      class="awakening-beat"
+      data-scene="question"
+    >
+
+      <div class="final-question">
+
+        <small>
+          THE NIGHT IS OVER
+        </small>
+
+        <h2>
+
+          WHAT DO YOU
+          <br>
+
+          REMEMBER?
+
+        </h2>
+
+      </div>
+
+    </section>
+
+
+    <section
+      class="awakening-beat exit-beat"
+      data-scene="exit"
+    >
+
+      <div class="exit-introduction">
+
+        <small>
+          THE DREAM ENDS · THE COLLECTION CONTINUES
+        </small>
+
+        <h2>
+          WHERE NEXT?
+        </h2>
+
+      </div>
+
+
+      <div class="museum-exits">
+
+        <a
+          class="museum-exit observatory-exit"
+          href="observatory.html"
+        >
+
+          <span>
+            01 · RESEARCH SPACE
+          </span>
+
+          <h3>
+
+            DREAM
+            <br>
+
+            OBSERVATORY
+
+          </h3>
+
+          <p>
+
+            Explore the research, artists and
+            creative decisions behind the exhibition.
+
+          </p>
+
+          <strong>
+            VISIT THE OBSERVATORY →
+          </strong>
+
+        </a>
+
+
+        <a
+          class="museum-exit submit-exit"
+          href="submit.html"
+        >
+
+          <span>
+            02 · OPEN COLLECTION
+          </span>
+
+          <h3>
+
+            SUBMIT
+            <br>
+
+            YOUR DREAM
+
+          </h3>
+
+          <p>
+
+            Preserve a dream by adding it
+            to the growing collection.
+
+          </p>
+
+          <strong>
+            WRITE YOUR DREAM →
+          </strong>
+
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script src="./awakening.js?v=1"></script>
+
+</body>
+
+</html>
