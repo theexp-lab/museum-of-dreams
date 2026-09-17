@@ -58,6 +58,10 @@ const dustField =
     "#dust-field"
   );
 
+const morningSoundToggle =
+  document.querySelector(
+    "#morning-sound-toggle"
+  );
 
 let activeIndex =
   -1;
@@ -589,7 +593,559 @@ window.addEventListener(
   }
 );
 
+/* ==========================================
+   PAYSAGE SONORE DU MATIN
+========================================== */
 
+let morningAudioContext;
+
+let morningMasterGain;
+
+let morningAirGain;
+
+let morningAirFilter;
+
+let birdTimer;
+
+let morningAudioReady =
+  false;
+
+
+let morningSoundEnabled =
+  localStorage.getItem(
+    "museumSound"
+  ) !== "off";
+
+
+/* ==========================================
+   METTRE À JOUR LE BOUTON
+========================================== */
+
+function updateMorningSoundButton() {
+  morningSoundToggle.textContent =
+    morningSoundEnabled
+      ? "MORNING SOUND ON"
+      : "MORNING SOUND OFF";
+
+
+  morningSoundToggle.setAttribute(
+    "aria-pressed",
+    String(morningSoundEnabled)
+  );
+}
+
+
+/* ==========================================
+   CRÉER LE FOND D’AIR DU MATIN
+========================================== */
+
+function createMorningAir() {
+  const length =
+    morningAudioContext.sampleRate *
+    3;
+
+
+  const buffer =
+    morningAudioContext.createBuffer(
+      1,
+      length,
+      morningAudioContext.sampleRate
+    );
+
+
+  const data =
+    buffer.getChannelData(0);
+
+
+  let previousValue =
+    0;
+
+
+  for (
+    let index = 0;
+    index < length;
+    index += 1
+  ) {
+    const randomValue =
+      Math.random() * 2 -
+      1;
+
+
+    previousValue =
+      previousValue * 0.98 +
+      randomValue * 0.02;
+
+
+    data[index] =
+      previousValue;
+  }
+
+
+  const source =
+    morningAudioContext
+      .createBufferSource();
+
+
+  source.buffer =
+    buffer;
+
+
+  source.loop =
+    true;
+
+
+  morningAirFilter =
+    morningAudioContext
+      .createBiquadFilter();
+
+
+  morningAirFilter.type =
+    "lowpass";
+
+
+  morningAirFilter.frequency.value =
+    1100;
+
+
+  morningAirGain =
+    morningAudioContext
+      .createGain();
+
+
+  morningAirGain.gain.value =
+    morningSoundEnabled
+      ? 0.018
+      : 0.0001;
+
+
+  source
+    .connect(morningAirFilter)
+    .connect(morningAirGain)
+    .connect(morningMasterGain);
+
+
+  source.start();
+}
+
+
+/* ==========================================
+   INITIALISER LE SON
+========================================== */
+
+function ensureMorningAudio() {
+  if (!morningAudioReady) {
+    morningAudioContext =
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+
+    morningMasterGain =
+      morningAudioContext
+        .createGain();
+
+
+    morningMasterGain.gain.value =
+      morningSoundEnabled
+        ? 0.72
+        : 0.0001;
+
+
+    morningMasterGain.connect(
+      morningAudioContext.destination
+    );
+
+
+    createMorningAir();
+
+
+    morningAudioReady =
+      true;
+  }
+
+
+  if (
+    morningAudioContext.state ===
+    "suspended"
+  ) {
+    morningAudioContext.resume();
+  }
+}
+
+
+/* ==========================================
+   CRÉER UN CHANT D’OISEAU
+========================================== */
+
+function createBirdNote(
+  startFrequency,
+  endFrequency,
+  duration,
+  volume,
+  delay,
+  pan
+) {
+  if (
+    !morningAudioReady ||
+    !morningSoundEnabled
+  ) {
+    return;
+  }
+
+
+  const startTime =
+    morningAudioContext.currentTime +
+    delay;
+
+
+  const oscillator =
+    morningAudioContext
+      .createOscillator();
+
+
+  const gain =
+    morningAudioContext
+      .createGain();
+
+
+  const panner =
+    morningAudioContext
+      .createStereoPanner();
+
+
+  oscillator.type =
+    "sine";
+
+
+  oscillator.frequency.setValueAtTime(
+    startFrequency,
+    startTime
+  );
+
+
+  oscillator.frequency.exponentialRampToValueAtTime(
+    endFrequency,
+    startTime +
+    duration
+  );
+
+
+  panner.pan.value =
+    pan;
+
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    startTime
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    volume,
+    startTime +
+    0.025
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    startTime +
+    duration
+  );
+
+
+  oscillator
+    .connect(gain)
+    .connect(panner)
+    .connect(morningMasterGain);
+
+
+  oscillator.start(
+    startTime
+  );
+
+
+  oscillator.stop(
+    startTime +
+    duration +
+    0.05
+  );
+}
+
+
+/* ==========================================
+   PETITE PHRASE D’OISEAU
+========================================== */
+
+function birdPhrase() {
+  if (
+    !morningSoundEnabled ||
+    !morningAudioReady
+  ) {
+    return;
+  }
+
+
+  const pan =
+    Math.random() *
+    1.5 -
+    0.75;
+
+
+  const baseFrequency =
+    2300 +
+    Math.random() *
+    1100;
+
+
+  const notes =
+    2 +
+    Math.floor(
+      Math.random() *
+      3
+    );
+
+
+  for (
+    let index = 0;
+    index < notes;
+    index += 1
+  ) {
+    const delay =
+      index *
+      (
+        0.11 +
+        Math.random() *
+        0.08
+      );
+
+
+    const direction =
+      Math.random() >
+      0.35;
+
+
+    createBirdNote(
+      direction
+        ? baseFrequency
+        : baseFrequency * 1.45,
+
+      direction
+        ? baseFrequency * 1.55
+        : baseFrequency * 0.86,
+
+      0.1 +
+      Math.random() *
+      0.11,
+
+      0.018 +
+      Math.random() *
+      0.018,
+
+      delay,
+
+      pan
+    );
+  }
+
+
+  /*
+   * Un second oiseau répond parfois
+   * depuis l’autre côté de la pièce.
+   */
+
+  if (
+    Math.random() >
+    0.62
+  ) {
+    createBirdNote(
+      3100,
+      4700,
+      0.16,
+      0.018,
+      0.65,
+      pan * -1
+    );
+
+
+    createBirdNote(
+      4300,
+      3500,
+      0.13,
+      0.014,
+      0.86,
+      pan * -1
+    );
+  }
+}
+
+
+/* ==========================================
+   PROGRAMMER LES OISEAUX
+========================================== */
+
+function scheduleBirds() {
+  window.clearTimeout(
+    birdTimer
+  );
+
+
+  if (
+    !morningSoundEnabled ||
+    !morningAudioReady
+  ) {
+    return;
+  }
+
+
+  const delay =
+    2200 +
+    Math.random() *
+    3800;
+
+
+  birdTimer =
+    window.setTimeout(
+      function () {
+        birdPhrase();
+
+        scheduleBirds();
+      },
+      delay
+    );
+}
+
+
+/* ==========================================
+   DÉMARRER LE MATIN
+========================================== */
+
+function startMorningSound() {
+  ensureMorningAudio();
+
+
+  if (!morningSoundEnabled) {
+    return;
+  }
+
+
+  morningMasterGain.gain.setTargetAtTime(
+    0.72,
+    morningAudioContext.currentTime,
+    0.35
+  );
+
+
+  morningAirGain.gain.setTargetAtTime(
+    0.018,
+    morningAudioContext.currentTime,
+    0.6
+  );
+
+
+  birdPhrase();
+
+  scheduleBirds();
+}
+
+
+/* ==========================================
+   PREMIÈRE INTERACTION
+
+   Chrome empêche le vrai autoplay.
+   Le son commence donc au premier scroll,
+   clic, toucher ou appui clavier.
+========================================== */
+
+function unlockMorningSound() {
+  if (morningSoundEnabled) {
+    startMorningSound();
+  }
+}
+
+
+window.addEventListener(
+  "pointerdown",
+  unlockMorningSound,
+  {
+    once: true,
+    passive: true
+  }
+);
+
+
+window.addEventListener(
+  "wheel",
+  unlockMorningSound,
+  {
+    once: true,
+    passive: true
+  }
+);
+
+
+window.addEventListener(
+  "touchstart",
+  unlockMorningSound,
+  {
+    once: true,
+    passive: true
+  }
+);
+
+
+window.addEventListener(
+  "keydown",
+  unlockMorningSound,
+  {
+    once: true
+  }
+);
+
+
+/* ==========================================
+   BOUTON SOUND ON / OFF
+========================================== */
+
+morningSoundToggle.addEventListener(
+  "click",
+  function () {
+    ensureMorningAudio();
+
+
+    morningSoundEnabled =
+      !morningSoundEnabled;
+
+
+    localStorage.setItem(
+      "museumSound",
+
+      morningSoundEnabled
+        ? "on"
+        : "off"
+    );
+
+
+    updateMorningSoundButton();
+
+
+    if (morningSoundEnabled) {
+      startMorningSound();
+    } else {
+      window.clearTimeout(
+        birdTimer
+      );
+
+
+      morningMasterGain.gain.setTargetAtTime(
+        0.0001,
+        morningAudioContext.currentTime,
+        0.18
+      );
+    }
+  }
+);
 /* ==========================================
    INITIALISATION
 ========================================== */
@@ -606,5 +1162,6 @@ window.scrollTo(
 
 createDust();
 
+updateMorningSoundButton();
 
 activateScene(0);
