@@ -286,7 +286,59 @@ a {
 
   text-transform: uppercase;
 }
+/* ==========================================
+   SON DU MATIN
+========================================== */
 
+.morning-sound-toggle {
+  position: fixed;
+
+  z-index: 90;
+
+  top: 62px;
+  left: 34px;
+
+  padding: 0;
+
+  border: 0;
+
+  color:
+    rgba(
+      28,
+      33,
+      38,
+      0.52
+    );
+
+  background: transparent;
+
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    color 300ms ease,
+    letter-spacing 300ms ease;
+}
+
+.morning-sound-toggle:hover {
+  color:
+    rgba(
+      28,
+      33,
+      38,
+      0.9
+    );
+
+  letter-spacing: 0.18em;
+}
 .awakening-header > a:last-child {
   justify-self: end;
 
@@ -1236,7 +1288,10 @@ body[data-scene="exit"]
     padding:
       18px 20px;
   }
-
+.morning-sound-toggle {
+  top: 52px;
+  left: 20px;
+}
   .awakening-location {
     display: none;
   }
