@@ -1464,37 +1464,19 @@ body:not(.nightmare-locked)
    TITRE NIGHTMARE CENTRÉ
 ========================================== */
 
-.title-copy {
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-}
-
-.title-copy small {
-  color: var(--red);
-
-  font:
-    9px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.2em;
-
-  text-align: center;
-}
-
 .title-copy h1 {
-  width: 100%;
+  position: relative;
 
-  margin:
-    24px auto 15px;
+  left: 50%;
+
+  width: max-content;
+  max-width: 94vw;
+
+  margin: 24px 0 15px;
 
   font:
     400
-    clamp(74px, 15vw, 218px)/0.78
+    clamp(68px, 14vw, 205px)/0.78
     "Gloock",
     serif;
 
@@ -1503,6 +1485,16 @@ body:not(.nightmare-locked)
   white-space: nowrap;
 
   text-align: center;
+
+  transform:
+    translateX(-50%);
+}
+
+.nightmare-beat.is-active
+.title-copy {
+  transform:
+    translateY(0)
+    scale(1);
 }
 
 .title-copy h1 span {
@@ -2670,16 +2662,22 @@ body.is-awakening
   }
 
   .title-copy h1 {
-    font-size:
-      clamp(
-        58px,
-        20vw,
-        120px
-      );
+  left: 50%;
 
-    letter-spacing:
-      -0.065em;
-  }
+  max-width: 96vw;
+
+  font-size:
+    clamp(
+      52px,
+      17.5vw,
+      112px
+    );
+
+  letter-spacing: -0.07em;
+
+  transform:
+    translateX(-50%);
+}
 
   .beat-copy p {
     font-size:
