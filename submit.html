@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#eee9df"
+  >
+
+  <meta
+    name="description"
+    content="Submit a dream to The Museum of Dreams collection."
+  >
+
+  <title>
+    Submit Your Dream — Museum of Dreams
+  </title>
+
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <link
+    rel="stylesheet"
+    href="./submit.css?v=1"
+  >
+
+</head>
+
+
+<body class="submit-page">
+
+
+  <!-- ==========================================
+       UNIVERS VISUEL DE L’ARCHIVE
+  =========================================== -->
+
+  <div
+    class="archive-world"
+    aria-hidden="true"
+  >
+
+    <div class="paper-light"></div>
+
+    <div class="archive-orbit orbit-one"></div>
+
+    <div class="archive-orbit orbit-two"></div>
+
+    <div
+      class="floating-words"
+      id="floating-words"
+    ></div>
+
+    <canvas id="memory-canvas"></canvas>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
+  <header class="submit-header">
+
+    <a href="awakening.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
+
+    <div class="submit-location">
+
+      <span></span>
+
+      OPEN COLLECTION · DREAM INTAKE
+
+    </div>
+
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
+  </header>
+
+
+  <main class="submit-main">
+
+
+    <!-- ==========================================
+         INTRODUCTION
+    =========================================== -->
+
+    <section class="submit-introduction">
+
+      <p>
+        THE NIGHT IS OVER · THE MEMORY IS NOT
+      </p>
+
+
+      <h1>
+
+        SUBMIT
+        <br>
+
+        <em>
+          YOUR DREAM
+        </em>
+
+      </h1>
+
+
+      <div class="intro-copy">
+
+        <p>
+          Write down what remains.
+        </p>
+
+        <span>
+          It does not need to make sense.
+        </span>
+
+      </div>
+
+
+      <button
+        class="begin-record"
+        id="begin-record"
+        type="button"
+      >
+        BEGIN A DREAM RECORD ↓
+      </button>
+
+    </section>
+
+
+    <!-- ==========================================
+         FORMULAIRE D’ARCHIVE
+    =========================================== -->
+
+    <section
+      class="intake-section"
+      id="intake-section"
+    >
+
+      <div class="intake-heading">
+
+        <span>
+          OPEN COLLECTION · INTAKE FORM 08.1
+        </span>
+
+
+        <h2>
+
+          WHAT DO YOU
+          <br>
+
+          STILL REMEMBER?
+
+        </h2>
+
+
+        <p>
+
+          Fragments, feelings and impossible
+          details are all accepted.
+
+        </p>
+
+      </div>
+
+
+      <form
+        class="dream-form"
+        id="dream-form"
+      >
+
+
+        <!-- Le fragment principal -->
+
+        <fieldset class="form-step dream-text-step">
+
+          <legend>
+
+            <span>
+              01
+            </span>
+
+            THE FRAGMENT
+
+          </legend>
+
+
+          <label for="dream-text">
+
+            Describe what remains of the dream.
+
+          </label>
+
+
+          <div class="textarea-shell">
+
+            <textarea
+              id="dream-text"
+              name="dream"
+              maxlength="1200"
+              required
+              placeholder="I was somewhere I recognised, but the windows opened onto..."
+            ></textarea>
+
+
+            <span class="character-count">
+
+              <strong id="character-count">
+                0
+              </strong>
+
+              / 1200
+
+            </span>
+
+          </div>
+
+        </fieldset>
+
+
+        <!-- Émotion principale -->
+
+        <fieldset class="form-step">
+
+          <legend>
+
+            <span>
+              02
+            </span>
+
+            EMOTIONAL CORE
+
+          </legend>
+
+
+          <p class="field-question">
+
+            What feeling stayed with you?
+
+          </p>
+
+
+          <div class="choice-grid emotion-grid">
+
+            <label>
+
+              <input
+                type="radio"
+                name="emotion"
+                value="Wonder"
+                required
+              >
+
+              <span>
+                WONDER
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="emotion"
+                value="Fear"
+              >
+
+              <span>
+                FEAR
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="emotion"
+                value="Longing"
+              >
+
+              <span>
+                LONGING
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="emotion"
+                value="Joy"
+              >
+
+              <span>
+                JOY
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="emotion"
+                value="Confusion"
+              >
+
+              <span>
+                CONFUSION
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="emotion"
+                value="Calm"
+              >
+
+              <span>
+                CALM
+              </span>
+
+            </label>
+
+          </div>
+
+        </fieldset>
+
+
+        <!-- Salle possible -->
+
+        <fieldset class="form-step">
+
+          <legend>
+
+            <span>
+              03
+            </span>
+
+            POSSIBLE ROOM
+
+          </legend>
+
+
+          <p class="field-question">
+
+            Where could this dream live?
+
+          </p>
+
+
+          <div class="choice-grid room-grid">
+
+            <label>
+
+              <input
+                type="radio"
+                name="room"
+                value="Everyday"
+                required
+              >
+
+              <span>
+                EVERYDAY
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="room"
+                value="Childhood"
+              >
+
+              <span>
+                CHILDHOOD
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="room"
+                value="Adventure"
+              >
+
+              <span>
+                ADVENTURE
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="room"
+                value="Romance"
+              >
+
+              <span>
+                ROMANCE
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="room"
+                value="Action"
+              >
+
+              <span>
+                ACTION
+              </span>
+
+            </label>
+
+
+            <label>
+
+              <input
+                type="radio"
+                name="room"
+                value="Nightmare"
+              >
+
+              <span>
+                NIGHTMARE
+              </span>
+
+            </label>
+
+
+            <label class="wide-choice">
+
+              <input
+                type="radio"
+                name="room"
+                value="Unclassified"
+              >
+
+              <span>
+                IT DOES NOT BELONG ANYWHERE
+              </span>
+
+            </label>
+
+          </div>
+
+        </fieldset>
+
+
+        <!-- Détails d’archive -->
+
+        <fieldset class="form-step details-step">
+
+          <legend>
+
+            <span>
+              04
+            </span>
+
+            ARCHIVE DETAILS
+
+          </legend>
+
+
+          <div class="input-row">
+
+            <label>
+
+              DREAM TITLE
+
+              <small>
+                OPTIONAL
+              </small>
+
+
+              <input
+                id="dream-title"
+                name="title"
+                type="text"
+                maxlength="55"
+                placeholder="The house above the clouds"
+              >
+
+            </label>
+
+
+            <label>
+
+              LOCATION
+
+              <small>
+                OPTIONAL
+              </small>
+
+
+              <input
+                id="dream-location"
+                name="location"
+                type="text"
+                maxlength="40"
+                placeholder="Paris, France"
+              >
+
+            </label>
+
+          </div>
+
+
+          <label
+            class="range-label"
+            for="dream-intensity"
+          >
+
+            DREAM INTENSITY
+
+            <output id="intensity-output">
+              05
+            </output>
+
+          </label>
+
+
+          <input
+            id="dream-intensity"
+            name="intensity"
+            type="range"
+            min="1"
+            max="10"
+            value="5"
+          >
+
+        </fieldset>
+
+
+        <!-- Consentement et confidentialité -->
+
+        <div class="consent-row">
+
+          <label class="consent-label">
+
+            <input
+              id="dream-consent"
+              type="checkbox"
+              required
+            >
+
+            <span>
+
+              I understand this portfolio
+              prototype stores my record
+              only in this browser.
+
+            </span>
+
+          </label>
+
+
+          <p>
+
+            Do not include names or information
+            you would not want preserved.
+
+          </p>
+
+        </div>
+
+
+        <button
+          class="archive-button"
+          type="submit"
+        >
+
+          <span>
+            CREATE DREAM RECORD
+          </span>
+
+          <strong>
+            →
+          </strong>
+
+        </button>
+
+
+        <p
+          class="form-error"
+          id="form-error"
+          role="alert"
+        ></p>
+
+      </form>
+
+    </section>
+
+
+    <!-- ==========================================
+         CARTEL GÉNÉRÉ
+    =========================================== -->
+
+    <section
+      class="record-section"
+      id="record-section"
+      aria-live="polite"
+    >
+
+      <div class="record-introduction">
+
+        <span>
+          COLLECTION ENTRY CREATED
+        </span>
+
+
+        <h2>
+
+          YOUR DREAM
+          <br>
+
+          HAS A PLACE.
+
+        </h2>
+
+      </div>
+
+
+      <article
+        class="dream-record"
+        id="dream-record"
+      >
+
+        <div class="record-topline">
+
+          <span>
+            THE MUSEUM OF DREAMS
+          </span>
+
+          <strong id="record-number">
+            DREAM · 0000
+          </strong>
+
+        </div>
+
+
+        <p
+          class="record-room"
+          id="record-room"
+        >
+          UNCLASSIFIED COLLECTION
+        </p>
+
+
+        <h3 id="record-title">
+          UNTITLED DREAM
+        </h3>
+
+
+        <blockquote id="record-fragment"></blockquote>
+
+
+        <dl>
+
+          <div>
+
+            <dt>
+              EMOTIONAL CORE
+            </dt>
+
+            <dd id="record-emotion"></dd>
+
+          </div>
+
+
+          <div>
+
+            <dt>
+              INTENSITY
+            </dt>
+
+            <dd id="record-intensity"></dd>
+
+          </div>
+
+
+          <div>
+
+            <dt>
+              LOCATION
+            </dt>
+
+            <dd id="record-location"></dd>
+
+          </div>
+
+
+          <div>
+
+            <dt>
+              STATUS
+            </dt>
+
+            <dd>
+              LOCALLY ARCHIVED
+            </dd>
+
+          </div>
+
+        </dl>
+
+
+        <div
+          class="record-mark"
+          aria-hidden="true"
+        >
+
+          <span></span>
+
+          <span></span>
+
+          <span></span>
+
+        </div>
+
+      </article>
+
+
+      <div class="record-actions">
+
+        <button
+          type="button"
+          id="copy-record"
+        >
+          COPY DREAM RECORD
+        </button>
+
+
+        <button
+          type="button"
+          id="new-record"
+        >
+          SUBMIT ANOTHER DREAM
+        </button>
+
+      </div>
+
+
+      <!-- Passage vers la case study finale -->
+
+      <a
+        class="case-study-link"
+        href="case-study.html"
+      >
+
+        <span>
+          THE VISIT IS COMPLETE
+        </span>
+
+        <strong>
+
+          DISCOVER HOW THE MUSEUM
+          WAS CREATED →
+
+        </strong>
+
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <script src="./submit.js?v=1"></script>
+
+</body>
+
+</html>
