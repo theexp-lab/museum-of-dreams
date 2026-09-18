@@ -1161,98 +1161,305 @@ input[type="range"] {
   background: #81718f;
 }
 
-
 /* ==========================================
    ACTIONS DU CARTEL
 ========================================== */
 
 .record-actions {
-  display: flex;
+  display: grid;
 
-  gap: 10px;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 12px;
+
+  width:
+    min(820px, 92vw);
 }
 
-.record-actions button {
+.record-action-button {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  min-height: 68px;
+
   padding:
-    13px 18px;
+    18px 20px;
 
   border:
     1px solid
-    rgba(47, 58, 64, 0.24);
+    rgba(47, 58, 64, 0.22);
 
   color: #4f616a;
 
   background:
     rgba(255, 255, 255, 0.38);
 
+  cursor: pointer;
+
+  transition:
+    color 350ms ease,
+    background 350ms ease,
+    border-color 350ms ease,
+    transform 350ms ease,
+    box-shadow 350ms ease;
+}
+
+.record-action-button span {
+  color:
+    rgba(74, 94, 104, 0.46);
+
   font:
     8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.12em;
+}
+
+.record-action-button strong {
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  font-weight: 400;
+
+  letter-spacing: 0.14em;
+}
+
+.record-action-button:hover {
+  color: #314a56;
+
+  border-color:
+    rgba(74, 105, 119, 0.52);
+
+  background:
+    rgba(255, 255, 255, 0.75);
+
+  transform:
+    translateY(-3px);
+
+  box-shadow:
+    0 15px 40px
+    rgba(48, 62, 69, 0.08);
+}
+
+
+/* ==========================================
+   GRANDE SORTIE VERS LA CASE STUDY
+========================================== */
+
+.case-study-link {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    auto 1fr auto;
+
+  align-items: center;
+
+  gap: 34px;
+
+  width:
+    min(820px, 92vw);
+
+  min-height: 210px;
+
+  padding:
+    32px 36px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(44, 58, 65, 0.32);
+
+  color: #f6f3eb;
+
+  background:
+    linear-gradient(
+      135deg,
+      #263841,
+      #435d68
+    );
+
+  box-shadow:
+    0 28px 80px
+    rgba(37, 49, 55, 0.18);
+
+  transition:
+    transform 500ms
+    cubic-bezier(
+      0.2,
+      0.75,
+      0.2,
+      1
+    ),
+    box-shadow 500ms ease;
+}
+
+.case-study-link::before {
+  content: "";
+
+  position: absolute;
+
+  width: 320px;
+  height: 320px;
+
+  right: -130px;
+  bottom: -220px;
+
+  border-radius: 50%;
+
+  opacity: 0.42;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(238, 203, 139, 0.72),
+      transparent 68%
+    );
+
+  transition:
+    transform 700ms ease,
+    opacity 700ms ease;
+}
+
+.case-study-link::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0.1;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+
+      transparent 0 39px,
+
+      rgba(255, 255, 255, 0.14)
+      40px,
+
+      transparent 41px
+    );
+
+  pointer-events: none;
+}
+
+.case-study-number,
+.case-study-copy,
+.case-study-arrow {
+  position: relative;
+
+  z-index: 2;
+}
+
+.case-study-number {
+  align-self: start;
+
+  color:
+    rgba(255, 255, 255, 0.48);
+
+  font:
+    7px/1.4
     "DM Mono",
     monospace;
 
   letter-spacing: 0.13em;
 
-  cursor: pointer;
+  writing-mode:
+    vertical-rl;
+
+  transform:
+    rotate(180deg);
 }
 
-.case-study-link {
-  display: grid;
+.case-study-copy span {
+  display: block;
 
-  gap: 9px;
+  margin-bottom: 16px;
 
-  width:
-    min(820px, 92vw);
-
-  padding: 28px;
-
-  border-top:
-    1px solid
-    rgba(42, 52, 57, 0.2);
-
-  border-bottom:
-    1px solid
-    rgba(42, 52, 57, 0.2);
-
-  text-align: center;
-
-  transition:
-    background 350ms ease;
-}
-
-.case-study-link span {
-  color: #748087;
+  color:
+    rgba(255, 255, 255, 0.55);
 
   font:
     8px/1
     "DM Mono",
     monospace;
 
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
 }
 
-.case-study-link strong {
-  color: #344d59;
+.case-study-copy strong {
+  display: block;
 
   font:
-    10px/1
-    "DM Mono",
-    monospace;
+    400
+    clamp(31px, 4vw, 54px)/0.92
+    "Gloock",
+    serif;
 
-  letter-spacing: 0.16em;
+  letter-spacing: -0.045em;
+}
+
+.case-study-arrow {
+  display: grid;
+
+  place-items: center;
+
+  width: 62px;
+  height: 62px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.42);
+
+  border-radius: 50%;
+
+  font-size: 25px;
 
   transition:
-    letter-spacing 350ms ease;
+    color 400ms ease,
+    background 400ms ease,
+    transform 500ms ease;
 }
 
 .case-study-link:hover {
-  background:
-    rgba(255, 255, 255, 0.42);
+  transform:
+    translateY(-7px);
+
+  box-shadow:
+    0 38px 100px
+    rgba(37, 49, 55, 0.28);
 }
 
-.case-study-link:hover strong {
-  letter-spacing: 0.2em;
+.case-study-link:hover::before {
+  opacity: 0.72;
+
+  transform:
+    scale(1.35);
 }
 
+.case-study-link:hover
+.case-study-arrow {
+  color: #314751;
+
+  background: #f4efe5;
+
+  transform:
+    translateX(6px)
+    rotate(-8deg);
+}
 
 /* ==========================================
    ANIMATIONS
@@ -1394,14 +1601,44 @@ input[type="range"] {
   }
 
   .record-actions {
-    flex-direction: column;
+  grid-template-columns:
+    1fr;
 
-    width: 92vw;
-  }
+  width: 92vw;
+}
 
-  .record-actions button {
-    width: 100%;
-  }
+.record-action-button {
+  width: 100%;
+}
+
+.case-study-link {
+  grid-template-columns:
+    1fr auto;
+
+  gap: 20px;
+
+  min-height: 190px;
+
+  padding:
+    27px 24px;
+}
+
+.case-study-number {
+  display: none;
+}
+
+.case-study-copy strong {
+  font-size:
+    clamp(
+      28px,
+      8vw,
+      42px
+    );
+}
+
+.case-study-arrow {
+  width: 50px;
+  height: 50px;
 }
 
 
