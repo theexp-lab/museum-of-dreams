@@ -2228,3 +2228,44 @@ a {
       0.01ms !important;
   }
 }
+
+.remove-personal-dream {
+  display: block;
+
+  margin:
+    26px auto 0;
+
+  padding:
+    11px 0;
+
+  border: 0;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.3);
+
+  color:
+    rgba(255, 255, 255, 0.48);
+
+  background: transparent;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.14em;
+
+  cursor: pointer;
+
+  transition:
+    color 300ms ease,
+    border-color 300ms ease;
+}
+
+.remove-personal-dream:hover {
+  color: #ff9bad;
+
+  border-color:
+    rgba(255, 155, 173, 0.7);
+}
