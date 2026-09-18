@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#071022"
+  >
+
+  <meta
+    name="description"
+    content="Dream Observatory — the living archive of The Museum of Dreams."
+  >
+
+  <title>
+    Dream Observatory — Museum of Dreams
+  </title>
+
+
+  <!-- Polices -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- CSS de la salle -->
+
+  <link
+    rel="stylesheet"
+    href="./observatory.css?v=1"
+  >
+
+</head>
+
+
+<body class="observatory-page introduction-visible">
+
+
+  <!-- ==========================================
+       UNIVERS DE L’OBSERVATOIRE
+  =========================================== -->
+
+  <div
+    class="observatory-world"
+    aria-hidden="true"
+  >
+
+    <div class="observatory-gradient"></div>
+
+    <div class="observatory-nebula nebula-one"></div>
+
+    <div class="observatory-nebula nebula-two"></div>
+
+    <div class="observatory-horizon"></div>
+
+    <canvas id="dream-sky"></canvas>
+
+  </div>
+
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+
+  <header class="observatory-header">
+
+    <a href="awakening.html">
+      THE MUSEUM OF DREAMS
+    </a>
+
+
+    <div class="observatory-location">
+
+      <span class="location-light"></span>
+
+      <span>
+        FINAL GALLERY · DREAM OBSERVATORY
+      </span>
+
+    </div>
+
+
+    <a href="case-study.html">
+      PROJECT
+    </a>
+
+  </header>
+
+
+  <!-- ==========================================
+       INTRODUCTION DE LA SALLE
+  =========================================== -->
+
+  <section
+    class="observatory-introduction"
+    id="observatory-introduction"
+  >
+
+    <p class="gallery-number">
+      FINAL GALLERY · 08
+    </p>
+
+
+    <h1>
+
+      DREAM
+
+      <em>
+        OBSERVATORY
+      </em>
+
+    </h1>
+
+
+    <div class="introduction-copy">
+
+      <p>
+        No two dreams are identical.
+      </p>
+
+      <span>
+        Yet certain feelings
+        keep finding each other.
+      </span>
+
+    </div>
+
+
+    <button
+      class="open-observatory"
+      id="open-observatory"
+      type="button"
+    >
+
+      <span>
+        ENTER THE LIVING ARCHIVE
+      </span>
+
+      <strong>
+        ↓
+      </strong>
+
+    </button>
+
+  </section>
+
+
+  <!-- ==========================================
+       INSTALLATION CENTRALE
+  =========================================== -->
+
+  <main
+    class="living-archive"
+    id="living-archive"
+  >
+
+    <div class="archive-heading">
+
+      <span>
+        INSTALLATION 08.1
+      </span>
+
+
+      <h2>
+        THE LIVING ARCHIVE
+      </h2>
+
+
+      <p>
+
+        Each light contains a dream
+
+        <em>
+          remembered by someone.
+        </em>
+
+      </p>
+
+    </div>
+
+
+    <!-- Zone contenant la constellation -->
+
+    <section
+      class="constellation-stage"
+      id="constellation-stage"
+      aria-label="Interactive constellation of anonymous dreams"
+    >
+
+      <div
+        class="constellation-aura"
+        aria-hidden="true"
+      ></div>
+
+
+      <canvas
+        id="constellation-canvas"
+        aria-hidden="true"
+      ></canvas>
+
+
+      <!-- Les boutons-étoiles seront créés en JavaScript -->
+
+      <div
+        class="dream-points"
+        id="dream-points"
+      ></div>
+
+
+      <!-- Indication d’utilisation -->
+
+      <p
+        class="constellation-instruction"
+        id="constellation-instruction"
+      >
+        MOVE THROUGH THE CONSTELLATION
+      </p>
+
+    </section>
+
+
+    <!-- ==========================================
+         CARTEL DU RÊVE SURVOLÉ
+    =========================================== -->
+
+    <aside
+      class="dream-card"
+      id="dream-card"
+      aria-live="polite"
+    >
+
+      <div class="dream-card-topline">
+
+        <span id="dream-card-number">
+          DREAM 0001
+        </span>
+
+        <span id="dream-card-status">
+          ANONYMOUS RECORD
+        </span>
+
+      </div>
+
+
+      <blockquote id="dream-card-fragment">
+
+        “I opened a door and found
+        the ocean behind it.”
+
+      </blockquote>
+
+
+      <dl>
+
+        <div>
+
+          <dt>
+            EMOTIONAL CORE
+          </dt>
+
+          <dd id="dream-card-emotion">
+            WONDER
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            COLLECTION
+          </dt>
+
+          <dd id="dream-card-room">
+            ADVENTURE
+          </dd>
+
+        </div>
+
+      </dl>
+
+    </aside>
+
+
+    <!-- ==========================================
+         FILTRES ÉMOTIONNELS
+    =========================================== -->
+
+    <section class="emotion-navigation">
+
+      <div class="emotion-heading">
+
+        <span>
+          CURATORIAL SYSTEM · 08.2
+        </span>
+
+        <h2>
+          EXPLORE BY FEELING
+        </h2>
+
+        <p>
+          Dreams are connected through emotional resonance.
+        </p>
+
+      </div>
+
+
+      <div
+        class="emotion-filters"
+        id="emotion-filters"
+        role="group"
+        aria-label="Filter dreams by emotion"
+      >
+
+        <button
+          class="emotion-filter is-active"
+          type="button"
+          data-emotion="all"
+        >
+          <span>00</span>
+          ALL DREAMS
+        </button>
+
+
+        <button
+          class="emotion-filter"
+          type="button"
+          data-emotion="wonder"
+        >
+          <span>01</span>
+          WONDER
+        </button>
+
+
+        <button
+          class="emotion-filter"
+          type="button"
+          data-emotion="desire"
+        >
+          <span>02</span>
+          DESIRE
+        </button>
+
+
+        <button
+          class="emotion-filter"
+          type="button"
+          data-emotion="nostalgia"
+        >
+          <span>03</span>
+          NOSTALGIA
+        </button>
+
+
+        <button
+          class="emotion-filter"
+          type="button"
+          data-emotion="fear"
+        >
+          <span>04</span>
+          FEAR
+        </button>
+
+
+        <button
+          class="emotion-filter"
+          type="button"
+          data-emotion="urgency"
+        >
+          <span>05</span>
+          URGENCY
+        </button>
+
+
+        <button
+          class="emotion-filter"
+          type="button"
+          data-emotion="confusion"
+        >
+          <span>06</span>
+          CONFUSION
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         RÊVE PERSONNEL
+
+         Caché automatiquement si aucun rêve
+         n’a été soumis auparavant.
+    =========================================== -->
+
+    <section
+      class="personal-dream"
+      id="personal-dream"
+      hidden
+    >
+
+      <div class="personal-orbit">
+
+        <span></span>
+
+        <span></span>
+
+        <span></span>
+
+      </div>
+
+
+      <div class="personal-dream-copy">
+
+        <span>
+          NEW ARCHIVE ENTRY
+        </span>
+
+
+        <h2>
+          A NEW DREAM HAS<br>
+          JOINED THE ARCHIVE.
+        </h2>
+
+
+        <p id="personal-dream-fragment">
+          Your dream now appears among the others.
+        </p>
+
+
+        <small>
+          YOUR DREAM · LOCALLY ARCHIVED
+        </small>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         NOTES DE L’INSTALLATION
+    =========================================== -->
+
+    <section class="installation-section">
+
+      <div class="installation-introduction">
+
+        <span>
+          FROM DIGITAL PROTOTYPE
+        </span>
+
+
+        <h2>
+
+          AN OBSERVATORY
+
+          <em>
+            BUILT FROM LIGHT.
+          </em>
+
+        </h2>
+
+
+        <button
+          class="notes-button"
+          id="open-notes"
+          type="button"
+        >
+          VIEW INSTALLATION NOTES
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         SORTIE DU MUSÉE
+    =========================================== -->
+
+    <section class="observatory-ending">
+
+      <p>
+
+        The dreams remain here.
+
+        <em>
+          The visitor does not.
+        </em>
+
+      </p>
+
+
+      <span>
+        FINAL ARCHIVE · 09
+      </span>
+
+
+      <h2>
+        THE VISIT<br>
+        IS COMPLETE
+      </h2>
+
+
+      <a
+        class="case-study-entry"
+        href="case-study.html"
+      >
+
+        <span>
+          BEHIND THE EXPERIENCE
+        </span>
+
+        <strong>
+          DISCOVER HOW THE<br>
+          MUSEUM WAS CREATED
+        </strong>
+
+        <i>
+          →
+        </i>
+
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- ==========================================
+       PANNEAU DES NOTES MUSÉALES
+  =========================================== -->
+
+  <div
+    class="installation-panel"
+    id="installation-panel"
+    aria-hidden="true"
+  >
+
+    <button
+      class="close-notes"
+      id="close-notes"
+      type="button"
+      aria-label="Close installation notes"
+    >
+      CLOSE ×
+    </button>
+
+
+    <div class="panel-content">
+
+      <p class="panel-number">
+        INSTALLATION NOTES · 08.3
+      </p>
+
+
+      <h2>
+        THE LIVING ARCHIVE
+      </h2>
+
+
+      <dl>
+
+        <div>
+
+          <dt>
+            FORMAT
+          </dt>
+
+          <dd>
+            GENERATIVE LIGHT INSTALLATION
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            MEDIUM
+          </dt>
+
+          <dd>
+            PROJECTION · SPATIAL SOUND<br>
+            INTERACTIVE LIGHTS
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            CURATORIAL PRINCIPLE
+          </dt>
+
+          <dd>
+            DREAMS ARE CONNECTED THROUGH<br>
+            EMOTIONAL RESONANCE
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            PHYSICAL ADAPTATION
+          </dt>
+
+          <dd>
+
+            A suspended field of responsive lights
+            allows visitors to navigate the collective
+            archive through movement.
+
+          </dd>
+
+        </div>
+
+      </dl>
+
+
+      <p class="panel-statement">
+
+        The digital experience acts as a prototype
+        for an exhibition that could exist physically.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==========================================
+       INTERFACE FIXE
+  =========================================== -->
+
+  <div class="archive-counter">
+
+    <span>
+      VISIBLE DREAMS
+    </span>
+
+    <strong id="visible-dream-count">
+      18
+    </strong>
+
+  </div>
+
+
+  <div class="observatory-progress">
+
+    <span id="observatory-progress-fill"></span>
+
+  </div>
+
+
+  <p
+    class="observatory-instruction"
+    id="observatory-instruction"
+  >
+    ENTER THE OBSERVATORY
+  </p>
+
+
+  <!-- Transition vers la case study -->
+
+  <div
+    class="case-study-transition"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- JavaScript de la salle -->
+
+  <script src="./observatory.js?v=1"></script>
+
+</body>
+
+</html>
