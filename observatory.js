@@ -375,6 +375,7 @@ const emotionColours = {
   }
 };
 
+let galaxyProgress = 0;
 
 let activeEmotion =
   "all";
@@ -873,8 +874,8 @@ function createSkyStars() {
 
   const starCount =
     window.innerWidth < 700
-      ? 100
-      : 190;
+      ? 190
+      : 390;
 
 
   for (
@@ -894,12 +895,12 @@ function createSkyStars() {
       radius:
         0.3 +
         Math.random() *
-        1.25,
+        1.55,
 
       opacity:
-        0.16 +
+        0.18 +
         Math.random() *
-        0.7,
+        0.78,
 
       speed:
         0.35 +
@@ -914,7 +915,11 @@ function createSkyStars() {
       depth:
         0.15 +
         Math.random() *
-        0.65
+        0.65,
+
+      rose:
+        Math.random() <
+        0.34
     });
   }
 }
@@ -1235,58 +1240,239 @@ function animateWorld(
 
 
   skyStars.forEach(
-    function (
-      star
+  function (
+    star
+  ) {
+    const twinkle =
+      0.68 +
+
+      Math.sin(
+        currentTime *
+        0.001 *
+        star.speed +
+
+        star.phase
+      ) *
+
+      0.32;
+
+
+    const starX =
+      star.x +
+      pointerX *
+      star.depth;
+
+
+    const starY =
+      star.y +
+      pointerY *
+      star.depth;
+
+
+    const red =
+      star.rose
+        ? 255
+        : 234 +
+          galaxyProgress *
+          15;
+
+
+    const green =
+      star.rose
+        ? 205 -
+          galaxyProgress *
+          35
+        : 237 -
+          galaxyProgress *
+          25;
+
+
+    const blue =
+      star.rose
+        ? 239
+        : 255;
+
+
+    skyContext.beginPath();
+
+
+    skyContext.arc(
+      starX,
+      starY,
+      star.radius +
+      galaxyProgress *
+      (
+        star.rose
+          ? 0.5
+          : 0.15
+      ),
+      0,
+      Math.PI *
+      2
+    );
+
+
+    skyContext.fillStyle =
+      "rgba(" +
+
+      red +
+      "," +
+
+      green +
+      "," +
+
+      blue +
+      "," +
+
+      star.opacity *
+      twinkle +
+
+      ")";
+
+
+    skyContext.fill();
+
+
+    if (
+      galaxyProgress >
+      0.18 &&
+      star.radius >
+      1.25
     ) {
-      const twinkle =
-        0.68 +
-
-        Math.sin(
-          currentTime *
-          0.001 *
-          star.speed +
-
-          star.phase
-        ) *
-
-        0.32;
-
-
       skyContext.beginPath();
 
 
-      skyContext.arc(
-        star.x +
-        pointerX *
-        star.depth,
-
-        star.y +
-        pointerY *
-        star.depth,
-
-        star.radius,
-
-        0,
-
-        Math.PI *
-        2
+      skyContext.moveTo(
+        starX - 4,
+        starY
       );
 
 
-      skyContext.fillStyle =
-        "rgba(234,237,255," +
+      skyContext.lineTo(
+        starX + 4,
+        starY
+      );
 
+
+      skyContext.moveTo(
+        starX,
+        starY - 4
+      );
+
+
+      skyContext.lineTo(
+        starX,
+        starY + 4
+      );
+
+
+      skyContext.strokeStyle =
+        "rgba(255,225,245," +
+
+        galaxyProgress *
         star.opacity *
-        twinkle +
+        0.34 +
 
         ")";
 
 
-      skyContext.fill();
+      skyContext.lineWidth =
+        0.55;
+
+
+      skyContext.stroke();
     }
-  );
+  }
+);
+
+/* Constellations du ciel */
+
+if (
+  galaxyProgress >
+  0.22
+) {
+  for (
+    let index = 0;
+    index <
+    skyStars.length - 8;
+    index += 17
+  ) {
+    const firstStar =
+      skyStars[index];
 
 
+    const secondStar =
+      skyStars[
+        index + 7
+      ];
+
+
+    const firstX =
+      firstStar.x +
+      pointerX *
+      firstStar.depth;
+
+
+    const firstY =
+      firstStar.y +
+      pointerY *
+      firstStar.depth;
+
+
+    const secondX =
+      secondStar.x +
+      pointerX *
+      secondStar.depth;
+
+
+    const secondY =
+      secondStar.y +
+      pointerY *
+      secondStar.depth;
+
+
+    const distance =
+      Math.hypot(
+        secondX - firstX,
+        secondY - firstY
+      );
+
+
+    if (
+      distance < 190
+    ) {
+      skyContext.beginPath();
+
+
+      skyContext.moveTo(
+        firstX,
+        firstY
+      );
+
+
+      skyContext.lineTo(
+        secondX,
+        secondY
+      );
+
+
+      skyContext.strokeStyle =
+        "rgba(255,196,232," +
+
+        galaxyProgress *
+        0.13 +
+
+        ")";
+
+
+      skyContext.lineWidth =
+        0.45;
+
+
+      skyContext.stroke();
+    }
+  }
+}
   drawConstellation(
     currentTime
   );
@@ -1354,9 +1540,18 @@ window.addEventListener(
    OUVRIR L’OBSERVATOIRE
 ========================================== */
 
-openObservatory.addEventListener(
-  "click",
-  function () {
+/* ==========================================
+   OUVRIR L’OBSERVATOIRE
+========================================== */
+
+function activateObservatory(
+  moveToArchive
+) {
+  if (
+    !page.classList.contains(
+      "archive-open"
+    )
+  ) {
     page.classList.add(
       "archive-open"
     );
@@ -1364,8 +1559,10 @@ openObservatory.addEventListener(
 
     observatoryInstruction.textContent =
       "EXPLORE THE LIVING ARCHIVE";
+  }
 
 
+  if (moveToArchive) {
     window.setTimeout(
       function () {
         livingArchive.scrollIntoView({
@@ -1373,7 +1570,17 @@ openObservatory.addEventListener(
           block: "start"
         });
       },
-      500
+      420
+    );
+  }
+}
+
+
+openObservatory.addEventListener(
+  "click",
+  function () {
+    activateObservatory(
+      true
     );
   }
 );
@@ -1481,7 +1688,45 @@ function updateScrollProgress() {
         )
       : 0;
 
+/* La galaxie apparaît progressivement */
 
+galaxyProgress =
+  clamp(
+    window.scrollY /
+    (
+      window.innerHeight *
+      0.82
+    ),
+    0,
+    1
+  );
+
+
+page.style.setProperty(
+  "--galaxy-opacity",
+  galaxyProgress *
+  0.92
+);
+
+
+page.style.setProperty(
+  "--galaxy-scale",
+  0.82 +
+  galaxyProgress *
+  0.25
+);
+
+
+/* Le scroll ouvre aussi l’archive */
+
+if (
+  window.scrollY > 35
+) {
+  activateObservatory(
+    false
+  );
+}
+   
   progressFill.style.height =
     progress *
     100 +
