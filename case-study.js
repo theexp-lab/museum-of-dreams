@@ -1,6 +1,6 @@
 /* ==========================================
    THE MUSEUM OF DREAMS
-   FINAL CASE STUDY
+   CASE STUDY — REDESIGN
 ========================================== */
 
 
@@ -33,37 +33,23 @@ const page =
   );
 
 
-const chapters =
+const sections =
   Array.from(
     document.querySelectorAll(
-      ".case-chapter"
-    )
-  );
-
-
-const triggers =
-  Array.from(
-    document.querySelectorAll(
-      ".chapter-trigger"
+      ".accordion-section"
     )
   );
 
 
 const progressFill =
   document.querySelector(
-    "#case-progress-fill"
+    "#page-progress-fill"
   );
 
 
-const caseStatus =
+const pageStatus =
   document.querySelector(
-    "#case-status"
-  );
-
-
-const chapterTransition =
-  document.querySelector(
-    ".chapter-transition"
+    "#page-status"
   );
 
 
@@ -76,40 +62,77 @@ const pendingLinks =
 
 
 /* ==========================================
-   COULEURS DES CHAPITRES
+   PRÉPARER LES COULEURS
 ========================================== */
 
-const chapterColours = {
-  violet: "#7d66c5",
-  blue: "#547ca4",
-  rose: "#bb667f",
-  gold: "#b18443",
-  cyan: "#4f8f98",
-  orange: "#b66843",
-  green: "#66816c"
-};
+sections.forEach(
+  function (
+    section
+  ) {
+    const colour =
+      section.dataset.colour ||
+      "#7456c5";
 
 
-function updateAccent(
-  chapter
+    section.style.setProperty(
+      "--section-colour",
+      colour
+    );
+  }
+);
+
+
+/* ==========================================
+   INFORMATIONS D’UN CHAPITRE
+========================================== */
+
+function getSectionInformation(
+  section
 ) {
-  if (!chapter) {
+  const number =
+    section
+      .querySelector(
+        ".accordion-number"
+      )
+      .textContent
+      .trim();
+
+
+  const title =
+    section
+      .querySelector(
+        ".accordion-heading strong"
+      )
+      .textContent
+      .trim();
+
+
+  return {
+    number: number,
+    title: title
+  };
+}
+
+
+/* ==========================================
+   CHANGER LA COULEUR ACTIVE
+========================================== */
+
+function updateActiveColour(
+  section
+) {
+  if (!section) {
     return;
   }
 
 
-  const accent =
-    chapter.dataset.accent ||
-    "violet";
-
-
   const colour =
-    chapterColours[accent] ||
-    chapterColours.violet;
+    section.dataset.colour ||
+    "#7456c5";
 
 
   page.style.setProperty(
-    "--active-accent",
+    "--active-colour",
     colour
   );
 }
@@ -119,29 +142,29 @@ function updateAccent(
    FERMER UN CHAPITRE
 ========================================== */
 
-function closeChapter(
-  chapter
+function closeSection(
+  section
 ) {
-  const trigger =
-    chapter.querySelector(
-      ".chapter-trigger"
+  const panel =
+    section.querySelector(
+      ".accordion-panel"
     );
 
 
-  const panel =
-    chapter.querySelector(
-      ".chapter-panel"
+  const trigger =
+    section.querySelector(
+      ".accordion-trigger"
     );
 
 
   const symbol =
-    chapter.querySelector(
-      ".chapter-symbol"
+    section.querySelector(
+      ".accordion-symbol"
     );
 
 
   if (
-    !chapter.classList.contains(
+    !section.classList.contains(
       "is-open"
     )
   ) {
@@ -150,9 +173,8 @@ function closeChapter(
 
 
   /*
-   * Si la hauteur était devenue automatique,
-   * on la reconvertit d’abord en pixels afin
-   * que la fermeture puisse être animée.
+   * Passer de height:auto à une valeur
+   * mesurable avant de refermer.
    */
 
   panel.style.height =
@@ -163,7 +185,7 @@ function closeChapter(
   panel.offsetHeight;
 
 
-  chapter.classList.remove(
+  section.classList.remove(
     "is-open"
   );
 
@@ -178,8 +200,12 @@ function closeChapter(
     "+";
 
 
-  panel.style.height =
-    "0px";
+  window.requestAnimationFrame(
+    function () {
+      panel.style.height =
+        "0px";
+    }
+  );
 }
 
 
@@ -187,49 +213,49 @@ function closeChapter(
    OUVRIR UN CHAPITRE
 ========================================== */
 
-function openChapter(
-  chapter,
-  moveToChapter
+function openSection(
+  section,
+  moveToSection
 ) {
-  const trigger =
-    chapter.querySelector(
-      ".chapter-trigger"
+  const panel =
+    section.querySelector(
+      ".accordion-panel"
     );
 
 
-  const panel =
-    chapter.querySelector(
-      ".chapter-panel"
+  const trigger =
+    section.querySelector(
+      ".accordion-trigger"
     );
 
 
   const symbol =
-    chapter.querySelector(
-      ".chapter-symbol"
+    section.querySelector(
+      ".accordion-symbol"
     );
 
 
   /*
-   * Fermer les autres chapitres.
+   * Une seule section reste ouverte.
    */
 
-  chapters.forEach(
+  sections.forEach(
     function (
-      otherChapter
+      otherSection
     ) {
       if (
-        otherChapter !==
-        chapter
+        otherSection !==
+        section
       ) {
-        closeChapter(
-          otherChapter
+        closeSection(
+          otherSection
         );
       }
     }
   );
 
 
-  chapter.classList.add(
+  section.classList.add(
     "is-open"
   );
 
@@ -244,13 +270,14 @@ function openChapter(
     "×";
 
 
-  updateAccent(
-    chapter
+  updateActiveColour(
+    section
   );
 
 
   /*
-   * Donner au panneau sa hauteur réelle.
+   * Ouvrir avec la hauteur réelle
+   * du contenu.
    */
 
   panel.style.height =
@@ -258,15 +285,10 @@ function openChapter(
     "px";
 
 
-  /*
-   * Après l’animation, la hauteur passe en
-   * automatique : le contenu reste responsive.
-   */
-
   window.setTimeout(
     function () {
       if (
-        chapter.classList.contains(
+        section.classList.contains(
           "is-open"
         )
       ) {
@@ -274,65 +296,46 @@ function openChapter(
           "auto";
       }
     },
-    780
+    830
   );
 
 
   /*
-   * Petit flash coloré très discret.
+   * Statut fixe.
    */
 
-  chapterTransition.classList.remove(
-    "is-active"
-  );
+  const information =
+    getSectionInformation(
+      section
+    );
 
 
-  chapterTransition.offsetHeight;
-
-
-  chapterTransition.classList.add(
-    "is-active"
-  );
-
-
-  /*
-   * Mettre à jour l’indication fixe.
-   */
-
-  const number =
-    chapter.querySelector(
-      ".chapter-number"
-    ).textContent.trim();
-
-
-  const title =
-    chapter.querySelector(
-      ".chapter-title"
-    ).textContent.trim();
-
-
-  caseStatus.textContent =
-    number +
+  pageStatus.textContent =
+    information.number +
     " · " +
-    title;
+    information.title;
 
 
   /*
-   * Replacer proprement le chapitre sous
-   * le header fixe.
+   * Remettre le début du chapitre
+   * sous le header.
    */
 
-  if (moveToChapter) {
+  if (moveToSection) {
     window.setTimeout(
       function () {
-        const top =
-          chapter.getBoundingClientRect().top +
+        const destination =
+          section
+            .getBoundingClientRect()
+            .top +
+
           window.scrollY -
-          73;
+
+          76;
 
 
         window.scrollTo({
-          top: top,
+          top: destination,
           behavior: "smooth"
         });
       },
@@ -343,39 +346,39 @@ function openChapter(
 
 
 /* ==========================================
-   INTERACTION AVEC LES CHAPITRES
+   CLIQUER SUR UN CHAPITRE
 ========================================== */
 
-triggers.forEach(
+sections.forEach(
   function (
-    trigger
+    section
   ) {
+    const trigger =
+      section.querySelector(
+        ".accordion-trigger"
+      );
+
+
     trigger.addEventListener(
       "click",
       function () {
-        const chapter =
-          trigger.closest(
-            ".case-chapter"
-          );
-
-
         const alreadyOpen =
-          chapter.classList.contains(
+          section.classList.contains(
             "is-open"
           );
 
 
         if (alreadyOpen) {
-          closeChapter(
-            chapter
+          closeSection(
+            section
           );
 
 
-          caseStatus.textContent =
+          pageStatus.textContent =
             "CASE STUDY · PROJECT ARCHIVE";
         } else {
-          openChapter(
-            chapter,
+          openSection(
+            section,
             true
           );
         }
@@ -386,71 +389,68 @@ triggers.forEach(
 
 
 /* ==========================================
-   INITIALISER LE PREMIER CHAPITRE
+   INITIALISER LES ACCORDÉONS
 ========================================== */
 
-function initialiseChapters() {
-  chapters.forEach(
+function initialiseSections() {
+  sections.forEach(
     function (
-      chapter,
+      section,
       index
     ) {
       const panel =
-        chapter.querySelector(
-          ".chapter-panel"
+        section.querySelector(
+          ".accordion-panel"
+        );
+
+
+      const trigger =
+        section.querySelector(
+          ".accordion-trigger"
+        );
+
+
+      const symbol =
+        section.querySelector(
+          ".accordion-symbol"
         );
 
 
       if (
-        index === 0
+        index ===
+        0
       ) {
-        chapter.classList.add(
+        section.classList.add(
           "is-open"
         );
 
 
-        chapter
-          .querySelector(
-            ".chapter-trigger"
-          )
-          .setAttribute(
-            "aria-expanded",
-            "true"
-          );
+        trigger.setAttribute(
+          "aria-expanded",
+          "true"
+        );
 
 
-        chapter
-          .querySelector(
-            ".chapter-symbol"
-          )
-          .textContent =
-            "×";
+        symbol.textContent =
+          "×";
 
 
         panel.style.height =
           "auto";
       } else {
-        chapter.classList.remove(
+        section.classList.remove(
           "is-open"
         );
 
 
-        chapter
-          .querySelector(
-            ".chapter-trigger"
-          )
-          .setAttribute(
-            "aria-expanded",
-            "false"
-          );
+        trigger.setAttribute(
+          "aria-expanded",
+          "false"
+        );
 
 
-        chapter
-          .querySelector(
-            ".chapter-symbol"
-          )
-          .textContent =
-            "+";
+        symbol.textContent =
+          "+";
 
 
         panel.style.height =
@@ -460,14 +460,93 @@ function initialiseChapters() {
   );
 
 
-  updateAccent(
-    chapters[0]
+  updateActiveColour(
+    sections[0]
   );
 }
 
 
 /* ==========================================
-   PROGRESSION ET STATUT
+   LUMIÈRE DE LA SOURIS
+========================================== */
+
+let cursorX =
+  50;
+
+
+let cursorY =
+  50;
+
+
+let targetCursorX =
+  50;
+
+
+let targetCursorY =
+  50;
+
+
+window.addEventListener(
+  "pointermove",
+  function (
+    event
+  ) {
+    targetCursorX =
+      event.clientX /
+      window.innerWidth *
+      100;
+
+
+    targetCursorY =
+      event.clientY /
+      window.innerHeight *
+      100;
+  },
+  {
+    passive: true
+  }
+);
+
+
+function animateCursor() {
+  cursorX +=
+    (
+      targetCursorX -
+      cursorX
+    ) *
+    0.08;
+
+
+  cursorY +=
+    (
+      targetCursorY -
+      cursorY
+    ) *
+    0.08;
+
+
+  page.style.setProperty(
+    "--cursor-x",
+    cursorX +
+    "%"
+  );
+
+
+  page.style.setProperty(
+    "--cursor-y",
+    cursorY +
+    "%"
+  );
+
+
+  window.requestAnimationFrame(
+    animateCursor
+  );
+}
+
+
+/* ==========================================
+   PROGRESSION DE LA PAGE
 ========================================== */
 
 function updatePageProgress() {
@@ -494,7 +573,7 @@ function updatePageProgress() {
 
 
   /*
-   * Introduction.
+   * Hero.
    */
 
   if (
@@ -502,8 +581,15 @@ function updatePageProgress() {
     window.innerHeight *
     0.72
   ) {
-    caseStatus.textContent =
+    pageStatus.textContent =
       "CASE STUDY · INTRODUCTION";
+
+
+    page.style.setProperty(
+      "--active-colour",
+      "#7456c5"
+    );
+
 
     return;
   }
@@ -515,26 +601,28 @@ function updatePageProgress() {
 
   if (
     progress >
-    0.93
+    0.92
   ) {
-    caseStatus.textContent =
+    pageStatus.textContent =
       "EXPERIENCE 002 · COMPLETE";
 
+
     page.style.setProperty(
-      "--active-accent",
-      chapterColours.violet
+      "--active-colour",
+      "#7456c5"
     );
+
 
     return;
   }
 
 
   /*
-   * Trouver le chapitre le plus proche
-   * du centre de l’écran.
+   * Identifier la section la plus proche
+   * du centre visuel de l’écran.
    */
 
-  let closestChapter =
+  let closestSection =
     null;
 
 
@@ -542,19 +630,19 @@ function updatePageProgress() {
     Infinity;
 
 
-  chapters.forEach(
+  sections.forEach(
     function (
-      chapter
+      section
     ) {
       const bounds =
-        chapter.getBoundingClientRect();
+        section.getBoundingClientRect();
 
 
       const distance =
         Math.abs(
           bounds.top -
           window.innerHeight *
-          0.32
+          0.34
         );
 
 
@@ -565,304 +653,31 @@ function updatePageProgress() {
         closestDistance =
           distance;
 
-        closestChapter =
-          chapter;
+
+        closestSection =
+          section;
       }
     }
   );
 
 
-  if (closestChapter) {
-    const number =
-      closestChapter
-        .querySelector(
-          ".chapter-number"
-        )
-        .textContent
-        .trim();
-
-
-    const title =
-      closestChapter
-        .querySelector(
-          ".chapter-title"
-        )
-        .textContent
-        .trim();
-
-
-    caseStatus.textContent =
-      number +
-      " · " +
-      title;
-
-
-    updateAccent(
-      closestChapter
-    );
-  }
-}
-
-
-/* ==========================================
-   SOURIS ET LUMIÈRE
-========================================== */
-
-window.addEventListener(
-  "pointermove",
-  function (
-    event
-  ) {
-    const horizontal =
-      event.clientX /
-      window.innerWidth *
-      100;
-
-
-    const vertical =
-      event.clientY /
-      window.innerHeight *
-      100;
-
-
-    page.style.setProperty(
-      "--cursor-x",
-      horizontal +
-      "%"
-    );
-
-
-    page.style.setProperty(
-      "--cursor-y",
-      vertical +
-      "%"
-    );
-  },
-  {
-    passive: true
-  }
-);
-
-
-/* ==========================================
-   PARTICULES DE FOND
-========================================== */
-
-const particleCanvas =
-  document.querySelector(
-    "#case-particles"
-  );
-
-
-const particleContext =
-  particleCanvas.getContext(
-    "2d"
-  );
-
-
-let particleWidth = 0;
-
-let particleHeight = 0;
-
-let particles = [];
-
-
-function createParticles() {
-  particles = [];
-
-
-  const particleCount =
-    window.innerWidth < 700
-      ? 28
-      : 55;
-
-
-  for (
-    let index = 0;
-    index < particleCount;
-    index++
-  ) {
-    particles.push({
-      x:
-        Math.random() *
-        particleWidth,
-
-      y:
-        Math.random() *
-        particleHeight,
-
-      radius:
-        0.35 +
-        Math.random() *
-        0.9,
-
-      opacity:
-        0.08 +
-        Math.random() *
-        0.23,
-
-      speed:
-        0.05 +
-        Math.random() *
-        0.12,
-
-      drift:
-        (
-          Math.random() -
-          0.5
-        ) *
-        0.08,
-
-      phase:
-        Math.random() *
-        Math.PI *
-        2
-    });
-  }
-}
-
-
-function resizeParticles() {
-  const pixelRatio =
-    Math.min(
-      window.devicePixelRatio ||
-      1,
-      1.5
-    );
-
-
-  particleWidth =
-    window.innerWidth;
-
-
-  particleHeight =
-    window.innerHeight;
-
-
-  particleCanvas.width =
-    particleWidth *
-    pixelRatio;
-
-
-  particleCanvas.height =
-    particleHeight *
-    pixelRatio;
-
-
-  particleContext.setTransform(
-    pixelRatio,
-    0,
-    0,
-    pixelRatio,
-    0,
-    0
-  );
-
-
-  createParticles();
-}
-
-
-function animateParticles(
-  currentTime
-) {
-  particleContext.clearRect(
-    0,
-    0,
-    particleWidth,
-    particleHeight
-  );
-
-
-  particles.forEach(
-    function (
-      particle
-    ) {
-      particle.y -=
-        particle.speed;
-
-
-      particle.x +=
-        particle.drift;
-
-
-      if (
-        particle.y <
-        -5
-      ) {
-        particle.y =
-          particleHeight +
-          5;
-
-        particle.x =
-          Math.random() *
-          particleWidth;
-      }
-
-
-      if (
-        particle.x <
-        -5
-      ) {
-        particle.x =
-          particleWidth +
-          5;
-      }
-
-
-      if (
-        particle.x >
-        particleWidth +
-        5
-      ) {
-        particle.x =
-          -5;
-      }
-
-
-      const breathing =
-        0.7 +
-
-        Math.sin(
-          currentTime *
-          0.001 +
-
-          particle.phase
-        ) *
-
-        0.3;
-
-
-      particleContext.beginPath();
-
-
-      particleContext.arc(
-        particle.x,
-        particle.y,
-        particle.radius,
-        0,
-        Math.PI *
-        2
+  if (closestSection) {
+    const information =
+      getSectionInformation(
+        closestSection
       );
 
 
-      particleContext.fillStyle =
-        "rgba(71,75,91," +
-
-        particle.opacity *
-        breathing +
-
-        ")";
+    pageStatus.textContent =
+      information.number +
+      " · " +
+      information.title;
 
 
-      particleContext.fill();
-    }
-  );
-
-
-  window.requestAnimationFrame(
-    animateParticles
-  );
+    updateActiveColour(
+      closestSection
+    );
+  }
 }
 
 
@@ -891,27 +706,62 @@ pendingLinks.forEach(
 ========================================== */
 
 function handleResize() {
-  resizeParticles();
-
-
-  chapters.forEach(
+  sections.forEach(
     function (
-      chapter
+      section
     ) {
       const panel =
-        chapter.querySelector(
-          ".chapter-panel"
+        section.querySelector(
+          ".accordion-panel"
         );
 
 
       if (
-        chapter.classList.contains(
+        section.classList.contains(
           "is-open"
         )
       ) {
         panel.style.height =
           "auto";
       }
+    }
+  );
+
+
+  updatePageProgress();
+}
+
+
+/* ==========================================
+   POLICES CHARGÉES
+========================================== */
+
+if (
+  document.fonts &&
+  document.fonts.ready
+) {
+  document.fonts.ready.then(
+    function () {
+      sections.forEach(
+        function (
+          section
+        ) {
+          const panel =
+            section.querySelector(
+              ".accordion-panel"
+            );
+
+
+          if (
+            section.classList.contains(
+              "is-open"
+            )
+          ) {
+            panel.style.height =
+              "auto";
+          }
+        }
+      );
     }
   );
 }
@@ -921,15 +771,13 @@ function handleResize() {
    INITIALISATION
 ========================================== */
 
-initialiseChapters();
-
-resizeParticles();
+initialiseSections();
 
 updatePageProgress();
 
 
 window.requestAnimationFrame(
-  animateParticles
+  animateCursor
 );
 
 
