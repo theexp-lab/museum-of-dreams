@@ -1,0 +1,2230 @@
+/* ==========================================
+   THE MUSEUM OF DREAMS
+   FINAL GALLERY — DREAM OBSERVATORY
+========================================== */
+
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+:root {
+  --night: #071022;
+  --deep-night: #030713;
+  --ink-blue: #111d3d;
+
+  --white: #fffaf1;
+  --soft-white: #eae7df;
+
+  --violet: #bda8ff;
+  --blue: #8dbfff;
+  --rose: #ff9dbd;
+  --gold: #f3c777;
+  --red: #ff5d6f;
+
+  --pointer-x: 0px;
+  --pointer-y: 0px;
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100%;
+
+  overflow-x: hidden;
+
+  color: var(--white);
+  background: var(--deep-night);
+}
+
+body.panel-open {
+  overflow: hidden;
+}
+
+button,
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* ==========================================
+   UNIVERS DE L’OBSERVATOIRE
+========================================== */
+
+.observatory-world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111c3c 0%,
+      #09152e 38%,
+      #071022 68%,
+      #030713 100%
+    );
+}
+
+.observatory-gradient {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 50% 28%,
+      rgba(109, 129, 211, 0.32),
+      transparent 32%
+    ),
+
+    radial-gradient(
+      circle at 18% 58%,
+      rgba(121, 79, 177, 0.19),
+      transparent 29%
+    ),
+
+    radial-gradient(
+      circle at 84% 70%,
+      rgba(56, 123, 170, 0.2),
+      transparent 32%
+    );
+}
+
+.observatory-nebula {
+  position: absolute;
+
+  width: 58vw;
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  filter: blur(75px);
+
+  opacity: 0.27;
+
+  pointer-events: none;
+}
+
+.nebula-one {
+  top: -20%;
+  left: -18%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(138, 104, 224, 0.6),
+      transparent 66%
+    );
+
+  transform:
+    translate(
+      calc(var(--pointer-x) * -0.5),
+      calc(var(--pointer-y) * -0.5)
+    );
+
+  animation:
+    nebulaFloatOne
+    16s ease-in-out infinite;
+}
+
+.nebula-two {
+  right: -22%;
+  bottom: -28%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(77, 142, 202, 0.55),
+      transparent 66%
+    );
+
+  transform:
+    translate(
+      calc(var(--pointer-x) * 0.5),
+      calc(var(--pointer-y) * 0.5)
+    );
+
+  animation:
+    nebulaFloatTwo
+    19s ease-in-out infinite;
+}
+
+.observatory-horizon {
+  position: absolute;
+
+  right: -20%;
+  bottom: -34vh;
+  left: -20%;
+
+  height: 60vh;
+
+  border-radius: 50% 50% 0 0;
+
+  border-top:
+    1px solid
+    rgba(187, 209, 255, 0.2);
+
+  background:
+    radial-gradient(
+      ellipse at center top,
+      rgba(94, 126, 190, 0.25),
+      rgba(6, 12, 28, 0.8) 48%,
+      #02040c 75%
+    );
+
+  box-shadow:
+    0 -25px 100px
+    rgba(112, 141, 210, 0.12);
+}
+
+#dream-sky {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.observatory-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  z-index: 100;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items: center;
+
+  width: 100%;
+
+  padding:
+    24px 34px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  transition:
+    opacity 500ms ease;
+}
+
+.observatory-header > a:last-child {
+  justify-self: end;
+
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.4);
+}
+
+.observatory-location {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.location-light {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--violet);
+
+  box-shadow:
+    0 0 12px var(--violet);
+
+  animation:
+    locationPulse
+    2.4s ease-in-out infinite;
+}
+
+
+/* ==========================================
+   INTRODUCTION
+========================================== */
+
+.observatory-introduction {
+  position: relative;
+  z-index: 10;
+
+  display: grid;
+  place-items: center;
+
+  min-height: 100svh;
+
+  padding:
+    110px 25px 70px;
+
+  text-align: center;
+
+  transition:
+    opacity 900ms ease,
+    filter 900ms ease,
+    transform 1100ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.gallery-number {
+  margin:
+    0 0 31px;
+
+  color:
+    rgba(255, 255, 255, 0.54);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+}
+
+.observatory-introduction h1 {
+  margin: 0;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(70px, 13vw, 190px);
+
+  font-weight: 400;
+
+  line-height: 0.72;
+
+  letter-spacing: -0.07em;
+
+  text-shadow:
+    0 0 60px
+    rgba(165, 180, 255, 0.18);
+}
+
+.observatory-introduction h1 em {
+  display: block;
+
+  margin-top: 0.12em;
+
+  color:
+    #d8ccff;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 0.48em;
+
+  font-style: normal;
+
+  letter-spacing: 0.04em;
+}
+
+.introduction-copy {
+  margin-top: 60px;
+}
+
+.introduction-copy p,
+.introduction-copy span {
+  display: block;
+
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(22px, 2.3vw, 36px);
+
+  line-height: 1.15;
+}
+
+.introduction-copy span {
+  margin-top: 8px;
+
+  color:
+    rgba(224, 218, 255, 0.72);
+}
+
+.open-observatory {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+
+  margin-top: 62px;
+
+  padding:
+    15px 0;
+
+  border: 0;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.47);
+
+  color: var(--white);
+
+  background: transparent;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.17em;
+
+  cursor: pointer;
+
+  transition:
+    gap 400ms ease,
+    color 300ms ease,
+    border-color 300ms ease;
+}
+
+.open-observatory:hover {
+  gap: 52px;
+
+  color: #d8ccff;
+
+  border-color: #d8ccff;
+}
+
+.open-observatory strong {
+  font-size: 15px;
+  font-weight: 300;
+
+  animation:
+    arrowFloat
+    1.8s ease-in-out infinite;
+}
+
+.observatory-page.archive-open
+.observatory-introduction {
+  opacity: 0;
+
+  filter:
+    blur(18px);
+
+  transform:
+    scale(1.08);
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   ARCHIVE PRINCIPALE
+========================================== */
+
+.living-archive {
+  position: relative;
+  z-index: 5;
+
+  min-height: 100vh;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    opacity 1100ms ease;
+}
+
+.observatory-page.archive-open
+.living-archive {
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
+.archive-heading {
+  display: grid;
+  justify-items: center;
+
+  min-height: 78vh;
+
+  padding:
+    150px 24px 60px;
+
+  align-content: center;
+
+  text-align: center;
+}
+
+.archive-heading > span,
+.emotion-heading > span,
+.installation-introduction > span {
+  color:
+    rgba(255, 255, 255, 0.48);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.19em;
+
+  text-transform: uppercase;
+}
+
+.archive-heading h2 {
+  margin:
+    24px 0 28px;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(54px, 9vw, 132px);
+
+  font-weight: 400;
+
+  line-height: 0.82;
+
+  letter-spacing: -0.06em;
+}
+
+.archive-heading p {
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(22px, 2.5vw, 38px);
+
+  line-height: 1.14;
+}
+
+.archive-heading p em {
+  display: block;
+
+  color: #cabdff;
+
+  font-style: normal;
+}
+
+
+/* ==========================================
+   CONSTELLATION
+========================================== */
+
+.constellation-stage {
+  position: relative;
+
+  width:
+    min(1180px, 94vw);
+
+  height:
+    min(78vh, 780px);
+
+  min-height: 570px;
+
+  margin:
+    0 auto;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(211, 220, 255, 0.15);
+
+  border-radius:
+    50% 50% 46% 46% /
+    58% 58% 42% 42%;
+
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(69, 91, 152, 0.19),
+      rgba(5, 11, 26, 0.38) 45%,
+      rgba(2, 5, 14, 0.7) 82%
+    );
+
+  box-shadow:
+    inset 0 0 90px
+    rgba(92, 121, 194, 0.1),
+
+    0 0 100px
+    rgba(30, 49, 101, 0.15);
+}
+
+.constellation-stage::before,
+.constellation-stage::after {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  border:
+    1px solid
+    rgba(215, 224, 255, 0.07);
+
+  border-radius: 50%;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.constellation-stage::before {
+  width: 72%;
+  height: 72%;
+}
+
+.constellation-stage::after {
+  width: 43%;
+  height: 43%;
+}
+
+.constellation-aura {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 40%;
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(189, 168, 255, 0.2),
+      transparent 70%
+    );
+
+  filter: blur(35px);
+
+  transform:
+    translate(-50%, -50%);
+
+  animation:
+    archiveBreathing
+    7s ease-in-out infinite;
+}
+
+#constellation-canvas {
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+}
+
+.dream-points {
+  position: absolute;
+  inset: 0;
+
+  z-index: 3;
+}
+
+.dream-point {
+  position: absolute;
+
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transform:
+    translate(-50%, -50%);
+
+  transition:
+    opacity 500ms ease,
+    transform 500ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    ),
+    filter 500ms ease;
+}
+
+.dream-point::before {
+  content: "";
+
+  width:
+    var(--point-size, 6px);
+
+  height:
+    var(--point-size, 6px);
+
+  border-radius: 50%;
+
+  background:
+    var(--point-color, #fff);
+
+  box-shadow:
+    0 0 9px
+    var(--point-color, #fff),
+
+    0 0 26px
+    var(--point-glow, rgba(255,255,255,.4));
+
+  animation:
+    dreamPulse
+    var(--pulse-speed, 3s)
+    ease-in-out infinite;
+}
+
+.dream-point::after {
+  content: "";
+
+  position: absolute;
+  inset: 5px;
+
+  border:
+    1px solid
+    var(--point-glow, rgba(255,255,255,.3));
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  transform:
+    scale(0.5);
+
+  transition:
+    opacity 350ms ease,
+    transform 500ms ease;
+}
+
+.dream-point:hover,
+.dream-point:focus-visible,
+.dream-point.is-selected {
+  z-index: 5;
+
+  outline: none;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.8);
+}
+
+.dream-point:hover::after,
+.dream-point:focus-visible::after,
+.dream-point.is-selected::after {
+  opacity: 1;
+
+  transform:
+    scale(1.35);
+}
+
+.dream-point.is-dimmed {
+  opacity: 0.09;
+
+  filter:
+    saturate(0.2);
+
+  pointer-events: none;
+}
+
+.dream-point[data-emotion="wonder"] {
+  --point-color: #f3c777;
+  --point-glow: rgba(243, 199, 119, 0.62);
+}
+
+.dream-point[data-emotion="desire"] {
+  --point-color: #ff9dbd;
+  --point-glow: rgba(255, 157, 189, 0.65);
+}
+
+.dream-point[data-emotion="nostalgia"] {
+  --point-color: #9bc8ff;
+  --point-glow: rgba(155, 200, 255, 0.65);
+}
+
+.dream-point[data-emotion="fear"] {
+  --point-color: #a77dea;
+  --point-glow: rgba(167, 125, 234, 0.65);
+}
+
+.dream-point[data-emotion="urgency"] {
+  --point-color: #ff5d6f;
+  --point-glow: rgba(255, 93, 111, 0.7);
+}
+
+.dream-point[data-emotion="confusion"] {
+  --point-color: #eae7df;
+  --point-glow: rgba(234, 231, 223, 0.6);
+}
+
+.dream-point[data-personal="true"] {
+  --point-size: 11px;
+  --point-color: #fff8d5;
+  --point-glow: rgba(255, 235, 155, 0.9);
+}
+
+.constellation-instruction {
+  position: absolute;
+
+  bottom: 27px;
+  left: 50%;
+
+  z-index: 5;
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.38);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.18em;
+
+  transform:
+    translateX(-50%);
+}
+
+
+/* ==========================================
+   CARTEL DU RÊVE
+========================================== */
+
+.dream-card {
+  position: relative;
+  z-index: 10;
+
+  width:
+    min(620px, 88vw);
+
+  min-height: 275px;
+
+  margin:
+    -90px auto 170px;
+
+  padding:
+    32px 35px;
+
+  border:
+    1px solid
+    rgba(217, 225, 255, 0.22);
+
+  background:
+    rgba(9, 17, 39, 0.76);
+
+  box-shadow:
+    0 30px 100px
+    rgba(0, 0, 0, 0.35);
+
+  backdrop-filter:
+    blur(18px);
+
+  opacity: 0;
+
+  transform:
+    translateY(25px);
+
+  transition:
+    opacity 500ms ease,
+    transform 600ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.dream-card.is-visible {
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+.dream-card-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding-bottom: 15px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.13);
+
+  color:
+    rgba(255, 255, 255, 0.5);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.14em;
+}
+
+.dream-card blockquote {
+  margin:
+    32px 0 43px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(26px, 3vw, 41px);
+
+  line-height: 1.12;
+
+  text-align: center;
+}
+
+.dream-card dl {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 25px;
+
+  margin: 0;
+}
+
+.dream-card dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding-top: 10px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.1em;
+}
+
+.dream-card dt {
+  color:
+    rgba(255, 255, 255, 0.4);
+}
+
+.dream-card dd {
+  margin: 0;
+
+  color: #d4c8ff;
+
+  text-align: right;
+}
+
+
+/* ==========================================
+   FILTRES ÉMOTIONNELS
+========================================== */
+
+.emotion-navigation {
+  width:
+    min(1150px, 90vw);
+
+  margin:
+    0 auto;
+
+  padding:
+    120px 0 170px;
+}
+
+.emotion-heading {
+  display: grid;
+
+  grid-template-columns:
+    1fr auto;
+
+  align-items: end;
+
+  gap:
+    18px 60px;
+
+  padding-bottom: 38px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.16);
+}
+
+.emotion-heading > span {
+  grid-column:
+    1 / -1;
+}
+
+.emotion-heading h2 {
+  margin: 0;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(45px, 6vw, 82px);
+
+  font-weight: 400;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.045em;
+}
+
+.emotion-heading p {
+  max-width: 330px;
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.53);
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 18px;
+
+  line-height: 1.3;
+
+  text-align: right;
+}
+
+.emotion-filters {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+}
+
+.emotion-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  min-height: 76px;
+
+  padding:
+    20px 5px;
+
+  border: 0;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+
+  color:
+    rgba(255, 255, 255, 0.52);
+
+  background: transparent;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 10px;
+
+  letter-spacing: 0.15em;
+
+  cursor: pointer;
+
+  transition:
+    color 350ms ease,
+    padding 350ms ease,
+    background 350ms ease;
+}
+
+.emotion-filter:nth-child(odd) {
+  padding-right: 35px;
+
+  border-right:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+}
+
+.emotion-filter:nth-child(even) {
+  padding-left: 35px;
+}
+
+.emotion-filter span {
+  color:
+    rgba(255, 255, 255, 0.25);
+
+  font-size: 7px;
+}
+
+.emotion-filter:hover,
+.emotion-filter.is-active {
+  padding-right: 20px;
+  padding-left: 20px;
+
+  color: var(--white);
+
+  background:
+    rgba(255, 255, 255, 0.055);
+}
+
+
+/* ==========================================
+   RÊVE PERSONNEL
+========================================== */
+
+.personal-dream {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(250px, 0.8fr)
+    minmax(330px, 1.2fr);
+
+  align-items: center;
+
+  gap: 80px;
+
+  width:
+    min(1050px, 88vw);
+
+  min-height: 650px;
+
+  margin:
+    70px auto 180px;
+
+  padding:
+    70px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(249, 229, 155, 0.18);
+
+  background:
+    radial-gradient(
+      circle at 24% 50%,
+      rgba(241, 206, 114, 0.12),
+      transparent 33%
+    ),
+
+    rgba(6, 12, 29, 0.58);
+}
+
+.personal-dream[hidden] {
+  display: none;
+}
+
+.personal-orbit {
+  position: relative;
+
+  width:
+    min(330px, 60vw);
+
+  aspect-ratio: 1;
+
+  border:
+    1px solid
+    rgba(255, 236, 167, 0.24);
+
+  border-radius: 50%;
+
+  animation:
+    personalOrbit
+    18s linear infinite;
+}
+
+.personal-orbit::before {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 13px;
+  height: 13px;
+
+  border-radius: 50%;
+
+  background: #fff8d5;
+
+  box-shadow:
+    0 0 20px #fff8d5,
+    0 0 75px rgba(245, 212, 125, 0.75);
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.personal-orbit span {
+  position: absolute;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #f3c777;
+
+  box-shadow:
+    0 0 14px #f3c777;
+}
+
+.personal-orbit span:nth-child(1) {
+  top: 8%;
+  left: 49%;
+}
+
+.personal-orbit span:nth-child(2) {
+  right: 10%;
+  bottom: 22%;
+}
+
+.personal-orbit span:nth-child(3) {
+  bottom: 15%;
+  left: 16%;
+}
+
+.personal-dream-copy > span {
+  color: var(--gold);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.18em;
+}
+
+.personal-dream-copy h2 {
+  margin:
+    28px 0;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(41px, 5vw, 70px);
+
+  font-weight: 400;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.045em;
+}
+
+.personal-dream-copy p {
+  margin:
+    0 0 45px;
+
+  color:
+    rgba(255, 255, 255, 0.68);
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(21px, 2.2vw, 31px);
+
+  line-height: 1.25;
+}
+
+.personal-dream-copy small {
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.14em;
+
+  opacity: 0.43;
+}
+
+
+/* ==========================================
+   INSTALLATION
+========================================== */
+
+.installation-section {
+  display: grid;
+  place-items: center;
+
+  min-height: 100svh;
+
+  padding:
+    130px 25px;
+}
+
+.installation-introduction {
+  max-width: 900px;
+
+  text-align: center;
+}
+
+.installation-introduction h2 {
+  margin:
+    32px 0 55px;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(50px, 8vw, 120px);
+
+  font-weight: 400;
+
+  line-height: 0.82;
+
+  letter-spacing: -0.06em;
+}
+
+.installation-introduction h2 em {
+  display: block;
+
+  color: #cfc3ff;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 0.68em;
+
+  font-style: normal;
+
+  letter-spacing: -0.02em;
+}
+
+.notes-button {
+  padding:
+    16px 0;
+
+  border: 0;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.52);
+
+  color: var(--white);
+
+  background: transparent;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.16em;
+
+  cursor: pointer;
+
+  transition:
+    letter-spacing 400ms ease,
+    color 300ms ease;
+}
+
+.notes-button:hover {
+  color: #d5c9ff;
+
+  letter-spacing: 0.24em;
+}
+
+
+/* ==========================================
+   FIN DE LA VISITE
+========================================== */
+
+.observatory-ending {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+
+  min-height: 115svh;
+
+  padding:
+    150px 25px 100px;
+
+  text-align: center;
+}
+
+.observatory-ending > p {
+  margin:
+    0 0 110px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(26px, 3.4vw, 49px);
+
+  line-height: 1.13;
+}
+
+.observatory-ending > p em {
+  display: block;
+
+  color:
+    rgba(218, 208, 255, 0.72);
+
+  font-style: normal;
+}
+
+.observatory-ending > span {
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.19em;
+}
+
+.observatory-ending h2 {
+  margin:
+    29px 0 70px;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(70px, 12vw, 175px);
+
+  font-weight: 400;
+
+  line-height: 0.75;
+
+  letter-spacing: -0.07em;
+}
+
+.case-study-entry {
+  display: grid;
+
+  grid-template-columns:
+    1fr auto;
+
+  gap:
+    17px 65px;
+
+  align-items: end;
+
+  width:
+    min(690px, 90vw);
+
+  padding:
+    31px 4px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.22);
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.22);
+
+  text-align: left;
+
+  transition:
+    padding 450ms ease,
+    background 350ms ease;
+}
+
+.case-study-entry:hover {
+  padding-right: 23px;
+  padding-left: 23px;
+
+  background:
+    rgba(255, 255, 255, 0.05);
+}
+
+.case-study-entry > span {
+  grid-column:
+    1 / -1;
+
+  color:
+    rgba(255, 255, 255, 0.38);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.15em;
+}
+
+.case-study-entry strong {
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(23px, 3vw, 39px);
+
+  font-weight: 400;
+
+  line-height: 1.05;
+}
+
+.case-study-entry i {
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 42px;
+
+  font-style: normal;
+}
+
+
+/* ==========================================
+   PANNEAU MUSÉAL
+========================================== */
+
+.installation-panel {
+  position: fixed;
+  inset: 0;
+
+  z-index: 300;
+
+  visibility: hidden;
+
+  overflow-y: auto;
+
+  padding:
+    95px max(6vw, 25px);
+
+  background:
+    rgba(4, 8, 19, 0.94);
+
+  backdrop-filter:
+    blur(25px);
+
+  opacity: 0;
+
+  transform:
+    translateY(25px);
+
+  transition:
+    visibility 700ms,
+    opacity 700ms ease,
+    transform 800ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.installation-panel.is-open {
+  visibility: visible;
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+.close-notes {
+  position: absolute;
+
+  top: 29px;
+  right: 34px;
+
+  padding:
+    10px 0;
+
+  border: 0;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.42);
+
+  color: var(--white);
+
+  background: transparent;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+
+  cursor: pointer;
+}
+
+.panel-content {
+  width:
+    min(980px, 100%);
+
+  margin:
+    0 auto;
+}
+
+.panel-number {
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.18em;
+}
+
+.panel-content h2 {
+  margin:
+    30px 0 70px;
+
+  font-family:
+    "Gloock",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(55px, 9vw, 125px);
+
+  font-weight: 400;
+
+  line-height: 0.84;
+
+  letter-spacing: -0.06em;
+}
+
+.panel-content dl {
+  margin: 0;
+}
+
+.panel-content dl div {
+  display: grid;
+
+  grid-template-columns:
+    0.75fr 1.25fr;
+
+  gap: 40px;
+
+  padding:
+    29px 0;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+}
+
+.panel-content dt {
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+}
+
+.panel-content dd {
+  margin: 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(18px, 2vw, 29px);
+
+  line-height: 1.3;
+}
+
+.panel-statement {
+  max-width: 650px;
+
+  margin:
+    90px 0 20px auto;
+
+  color: #cfc5ef;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(24px, 3vw, 41px);
+
+  line-height: 1.15;
+}
+
+
+/* ==========================================
+   INTERFACE FIXE
+========================================== */
+
+.archive-counter {
+  position: fixed;
+
+  right: 35px;
+  bottom: 30px;
+
+  z-index: 90;
+
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+
+  opacity: 0;
+
+  transition:
+    opacity 500ms ease;
+}
+
+.archive-open
+.archive-counter {
+  opacity: 0.55;
+}
+
+.archive-counter span {
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.13em;
+}
+
+.archive-counter strong {
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 0.8;
+}
+
+.observatory-progress {
+  position: fixed;
+
+  top: 50%;
+  right: 16px;
+
+  z-index: 90;
+
+  width: 1px;
+  height: 150px;
+
+  background:
+    rgba(255, 255, 255, 0.13);
+
+  transform:
+    translateY(-50%);
+}
+
+.observatory-progress span {
+  display: block;
+
+  width: 100%;
+  height: 0;
+
+  background:
+    linear-gradient(
+      #fffaf1,
+      #bda8ff
+    );
+
+  box-shadow:
+    0 0 9px #bda8ff;
+}
+
+.observatory-instruction {
+  position: fixed;
+
+  bottom: 31px;
+  left: 35px;
+
+  z-index: 90;
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.43);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.15em;
+}
+
+
+/* ==========================================
+   TRANSITION FINALE
+========================================== */
+
+.case-study-transition {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  z-index: 500;
+
+  visibility: hidden;
+
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  background:
+    radial-gradient(
+      circle,
+      #fffef6 0%,
+      #ded4ff 27%,
+      #6274bc 55%,
+      #071022 100%
+    );
+
+  transform:
+    translate(-50%, -50%)
+    scale(0);
+
+  pointer-events: none;
+}
+
+.observatory-page.leaving-observatory
+.case-study-transition {
+  visibility: visible;
+
+  animation:
+    caseStudyTransition
+    1.35s
+    cubic-bezier(
+      0.76,
+      0,
+      0.24,
+      1
+    )
+    forwards;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes locationPulse {
+  50% {
+    opacity: 0.3;
+
+    transform:
+      scale(0.65);
+  }
+}
+
+@keyframes arrowFloat {
+  50% {
+    transform:
+      translateY(6px);
+  }
+}
+
+@keyframes nebulaFloatOne {
+  0%,
+  100% {
+    transform:
+      translate(
+        calc(var(--pointer-x) * -0.5),
+        calc(var(--pointer-y) * -0.5)
+      )
+      scale(0.95);
+  }
+
+  50% {
+    transform:
+      translate(
+        calc(var(--pointer-x) * -0.5 + 4vw),
+        calc(var(--pointer-y) * -0.5 + 3vh)
+      )
+      scale(1.08);
+  }
+}
+
+@keyframes nebulaFloatTwo {
+  0%,
+  100% {
+    transform:
+      translate(
+        calc(var(--pointer-x) * 0.5),
+        calc(var(--pointer-y) * 0.5)
+      )
+      scale(1.05);
+  }
+
+  50% {
+    transform:
+      translate(
+        calc(var(--pointer-x) * 0.5 - 4vw),
+        calc(var(--pointer-y) * 0.5 - 3vh)
+      )
+      scale(0.92);
+  }
+}
+
+@keyframes archiveBreathing {
+  0%,
+  100% {
+    opacity: 0.55;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1.15);
+  }
+}
+
+@keyframes dreamPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+
+    transform:
+      scale(0.75);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      scale(1.25);
+  }
+}
+
+@keyframes personalOrbit {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+@keyframes caseStudyTransition {
+  0% {
+    visibility: visible;
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+  }
+
+  22% {
+    opacity: 1;
+  }
+
+  100% {
+    visibility: visible;
+
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(40);
+  }
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 800px) {
+  .observatory-header {
+    grid-template-columns:
+      1fr auto;
+
+    padding:
+      18px 20px;
+  }
+
+  .observatory-location {
+    display: none;
+  }
+
+  .observatory-introduction h1 {
+    font-size:
+      clamp(64px, 20vw, 120px);
+  }
+
+  .constellation-stage {
+    width: 96vw;
+    height: 70vh;
+
+    min-height: 520px;
+
+    border-radius:
+      48% 48% 42% 42% /
+      55% 55% 45% 45%;
+  }
+
+  .emotion-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .emotion-heading p {
+    text-align: left;
+  }
+
+  .emotion-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .emotion-filter,
+  .emotion-filter:nth-child(odd),
+  .emotion-filter:nth-child(even) {
+    padding:
+      20px 8px;
+
+    border-right: 0;
+  }
+
+  .emotion-filter:hover,
+  .emotion-filter.is-active {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .personal-dream {
+    grid-template-columns: 1fr;
+
+    gap: 65px;
+
+    padding:
+      65px 28px;
+
+    text-align: center;
+  }
+
+  .personal-orbit {
+    justify-self: center;
+  }
+
+  .dream-card {
+    margin-bottom: 90px;
+  }
+
+  .dream-card dl {
+    grid-template-columns: 1fr;
+  }
+
+  .case-study-entry {
+    gap:
+      17px 30px;
+  }
+
+  .archive-counter {
+    right: 20px;
+    bottom: 22px;
+  }
+
+  .observatory-instruction {
+    bottom: 22px;
+    left: 20px;
+  }
+
+  .observatory-progress {
+    right: 8px;
+  }
+
+  .panel-content dl div {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .observatory-introduction {
+    padding-inline: 18px;
+  }
+
+  .introduction-copy p,
+  .introduction-copy span {
+    font-size: 21px;
+  }
+
+  .archive-heading {
+    min-height: 70vh;
+  }
+
+  .constellation-stage {
+    min-height: 500px;
+  }
+
+  .dream-card {
+    padding:
+      27px 22px;
+  }
+
+  .dream-card-topline {
+    flex-direction: column;
+  }
+
+  .personal-dream {
+    width: 92vw;
+  }
+
+  .archive-counter {
+    display: none;
+  }
+
+  .observatory-ending h2 {
+    font-size:
+      clamp(65px, 22vw, 110px);
+  }
+
+  .case-study-entry strong {
+    font-size: 22px;
+  }
+}
+
+
+/* ==========================================
+   ACCESSIBILITÉ
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    scroll-behavior:
+      auto !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
