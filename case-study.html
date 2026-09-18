@@ -13,7 +13,7 @@
 
   <meta
     name="theme-color"
-    content="#f1ede4"
+    content="#f7f5ff"
   >
 
   <meta
@@ -26,7 +26,7 @@
   </title>
 
 
-  <!-- Polices -->
+  <!-- Nouvelles polices -->
 
   <link
     rel="preconnect"
@@ -40,16 +40,14 @@
   >
 
   <link
-    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Gloock&family=Italiana&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600&display=swap"
     rel="stylesheet"
   >
 
 
-  <!-- CSS -->
-
   <link
     rel="stylesheet"
-    href="./case-study.css?v=1"
+    href="./case-study.css?v=2"
   >
 
 </head>
@@ -59,7 +57,7 @@
 
 
   <!-- ==========================================
-       FOND ÉDITORIAL
+       FOND
   =========================================== -->
 
   <div
@@ -67,15 +65,13 @@
     aria-hidden="true"
   >
 
-    <div class="paper-light"></div>
+    <div class="background-light light-one"></div>
 
-    <div class="case-orbit orbit-one"></div>
+    <div class="background-light light-two"></div>
 
-    <div class="case-orbit orbit-two"></div>
+    <div class="background-light light-three"></div>
 
-    <div class="cursor-light"></div>
-
-    <canvas id="case-particles"></canvas>
+    <div class="cursor-aura"></div>
 
   </div>
 
@@ -86,7 +82,10 @@
 
   <header class="case-header">
 
-    <a href="index.html">
+    <a
+      href="#"
+      class="pending-link"
+    >
       THE EXPERIENCE LABORATORY
     </a>
 
@@ -107,15 +106,16 @@
   </header>
 
 
-  <!-- ==========================================
-       HERO
-  =========================================== -->
-
   <main>
+
+
+    <!-- ==========================================
+         HERO
+    =========================================== -->
 
     <section class="case-hero">
 
-      <p class="case-eyebrow">
+      <p class="eyebrow">
         EXPERIENCE 002 · SELF-INITIATED CONCEPT
       </p>
 
@@ -131,47 +131,60 @@
       </h1>
 
 
-      <p class="case-definition">
+      <p class="hero-description">
 
-        An immersive exhibition concept transforming
-        the emotional language of dreams into spaces
-        that can be visited.
+        An immersive exhibition concept that transforms
+        the emotions, memories and strange logic of dreams
+        into spaces people can visit.
 
       </p>
 
 
-      <div class="project-information">
+      <div class="project-facts">
 
-        <div>
+        <article>
 
           <span>
             ROLE
           </span>
 
           <p>
-            CREATIVE DIRECTION<br>
-            EXPERIENCE DESIGN<br>
-            INTERACTIVE PROTOTYPING
+            Creative direction<br>
+            Experience design<br>
+            Interactive prototyping
           </p>
 
-        </div>
+        </article>
 
 
-        <div>
+        <article>
 
           <span>
             FORMAT
           </span>
 
           <p>
-            DIGITAL PROTOTYPE<br>
-            FOR A PHYSICAL EXHIBITION
+            Digital prototype for<br>
+            a physical exhibition
           </p>
 
-        </div>
+        </article>
 
 
-        <div>
+        <article>
+
+          <span>
+            CREATED BY
+          </span>
+
+          <p>
+            Lou-Ann de Sia
+          </p>
+
+        </article>
+
+
+        <article>
 
           <span>
             YEAR
@@ -181,26 +194,13 @@
             2026
           </p>
 
-        </div>
-
-
-        <div>
-
-          <span>
-            STATUS
-          </span>
-
-          <p>
-            CONCEPT PROTOTYPE
-          </p>
-
-        </div>
+        </article>
 
       </div>
 
 
       <a
-        class="replay-link"
+        class="hero-link"
         href="index.html"
       >
         REPLAY THE EXPERIENCE →
@@ -210,14 +210,14 @@
 
 
     <!-- ==========================================
-         QUESTION CENTRALE
+         QUESTION PRINCIPALE
     =========================================== -->
 
-    <section class="central-question">
+    <section class="project-question">
 
-      <span>
+      <p class="section-label">
         THE STARTING POINT
-      </span>
+      </p>
 
 
       <h2>
@@ -231,72 +231,141 @@
       </h2>
 
 
-      <p>
+      <div class="question-explanation">
 
-        Dreams are private, unstable and often impossible
-        to describe. The challenge was to transform this
-        intimate material into a collective experience
-        without pretending that every dream is the same.
+        <p>
 
-      </p>
+          Dreams are private, unstable and difficult to describe.
+          Their spaces change suddenly, time behaves strangely
+          and most details disappear after waking.
+
+        </p>
+
+
+        <p>
+
+          The project explores how those unstable experiences
+          could become a collective exhibition without claiming
+          that every person dreams in the same way.
+
+        </p>
+
+      </div>
 
     </section>
 
 
     <!-- ==========================================
-         APERÇU DU PARCOURS
+         PARCOURS RÉSUMÉ
     =========================================== -->
 
-    <section class="journey-preview">
+    <section class="journey-overview">
 
-      <div class="journey-heading">
+      <div class="journey-title">
 
-        <span>
-          THE EXPERIENCE IN ONE NIGHT
-        </span>
-
-        <p>
-          From wakefulness to dreaming and back again.
+        <p class="section-label">
+          ONE NIGHT · ONE JOURNEY
         </p>
+
+        <h2>
+          FROM WAKEFULNESS<br>
+          TO DREAMING<br>
+          AND BACK AGAIN.
+        </h2>
 
       </div>
 
 
-      <ol>
+      <ol class="journey-line">
 
         <li>
-          <span>01</span>
-          AWAKE
+
+          <span>
+            01
+          </span>
+
+          <strong>
+            AWAKE
+          </strong>
+
         </li>
 
-        <li>
-          <span>02</span>
-          FALLING ASLEEP
-        </li>
 
         <li>
-          <span>03</span>
-          ENTERING THE MIND
+
+          <span>
+            02
+          </span>
+
+          <strong>
+            FALLING ASLEEP
+          </strong>
+
         </li>
 
-        <li>
-          <span>04</span>
-          DREAM GALLERIES
-        </li>
 
         <li>
-          <span>05</span>
-          NIGHTMARE
+
+          <span>
+            03
+          </span>
+
+          <strong>
+            ENTERING THE MIND
+          </strong>
+
         </li>
 
-        <li>
-          <span>06</span>
-          AWAKENING
-        </li>
 
         <li>
-          <span>07</span>
-          LIVING ARCHIVE
+
+          <span>
+            04
+          </span>
+
+          <strong>
+            DREAM GALLERIES
+          </strong>
+
+        </li>
+
+
+        <li>
+
+          <span>
+            05
+          </span>
+
+          <strong>
+            NIGHTMARE
+          </strong>
+
+        </li>
+
+
+        <li>
+
+          <span>
+            06
+          </span>
+
+          <strong>
+            AWAKENING
+          </strong>
+
+        </li>
+
+
+        <li>
+
+          <span>
+            07
+          </span>
+
+          <strong>
+            DREAM ARCHIVE
+          </strong>
+
         </li>
 
       </ol>
@@ -305,28 +374,32 @@
 
 
     <!-- ==========================================
-         INDEX DE LA CASE STUDY
+         CASE STUDY
     =========================================== -->
 
     <section
-      class="case-index"
-      id="case-index"
+      class="case-archive"
+      id="case-archive"
     >
 
-      <div class="index-heading">
+      <div class="archive-introduction">
 
-        <span>
+        <p class="section-label">
           PROJECT ARCHIVE
-        </span>
+        </p>
+
 
         <h2>
           EXPLORE THE<br>
           CASE STUDY
         </h2>
 
+
         <p>
-          Open a chapter to examine the thinking,
-          research and production behind the museum.
+
+          Open a chapter to discover the thinking,
+          research and production behind the experience.
+
         </p>
 
       </div>
@@ -337,30 +410,36 @@
       ========================================= -->
 
       <article
-        class="case-chapter is-open"
-        data-accent="violet"
+        class="accordion-section is-open"
+        data-colour="#7456c5"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="true"
-          aria-controls="chapter-01"
+          aria-controls="panel-01"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             01
           </span>
 
-          <span class="chapter-title">
-            THE CHALLENGE
+
+          <span class="accordion-heading">
+
+            <strong>
+              THE CHALLENGE
+            </strong>
+
+            <small>
+              How can something invisible become a place?
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            Turning private memories into a collective experience.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             ×
           </span>
 
@@ -368,45 +447,52 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-01"
+          class="accordion-panel"
+          id="panel-01"
         >
 
-          <div class="chapter-content two-column-content">
-
-            <h3>
-              HOW CAN SOMETHING INVISIBLE BECOME A PLACE?
-            </h3>
-
+          <div class="accordion-content challenge-layout">
 
             <div>
 
+              <p class="section-label">
+                DESIGN QUESTION
+              </p>
+
+              <h3>
+                MAKING DREAMS VISITABLE
+              </h3>
+
+            </div>
+
+
+            <div class="readable-copy">
+
               <p>
 
-                Dreams have no stable architecture. Their spaces
-                transform without explanation, time behaves
-                inconsistently and the dreamer often forgets
-                everything within minutes of waking.
+                A dream has no stable architecture. A bedroom can
+                become a station, a familiar person can lose their
+                face and an ordinary corridor can continue forever.
 
               </p>
 
 
               <p>
 
-                The project therefore avoids reconstructing dreams
-                as literal scenes. Instead, it translates their
-                emotional logic into space, movement, sound,
-                light and interaction.
+                Reconstructing those scenes literally would reduce
+                them to illustrations. Instead, the museum translates
+                their emotional logic into space, light, sound,
+                movement and interaction.
 
               </p>
 
 
               <blockquote>
 
-                The objective was not to explain dreams.
+                The objective is not to explain dreams.
 
                 <em>
-                  It was to make their instability visitable.
+                  It is to make their instability visitable.
                 </em>
 
               </blockquote>
@@ -425,30 +511,36 @@
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="blue"
+        class="accordion-section"
+        data-colour="#4675a8"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-02"
+          aria-controls="panel-02"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             02
           </span>
 
-          <span class="chapter-title">
-            THE CURATORIAL SYSTEM
+
+          <span class="accordion-heading">
+
+            <strong>
+              THE CURATORIAL SYSTEM
+            </strong>
+
+            <small>
+              Why the museum groups dreams by feeling.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            Why dreams are organised by emotion, not literal story.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -456,117 +548,154 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-02"
+          class="accordion-panel"
+          id="panel-02"
         >
 
-          <div class="chapter-content">
+          <div class="accordion-content">
 
-            <div class="chapter-introduction">
+            <div class="chapter-opening">
+
+              <p class="section-label">
+                SHARED EMOTIONS · DIFFERENT STORIES
+              </p>
+
 
               <h3>
-                DREAMS ARE CONNECTED THROUGH EMOTIONAL RESONANCE.
+
+                The museum groups dreams by the feeling
+                they leave behind,
+
+                <em>
+                  not only by what happens in them.
+                </em>
+
               </h3>
+
 
               <p>
 
-                No two dreams are identical. However, their emotional
-                structures, sensory details and recurring transformations
-                can echo one another.
+                Two dreams may contain completely different people,
+                places and events while creating the same feeling
+                of urgency, wonder, nostalgia or fear.
 
               </p>
 
             </div>
 
 
-            <div class="room-system">
+            <div class="room-grid">
 
-              <div class="room-card everyday-card">
+              <article class="room-card everyday-room">
 
-                <span>ROOM 01</span>
+                <span>
+                  ROOM 01
+                </span>
 
-                <strong>EVERYDAY</strong>
-
-                <p>
-                  Familiarity becoming strange.
-                </p>
-
-              </div>
-
-
-              <div class="room-card childhood-card">
-
-                <span>ROOM 02</span>
-
-                <strong>CHILDHOOD</strong>
+                <strong>
+                  EVERYDAY
+                </strong>
 
                 <p>
-                  Memory and distorted scale.
+                  Familiar places becoming subtly wrong.
                 </p>
 
-              </div>
+              </article>
 
 
-              <div class="room-card adventure-card">
+              <article class="room-card childhood-room">
 
-                <span>ROOM 03</span>
+                <span>
+                  ROOM 02
+                </span>
 
-                <strong>ADVENTURE</strong>
+                <strong>
+                  CHILDHOOD
+                </strong>
 
                 <p>
-                  Wonder and impossible movement.
+                  Memories rebuilt with distorted proportions.
                 </p>
 
-              </div>
+              </article>
 
 
-              <div class="room-card romance-card">
+              <article class="room-card adventure-room">
 
-                <span>ROOM 04</span>
+                <span>
+                  ROOM 03
+                </span>
 
-                <strong>ROMANCE</strong>
+                <strong>
+                  ADVENTURE
+                </strong>
 
                 <p>
-                  Desire, intimacy and jealousy.
+                  Wonder, movement and impossible landscapes.
                 </p>
 
-              </div>
+              </article>
 
 
-              <div class="room-card action-card">
+              <article class="room-card romance-room">
 
-                <span>ROOM 05</span>
+                <span>
+                  ROOM 04
+                </span>
 
-                <strong>ACTION</strong>
+                <strong>
+                  ROMANCE
+                </strong>
+
+                <p>
+                  Attraction, intimacy and jealousy.
+                </p>
+
+              </article>
+
+
+              <article class="room-card action-room">
+
+                <span>
+                  ROOM 05
+                </span>
+
+                <strong>
+                  ACTION
+                </strong>
 
                 <p>
                   Speed, urgency and loss of control.
                 </p>
 
-              </div>
+              </article>
 
 
-              <div class="room-card nightmare-card">
+              <article class="room-card nightmare-room">
 
-                <span>ROOM 06</span>
+                <span>
+                  ROOM 06
+                </span>
 
-                <strong>NIGHTMARE</strong>
+                <strong>
+                  NIGHTMARE
+                </strong>
 
                 <p>
-                  Fear, paralysis and awakening.
+                  Fear, pursuit and forced awakening.
                 </p>
 
-              </div>
+              </article>
 
             </div>
 
 
-            <p class="large-statement">
+            <p class="chapter-conclusion">
 
               The rooms represent shared emotional patterns,
 
               <em>
-                not the private story of a single dreamer.
+                not one person’s private story.
               </em>
 
             </p>
@@ -579,34 +708,40 @@
 
 
       <!-- ========================================
-           03 — DREAM TO EXHIBITION
+           03 — DREAM SELECTION
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="rose"
+        class="accordion-section"
+        data-colour="#c85e91"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-03"
+          aria-controls="panel-03"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             03
           </span>
 
-          <span class="chapter-title">
-            FROM DREAM TO EXHIBITION
+
+          <span class="accordion-heading">
+
+            <strong>
+              FROM DREAM TO EXHIBITION
+            </strong>
+
+            <small>
+              How submitted dreams become installations.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            How dreams are collected, protected and transformed.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -614,43 +749,52 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-03"
+          class="accordion-panel"
+          id="panel-03"
         >
 
-          <div class="chapter-content">
+          <div class="accordion-content">
 
-            <div class="chapter-introduction">
+            <div class="chapter-opening">
+
+              <p class="section-label">
+                THE SELECTION PROCESS
+              </p>
+
 
               <h3>
-                HOW DOES A DREAM ENTER THE MUSEUM?
+                HOW DOES A DREAM<br>
+                ENTER THE MUSEUM?
               </h3>
+
 
               <p>
 
-                The museum does not reproduce one person’s dream
-                exactly as it was submitted. Dreams are collected,
-                protected, studied and combined before becoming
-                part of an exhibition.
+                The museum does not place a submitted dream directly
+                in public view. Every contribution passes through
+                consent, moderation and curatorial review.
 
               </p>
 
             </div>
 
 
-            <div class="selection-process">
+            <div class="process-grid">
 
               <article>
 
-                <span>01 · COLLECT</span>
+                <span>
+                  01
+                </span>
 
-                <h4>VOLUNTARY SUBMISSION</h4>
+                <strong>
+                  COLLECT
+                </strong>
 
                 <p>
 
-                  Dreams are gathered through the open collection,
-                  voluntary interviews and international artistic
-                  research.
+                  Dreams are gathered voluntarily through the open
+                  collection, interviews and artistic research.
 
                 </p>
 
@@ -659,14 +803,18 @@
 
               <article>
 
-                <span>02 · PROTECT</span>
+                <span>
+                  02
+                </span>
 
-                <h4>ANONYMISATION</h4>
+                <strong>
+                  PROTECT
+                </strong>
 
                 <p>
 
                   Names, precise locations and identifying details
-                  are removed before any material is reviewed.
+                  are removed.
 
                 </p>
 
@@ -675,15 +823,18 @@
 
               <article>
 
-                <span>03 · REVIEW</span>
+                <span>
+                  03
+                </span>
 
-                <h4>CONSENT AND MODERATION</h4>
+                <strong>
+                  REVIEW
+                </strong>
 
                 <p>
 
                   Contributors choose whether their dream remains
-                  private, enters the anonymous archive or may inspire
-                  an artwork. Harmful submissions are rejected.
+                  private, enters the archive or may inspire an artwork.
 
                 </p>
 
@@ -692,15 +843,18 @@
 
               <article>
 
-                <span>04 · IDENTIFY</span>
+                <span>
+                  04
+                </span>
 
-                <h4>EMOTIONAL MAPPING</h4>
+                <strong>
+                  IDENTIFY
+                </strong>
 
                 <p>
 
-                  Each dream is examined through its dominant feelings,
-                  sensory details and recurring motifs—not diagnosed
-                  or assigned a universal meaning.
+                  Curators identify the main emotion, sensory details
+                  and recurring motifs without diagnosing the dreamer.
 
                 </p>
 
@@ -709,15 +863,18 @@
 
               <article>
 
-                <span>05 · CONNECT</span>
+                <span>
+                  05
+                </span>
 
-                <h4>CURATORIAL CLUSTERS</h4>
+                <strong>
+                  CONNECT
+                </strong>
 
                 <p>
 
-                  Dreams sharing emotional or structural qualities
-                  are connected, even when their stories appear
-                  completely different.
+                  Dreams with related feelings or structures are
+                  grouped together.
 
                 </p>
 
@@ -726,15 +883,18 @@
 
               <article>
 
-                <span>06 · CREATE</span>
+                <span>
+                  06
+                </span>
 
-                <h4>COMPOSITE DREAMS</h4>
+                <strong>
+                  CREATE
+                </strong>
 
                 <p>
 
-                  Selected fragments are combined into fictional,
-                  anonymous sequences that preserve no complete
-                  individual account.
+                  Artists transform selected fragments into a new
+                  collective installation.
 
                 </p>
 
@@ -743,11 +903,56 @@
             </div>
 
 
+            <div class="composite-explanation">
+
+              <div>
+
+                <p class="section-label">
+                  COMPOSITE DREAMS
+                </p>
+
+                <h3>
+                  SEVERAL DREAMS.<br>
+                  ONE INSTALLATION.
+                </h3>
+
+              </div>
+
+
+              <div class="readable-copy">
+
+                <p>
+
+                  Fragments from several anonymous dreams are combined.
+
+                </p>
+
+
+                <p>
+
+                  One dream may provide the setting, another the
+                  movement and another the emotion.
+
+                </p>
+
+
+                <p>
+
+                  No room claims to reproduce one contributor’s complete
+                  private experience.
+
+                </p>
+
+              </div>
+
+            </div>
+
+
             <div class="selection-principles">
 
-              <h3>
-                SELECTION PRINCIPLES
-              </h3>
+              <p class="section-label">
+                WHAT MAY BE SELECTED
+              </p>
 
 
               <ul>
@@ -782,32 +987,32 @@
               <p>
 
                 Popularity alone does not determine selection.
-                A quiet, ordinary dream may reveal an emotion
-                that has not yet appeared elsewhere.
+                An ordinary dream may reveal a feeling that has
+                not yet appeared elsewhere in the collection.
 
               </p>
 
             </div>
 
 
-            <div class="creative-team">
+            <div class="creation-team">
 
-              <h3>
+              <p class="section-label">
                 WHO CREATES THE ROOMS?
-              </h3>
+              </p>
 
 
               <div class="team-grid">
 
                 <article>
 
-                  <span>01</span>
-
-                  <strong>DREAM CURATOR</strong>
+                  <strong>
+                    DREAM CURATOR
+                  </strong>
 
                   <p>
-                    Identifies connections and defines the emotional
-                    direction of each exhibition.
+                    Connects anonymous dreams and defines the direction
+                    of each exhibition.
                   </p>
 
                 </article>
@@ -815,12 +1020,12 @@
 
                 <article>
 
-                  <span>02</span>
-
-                  <strong>SCIENTIFIC ADVISOR</strong>
+                  <strong>
+                    SCIENTIFIC ADVISOR
+                  </strong>
 
                   <p>
-                    Reviews the use of sleep research and prevents
+                    Reviews the scientific claims and prevents
                     unsupported interpretation.
                   </p>
 
@@ -829,13 +1034,13 @@
 
                 <article>
 
-                  <span>03</span>
-
-                  <strong>COMMISSIONED ARTISTS</strong>
+                  <strong>
+                    COMMISSIONED ARTISTS
+                  </strong>
 
                   <p>
-                    Translate selected fragments through installation,
-                    sculpture, image, music and performance.
+                    Transform dream fragments through image, sculpture,
+                    performance, sound and installation.
                   </p>
 
                 </article>
@@ -843,13 +1048,13 @@
 
                 <article>
 
-                  <span>04</span>
-
-                  <strong>EXPERIENCE DESIGNER</strong>
+                  <strong>
+                    EXPERIENCE DESIGNER
+                  </strong>
 
                   <p>
-                    Connects space, interaction, rhythm and visitor
-                    participation.
+                    Builds the visitor journey through space,
+                    movement and interaction.
                   </p>
 
                 </article>
@@ -857,13 +1062,13 @@
 
                 <article>
 
-                  <span>05</span>
-
-                  <strong>SOUND & LIGHT ARTISTS</strong>
+                  <strong>
+                    SOUND & LIGHT TEAM
+                  </strong>
 
                   <p>
-                    Determine what visitors hear, what remains hidden
-                    and how the atmosphere responds.
+                    Creates the sensory rhythm and emotional behaviour
+                    of every room.
                   </p>
 
                 </article>
@@ -871,13 +1076,13 @@
 
                 <article>
 
-                  <span>06</span>
-
-                  <strong>PRODUCTION TEAM</strong>
+                  <strong>
+                    PRODUCTION TEAM
+                  </strong>
 
                   <p>
                     Evaluates feasibility, accessibility, safety,
-                    technology and production costs.
+                    technology and cost.
                   </p>
 
                 </article>
@@ -887,41 +1092,47 @@
             </div>
 
 
-            <div class="dream-production-line">
+            <div class="production-path">
 
-              <span>DREAM SUBMISSION</span>
-
-              <i>→</i>
-
-              <span>ANONYMISATION</span>
+              <span>
+                DREAM
+              </span>
 
               <i>→</i>
 
-              <span>EMOTIONAL MAPPING</span>
+              <span>
+                ANONYMISATION
+              </span>
 
               <i>→</i>
 
-              <span>CURATORIAL SELECTION</span>
+              <span>
+                EMOTIONAL MAPPING
+              </span>
 
               <i>→</i>
 
-              <span>ARTIST COMMISSION</span>
+              <span>
+                ARTIST COMMISSION
+              </span>
 
               <i>→</i>
 
-              <span>PHYSICAL INSTALLATION</span>
+              <span>
+                INSTALLATION
+              </span>
 
             </div>
 
 
-            <p class="large-statement">
+            <p class="chapter-conclusion">
 
-              The artist does not illustrate the dream literally.
+              Artists do not recreate dreams literally.
 
               <em>
 
-                They translate its emotional structure into something
-                the visitor can see, hear, cross or physically feel.
+                They turn their feelings into light,
+                sound, image and movement.
 
               </em>
 
@@ -939,30 +1150,36 @@
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="gold"
+        class="accordion-section"
+        data-colour="#d47a4d"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-04"
+          aria-controls="panel-04"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             04
           </span>
 
-          <span class="chapter-title">
-            THE VISITOR JOURNEY
+
+          <span class="accordion-heading">
+
+            <strong>
+              THE VISITOR JOURNEY
+            </strong>
+
+            <small>
+              One night told through space, sound and movement.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            One night, from wakefulness to dreaming and back again.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -970,109 +1187,82 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-04"
+          class="accordion-panel"
+          id="panel-04"
         >
 
-          <div class="chapter-content">
+          <div class="accordion-content">
 
-            <div class="chapter-introduction">
+            <div class="chapter-opening">
+
+              <p class="section-label">
+                EXPERIENCE STRUCTURE
+              </p>
+
 
               <h3>
-                THE EXPERIENCE FOLLOWS THE STRUCTURE OF ONE NIGHT.
+                THE VISITOR ENTERS<br>
+                AS THE SLEEPER<br>
+                LOSES CONSCIOUSNESS.
               </h3>
+
 
               <p>
 
-                The visitor enters as the sleeper loses consciousness,
-                moves through increasingly unstable environments and
-                leaves when the sleeper wakes.
+                The galleries become increasingly unstable as the
+                night progresses. The experience ends when a nightmare
+                forces the sleeper—and the visitor—to wake.
 
               </p>
 
             </div>
 
 
-            <ol class="journey-details">
+            <div class="journey-cards">
 
-              <li>
-
+              <article>
                 <span>01</span>
+                <strong>SUNSET</strong>
+                <p>The outside world becomes quieter.</p>
+              </article>
 
-                <strong>THE SUNSET</strong>
-
-                <p>
-                  The outside world becomes quieter and darker.
-                </p>
-
-              </li>
-
-
-              <li>
-
+              <article>
                 <span>02</span>
+                <strong>SLEEP</strong>
+                <p>The eyes close while the mind remains active.</p>
+              </article>
 
-                <strong>THE SLEEPER</strong>
-
-                <p>
-                  The eyes close while neural activity begins.
-                </p>
-
-              </li>
-
-
-              <li>
-
+              <article>
                 <span>03</span>
+                <strong>MIND</strong>
+                <p>Memory and sensation become exhibition material.</p>
+              </article>
 
-                <strong>THE MIND</strong>
-
-                <p>
-                  Memory, sensation and emotion become exhibition material.
-                </p>
-
-              </li>
-
-
-              <li>
-
+              <article>
                 <span>04</span>
+                <strong>DREAMS</strong>
+                <p>Each gallery explores an emotional structure.</p>
+              </article>
 
-                <strong>THE GALLERIES</strong>
-
-                <p>
-                  Each room explores a different emotional dream structure.
-                </p>
-
-              </li>
-
-
-              <li>
-
+              <article>
                 <span>05</span>
+                <strong>NIGHTMARE</strong>
+                <p>The experience loses stability and control.</p>
+              </article>
 
-                <strong>THE NIGHTMARE</strong>
-
-                <p>
-                  The experience loses stability and forces an awakening.
-                </p>
-
-              </li>
-
-
-              <li>
-
+              <article>
                 <span>06</span>
+                <strong>AWAKENING</strong>
+                <p>Light, calm and the outside world return.</p>
+              </article>
 
-                <strong>THE ARCHIVE</strong>
+              <article>
+                <span>07</span>
+                <strong>ARCHIVE</strong>
+                <p>The visitor records what remains of a dream.</p>
+              </article>
 
-                <p>
-                  The visitor contributes what remains of their own dream.
-                </p>
-
-              </li>
-
-            </ol>
+            </div>
 
           </div>
 
@@ -1086,30 +1276,36 @@
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="cyan"
+        class="accordion-section"
+        data-colour="#4f879d"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-05"
+          aria-controls="panel-05"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             05
           </span>
 
-          <span class="chapter-title">
-            DIGITAL TO PHYSICAL
+
+          <span class="accordion-heading">
+
+            <strong>
+              DIGITAL TO PHYSICAL
+            </strong>
+
+            <small>
+              How the website prototypes a real exhibition.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            How the website prototypes a real exhibition.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -1117,118 +1313,111 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-05"
+          class="accordion-panel"
+          id="panel-05"
         >
 
-          <div class="chapter-content">
+          <div class="accordion-content">
 
-            <div class="chapter-introduction">
+            <div class="chapter-opening">
+
+              <p class="section-label">
+                PROTOTYPE PURPOSE
+              </p>
+
 
               <h3>
-                THE WEBSITE IS NOT THE MUSEUM ITSELF.
+                THE WEBSITE IS NOT<br>
+                THE MUSEUM ITSELF.
               </h3>
+
 
               <p>
 
-                It is a narrative and interactive prototype showing
-                how the exhibition could feel, move and respond before
-                being produced physically.
+                It demonstrates how the exhibition could feel,
+                move and respond before being produced physically.
 
               </p>
 
             </div>
 
 
-            <div class="translation-table">
+            <div class="translation-grid">
 
-              <div class="translation-heading">
+              <div class="translation-row">
+
+                <strong>
+                  SCROLL AND CURSOR
+                </strong>
 
                 <span>
-                  DIGITAL PROTOTYPE
+                  VISITOR MOVEMENT
                 </span>
+
+              </div>
+
+
+              <div class="translation-row">
+
+                <strong>
+                  ANIMATED SCREENS
+                </strong>
 
                 <span>
-                  PHYSICAL EXHIBITION
+                  MONUMENTAL PROJECTIONS
                 </span>
 
               </div>
 
 
-              <div>
+              <div class="translation-row">
 
                 <strong>
-                  Scroll and cursor movement
+                  REACTIVE AUDIO
                 </strong>
 
-                <p>
-                  Visitor movement through space
-                </p>
+                <span>
+                  SPATIAL SOUND
+                </span>
 
               </div>
 
 
-              <div>
+              <div class="translation-row">
 
                 <strong>
-                  Animated screens
+                  COLOUR TRANSITIONS
                 </strong>
 
-                <p>
-                  Monumental projections
-                </p>
+                <span>
+                  SCENOGRAPHIC LIGHTING
+                </span>
 
               </div>
 
 
-              <div>
+              <div class="translation-row">
 
                 <strong>
-                  Reactive audio
+                  DIGITAL PARTICLES
                 </strong>
 
-                <p>
-                  Spatial sound installation
-                </p>
+                <span>
+                  SENSORS AND SUSPENDED LIGHTS
+                </span>
 
               </div>
 
 
-              <div>
+              <div class="translation-row">
 
                 <strong>
-                  Colour transitions
+                  DREAM OBSERVATORY
                 </strong>
 
-                <p>
-                  Responsive scenographic lighting
-                </p>
-
-              </div>
-
-
-              <div>
-
-                <strong>
-                  Interactive particles
-                </strong>
-
-                <p>
-                  Sensors and suspended lights
-                </p>
-
-              </div>
-
-
-              <div>
-
-                <strong>
-                  Dream Observatory
-                </strong>
-
-                <p>
-                  Collective luminous archive
-                </p>
+                <span>
+                  COLLECTIVE LIGHT ARCHIVE
+                </span>
 
               </div>
 
@@ -1242,34 +1431,40 @@
 
 
       <!-- ========================================
-           06 — ARTISTIC COLLABORATION
+           06 — ARTISTS
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="orange"
+        class="accordion-section"
+        data-colour="#b76a45"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-06"
+          aria-controls="panel-06"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             06
           </span>
 
-          <span class="chapter-title">
-            THE ARTISTIC COLLABORATION
+
+          <span class="accordion-heading">
+
+            <strong>
+              THE ARTISTIC COLLABORATION
+            </strong>
+
+            <small>
+              A platform for artists from different disciplines.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            A platform for artists working across disciplines.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -1277,25 +1472,34 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-06"
+          class="accordion-panel"
+          id="panel-06"
         >
 
-          <div class="chapter-content two-column-content">
-
-            <h3>
-              ONE COLLECTION.<br>
-              MANY ARTISTIC LANGUAGES.
-            </h3>
-
+          <div class="accordion-content challenge-layout">
 
             <div>
 
+              <p class="section-label">
+                COLLECTIVE EXHIBITION
+              </p>
+
+              <h3>
+                ONE COLLECTION.<br>
+                MANY ARTISTIC<br>
+                LANGUAGES.
+              </h3>
+
+            </div>
+
+
+            <div class="readable-copy">
+
               <p>
 
-                Each gallery is conceived as a platform for artists
+                Each gallery is designed as a platform for artists
                 from different countries working across installation,
-                sculpture, painting, moving image, sound, music,
+                sculpture, moving image, music, light, sound,
                 performance and interactive technology.
 
               </p>
@@ -1303,14 +1507,13 @@
 
               <p>
 
-                Artists would be commissioned according to the emotional
-                and sensory character of a room—not asked to reproduce
-                a contributor’s private account literally.
+                Artists are selected according to the emotional
+                and sensory character of the room.
 
               </p>
 
 
-              <div class="medium-list">
+              <div class="medium-tags">
 
                 <span>INSTALLATION</span>
                 <span>SCULPTURE</span>
@@ -1333,34 +1536,40 @@
 
 
       <!-- ========================================
-           07 — RESEARCH
+           07 — SCIENCE
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="green"
+        class="accordion-section"
+        data-colour="#598169"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-07"
+          aria-controls="panel-07"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             07
           </span>
 
-          <span class="chapter-title">
-            RESEARCH FOUNDATION
+
+          <span class="accordion-heading">
+
+            <strong>
+              RESEARCH FOUNDATION
+            </strong>
+
+            <small>
+              Scientific context without universal interpretation.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            Scientific context, never universal interpretation.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -1368,23 +1577,31 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-07"
+          class="accordion-panel"
+          id="panel-07"
         >
 
-          <div class="chapter-content">
+          <div class="accordion-content">
 
-            <div class="chapter-introduction">
+            <div class="chapter-opening">
+
+              <p class="section-label">
+                RESEARCH · NOT INTERPRETATION
+              </p>
+
 
               <h3>
-                RESEARCH, NOT INTERPRETATION.
+                SCIENCE PROVIDES CONTEXT.<br>
+                IT DOES NOT DECODE THE DREAMER.
               </h3>
+
 
               <p>
 
-                The project does not attempt to decode dreams or assign
-                them universal meanings. Research provides context for
-                the creative direction while uncertainty remains visible.
+                The project uses peer-reviewed research to understand
+                memory, emotion and recurring dream patterns. It does
+                not assign fixed meanings to symbols or claim that
+                one finding applies to every person.
 
               </p>
 
@@ -1394,45 +1611,42 @@
             <div class="research-grid">
 
               <a
-                class="research-card"
                 href="https://pubmed.ncbi.nlm.nih.gov/29020066/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
 
                 <span>
-                  RESEARCH 01 · MEMORY SOURCES
+                  01 · MEMORY SOURCES
                 </span>
 
                 <strong>
-                  DREAMS RARELY REPLAY MEMORY EXACTLY
+                  DREAMS RARELY REPLAY A MEMORY EXACTLY
                 </strong>
 
                 <p>
 
-                  In a seven-day protocol, most dream reports were
-                  connected to waking-life elements, including recent,
-                  remote and mundane experiences. The authors note that
-                  dreams rarely replay episodic memories as remembered.
+                  Dream reports were often connected to waking-life
+                  elements, including recent, remote and ordinary
+                  experiences.
 
                 </p>
 
                 <small>
-                  VALLAT ET AL. · PLOS ONE · 2017 ↗
+                  VALLAT ET AL. · 2017 ↗
                 </small>
 
               </a>
 
 
               <a
-                class="research-card"
                 href="https://pubmed.ncbi.nlm.nih.gov/20417102/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
 
                 <span>
-                  RESEARCH 02 · SPATIAL LEARNING
+                  02 · SPATIAL LEARNING
                 </span>
 
                 <strong>
@@ -1441,154 +1655,135 @@
 
                 <p>
 
-                  Participants who dreamed about a virtual navigation
-                  task showed greater improvement after sleep. This was
-                  an association and does not prove that dreaming alone
-                  caused better learning.
+                  Dreaming about a virtual navigation task was associated
+                  with greater improvement after sleep. It does not prove
+                  that dreaming alone caused the improvement.
 
                 </p>
 
                 <small>
-                  WAMSLEY ET AL. · CURRENT BIOLOGY · 2010 ↗
+                  WAMSLEY ET AL. · 2010 ↗
                 </small>
 
               </a>
 
 
               <a
-                class="research-card"
                 href="https://journals.sagepub.com/doi/10.1177/1948550613486678"
                 target="_blank"
                 rel="noopener noreferrer"
               >
 
                 <span>
-                  RESEARCH 03 · RELATIONSHIPS
+                  03 · RELATIONSHIPS
                 </span>
 
                 <strong>
-                  SOME DREAM EXPERIENCES ECHOED INTO THE NEXT DAY
+                  SOME DREAM EMOTIONS ECHOED INTO THE NEXT DAY
                 </strong>
 
                 <p>
 
-                  Emotions and interactions involving romantic partners
-                  in dreams were associated with aspects of relationship
-                  behaviour on the following day.
+                  Dreams involving romantic partners were associated
+                  with aspects of relationship behaviour on the
+                  following day.
 
                 </p>
 
                 <small>
-                  SELTERMAN ET AL. · SPPS · 2014 ↗
+                  SELTERMAN ET AL. · 2014 ↗
                 </small>
 
               </a>
 
             </div>
 
+
+            <div class="scientific-references">
+
+              <p class="section-label">
+                SELECTED SCIENTIFIC REFERENCES
+              </p>
+
+
+              <ol>
+
+                <li>
+
+                  Vallat, R., Chatard, B., Blagrove, M. & Ruby, P.
+                  “Characteristics of the memory sources of dreams.”
+                  <em>PLOS ONE</em>, 2017.
+
+                </li>
+
+
+                <li>
+
+                  Wamsley, E. J. et al.
+                  “Dreaming of a learning task is associated with
+                  enhanced sleep-dependent memory consolidation.”
+                  <em>Current Biology</em>, 2010.
+
+                </li>
+
+
+                <li>
+
+                  Selterman, D. F. et al.
+                  “Dreaming of You: Behavior and Emotion in Dreams
+                  of Significant Others Predict Subsequent
+                  Relational Behavior.”
+                  <em>Social Psychological and Personality Science</em>,
+                  2014.
+
+                </li>
+
+              </ol>
+
+            </div>
+
           </div>
 
         </div>
-<div class="scientific-references">
 
-  <span>
-    SELECTED SCIENTIFIC REFERENCES
-  </span>
-
-
-  <ol>
-
-    <li>
-
-      Vallat, R., Chatard, B., Blagrove, M. & Ruby, P.
-      “Characteristics of the memory sources of dreams.”
-      <em>PLOS ONE</em>, 2017.
-
-      <a
-        href="https://pubmed.ncbi.nlm.nih.gov/29020066/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        VIEW PUBLICATION ↗
-      </a>
-
-    </li>
-
-
-    <li>
-
-      Wamsley, E. J., Tucker, M. A., Payne, J. D.,
-      Benavides, J. A. & Stickgold, R.
-      “Dreaming of a learning task is associated with
-      enhanced sleep-dependent memory consolidation.”
-      <em>Current Biology</em>, 2010.
-
-      <a
-        href="https://pubmed.ncbi.nlm.nih.gov/20417102/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        VIEW PUBLICATION ↗
-      </a>
-
-    </li>
-
-
-    <li>
-
-      Selterman, D. F., Apetroaia, A. I.,
-      Riela, S. & Aron, A.
-      “Dreaming of You: Behavior and Emotion in Dreams
-      of Significant Others Predict Subsequent
-      Relational Behavior.”
-      <em>Social Psychological and Personality Science</em>,
-      2014.
-
-      <a
-        href="https://journals.sagepub.com/doi/10.1177/1948550613486678"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        VIEW PUBLICATION ↗
-      </a>
-
-    </li>
-
-  </ol>
-
-</div>
       </article>
 
 
       <!-- ========================================
-           08 — MY ROLE
+           08 — ROLE
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="violet"
+        class="accordion-section"
+        data-colour="#7456c5"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-08"
+          aria-controls="panel-08"
         >
 
-          <span class="chapter-number">
+          <span class="accordion-number">
             08
           </span>
 
-          <span class="chapter-title">
-            MY ROLE
+
+          <span class="accordion-heading">
+
+            <strong>
+              MY ROLE & THE PROTOTYPE
+            </strong>
+
+            <small>
+              From the initial question to the working experience.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            From the initial question to the interactive prototype.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -1596,30 +1791,37 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-08"
+          class="accordion-panel"
+          id="panel-08"
         >
 
-          <div class="chapter-content">
+          <div class="accordion-content">
 
-            <div class="chapter-introduction">
+            <div class="chapter-opening">
+
+              <p class="section-label">
+                CREATED BY LOU-ANN DE SIA
+              </p>
+
 
               <h3>
-                I DEVELOPED THE PROJECT FROM CONCEPT TO PROTOTYPE.
+                FROM CONCEPT<br>
+                TO INTERACTIVE<br>
+                PROTOTYPE.
               </h3>
+
 
               <p>
 
-                The work combined strategic framing, creative direction,
-                narrative construction, interaction design and front-end
-                experimentation.
+                I developed the concept, visitor journey, narrative,
+                art direction and interactive prototype.
 
               </p>
 
             </div>
 
 
-            <div class="role-list">
+            <div class="role-tags">
 
               <span>CONCEPT DEVELOPMENT</span>
               <span>CREATIVE DIRECTION</span>
@@ -1633,62 +1835,14 @@
 
             </div>
 
-          </div>
 
-        </div>
-
-      </article>
-
-
-      <!-- ========================================
-           09 — PROTOTYPE
-      ========================================= -->
-
-      <article
-        class="case-chapter"
-        data-accent="blue"
-      >
-
-        <button
-          class="chapter-trigger"
-          type="button"
-          aria-expanded="false"
-          aria-controls="chapter-09"
-        >
-
-          <span class="chapter-number">
-            09
-          </span>
-
-          <span class="chapter-title">
-            THE PROTOTYPE
-          </span>
-
-          <span class="chapter-summary">
-            What was designed, built and tested.
-          </span>
-
-          <span class="chapter-symbol">
-            +
-          </span>
-
-        </button>
-
-
-        <div
-          class="chapter-panel"
-          id="chapter-09"
-        >
-
-          <div class="chapter-content">
-
-            <div class="prototype-grid">
+            <div class="prototype-description">
 
               <div>
 
-                <span>
+                <p class="section-label">
                   BUILT WITH
-                </span>
+                </p>
 
                 <h3>
                   HTML<br>
@@ -1699,13 +1853,13 @@
               </div>
 
 
-              <div>
+              <div class="readable-copy">
 
                 <p>
 
-                  The prototype uses responsive interfaces, generative
-                  canvas animation, reactive sound, scroll-driven scenes,
-                  local browser storage and original interaction systems.
+                  The prototype uses responsive layouts, canvas animation,
+                  scroll-driven scenes, reactive audio, local browser
+                  storage and emotion-based filtering.
 
                 </p>
 
@@ -1717,11 +1871,7 @@
                   </li>
 
                   <li>
-                    Interactive particle environments
-                  </li>
-
-                  <li>
-                    Scroll-directed transitions
+                    Interactive visual environments
                   </li>
 
                   <li>
@@ -1733,7 +1883,7 @@
                   </li>
 
                   <li>
-                    Emotion-based archive filtering
+                    Collective archive prototype
                   </li>
 
                 </ul>
@@ -1741,18 +1891,6 @@
               </div>
 
             </div>
-
-
-            <p class="large-statement">
-
-              The prototype explores how research, narrative,
-              technology and scenography can become
-
-              <em>
-                one continuous visitor experience.
-              </em>
-
-            </p>
 
           </div>
 
@@ -1762,34 +1900,40 @@
 
 
       <!-- ========================================
-           10 — PRODUCTION NOTE
+           09 — PRODUCTION NOTE
       ========================================= -->
 
       <article
-        class="case-chapter"
-        data-accent="rose"
+        class="accordion-section"
+        data-colour="#c85e91"
       >
 
         <button
-          class="chapter-trigger"
+          class="accordion-trigger"
           type="button"
           aria-expanded="false"
-          aria-controls="chapter-10"
+          aria-controls="panel-09"
         >
 
-          <span class="chapter-number">
-            10
+          <span class="accordion-number">
+            09
           </span>
 
-          <span class="chapter-title">
-            PRODUCTION NOTE
+
+          <span class="accordion-heading">
+
+            <strong>
+              PRODUCTION NOTE
+            </strong>
+
+            <small>
+              A transparent account of how the project was created.
+            </small>
+
           </span>
 
-          <span class="chapter-summary">
-            A transparent account of how the concept was produced.
-          </span>
 
-          <span class="chapter-symbol">
+          <span class="accordion-symbol">
             +
           </span>
 
@@ -1797,34 +1941,42 @@
 
 
         <div
-          class="chapter-panel"
-          id="chapter-10"
+          class="accordion-panel"
+          id="panel-09"
         >
 
-          <div class="chapter-content two-column-content">
-
-            <h3>
-              SPECULATIVE,<br>
-              NOT FICTIONAL CLIENT WORK.
-            </h3>
-
+          <div class="accordion-content challenge-layout">
 
             <div>
 
+              <p class="section-label">
+                PROJECT STATUS
+              </p>
+
+              <h3>
+                SELF-INITIATED<br>
+                SPECULATIVE<br>
+                PROJECT.
+              </h3>
+
+            </div>
+
+
+            <div class="readable-copy">
+
               <p>
 
-                The Museum of Dreams is a self-initiated speculative
-                project. It has not yet been commissioned or produced
-                as a physical exhibition.
+                The Museum of Dreams has not yet been commissioned
+                or produced as a physical exhibition.
 
               </p>
 
 
               <p>
 
-                The experience, creative direction, narrative system,
-                visitor journey and interactive prototype were developed
-                by Lou-Ann de Sia.
+                The concept, creative direction, narrative system,
+                visitor journey and interactive prototype were
+                developed by Lou-Ann de Sia.
 
               </p>
 
@@ -1832,9 +1984,16 @@
               <p>
 
                 AI-assisted imagery was used as visualisation material
-                for selected environments and characters. The final
-                physical project would require commissioned artists,
-                scientific advisors and a complete production team.
+                for selected environments and characters.
+
+              </p>
+
+
+              <p>
+
+                A physical production would require commissioned artists,
+                scientific advisors, accessibility specialists and
+                a complete technical production team.
 
               </p>
 
@@ -1855,7 +2014,7 @@
 
     <section class="experience-complete">
 
-      <p>
+      <p class="ending-sentence">
 
         Dreams disappear quickly.
 
@@ -1866,9 +2025,9 @@
       </p>
 
 
-      <span>
+      <p class="section-label">
         THE EXPERIENCE LABORATORY
-      </span>
+      </p>
 
 
       <h2>
@@ -1901,12 +2060,9 @@
         </a>
 
 
-        <!-- Lien à connecter plus tard -->
-
         <a
           href="#"
           class="pending-link"
-          aria-disabled="true"
         >
 
           <span>
@@ -1924,12 +2080,9 @@
         </a>
 
 
-        <!-- Lien à connecter plus tard -->
-
         <a
           href="#"
           class="pending-link"
-          aria-disabled="true"
         >
 
           <span>
@@ -1963,30 +2116,22 @@
        INTERFACE
   =========================================== -->
 
-  <div class="case-progress">
+  <div class="page-progress">
 
-    <span id="case-progress-fill"></span>
+    <span id="page-progress-fill"></span>
 
   </div>
 
 
   <p
-    class="case-status"
-    id="case-status"
+    class="page-status"
+    id="page-status"
   >
     CASE STUDY · INTRODUCTION
   </p>
 
 
-  <div
-    class="chapter-transition"
-    aria-hidden="true"
-  ></div>
-
-
-  <!-- JavaScript -->
-
-  <script src="./case-study.js?v=1"></script>
+  <script src="./case-study.js?v=2"></script>
 
 </body>
 
