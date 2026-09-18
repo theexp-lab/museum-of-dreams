@@ -500,6 +500,16 @@ function loadPersonalDream() {
   personalDreamSection.hidden =
     false;
 
+   const archiveContribution =
+  document.querySelector(
+    "#archive-contribution"
+  );
+
+
+if (archiveContribution) {
+  archiveContribution.hidden =
+    true;
+}
 
   personalDreamFragment.textContent =
     "“" +
