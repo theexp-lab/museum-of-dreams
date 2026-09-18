@@ -1557,6 +1557,40 @@ function resizeWorld() {
   resizeConstellation();
 }
 
+/* ==========================================
+   SUPPRIMER LE RÊVE PERSONNEL
+========================================== */
+
+const removePersonalDream =
+  document.querySelector(
+    "#remove-personal-dream"
+  );
+
+
+if (removePersonalDream) {
+  removePersonalDream.addEventListener(
+    "click",
+    function () {
+      const confirmation =
+        window.confirm(
+          "Remove your dream from this device?"
+        );
+
+
+      if (!confirmation) {
+        return;
+      }
+
+
+      localStorage.removeItem(
+        "museumDreamRecords"
+      );
+
+
+      window.location.reload();
+    }
+  );
+}
 
 /* ==========================================
    INITIALISATION
