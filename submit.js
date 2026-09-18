@@ -625,7 +625,7 @@ copyRecord.addEventListener(
 
 
       copyRecord.textContent =
-        "RECORD COPIED";
+        "DREAM SAVED";
     } catch (error) {
       copyRecord.textContent =
         "COPY UNAVAILABLE";
