@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Italiana&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="adventure.css?v=4">
+  <link rel="stylesheet" href="adventure.css?v=5">
 </head>
 
 <body class="adventure-page">
@@ -92,7 +92,211 @@
     <p>THE MUSEUM OF DREAMS</p>
     <a href="romance.html">ROOM 04 →</a>
   </header>
+<!-- ==========================================
+     OUTILS DE LA SALLE
+=========================================== -->
 
+<div class="adventure-tools">
+
+  <button
+    type="button"
+    class="adventure-tool-button"
+    id="adventure-sound-button"
+    aria-pressed="false"
+  >
+    ENABLE SOUND
+  </button>
+
+  <button
+    type="button"
+    class="adventure-tool-button"
+    id="adventure-notes-button"
+    aria-controls="adventure-notes-panel"
+    aria-expanded="false"
+  >
+    ROOM NOTES +
+  </button>
+
+</div>
+
+
+<button
+  type="button"
+  class="adventure-notes-backdrop"
+  id="adventure-notes-backdrop"
+  aria-label="Close room notes"
+  tabindex="-1"
+></button>
+
+
+<aside
+  class="adventure-notes-panel"
+  id="adventure-notes-panel"
+  aria-hidden="true"
+>
+
+  <div class="adventure-notes-heading">
+
+    <div>
+
+      <span>
+        ROOM 03 · CURATORIAL FILE
+      </span>
+
+      <h2>
+        ADVENTURE
+      </h2>
+
+    </div>
+
+    <button
+      type="button"
+      id="adventure-notes-close"
+      aria-label="Close room notes"
+    >
+      CLOSE ×
+    </button>
+
+  </div>
+
+
+  <section class="adventure-note-section">
+
+    <span class="adventure-note-number">
+      RESEARCH 03.A
+    </span>
+
+    <h3>
+      FLIGHT AS A REPORTED DREAM THEME
+    </h3>
+
+    <p>
+      In a questionnaire completed by 1,181
+      first-year Canadian university students,
+      48.3% reported having experienced a
+      flying dream at least once.
+    </p>
+
+    <a
+      href="https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      NIELSEN ET AL. · 2003 ↗
+    </a>
+
+  </section>
+
+
+  <section class="adventure-note-section">
+
+    <span class="adventure-note-number">
+      RESEARCH 03.B
+    </span>
+
+    <h3>
+      FLIGHT AND LUCIDITY
+    </h3>
+
+    <p>
+      In 1,910 dream reports from 191 participants,
+      people reporting flying dreams were more likely
+      to also report lucid, pre-lucid or false-awakening
+      dreams. This was an association, not proof that
+      flight produces lucidity.
+    </p>
+
+    <a
+      href="https://doi.org/10.1037/h0094325"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      BARRETT · 1991 ↗
+    </a>
+
+  </section>
+
+
+  <section class="adventure-note-section">
+
+    <span class="adventure-note-number">
+      RESEARCH 03.C
+    </span>
+
+    <h3>
+      WHEN ONE PLACE BECOMES ANOTHER
+    </h3>
+
+    <p>
+      In a small experiment using 20 dream reports
+      containing complete scene and plot discontinuities,
+      judges distinguished intact reports from artificially
+      spliced reports only 57% of the time.
+    </p>
+
+    <a
+      href="https://academic.oup.com/sleepadvances/article/6/1/zpae093/7924184"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      STICKGOLD &amp; SANGODEYI · 2025 ↗
+    </a>
+
+  </section>
+
+
+  <section class="adventure-note-section physical-adventure-note">
+
+    <span class="adventure-note-number">
+      PHYSICAL TRANSLATION
+    </span>
+
+    <h3>
+      HOW THIS BECOMES A REAL GALLERY
+    </h3>
+
+    <ul>
+
+      <li>
+        Visitors enter through a raised walkway above
+        an LED cloud floor, accompanied by directional air.
+      </li>
+
+      <li>
+        A projection tunnel makes clouds and stars accelerate
+        around the visitor without requiring a headset.
+      </li>
+
+      <li>
+        Suspended inverted trees descend into the circulation
+        path using lightweight sculptural forms.
+      </li>
+
+      <li>
+        Three connected chambers reproduce three sunsets
+        through light, temperature and spatial sound.
+      </li>
+
+      <li>
+        The final horizon folds through mirrored projection
+        before revealing the light of Room 04.
+      </li>
+
+    </ul>
+
+  </section>
+
+
+  <p class="adventure-research-caveat">
+
+    The room transforms reported dream patterns into
+    an artistic installation. These studies describe
+    specific samples and do not establish universal
+    meanings for flying or falling dreams.
+
+  </p>
+
+</aside>
   <aside class="room-index">
     <span>ROOM 03</span>
     <strong>ADVENTURE</strong>
@@ -136,6 +340,6 @@
 
   <main class="adventure-scroll"></main>
   <div class="romance-transition" aria-hidden="true"></div>
-  <script src="adventure.js?v=4"></script>
+  <script src="adventure.js?v=5"></script>
 </body>
 </html>
