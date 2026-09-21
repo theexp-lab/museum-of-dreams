@@ -86,220 +86,6 @@ a {
 }
 
 
-/* ==========================================
-   ÉCRAN D’ENTRÉE
-========================================== */
-
-.experience-gate {
-  position: fixed;
-  inset: 0;
-
-  z-index: 500;
-
-  display: grid;
-  place-content: center;
-
-  padding:
-    50px 24px;
-
-  overflow: hidden;
-
-  text-align: center;
-
-  background:
-    radial-gradient(
-      circle at 50% 54%,
-      rgba(255, 124, 137, 0.16),
-      transparent 25%
-    ),
-
-    radial-gradient(
-      circle at 50% 50%,
-      #30202d,
-      #130d16 45%,
-      #07060a 82%
-    );
-
-  transition:
-    opacity 900ms ease,
-    visibility 900ms ease;
-}
-
-.experience-gate::before {
-  content: "";
-
-  position: absolute;
-
-  top: 50%;
-  left: 50%;
-
-  width:
-    min(65vw, 850px);
-
-  aspect-ratio: 1;
-
-  border-radius: 50%;
-
-  opacity: 0.34;
-
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 197, 198, 0.22),
-      rgba(255, 91, 103, 0.08) 34%,
-      transparent 68%
-    );
-
-  filter:
-    blur(25px);
-
-  transform:
-    translate(-50%, -50%);
-
-  animation:
-    gateBreathing
-    5.5s ease-in-out infinite;
-}
-
-.experience-gate.hidden {
-  visibility: hidden;
-
-  opacity: 0;
-
-  pointer-events: none;
-}
-
-.experience-gate > * {
-  position: relative;
-
-  z-index: 2;
-}
-
-.gate-room {
-  margin:
-    0 0 29px;
-
-  font-size: 8px;
-
-  letter-spacing: 0.22em;
-
-  text-transform: uppercase;
-
-  opacity: 0.56;
-}
-
-.experience-gate h1 {
-  margin: 0;
-
-  font-family:
-    "Italiana",
-    Georgia,
-    serif;
-
-  font-size:
-    clamp(62px, 9vw, 145px);
-
-  font-weight: 400;
-
-  line-height: 0.82;
-
-  letter-spacing: -0.055em;
-}
-
-.experience-gate h1 em {
-  display: block;
-
-  color: #ffc0c6;
-
-  font-family:
-    "Gloock",
-    Georgia,
-    serif;
-
-  font-weight: 400;
-}
-
-.gate-description {
-  max-width: 440px;
-
-  margin:
-    48px auto 30px;
-
-  font-size: 8px;
-
-  line-height: 1.8;
-
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-
-  opacity: 0.48;
-}
-
-.gate-description span {
-  display: block;
-}
-
-.gate-actions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  gap: 12px;
-}
-
-.gate-actions button {
-  min-width: 220px;
-
-  padding:
-    15px 21px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.28);
-
-  color: var(--ivory);
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
-  font-size: 8px;
-
-  letter-spacing: 0.15em;
-
-  cursor: pointer;
-
-  transition:
-    color 300ms ease,
-    background 300ms ease,
-    border-color 300ms ease,
-    box-shadow 300ms ease;
-}
-
-#enter-with-sound {
-  border-color:
-    rgba(255, 150, 161, 0.68);
-
-  background:
-    rgba(255, 111, 125, 0.09);
-}
-
-.gate-actions button:hover {
-  color: #110a0d;
-
-  background:
-    var(--ivory);
-
-  border-color:
-    var(--ivory);
-
-  box-shadow:
-    0 0 40px
-    rgba(255, 166, 176, 0.18);
-}
-
 
 /* ==========================================
    MONDE ABSTRAIT
@@ -2933,5 +2719,72 @@ a {
   .physical-room-note {
     padding:
       28px 20px 30px;
+  }
+}
+/* ==========================================
+   BOUTON SON — ROMANCE
+========================================== */
+
+#sound-control {
+  position: relative;
+
+  min-width: 105px;
+
+  padding:
+    8px 0 8px 15px;
+
+  text-align: right;
+
+  white-space: nowrap;
+}
+
+#sound-control::before {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 0;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 238, 229, 0.42);
+
+  box-shadow:
+    0 0 0
+    rgba(255, 139, 149, 0);
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    background 350ms ease,
+    box-shadow 350ms ease,
+    transform 350ms ease;
+}
+
+#sound-control[aria-pressed="true"]::before {
+  background: #ff929d;
+
+  box-shadow:
+    0 0 14px
+    rgba(255, 79, 98, 0.88);
+
+  animation:
+    romanceSoundPulse
+    1.7s ease-in-out infinite;
+}
+
+@keyframes romanceSoundPulse {
+  50% {
+    opacity: 0.42;
+
+    transform:
+      translateY(-50%)
+      scale(0.7);
   }
 }
