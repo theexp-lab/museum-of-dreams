@@ -133,35 +133,70 @@
 ];
 
   const scienceSteps = [
-    {
-      start: 0,
-      number: "03.1",
-      title: "FLYING DREAMS",
-      text: "In one student sample, 48.3% reported having experienced a flying dream at least once.",
-      source: "https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b"
-    },
-    {
-      start: 0.39,
-      number: "03.2",
-      title: "RECURRING MOTION",
-      text: "81.5% reported a dream of being chased and 73.8% a dream of falling at least once.",
-      source: "https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b"
-    },
-    {
-      start: 0.58,
-      number: "03.3",
-      title: "FLIGHT & LUCIDITY",
-      text: "Across 1,910 reports, flying dreams were associated with lucid and pre-lucid dreaming.",
-      source: "https://doi.org/10.1037/h0094325"
-    },
-    {
-      start: 0.84,
-      number: "03.4",
-      title: "DREAM DISCONTINUITY",
-      text: "Judges distinguished real dreams from spliced narratives only 57% of the time.",
-      source: "https://academic.oup.com/sleepadvances/article/6/1/zpae093/7924184"
-    }
-  ];
+  {
+    start: 0,
+
+    number:
+      "03.1",
+
+    title:
+      "FLYING DREAMS",
+
+    text:
+      "In a questionnaire of 1,181 first-year Canadian students, 48.3% reported having experienced a flying dream at least once.",
+
+    source:
+      "https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b"
+  },
+
+  {
+    start: 0.39,
+
+    number:
+      "03.2",
+
+    title:
+      "CHASE & FALL",
+
+    text:
+      "In the same student sample, 81.5% reported a dream of being chased and 73.8% a dream of falling at least once.",
+
+    source:
+      "https://link.springer.com/article/10.1023/B:DREM.0000003144.40929.0b"
+  },
+
+  {
+    start: 0.58,
+
+    number:
+      "03.3",
+
+    title:
+      "FLIGHT & LUCIDITY",
+
+    text:
+      "Across 1,910 reports from 191 participants, people reporting flying dreams were more likely to also report lucid or pre-lucid dreams.",
+
+    source:
+      "https://doi.org/10.1037/h0094325"
+  },
+
+  {
+    start: 0.84,
+
+    number:
+      "03.4",
+
+    title:
+      "SCENE DISCONTINUITY",
+
+    text:
+      "In a small experiment using 20 discontinuous dream reports, judges identified intact and artificially spliced reports correctly only 57% of the time.",
+
+    source:
+      "https://academic.oup.com/sleepadvances/article/6/1/zpae093/7924184"
+  }
+];
 
   let narrationIndex = -1;
   let scienceIndex = -1;
