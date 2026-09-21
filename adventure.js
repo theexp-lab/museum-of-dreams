@@ -416,3 +416,852 @@
     calculateProgress();
   });
 })();
+/* ==========================================
+   ADVENTURE — ROOM NOTES
+========================================== */
+
+(function () {
+  "use strict";
+
+
+  const adventurePage =
+    document.querySelector(
+      ".adventure-page"
+    );
+
+
+  const notesButton =
+    document.querySelector(
+      "#adventure-notes-button"
+    );
+
+
+  const notesClose =
+    document.querySelector(
+      "#adventure-notes-close"
+    );
+
+
+  const notesBackdrop =
+    document.querySelector(
+      "#adventure-notes-backdrop"
+    );
+
+
+  const notesPanel =
+    document.querySelector(
+      "#adventure-notes-panel"
+    );
+
+
+  function setNotesOpen(
+    open
+  ) {
+    if (
+      !adventurePage
+    ) {
+      return;
+    }
+
+
+    adventurePage.classList.toggle(
+      "adventure-notes-open",
+      open
+    );
+
+
+    if (
+      notesButton
+    ) {
+      notesButton.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
+
+
+      notesButton.textContent =
+        open
+          ? "ROOM NOTES −"
+          : "ROOM NOTES +";
+    }
+
+
+    if (
+      notesPanel
+    ) {
+      notesPanel.setAttribute(
+        "aria-hidden",
+        String(!open)
+      );
+    }
+  }
+
+
+  if (
+    notesButton
+  ) {
+    notesButton.addEventListener(
+      "click",
+      function () {
+        setNotesOpen(
+          !adventurePage.classList.contains(
+            "adventure-notes-open"
+          )
+        );
+      }
+    );
+  }
+
+
+  if (
+    notesClose
+  ) {
+    notesClose.addEventListener(
+      "click",
+      function () {
+        setNotesOpen(
+          false
+        );
+      }
+    );
+  }
+
+
+  if (
+    notesBackdrop
+  ) {
+    notesBackdrop.addEventListener(
+      "click",
+      function () {
+        setNotesOpen(
+          false
+        );
+      }
+    );
+  }
+
+
+  window.addEventListener(
+    "keydown",
+    function (
+      event
+    ) {
+      if (
+        event.key ===
+        "Escape"
+      ) {
+        setNotesOpen(
+          false
+        );
+      }
+    }
+  );
+
+
+/* ==========================================
+   AMBIANCE SONORE
+
+   Vent, traversée rapide, forêt suspendue,
+   chute et apparition de la lumière.
+========================================== */
+
+  const soundButton =
+    document.querySelector(
+      "#adventure-sound-button"
+    );
+
+
+  let audioContext =
+    null;
+
+
+  let masterGain =
+    null;
+
+
+  let windGain =
+    null;
+
+
+  let forestGain =
+    null;
+
+
+  let fallGain =
+    null;
+
+
+  let romanceGain =
+    null;
+
+
+  let soundEnabled =
+    false;
+
+
+  let audioCreated =
+    false;
+
+
+  let chimeTimer =
+    null;
+
+
+/* ==========================================
+   PROGRESSION LOCALE
+========================================== */
+
+  function getAdventureProgress() {
+    const maximumScroll =
+      Math.max(
+        1,
+        document.documentElement.scrollHeight -
+        window.innerHeight
+      );
+
+
+    return Math.min(
+      Math.max(
+        window.scrollY /
+        maximumScroll,
+        0
+      ),
+      1
+    );
+  }
+
+
+  function soundRange(
+    progress,
+    start,
+    end
+  ) {
+    return Math.min(
+      Math.max(
+        (
+          progress -
+          start
+        ) /
+        (
+          end -
+          start
+        ),
+        0
+      ),
+      1
+    );
+  }
+
+
+/* ==========================================
+   CRÉATION DU SON
+========================================== */
+
+  function createNoiseSource(
+    filterType,
+    frequency,
+    destination
+  ) {
+    const duration =
+      2;
+
+
+    const buffer =
+      audioContext.createBuffer(
+        1,
+        audioContext.sampleRate *
+        duration,
+        audioContext.sampleRate
+      );
+
+
+    const data =
+      buffer.getChannelData(
+        0
+      );
+
+
+    for (
+      let index = 0;
+      index < data.length;
+      index++
+    ) {
+      data[
+        index
+      ] =
+        Math.random() *
+        2 -
+        1;
+    }
+
+
+    const source =
+      audioContext.createBufferSource();
+
+
+    const filter =
+      audioContext.createBiquadFilter();
+
+
+    source.buffer =
+      buffer;
+
+
+    source.loop =
+      true;
+
+
+    filter.type =
+      filterType;
+
+
+    filter.frequency.value =
+      frequency;
+
+
+    filter.Q.value =
+      0.7;
+
+
+    source.connect(
+      filter
+    );
+
+
+    filter.connect(
+      destination
+    );
+
+
+    source.start();
+
+
+    return {
+      source: source,
+      filter: filter
+    };
+  }
+
+
+  function createAdventureAudio() {
+    if (
+      audioCreated
+    ) {
+      return;
+    }
+
+
+    const AudioContextClass =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+
+    if (
+      !AudioContextClass
+    ) {
+      return;
+    }
+
+
+    audioContext =
+      new AudioContextClass();
+
+
+    masterGain =
+      audioContext.createGain();
+
+
+    windGain =
+      audioContext.createGain();
+
+
+    forestGain =
+      audioContext.createGain();
+
+
+    fallGain =
+      audioContext.createGain();
+
+
+    romanceGain =
+      audioContext.createGain();
+
+
+    masterGain.gain.value =
+      0.0001;
+
+
+    windGain.gain.value =
+      0.0001;
+
+
+    forestGain.gain.value =
+      0.0001;
+
+
+    fallGain.gain.value =
+      0.0001;
+
+
+    romanceGain.gain.value =
+      0.0001;
+
+
+    windGain.connect(
+      masterGain
+    );
+
+
+    forestGain.connect(
+      masterGain
+    );
+
+
+    fallGain.connect(
+      masterGain
+    );
+
+
+    romanceGain.connect(
+      masterGain
+    );
+
+
+    masterGain.connect(
+      audioContext.destination
+    );
+
+
+    createNoiseSource(
+      "bandpass",
+      720,
+      windGain
+    );
+
+
+    createNoiseSource(
+      "highpass",
+      1900,
+      forestGain
+    );
+
+
+    createNoiseSource(
+      "lowpass",
+      230,
+      fallGain
+    );
+
+
+    /*
+     * Vibration grave durant la chute.
+     */
+
+    const fallOscillator =
+      audioContext.createOscillator();
+
+
+    fallOscillator.type =
+      "sine";
+
+
+    fallOscillator.frequency.value =
+      49;
+
+
+    fallOscillator.connect(
+      fallGain
+    );
+
+
+    fallOscillator.start();
+
+
+    /*
+     * Lumière de Romance.
+     */
+
+    const romanceOscillator =
+      audioContext.createOscillator();
+
+
+    romanceOscillator.type =
+      "sine";
+
+
+    romanceOscillator.frequency.value =
+      261.63;
+
+
+    romanceOscillator.connect(
+      romanceGain
+    );
+
+
+    romanceOscillator.start();
+
+
+    audioCreated =
+      true;
+  }
+
+
+/* ==========================================
+   ÉCLAT SONORE
+========================================== */
+
+  function playAdventureChime() {
+    if (
+      !soundEnabled ||
+      !audioContext ||
+      !masterGain
+    ) {
+      return;
+    }
+
+
+    const frequencies = [
+      523.25,
+      659.25,
+      783.99,
+      1046.5
+    ];
+
+
+    const frequency =
+      frequencies[
+        Math.floor(
+          Math.random() *
+          frequencies.length
+        )
+      ];
+
+
+    const now =
+      audioContext.currentTime;
+
+
+    const oscillator =
+      audioContext.createOscillator();
+
+
+    const gain =
+      audioContext.createGain();
+
+
+    oscillator.type =
+      "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+      frequency,
+      now
+    );
+
+
+    gain.gain.setValueAtTime(
+      0.0001,
+      now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.025,
+      now + 0.02
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      now + 1.7
+    );
+
+
+    oscillator.connect(
+      gain
+    );
+
+
+    gain.connect(
+      masterGain
+    );
+
+
+    oscillator.start(
+      now
+    );
+
+
+    oscillator.stop(
+      now + 1.8
+    );
+  }
+
+
+  function scheduleAdventureChime() {
+    window.clearTimeout(
+      chimeTimer
+    );
+
+
+    chimeTimer =
+      window.setTimeout(
+        function () {
+          if (
+            soundEnabled
+          ) {
+            playAdventureChime();
+          }
+
+
+          scheduleAdventureChime();
+        },
+        2700 +
+        Math.random() *
+        2200
+      );
+  }
+
+
+/* ==========================================
+   SYNCHRONISATION AU SCROLL
+========================================== */
+
+  function syncAdventureSound() {
+    if (
+      !audioCreated ||
+      !audioContext
+    ) {
+      return;
+    }
+
+
+    const progress =
+      getAdventureProgress();
+
+
+    const flight =
+      soundRange(
+        progress,
+        0.04,
+        0.14
+      ) *
+      (
+        1 -
+        soundRange(
+          progress,
+          0.34,
+          0.4
+        )
+      );
+
+
+    const forest =
+      soundRange(
+        progress,
+        0.35,
+        0.43
+      ) *
+      (
+        1 -
+        soundRange(
+          progress,
+          0.52,
+          0.59
+        )
+      );
+
+
+    const fall =
+      soundRange(
+        progress,
+        0.56,
+        0.67
+      ) *
+      (
+        1 -
+        soundRange(
+          progress,
+          0.83,
+          0.89
+        )
+      );
+
+
+    const romance =
+      soundRange(
+        progress,
+        0.9,
+        0.98
+      );
+
+
+    const now =
+      audioContext.currentTime;
+
+
+    windGain.gain.setTargetAtTime(
+      soundEnabled
+        ? 0.018 +
+          flight *
+          0.075
+        : 0.0001,
+
+      now,
+      0.35
+    );
+
+
+    forestGain.gain.setTargetAtTime(
+      soundEnabled
+        ? forest *
+          0.025
+        : 0.0001,
+
+      now,
+      0.45
+    );
+
+
+    fallGain.gain.setTargetAtTime(
+      soundEnabled
+        ? fall *
+          0.045
+        : 0.0001,
+
+      now,
+      0.4
+    );
+
+
+    romanceGain.gain.setTargetAtTime(
+      soundEnabled
+        ? romance *
+          0.012
+        : 0.0001,
+
+      now,
+      0.8
+    );
+  }
+
+
+/* ==========================================
+   BOUTON SONORE
+========================================== */
+
+  function setAdventureSound(
+    enabled
+  ) {
+    createAdventureAudio();
+
+
+    if (
+      !audioContext ||
+      !masterGain
+    ) {
+      return;
+    }
+
+
+    soundEnabled =
+      enabled;
+
+
+    if (
+      audioContext.state ===
+      "suspended"
+    ) {
+      audioContext.resume();
+    }
+
+
+    masterGain.gain.setTargetAtTime(
+      enabled
+        ? 0.72
+        : 0.0001,
+
+      audioContext.currentTime,
+      0.3
+    );
+
+
+    if (
+      soundButton
+    ) {
+      soundButton.setAttribute(
+        "aria-pressed",
+        String(enabled)
+      );
+
+
+      soundButton.textContent =
+        enabled
+          ? "SOUND ON"
+          : "SOUND OFF";
+    }
+
+
+    syncAdventureSound();
+
+
+    if (
+      enabled &&
+      !chimeTimer
+    ) {
+      playAdventureChime();
+
+      scheduleAdventureChime();
+    }
+  }
+
+
+  if (
+    soundButton
+  ) {
+    soundButton.addEventListener(
+      "click",
+      function () {
+        setAdventureSound(
+          !soundEnabled
+        );
+      }
+    );
+  }
+
+
+  window.addEventListener(
+    "scroll",
+    syncAdventureSound,
+    {
+      passive: true
+    }
+  );
+
+
+  document.addEventListener(
+    "visibilitychange",
+    function () {
+      if (
+        !audioCreated ||
+        !audioContext ||
+        !masterGain
+      ) {
+        return;
+      }
+
+
+      masterGain.gain.setTargetAtTime(
+        document.hidden ||
+        !soundEnabled
+
+          ? 0.0001
+          : 0.72,
+
+        audioContext.currentTime,
+        0.3
+      );
+    }
+  );
+
+})();
