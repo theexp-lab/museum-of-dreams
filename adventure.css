@@ -583,3 +583,423 @@ a { color: inherit; text-decoration: none; }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ==========================================
+   ADVENTURE — SOUND + ROOM NOTES
+========================================== */
+
+
+/* OUTILS */
+
+.adventure-tools {
+  position: fixed;
+
+  top: 65px;
+  right: 35px;
+
+  z-index: 80;
+
+  display: flex;
+  gap: 9px;
+}
+
+.adventure-tool-button {
+  appearance: none;
+
+  padding:
+    9px 13px;
+
+  border:
+    1px solid
+    rgba(255, 250, 240, 0.38);
+
+  border-radius: 999px;
+
+  color: #fffaf0;
+
+  background:
+    rgba(24, 42, 94, 0.42);
+
+  backdrop-filter:
+    blur(14px);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+   line-height: 1;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    transform 250ms ease,
+    color 250ms ease,
+    background 250ms ease,
+    border-color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.adventure-tool-button:hover {
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(255, 227, 166, 0.85);
+
+  background:
+    rgba(61, 81, 146, 0.66);
+
+  box-shadow:
+    0 8px 28px
+    rgba(15, 26, 72, 0.25);
+}
+
+#adventure-sound-button[aria-pressed="true"] {
+  color: #24345f;
+
+  border-color: #fff2c9;
+
+  background: #fff2c9;
+
+  box-shadow:
+    0 0 25px
+    rgba(255, 236, 178, 0.32);
+}
+
+
+/* FOND DU PANNEAU */
+
+.adventure-notes-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 84;
+
+  visibility: hidden;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  border: 0;
+
+  opacity: 0;
+
+  background:
+    rgba(12, 23, 61, 0.52);
+
+  backdrop-filter:
+    blur(5px);
+
+  cursor: pointer;
+
+  transition:
+    opacity 450ms ease,
+    visibility 450ms ease;
+}
+
+.adventure-page.adventure-notes-open
+.adventure-notes-backdrop {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+
+/* PANNEAU */
+
+.adventure-notes-panel {
+  position: fixed;
+
+  top: 0;
+  right: 0;
+
+  z-index: 85;
+
+  width:
+    min(490px, 94vw);
+
+  height: 100dvh;
+
+  overflow-y: auto;
+
+  padding:
+    34px 39px 55px;
+
+  color: #1e2b54;
+
+  background:
+    linear-gradient(
+      155deg,
+      rgba(255, 250, 235, 0.99),
+      rgba(215, 230, 255, 0.985)
+    );
+
+  box-shadow:
+    -30px 0 100px
+    rgba(5, 16, 52, 0.36);
+
+  transform:
+    translateX(105%);
+
+  transition:
+    transform 650ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.adventure-page.adventure-notes-open
+.adventure-notes-panel {
+  transform:
+    translateX(0);
+}
+
+
+/* TITRE DU PANNEAU */
+
+.adventure-notes-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 25px;
+
+  padding-bottom: 26px;
+
+  border-bottom:
+    1px solid
+    rgba(42, 62, 108, 0.17);
+}
+
+.adventure-notes-heading span,
+.adventure-note-number {
+  display: block;
+
+  color: #7080aa;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.15em;
+
+  text-transform: uppercase;
+}
+
+.adventure-notes-heading h2 {
+  margin:
+    8px 0 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(45px, 5vw, 72px);
+
+  font-weight: 400;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.045em;
+}
+
+#adventure-notes-close {
+  appearance: none;
+
+  padding: 4px 0;
+  border: 0;
+
+  color: #596992;
+
+  background: transparent;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.12em;
+
+  cursor: pointer;
+}
+
+
+/* CONTENU */
+
+.adventure-note-section {
+  padding:
+    28px 0;
+
+  border-bottom:
+    1px solid
+    rgba(42, 62, 108, 0.14);
+}
+
+.adventure-note-section h3 {
+  max-width: 355px;
+
+  margin:
+    10px 0 13px;
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(23px, 2.5vw, 32px);
+
+  font-weight: 400;
+
+  line-height: 1.02;
+
+  letter-spacing: -0.025em;
+}
+
+.adventure-note-section p,
+.adventure-note-section li {
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 10px;
+
+  line-height: 1.75;
+}
+
+.adventure-note-section p {
+  margin:
+    0 0 17px;
+}
+
+.adventure-note-section a {
+  display: inline-block;
+
+  padding-bottom: 4px;
+
+  border-bottom:
+    1px solid
+    rgba(42, 62, 108, 0.34);
+
+  color: #52679e;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.11em;
+
+  text-transform: uppercase;
+}
+
+.adventure-note-section ul {
+  margin:
+    17px 0 0;
+
+  padding-left: 18px;
+}
+
+.adventure-note-section li {
+  margin:
+    0 0 12px;
+
+  padding-left: 5px;
+}
+
+.physical-adventure-note {
+  position: relative;
+}
+
+.physical-adventure-note::before {
+  content: "";
+
+  position: absolute;
+
+  top: 22px;
+  right: 4px;
+
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 201, 111, 0.65),
+      rgba(255, 169, 109, 0.15) 48%,
+      transparent 72%
+    );
+
+  box-shadow:
+    0 0 25px
+    rgba(255, 185, 114, 0.25);
+}
+
+.adventure-research-caveat {
+  margin:
+    27px 0 0;
+
+  color: #7180a1;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  line-height: 1.7;
+
+  letter-spacing: 0.065em;
+
+  text-transform: uppercase;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+  .adventure-tools {
+    top: 59px;
+    right: 18px;
+
+    gap: 6px;
+  }
+
+  .adventure-tool-button {
+    padding:
+      8px 10px;
+
+    font-size: 7px;
+  }
+
+  .adventure-notes-panel {
+    width: 100%;
+
+    padding:
+      27px 24px 45px;
+  }
+}
+
+@media (max-width: 520px) {
+  .adventure-tools {
+    right: 14px;
+  }
+}
