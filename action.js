@@ -58,9 +58,27 @@ const researchPrinciple =
   document.querySelector(
     "#research-principle"
   );
-const researchSource =
+const actionNotesButton =
   document.querySelector(
-    "#research-source"
+    "#action-notes-button"
+  );
+
+
+const actionNotesPanel =
+  document.querySelector(
+    "#action-notes-panel"
+  );
+
+
+const actionNotesBackdrop =
+  document.querySelector(
+    "#action-notes-backdrop"
+  );
+
+
+const actionNotesClose =
+  document.querySelector(
+    "#action-notes-close"
   );
 
 /* ==========================================
@@ -265,7 +283,7 @@ function primeMedia() {
       }
     );
 
-  Promise
+  return Promise
     .all(
       attempts
     )
@@ -284,18 +302,11 @@ function primeMedia() {
         );
 
         mediaPrimed =
-          true;
+  true;
 
-        mediaPriming =
-          false;
 
-                syncAudio(
-          sceneNames[
-            activeIndex
-          ],
-
-          activeIndex
-        );
+mediaPriming =
+  false;
       }
     );
 }
@@ -1707,6 +1718,13 @@ function goToBeat(
 window.addEventListener(
   "wheel",
   function (event) {
+    if (
+  body.classList.contains(
+    "notes-open"
+  )
+) {
+  return;
+}
     primeMedia();
 
     if (
@@ -1756,6 +1774,13 @@ window.addEventListener(
 window.addEventListener(
   "keydown",
   function (event) {
+    if (
+  body.classList.contains(
+    "notes-open"
+  )
+) {
+  return;
+}
     const acceptedKeys = [
       "ArrowDown",
       "ArrowUp",
@@ -2191,6 +2216,142 @@ window.addEventListener(
   }
 );
 
+/* ==========================================
+   DOSSIER CURATORIAL — ACTION
+========================================== */
+
+function openActionNotes() {
+  if (
+    !actionNotesPanel ||
+    !actionNotesButton
+  ) {
+    return;
+  }
+
+
+  body.classList.add(
+    "notes-open"
+  );
+
+
+  actionNotesPanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  if (actionNotesBackdrop) {
+    actionNotesBackdrop.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+  }
+
+
+  actionNotesButton.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+
+  actionNotesButton.textContent =
+    "ROOM NOTES −";
+}
+
+
+function closeActionNotes() {
+  if (
+    !actionNotesPanel ||
+    !actionNotesButton
+  ) {
+    return;
+  }
+
+
+  body.classList.remove(
+    "notes-open"
+  );
+
+
+  actionNotesPanel.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  if (actionNotesBackdrop) {
+    actionNotesBackdrop.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+  }
+
+
+  actionNotesButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+
+  actionNotesButton.textContent =
+    "ROOM NOTES +";
+}
+
+
+if (actionNotesButton) {
+  actionNotesButton.addEventListener(
+    "click",
+    function () {
+      if (
+        body.classList.contains(
+          "notes-open"
+        )
+      ) {
+        closeActionNotes();
+      } else {
+        openActionNotes();
+      }
+    }
+  );
+}
+
+
+if (actionNotesClose) {
+  actionNotesClose.addEventListener(
+    "click",
+    closeActionNotes
+  );
+}
+
+
+if (actionNotesBackdrop) {
+  actionNotesBackdrop.addEventListener(
+    "click",
+    closeActionNotes
+  );
+}
+
+
+window.addEventListener(
+  "keydown",
+  function (
+    event
+  ) {
+    if (
+      event.key === "Escape" &&
+      body.classList.contains(
+        "notes-open"
+      )
+    ) {
+      closeActionNotes();
+
+
+      if (actionNotesButton) {
+        actionNotesButton.focus();
+      }
+    }
+  }
+);
 
 /* ==========================================
    INITIALISATION
