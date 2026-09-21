@@ -243,80 +243,98 @@ function ensureAudio() {
    autorisera ensuite pendant le scroll.
 ========================================== */
 
-function primeMedia() {
-  if (
-    !soundEnabled ||
-    mediaPrimed ||
-    mediaPriming
-  ) {
-    return Promise.resolve();
+async function primeMedia() {
+  if (!soundEnabled) {
+    return false;
   }
 
 
   ensureAudio();
 
 
+  if (
+    audioContext &&
+    audioContext.state ===
+    "suspended"
+  ) {
+    await audioContext.resume();
+  }
 
-  mediaPriming =
-    true;
+
+  if (mediaPrimed) {
+    return true;
+  }
+
+
+  if (mediaPriming) {
+    return false;
+  }
+
+
+  mediaPriming = true;
+
 
   const media = [
     startSound,
     trainSound
   ];
 
-  const attempts =
-    media.map(
-      function (audio) {
-        audio.muted =
-          true;
 
-        audio.load();
-
-        return audio
-          .play()
-          .catch(
-            function () {
-              return null;
-            }
-          );
-      }
-    );
-
-  return Promise
-    .all(
-      attempts
-    )
-    .then(
-      function () {
-        media.forEach(
-          function (audio) {
-            audio.pause();
-
-            audio.currentTime =
-              0;
-
-            audio.muted =
-              !soundEnabled;
+  try {
+    await Promise.all(
+      media.map(
+        async function (
+          audio
+        ) {
+          if (!audio) {
+            return;
           }
-        );
-
-        mediaPrimed =
-  true;
 
 
-mediaPriming =
-  false;
-      }
+          audio.pause();
+
+          audio.currentTime = 0;
+
+          audio.muted = true;
+
+          audio.volume = 0;
+
+
+          try {
+            await audio.play();
+          } catch (error) {
+            /*
+             * Un fichier refusé ne doit pas
+             * bloquer toute la salle.
+             */
+          }
+
+
+          audio.pause();
+
+          audio.currentTime = 0;
+
+          audio.muted = false;
+        }
+      )
     );
+
+
+    startSound.volume =
+      0.92;
+
+
+    trainSound.volume =
+      0.95;
+
+
+    mediaPrimed = true;
+
+    return true;
+  } finally {
+    mediaPriming = false;
+  }
 }
-
-
-/* ==========================================
-   AMBIANCE DE LA VILLE
-========================================== */
-
-
 /* ==========================================
    AMBIANCE DE LA VILLE
 ========================================== */
@@ -1706,6 +1724,18 @@ function goToBeat(
       )
     );
 
+
+  /*
+   * Activer immédiatement la scène.
+   * IntersectionObserver reste une sécurité,
+   * mais ne contrôle plus seul l’expérience.
+   */
+
+  activateScene(
+    target
+  );
+
+
   beats[
     target
   ].scrollIntoView({
@@ -1713,7 +1743,6 @@ function goToBeat(
     block: "start"
   });
 }
-
 
 window.addEventListener(
   "wheel",
@@ -1755,14 +1784,28 @@ window.addEventListener(
       )
     );
 
-    window.setTimeout(
-      function () {
-        wheelLocked =
-          false;
-      },
+    const currentScene =
+  sceneNames[
+    activeIndex
+  ];
 
-      850
-    );
+
+const lockDuration =
+  currentScene === "countdown"
+    ? 3900
+    : currentScene === "pulse"
+      ? 3100
+      : 850;
+
+
+window.setTimeout(
+  function () {
+    wheelLocked =
+      false;
+  },
+
+  lockDuration
+);
   },
 
   {
