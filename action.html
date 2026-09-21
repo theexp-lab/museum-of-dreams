@@ -41,67 +41,17 @@
 
   <link
     rel="stylesheet"
-    href="./action.css?v=57"
+    href="./action.css?v=62"
   >
 </head>
 
 
 <body
-  class="action-page sound-locked"
+  class="action-page"
   data-scene="intro"
 >
 
-  <!-- ==========================================
-     ACTIVATION DE L’EXPÉRIENCE SONORE
-========================================== -->
 
-<div
-  class="sound-entry"
-  id="sound-entry"
->
-
-  <div class="sound-entry-glow"></div>
-
-
-  <div class="sound-entry-content">
-
-    <span>
-      ROOM 05 · ACTION
-    </span>
-
-
-    <h2>
-      THE CITY
-      <em>IS WAITING.</em>
-    </h2>
-
-
-    <p>
-      This installation uses spatial sound,
-      engine noise and reactive audio.
-    </p>
-
-
-    <button
-      type="button"
-      id="enter-with-sound"
-      class="enter-with-sound"
-    >
-      <span class="sound-symbol">
-        ◉
-      </span>
-
-      ENTER WITH SOUND
-    </button>
-
-
-    <small>
-      HEADPHONES RECOMMENDED
-    </small>
-
-  </div>
-
-</div>
 
   <!-- ==========================================
        MONDE VISUEL
@@ -226,21 +176,26 @@
     </div>
 
 
-    <a href="case-study.html">
-      PROJECT
-    </a>
-
-  </header>
-
+    <div class="action-header-tools">
 
   <button
     class="sound-toggle"
     id="sound-toggle"
     type="button"
-    aria-pressed="true"
+    aria-pressed="false"
   >
-    SOUND ON
+    ENABLE SOUND
   </button>
+
+  <a href="case-study.html">
+    PROJECT
+  </a>
+
+</div>
+
+  </header>
+
+
 
 
   <!-- ==========================================
@@ -268,6 +223,14 @@
       MOTION · WITHOUT MOVEMENT
     </strong>
 
+    <a
+  id="research-source"
+  href="https://pubmed.ncbi.nlm.nih.gov/38060134/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  VIEW STUDY ↗
+</a>
   </aside>
 
 
@@ -796,7 +759,7 @@
   ></audio>
 
 
-  <script src="./action.js?v=61"></script>
+  <script src="./action.js?v=62"></script>
 
 </body>
 </html>
