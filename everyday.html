@@ -41,7 +41,7 @@
 
   <link
     rel="stylesheet"
-    href="./everyday.css?v=1"
+    href="./everyday.css?v=2"
   >
 </head>
 
@@ -354,6 +354,303 @@
 
   </section>
 
+    <!-- ==========================================
+       SON ET NOTES DE LA SALLE
+  =========================================== -->
+
+  <div class="room-tools">
+
+    <button
+      class="room-tool sound-toggle"
+      id="everyday-sound-toggle"
+      type="button"
+      aria-pressed="false"
+    >
+
+      <span class="tool-dot"></span>
+
+      <strong id="everyday-sound-label">
+        ENABLE SOUND
+      </strong>
+
+    </button>
+
+
+    <button
+      class="room-tool notes-toggle"
+      id="everyday-notes-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="everyday-room-notes"
+    >
+      ROOM NOTES +
+    </button>
+
+  </div>
+
+
+  <div
+    class="room-notes-backdrop"
+    id="everyday-notes-backdrop"
+    aria-hidden="true"
+  ></div>
+
+
+  <aside
+    class="room-notes-panel"
+    id="everyday-room-notes"
+    aria-hidden="true"
+  >
+
+    <header class="notes-header">
+
+      <div>
+
+        <span>
+          ROOM 01 · EXHIBITION NOTES
+        </span>
+
+        <h2>
+          THE EVERYDAY<br>
+          LOOP
+        </h2>
+
+      </div>
+
+
+      <button
+        class="close-notes"
+        id="everyday-close-notes"
+        type="button"
+        aria-label="Close room notes"
+      >
+        CLOSE ×
+      </button>
+
+    </header>
+
+
+    <!-- Observation scientifique -->
+
+    <section class="notes-section research-section">
+
+      <p class="notes-number">
+        RESEARCH NOTE 01.1
+      </p>
+
+
+      <h3>
+        ORDINARY LIFE<br>
+        ENTERS THE DREAM.
+      </h3>
+
+
+      <div class="research-block">
+
+        <strong>
+          WHAT THE STUDY FOUND
+        </strong>
+
+        <p>
+
+          In a seven-day study, an average of 83.4% of dream
+          reports were connected to at least one waking-life
+          element.
+
+        </p>
+
+        <p>
+
+          Among the elements participants could date,
+          40.2% came from the previous day. Those recent
+          elements were often ordinary rather than exceptional.
+
+        </p>
+
+      </div>
+
+
+      <div class="research-block">
+
+        <strong>
+          WHAT IT DOES NOT PROVE
+        </strong>
+
+        <p>
+
+          Dreams do not simply replay daily life and the study
+          does not provide a universal interpretation for
+          particular objects, places or symbols.
+
+        </p>
+
+      </div>
+
+
+      <div class="research-block">
+
+        <strong>
+          INFLUENCE ON THE ROOM
+        </strong>
+
+        <p>
+
+          The corridor, clock and repeated doors are familiar
+          everyday elements. The dream reorganises them instead
+          of reproducing a complete real event.
+
+        </p>
+
+      </div>
+
+
+      <a
+        class="research-source"
+        href="https://pubmed.ncbi.nlm.nih.gov/29020066/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VALLAT ET AL. · PLOS ONE · 2017 ↗
+      </a>
+
+    </section>
+
+
+    <!-- Concept physique -->
+
+    <section class="notes-section physical-section">
+
+      <p class="notes-number">
+        PHYSICAL ROOM CONCEPT 01.2
+      </p>
+
+
+      <h3>
+        AN ORDINARY CORRIDOR<br>
+        THAT REFUSES TO END.
+      </h3>
+
+
+      <dl class="physical-details">
+
+        <div>
+
+          <dt>
+            SPACE
+          </dt>
+
+          <dd>
+
+            A life-sized apartment corridor built with repeating
+            doors, mirrored endings and projection surfaces.
+
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            LIGHT
+          </dt>
+
+          <dd>
+
+            Domestic ceiling lights flicker only after a visitor
+            crosses a doorway. The colour temperature becomes
+            gradually less natural.
+
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            SOUND
+          </dt>
+
+          <dd>
+
+            Hidden speakers repeat the visitor’s footsteps with
+            a slight delay while an impossible clock slowly
+            loses its rhythm.
+
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            INTERACTION
+          </dt>
+
+          <dd>
+
+            Motion sensors change room numbers, exit signs and
+            door destinations whenever the visitor turns away.
+
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            MATERIALS
+          </dt>
+
+          <dd>
+
+            Carpet, painted wood, frosted glass, mirrors,
+            projection screens and concealed speakers.
+
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            VISITOR ACTION
+          </dt>
+
+          <dd>
+
+            The visitor chooses a door and returns to the same
+            corridor, where one familiar detail has changed.
+
+          </dd>
+
+        </div>
+
+
+        <div>
+
+          <dt>
+            ARTIST PROFILE
+          </dt>
+
+          <dd>
+
+            Installation artist · scenographer · sound designer ·
+            interactive technologist
+
+          </dd>
+
+        </div>
+
+      </dl>
+
+    </section>
+
+  </aside>
 
   <!-- ==========================================
        INTERFACE
@@ -393,7 +690,7 @@
   ></div>
 
 
-  <script src="./everyday.js?v=1"></script>
+  <script src="./everyday.js?v=2"></script>
 
 </body>
 
