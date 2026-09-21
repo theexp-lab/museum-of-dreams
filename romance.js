@@ -59,23 +59,6 @@ const page =
   );
 
 
-const gate =
-  document.querySelector(
-    "#experience-gate"
-  );
-
-
-const enterWithSound =
-  document.querySelector(
-    "#enter-with-sound"
-  );
-
-
-const enterWithoutSound =
-  document.querySelector(
-    "#enter-without-sound"
-  );
-
 
 const soundControl =
   document.querySelector(
@@ -408,7 +391,14 @@ function updateStoryLines() {
   }
 }
 /* ==========================================
-   AUDIO
+   AUDIO — ROMANCE
+
+   Début :
+   nappe harmonique, cloches, chaleur.
+
+   Fin :
+   désaccord, graves, souffle aigu,
+   battements accélérés.
 ========================================== */
 
 let audioContext = null;
@@ -429,6 +419,8 @@ let soundEnabled = false;
 
 let heartbeatTimer = null;
 
+let romanceMelodyTimer = null;
+
 let currentProgress = 0;
 
 let currentWarmth = 0;
@@ -442,11 +434,16 @@ let enoughPlayed = false;
 let finalStormPlayed = false;
 
 
+/* ==========================================
+   CRÉER UNE NAPPE CONTINUE
+========================================== */
+
 function createDrone(
   frequency,
   volume,
   destination,
-  type = "sine"
+  type = "sine",
+  detune = 0
 ) {
   const oscillator =
     audioContext.createOscillator();
@@ -462,6 +459,10 @@ function createDrone(
 
   oscillator.frequency.value =
     frequency;
+
+
+  oscillator.detune.value =
+    detune;
 
 
   gain.gain.value =
@@ -481,6 +482,270 @@ function createDrone(
   oscillator.start();
 }
 
+
+/* ==========================================
+   NOTE LUMINEUSE
+
+   Les notes sont courtes et espacées :
+   pas de mélodie envahissante.
+========================================== */
+
+function playRomanceNote(
+  frequency,
+  volume = 0.08,
+  delay = 0,
+  pan = 0
+) {
+  if (
+    !audioContext ||
+    !soundEnabled
+  ) {
+    return;
+  }
+
+
+  const startTime =
+    audioContext.currentTime +
+    delay;
+
+
+  const oscillator =
+    audioContext.createOscillator();
+
+
+  const harmonic =
+    audioContext.createOscillator();
+
+
+  const gain =
+    audioContext.createGain();
+
+
+  const harmonicGain =
+    audioContext.createGain();
+
+
+  const panner =
+    audioContext.createStereoPanner
+      ? audioContext.createStereoPanner()
+      : null;
+
+
+  oscillator.type =
+    "sine";
+
+
+  harmonic.type =
+    "sine";
+
+
+  oscillator.frequency.value =
+    frequency;
+
+
+  harmonic.frequency.value =
+    frequency * 2;
+
+
+  harmonicGain.gain.value =
+    0.16;
+
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    startTime
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    volume,
+    startTime + 0.08
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    startTime + 2.8
+  );
+
+
+  oscillator.connect(
+    gain
+  );
+
+
+  harmonic.connect(
+    harmonicGain
+  );
+
+
+  harmonicGain.connect(
+    gain
+  );
+
+
+  if (panner) {
+    panner.pan.value =
+      pan;
+
+
+    gain.connect(
+      panner
+    );
+
+
+    panner.connect(
+      masterGain
+    );
+  } else {
+    gain.connect(
+      masterGain
+    );
+  }
+
+
+  oscillator.start(
+    startTime
+  );
+
+
+  harmonic.start(
+    startTime
+  );
+
+
+  oscillator.stop(
+    startTime + 3
+  );
+
+
+  harmonic.stop(
+    startTime + 3
+  );
+}
+
+
+/* ==========================================
+   PHRASE MUSICALE
+
+   Avant la jalousie :
+   accord tendre et ouvert.
+
+   Après la troisième lumière :
+   les intervalles deviennent instables.
+========================================== */
+
+function playRomancePhrase() {
+  if (
+    !soundEnabled ||
+    !audioContext
+  ) {
+    return;
+  }
+
+
+  if (
+    currentJealousy < 0.2
+  ) {
+    const romanticNotes = [
+      523.25,
+      659.25,
+      783.99
+    ];
+
+
+    romanticNotes.forEach(
+      function (
+        frequency,
+        index
+      ) {
+        playRomanceNote(
+          frequency,
+          0.052 +
+          currentWarmth * 0.025,
+          index * 0.42,
+          index === 0
+            ? -0.35
+            : index === 2
+              ? 0.35
+              : 0
+        );
+      }
+    );
+  } else if (
+    currentJealousy < 0.68
+  ) {
+    playRomanceNote(
+      523.25,
+      0.045,
+      0,
+      -0.28
+    );
+
+
+    playRomanceNote(
+      554.37,
+      0.04,
+      0.34,
+      0.3
+    );
+  } else {
+    /*
+     * Deux notes très proches produisent
+     * un léger malaise sans devenir du bruit.
+     */
+
+    playRomanceNote(
+      349.23,
+      0.034,
+      0,
+      -0.4
+    );
+
+
+    playRomanceNote(
+      369.99,
+      0.032,
+      0.16,
+      0.4
+    );
+  }
+
+
+  scheduleRomancePhrase();
+}
+
+
+function scheduleRomancePhrase() {
+  window.clearTimeout(
+    romanceMelodyTimer
+  );
+
+
+  if (!soundEnabled) {
+    return;
+  }
+
+
+  const delay =
+    currentJealousy < 0.2
+      ? 5200
+      : currentJealousy < 0.68
+        ? 4300
+        : 5700;
+
+
+  romanceMelodyTimer =
+    window.setTimeout(
+      playRomancePhrase,
+      delay
+    );
+}
+
+
+/* ==========================================
+   INITIALISER L’ENVIRONNEMENT SONORE
+========================================== */
 
 async function startAudio() {
   const AudioContextClass =
@@ -506,23 +771,23 @@ async function startAudio() {
 
 
     compressor.threshold.value =
-      -19;
+      -22;
 
 
     compressor.knee.value =
-      14;
+      18;
 
 
     compressor.ratio.value =
-      9;
+      7;
 
 
     compressor.attack.value =
-      0.005;
+      0.012;
 
 
     compressor.release.value =
-      0.26;
+      0.34;
 
 
     masterGain =
@@ -543,14 +808,14 @@ async function startAudio() {
     );
 
 
-    /* Nappe douce */
+    /* Nappe romantique claire */
 
     softGain =
       audioContext.createGain();
 
 
     softGain.gain.value =
-      0.055;
+      0.0001;
 
 
     softGain.connect(
@@ -559,27 +824,40 @@ async function startAudio() {
 
 
     createDrone(
-      174.61,
-      0.1,
-      softGain
+      130.81,
+      0.18,
+      softGain,
+      "sine"
     );
 
 
     createDrone(
-      261.63,
-      0.045,
-      softGain
+      196,
+      0.095,
+      softGain,
+      "sine",
+      -4
     );
 
 
     createDrone(
-      349.23,
-      0.018,
-      softGain
+      246.94,
+      0.055,
+      softGain,
+      "triangle",
+      3
     );
 
 
-    /* Chaleur */
+    createDrone(
+      329.63,
+      0.022,
+      softGain,
+      "sine"
+    );
+
+
+    /* Chaleur qui accompagne le rapprochement */
 
     warmGain =
       audioContext.createGain();
@@ -595,27 +873,31 @@ async function startAudio() {
 
 
     createDrone(
-      110,
-      0.25,
-      warmGain
+      98,
+      0.19,
+      warmGain,
+      "sine"
     );
 
 
     createDrone(
-      164.81,
-      0.13,
-      warmGain
+      146.83,
+      0.1,
+      warmGain,
+      "sine",
+      4
     );
 
 
     createDrone(
       220,
-      0.065,
-      warmGain
+      0.04,
+      warmGain,
+      "triangle"
     );
 
 
-    /* Tension grave */
+    /* Inquiétude grave de la partie rouge */
 
     tensionGain =
       audioContext.createGain();
@@ -632,19 +914,30 @@ async function startAudio() {
 
     createDrone(
       36,
-      0.48,
-      tensionGain
+      0.42,
+      tensionGain,
+      "sine"
     );
 
 
     createDrone(
       40.5,
-      0.34,
-      tensionGain
+      0.3,
+      tensionGain,
+      "sine"
     );
 
 
-    /* Sifflement */
+    createDrone(
+      73,
+      0.08,
+      tensionGain,
+      "triangle",
+      -7
+    );
+
+
+    /* Friction aiguë très légère */
 
     whistleGain =
       audioContext.createGain();
@@ -661,15 +954,17 @@ async function startAudio() {
 
     createDrone(
       182,
-      0.055,
-      whistleGain
+      0.04,
+      whistleGain,
+      "sine"
     );
 
 
     createDrone(
       187,
-      0.05,
-      whistleGain
+      0.036,
+      whistleGain,
+      "sine"
     );
   }
 
@@ -686,14 +981,17 @@ async function startAudio() {
 
 
   masterGain.gain.setValueAtTime(
-    0.0001,
+    Math.max(
+      0.0001,
+      masterGain.gain.value
+    ),
     audioContext.currentTime
   );
 
 
   masterGain.gain.exponentialRampToValueAtTime(
-    0.7,
-    audioContext.currentTime + 1.2
+    0.52,
+    audioContext.currentTime + 1.5
   );
 
 
@@ -707,9 +1005,17 @@ async function startAudio() {
   );
 
 
+  updateAudio();
+
+  playRomancePhrase();
+
   scheduleHeartbeat();
 }
 
+
+/* ==========================================
+   ÉVOLUTION LIÉE AU SCROLL
+========================================== */
 
 function updateAudio() {
   if (
@@ -724,27 +1030,44 @@ function updateAudio() {
     audioContext.currentTime;
 
 
+  /*
+   * La nappe romantique reste clairement
+   * présente pendant la première moitié.
+   */
+
   softGain.gain.setTargetAtTime(
-    0.05 -
-    currentJealousy * 0.035,
+    0.065 *
+    (
+      1 -
+      currentJealousy * 0.78
+    ),
     now,
-    0.5
+    0.7
   );
 
 
   warmGain.gain.setTargetAtTime(
     0.0001 +
-    currentWarmth * 0.28,
+    currentWarmth * 0.22,
     now,
-    0.4
+    0.65
   );
 
 
+  /*
+   * La tension démarre seulement après
+   * l’arrivée de la troisième lumière.
+   */
+
   tensionGain.gain.setTargetAtTime(
     0.0001 +
-    currentJealousy * 0.55,
+    Math.pow(
+      currentJealousy,
+      1.7
+    ) *
+    0.48,
     now,
-    0.18
+    0.28
   );
 
 
@@ -752,14 +1075,18 @@ function updateAudio() {
     0.0001 +
     Math.pow(
       currentJealousy,
-      2
+      2.6
     ) *
-    0.2,
+    0.13,
     now,
-    0.2
+    0.35
   );
 }
 
+
+/* ==========================================
+   BATTEMENT DE CŒUR
+========================================== */
 
 function playHeartbeat(
   strength = 1,
@@ -796,14 +1123,14 @@ function playHeartbeat(
 
 
   oscillator.frequency.setValueAtTime(
-    96,
+    92,
     now
   );
 
 
   oscillator.frequency.exponentialRampToValueAtTime(
-    31,
-    now + 0.34
+    29,
+    now + 0.3
   );
 
 
@@ -815,8 +1142,8 @@ function playHeartbeat(
 
   gain.gain.exponentialRampToValueAtTime(
     Math.min(
-      0.95,
-      0.38 * strength
+      0.88,
+      0.3 * strength
     ),
     now + 0.012
   );
@@ -824,7 +1151,7 @@ function playHeartbeat(
 
   gain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + 0.37
+    now + 0.32
   );
 
 
@@ -834,20 +1161,32 @@ function playHeartbeat(
 
 
   if (panner) {
-    panner.pan.value = pan;
+    panner.pan.value =
+      pan;
 
-    gain.connect(panner);
 
-    panner.connect(masterGain);
+    gain.connect(
+      panner
+    );
+
+
+    panner.connect(
+      masterGain
+    );
   } else {
-    gain.connect(masterGain);
+    gain.connect(
+      masterGain
+    );
   }
 
 
-  oscillator.start(now);
+  oscillator.start(
+    now
+  );
+
 
   oscillator.stop(
-    now + 0.4
+    now + 0.35
   );
 }
 
@@ -858,32 +1197,37 @@ function heartbeatSequence() {
   }
 
 
+  /*
+   * Le cœur reste presque imperceptible
+   * au début, puis domine la fin.
+   */
+
   const strength =
-    0.8 +
-    currentProgress * 0.45 +
-    currentJealousy * 1.25;
+    0.42 +
+    currentProgress * 0.32 +
+    currentJealousy * 1.65;
 
 
   playHeartbeat(
     strength,
-    currentJealousy > 0.2
-      ? -0.45
-      : -0.1
+    currentJealousy > 0.35
+      ? -0.42
+      : -0.08
   );
 
 
   window.setTimeout(
     function () {
       playHeartbeat(
-        strength * 0.76,
-        currentJealousy > 0.2
-          ? 0.48
-          : 0.1
+        strength * 0.7,
+        currentJealousy > 0.35
+          ? 0.44
+          : 0.08
       );
     },
-    currentJealousy > 0.4
-      ? 140
-      : 220
+    currentJealousy > 0.55
+      ? 135
+      : 205
   );
 
 
@@ -903,21 +1247,25 @@ function scheduleHeartbeat() {
 
 
   const delay =
-    1450 -
-    currentProgress * 260 -
-    currentJealousy * 780;
+    1750 -
+    currentProgress * 230 -
+    currentJealousy * 1040;
 
 
   heartbeatTimer =
     window.setTimeout(
       heartbeatSequence,
       Math.max(
-        370,
+        350,
         delay
       )
     );
 }
 
+
+/* ==========================================
+   IMPACTS DRAMATIQUES
+========================================== */
 
 function playImpact(
   frequency,
@@ -944,6 +1292,10 @@ function playImpact(
     audioContext.createGain();
 
 
+  oscillator.type =
+    "sine";
+
+
   oscillator.frequency.setValueAtTime(
     frequency * 2.2,
     now
@@ -964,8 +1316,8 @@ function playImpact(
 
   gain.gain.exponentialRampToValueAtTime(
     Math.min(
-      0.9,
-      strength * 0.6
+      0.82,
+      strength * 0.52
     ),
     now + 0.018
   );
@@ -977,11 +1329,20 @@ function playImpact(
   );
 
 
-  oscillator.connect(gain);
+  oscillator.connect(
+    gain
+  );
 
-  gain.connect(masterGain);
 
-  oscillator.start(now);
+  gain.connect(
+    masterGain
+  );
+
+
+  oscillator.start(
+    now
+  );
+
 
   oscillator.stop(
     now + duration + 0.05
@@ -992,30 +1353,32 @@ function playImpact(
 function playStorm() {
   playImpact(
     27,
-    1.5,
-    1.7
+    1.4,
+    1.65
   );
 
 
   [
     0,
-    300,
-    545,
-    755,
-    940,
-    1100,
-    1250,
-    1380
+    320,
+    580,
+    800,
+    990,
+    1150,
+    1290
   ].forEach(
-    function (delay, index) {
+    function (
+      delay,
+      index
+    ) {
       window.setTimeout(
         function () {
           playHeartbeat(
-            1.85 +
-            index * 0.08,
+            1.7 +
+            index * 0.09,
             index % 2 === 0
-              ? -0.5
-              : 0.5
+              ? -0.48
+              : 0.48
           );
         },
         delay
@@ -1024,6 +1387,10 @@ function playStorm() {
   );
 }
 
+
+/* ==========================================
+   ARRÊTER LE SON
+========================================== */
 
 function stopAudio() {
   soundEnabled = false;
@@ -1034,6 +1401,11 @@ function stopAudio() {
   );
 
 
+  window.clearTimeout(
+    romanceMelodyTimer
+  );
+
+
   if (
     audioContext &&
     masterGain
@@ -1041,13 +1413,13 @@ function stopAudio() {
     masterGain.gain.setTargetAtTime(
       0.0001,
       audioContext.currentTime,
-      0.08
+      0.12
     );
   }
 
 
   soundControl.textContent =
-    "SOUND OFF";
+    "ENABLE SOUND";
 
 
   soundControl.setAttribute(
@@ -1058,46 +1430,32 @@ function stopAudio() {
 
 
 /* ==========================================
-   ENTRÉE ET COMMANDES
+   BOUTON DU HEADER
 ========================================== */
 
-function enterExperience() {
-  gate.classList.add(
-    "hidden"
+if (soundControl) {
+  soundControl.addEventListener(
+    "click",
+    async function () {
+      if (soundEnabled) {
+        stopAudio();
+      } else {
+        try {
+          await startAudio();
+        } catch (error) {
+          console.warn(
+            "Romance audio unavailable:",
+            error
+          );
+
+
+          soundControl.textContent =
+            "SOUND UNAVAILABLE";
+        }
+      }
+    }
   );
 }
-
-
-enterWithSound.addEventListener(
-  "click",
-  async function () {
-    enterExperience();
-
-    await startAudio();
-  }
-);
-
-
-enterWithoutSound.addEventListener(
-  "click",
-  function () {
-    enterExperience();
-
-    stopAudio();
-  }
-);
-
-
-soundControl.addEventListener(
-  "click",
-  async function () {
-    if (soundEnabled) {
-      stopAudio();
-    } else {
-      await startAudio();
-    }
-  }
-);
 
 
 /* ==========================================
@@ -1365,7 +1723,9 @@ const endingButton =
   updateAudio();
 
 
-  /* Troisième lumière */
+ /* ==========================================
+   TROISIÈME LUMIÈRE
+========================================== */
 
 if (
   progress >= 0.5 &&
@@ -1376,7 +1736,7 @@ if (
 
   playImpact(
     48,
-    0.75,
+    0.72,
     1.1
   );
 }
@@ -1389,7 +1749,9 @@ if (
 }
 
 
-/* THAT IS ENOUGH */
+/* ==========================================
+   THAT IS ENOUGH
+========================================== */
 
 if (
   progress >= 0.785 &&
@@ -1403,13 +1765,13 @@ if (
 
   playImpact(
     31,
-    1.35,
-    1.5
+    1.3,
+    1.45
   );
 
 
   playHeartbeat(
-    2,
+    1.9,
     0
   );
 }
@@ -1422,7 +1784,9 @@ if (
 }
 
 
-/* Tempête finale */
+/* ==========================================
+   TEMPÊTE FINALE
+========================================== */
 
 if (
   progress >= 0.91 &&
@@ -1444,91 +1808,7 @@ if (
 }
 
 
-  /* ==========================================
-   IMPACT DE LA TROISIÈME LUMIÈRE
-========================================== */
-
-if (
-  progress >= 0.5 &&
-  !thirdLightPlayed
-) {
-  thirdLightPlayed = true;
-
-
-  playImpact(
-    48,
-    0.75,
-    1.1
-  );
-}
-
-
-if (
-  progress < 0.47
-) {
-  thirdLightPlayed = false;
-}
-
-
-/* ==========================================
-   IMPACT — THAT IS ENOUGH
-========================================== */
-
-if (
-  progress >= 0.785 &&
-  !enoughPlayed
-) {
-  enoughPlayed = true;
-
-
-  triggerFlash();
-
-
-  playImpact(
-    31,
-    1.35,
-    1.5
-  );
-
-
-  playHeartbeat(
-    2,
-    0
-  );
-}
-
-
-if (
-  progress < 0.75
-) {
-  enoughPlayed = false;
-}
-
-
-/* ==========================================
-   TEMPÊTE DU POULS
-========================================== */
-
-if (
-  progress >= 0.91 &&
-  !finalStormPlayed
-) {
-  finalStormPlayed = true;
-
-
-  triggerFlash();
-
-
-  playStorm();
-}
-
-
-if (
-  progress < 0.88
-) {
-  finalStormPlayed = false;
-}
-
+if (progress < 0.15) {
 
   if (progress < 0.15) {
     scrollInstruction.textContent =
@@ -1580,9 +1860,9 @@ function createParticles() {
 
 
   const amount =
-    window.innerWidth < 700
-      ? 55
-      : 105;
+  window.innerWidth < 700
+    ? 36
+    : 68;
 
 
   for (
@@ -1630,10 +1910,10 @@ function createParticles() {
 
 function resizeCanvas() {
   const pixelRatio =
-    Math.min(
-      window.devicePixelRatio || 1,
-      1.5
-    );
+  Math.min(
+    window.devicePixelRatio || 1,
+    1.15
+  );
 
 
   canvasWidth =
@@ -1667,8 +1947,31 @@ function resizeCanvas() {
   createParticles();
 }
 
-
+let previousParticleFrame = 0;
+   
 function animateParticles(time) {
+  window.requestAnimationFrame(
+    animateParticles
+  );
+
+
+  /*
+   * Environ 30 FPS suffisent largement
+   * pour ces particules.
+   */
+
+  if (
+    document.hidden ||
+    time - previousParticleFrame < 34
+  ) {
+    return;
+  }
+
+
+  previousParticleFrame =
+    time;
+
+
   context.clearRect(
     0,
     0,
@@ -1765,11 +2068,6 @@ function animateParticles(time) {
   );
 
 
-  window.requestAnimationFrame(
-    animateParticles
-  );
-}
-
 
 /* ==========================================
    SOURIS
@@ -1822,9 +2120,31 @@ window.requestAnimationFrame(
 );
 
 
+let romanceUpdatePending = false;
+
+
+function requestRomanceUpdate() {
+  if (romanceUpdatePending) {
+    return;
+  }
+
+
+  romanceUpdatePending = true;
+
+
+  window.requestAnimationFrame(
+    function () {
+      updateRomance();
+
+      romanceUpdatePending = false;
+    }
+  );
+}
+
+
 window.addEventListener(
   "scroll",
-  updateRomance,
+  requestRomanceUpdate,
   {
     passive: true
   }
@@ -1836,7 +2156,10 @@ window.addEventListener(
   function () {
     resizeCanvas();
 
-    updateRomance();
+    requestRomanceUpdate();
+  },
+  {
+    passive: true
   }
 );
 /* ==========================================
