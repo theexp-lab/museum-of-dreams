@@ -17,16 +17,7 @@ const soundToggle =
     "#sound-toggle"
   );
 
-const soundEntry =
-  document.querySelector(
-    "#sound-entry"
-  );
 
-
-const enterWithSound =
-  document.querySelector(
-    "#enter-with-sound"
-  );
 
 const takeHand =
   document.querySelector(
@@ -67,7 +58,10 @@ const researchPrinciple =
   document.querySelector(
     "#research-principle"
   );
-
+const researchSource =
+  document.querySelector(
+    "#research-source"
+  );
 
 /* ==========================================
    FICHIERS AUDIO
@@ -104,10 +98,7 @@ let wheelLocked =
 let audioUnlocked =
   false;
 
-let soundEnabled =
-  localStorage.getItem(
-    "museumSound"
-  ) !== "off";
+let soundEnabled = false;
 
 let audioContext;
 
@@ -160,10 +151,16 @@ trainSound.volume = 0.95;
 ========================================== */
 
 function updateSoundButton() {
+  if (!soundToggle) {
+    return;
+  }
+
+
   soundToggle.textContent =
     soundEnabled
       ? "SOUND ON"
-      : "SOUND OFF";
+      : "ENABLE SOUND";
+
 
   soundToggle.setAttribute(
     "aria-pressed",
@@ -229,16 +226,16 @@ function ensureAudio() {
 ========================================== */
 
 function primeMedia() {
-  ensureAudio();
-
-
   if (
+    !soundEnabled ||
     mediaPrimed ||
-    mediaPriming ||
-    !soundEnabled
+    mediaPriming
   ) {
     return Promise.resolve();
   }
+
+
+  ensureAudio();
 
 
 
@@ -1118,41 +1115,51 @@ function setHeartbeat(
    NOTES SCIENTIFIQUES
 ========================================== */
 
-function setResearch(
-  scene
-) {
-  const secondNoteScenes = [
+function setResearch(scene) {
+  const movementScenes = [
+    "intro",
+    "exhibit",
+    "trouble",
+    "ride",
     "directions",
-    "pursuit",
-    "rooftop",
-    "jump",
-    "airborne",
-    "train",
-    "countdown"
+    "pursuit"
   ];
 
+
   if (
-    secondNoteScenes.includes(
+    movementScenes.includes(
       scene
     )
   ) {
     researchNumber.textContent =
-      "RESEARCH NOTE 05.2";
-
-    researchText.textContent =
-      "Dream narratives can change location, objective and physical rules without requiring a logical transition.";
-
-    researchPrinciple.textContent =
-      "DISCONTINUITY · ACCEPTED AS REAL";
-  } else {
-    researchNumber.textContent =
       "RESEARCH NOTE 05.1";
 
+
     researchText.textContent =
-      "During REM sleep, movement can be vividly simulated while most skeletal muscles remain inhibited.";
+      "During REM sleep, muscle atonia normally limits the physical enactment of dream activity.";
+
 
     researchPrinciple.textContent =
-      "MOTION · WITHOUT MOVEMENT";
+      "DREAM ACTIVITY · MOTOR ATONIA";
+
+
+    researchSource.href =
+      "https://pubmed.ncbi.nlm.nih.gov/38060134/";
+  } else {
+    researchNumber.textContent =
+      "RESEARCH NOTE 05.2";
+
+
+    researchText.textContent =
+      "Sleep-related vestibular-motor experiences can include sensations of floating, flying and illusory movement.";
+
+
+    researchPrinciple.textContent =
+      "MOVEMENT · WITHOUT DISPLACEMENT";
+
+
+    researchSource.href =
+      "https://pubmed.ncbi.nlm.nih.gov/18621363/";
   }
 }
 
@@ -1791,266 +1798,138 @@ window.addEventListener(
 
 
 
-    /* ==========================================
-   ENTRER DANS LA SALLE AVEC LE SON
+   
+
+/* ==========================================
+   ENABLE SOUND / SOUND ON
 ========================================== */
 
-enterWithSound.addEventListener(
-  "click",
-
-  function () {
-    /*
-     * La salle s’ouvre immédiatement :
-     * aucun fichier audio ne peut bloquer
-     * le bouton.
-     */
-
-    soundEnabled = true;
+if (soundToggle) {
+  soundToggle.addEventListener(
+    "click",
+    async function () {
+      if (soundEnabled) {
+        soundEnabled = false;
 
 
-    localStorage.setItem(
-      "museumSound",
-      "on"
-    );
-
-
-    updateSoundButton();
-
-
-    /* Déverrouiller Web Audio */
-
-    try {
-      ensureAudio();
-
-
-      if (
-        audioContext &&
-        audioContext.state ===
-        "suspended"
-      ) {
-        audioContext.resume();
-      }
-
-
-      if (
-        masterGain &&
-        audioContext
-      ) {
-        masterGain.gain.setValueAtTime(
-          0.8,
-          audioContext.currentTime
+        localStorage.setItem(
+          "museumSound",
+          "off"
         );
-      }
-    } catch (error) {
-      console.warn(
-        "Web Audio could not start:",
-        error
-      );
-    }
-
-
-    /* Déverrouiller les deux fichiers MP3 */
-
-    const soundsToUnlock = [
-      {
-        audio: startSound,
-        volume: 0.92
-      },
-
-      {
-        audio: trainSound,
-        volume: 0.95
-      }
-    ];
-
-
-    soundsToUnlock.forEach(
-      function (item) {
-        const audio =
-          item.audio;
-
-
-        if (!audio) {
-          return;
-        }
-
-
-        audio.muted = true;
-
-        audio.volume = 0;
-
-        audio.currentTime = 0;
-
-
-        const playback =
-          audio.play();
 
 
         if (
-          playback &&
-          typeof playback.catch ===
-          "function"
+          masterGain &&
+          audioContext
         ) {
-          playback.catch(
-            function () {
-              /*
-               * On ne bloque jamais
-               * l’ouverture de la salle.
-               */
-            }
+          masterGain.gain.setTargetAtTime(
+            0.0001,
+            audioContext.currentTime,
+            0.08
           );
         }
 
 
-        window.setTimeout(
-          function () {
-            audio.pause();
+        startSound.pause();
 
-            audio.currentTime = 0;
+        trainSound.pause();
 
-            audio.muted = false;
 
-            audio.volume =
-              item.volume;
-          },
-          120
+        stopHeartbeat();
+
+
+        window.clearInterval(
+          signalToneTimer
         );
+
+
+        setAtmosphere(
+          "pulse"
+        );
+
+
+        updateSoundButton();
+
+        return;
       }
-    );
 
 
-    mediaPrimed = true;
-
-    mediaPriming = false;
+      soundEnabled = true;
 
 
-    /* Petit son de confirmation */
-
-    try {
-      tone(
-        220,
-        0.34,
-        0.04,
-        "sine"
+      localStorage.setItem(
+        "museumSound",
+        "on"
       );
 
 
-      tone(
-        440,
-        0.3,
-        0.025,
-        "sine",
-        0.12
-      );
-    } catch (error) {
-      console.warn(
-        "Confirmation sound unavailable:",
-        error
-      );
-    }
+      try {
+        ensureAudio();
 
 
-    /* Ouvrir immédiatement la salle */
-
-    soundEntry.classList.add(
-      "is-leaving"
-    );
-
-
-    body.classList.remove(
-      "sound-locked"
-    );
+        if (
+          audioContext.state ===
+          "suspended"
+        ) {
+          await audioContext.resume();
+        }
 
 
-    window.setTimeout(
-      function () {
-        soundEntry.remove();
+        masterGain.gain.setValueAtTime(
+          0.8,
+          audioContext.currentTime
+        );
+
+
+        await primeMedia();
+
+
+        updateSoundButton();
+
+
+        /*
+         * Confirmation sonore courte,
+         * liée au signal rouge.
+         */
+
+        tone(
+          220,
+          0.3,
+          0.035,
+          "sine"
+        );
+
+
+        tone(
+          440,
+          0.25,
+          0.022,
+          "sine",
+          0.11
+        );
 
 
         syncAudio(
           sceneNames[
             activeIndex
           ],
-
           activeIndex
         );
-      },
-      900
-    );
-  }
-);
+      } catch (error) {
+        soundEnabled = false;
 
-/* ==========================================
-   SOUND ON / OFF
-========================================== */
 
-soundToggle.addEventListener(
-  "click",
-  function () {
-    ensureAudio();
+        updateSoundButton();
 
-    soundEnabled =
-      !soundEnabled;
 
-    localStorage.setItem(
-      "museumSound",
-
-      soundEnabled
-        ? "on"
-        : "off"
-    );
-
-    if (
-      masterGain
-    ) {
-      masterGain.gain.setTargetAtTime(
-        soundEnabled
-          ? 0.8
-          : 0,
-
-        audioContext.currentTime,
-
-        0.05
-      );
-    }
-
-    [
-      startSound,
-      trainSound
-    ].forEach(
-      function (audio) {
-        audio.muted =
-          !soundEnabled;
+        console.warn(
+          "Action audio unavailable:",
+          error
+        );
       }
-    );
-
-    if (
-      soundEnabled
-    ) {
-      primeMedia();
-
-      syncAudio(
-        sceneNames[
-          activeIndex
-        ],
-
-        activeIndex
-      );
-    } else {
-      stopHeartbeat();
-
-      window.clearInterval(
-        signalToneTimer
-      );
-
-      setAtmosphere(
-        "pulse"
-      );
     }
-
-    updateSoundButton();
-  }
-);
+  );
+}
 
 
 /* ==========================================
@@ -2101,12 +1980,12 @@ let canvasHeight =
 
 function resizeCanvas() {
   const ratio =
-    Math.min(
-      window.devicePixelRatio ||
-      1,
+  Math.min(
+    window.devicePixelRatio ||
+    1,
 
-      1.5
-    );
+    1.15
+  );
 
   canvasWidth =
     window.innerWidth;
@@ -2132,9 +2011,9 @@ function resizeCanvas() {
   );
 
   const count =
-    window.innerWidth < 700
-      ? 45
-      : 85;
+  window.innerWidth < 700
+    ? 30
+    : 55;
 
   drops =
     Array.from(
@@ -2171,8 +2050,25 @@ function resizeCanvas() {
     );
 }
 
+let previousWeatherFrame = 0;
+function animateWeather(time) {
+  window.requestAnimationFrame(
+    animateWeather
+  );
 
-function animateWeather() {
+
+  if (
+    document.hidden ||
+    time - previousWeatherFrame < 34
+  ) {
+    return;
+  }
+
+
+  previousWeatherFrame =
+    time;
+
+
   context.clearRect(
     0,
     0,
@@ -2257,9 +2153,7 @@ function animateWeather() {
     }
   );
 
-  window.requestAnimationFrame(
-    animateWeather
-  );
+ 
 }
 
 
