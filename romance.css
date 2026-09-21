@@ -2434,3 +2434,504 @@ a {
       0.01ms !important;
   }
 }
+/* ==========================================
+   ROMANCE — OUTILS DU HEADER
+========================================== */
+
+.romance-header-tools {
+  justify-self: end;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  pointer-events: auto;
+}
+
+.romance-header-tools #sound-control {
+  justify-self: auto;
+}
+
+#romance-notes-button,
+#romance-notes-close {
+  appearance: none;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: inherit;
+
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+
+  cursor: pointer;
+}
+
+#romance-notes-button {
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 238, 231, 0.42);
+
+  transition:
+    color 300ms ease,
+    border-color 300ms ease,
+    letter-spacing 300ms ease;
+}
+
+#romance-notes-button:hover,
+#romance-notes-button:focus-visible {
+  color: #ffd7cf;
+
+  border-color:
+    rgba(255, 215, 207, 0.9);
+
+  letter-spacing: 0.16em;
+}
+
+
+/* ==========================================
+   FOND DU DOSSIER
+========================================== */
+
+.romance-notes-backdrop {
+  position: fixed;
+  inset: 0;
+
+  z-index: 140;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  background:
+    rgba(16, 2, 9, 0.66);
+
+  backdrop-filter:
+    blur(13px);
+
+  transition:
+    opacity 500ms ease,
+    visibility 500ms;
+}
+
+.romance-page.notes-open
+.romance-notes-backdrop {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+
+/* ==========================================
+   PANNEAU CURATORIAL
+========================================== */
+
+.romance-notes-panel {
+  position: fixed;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 150;
+
+  width:
+    min(610px, 94vw);
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  color: #fff5ef;
+
+  background:
+    radial-gradient(
+      circle at 90% 12%,
+      rgba(255, 99, 99, 0.22),
+      transparent 34%
+    ),
+
+    radial-gradient(
+      circle at 15% 70%,
+      rgba(153, 45, 94, 0.18),
+      transparent 40%
+    ),
+
+    linear-gradient(
+      150deg,
+      rgba(52, 8, 25, 0.98),
+      rgba(23, 4, 15, 0.99) 55%,
+      rgba(10, 3, 12, 1)
+    );
+
+  border-left:
+    1px solid
+    rgba(255, 221, 210, 0.18);
+
+  box-shadow:
+    -30px 0 100px
+    rgba(10, 0, 5, 0.48);
+
+  transform:
+    translateX(102%);
+
+  transition:
+    transform 700ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.romance-page.notes-open
+.romance-notes-panel {
+  transform:
+    translateX(0);
+}
+
+
+/* ==========================================
+   EN-TÊTE DU DOSSIER
+========================================== */
+
+.romance-notes-header {
+  position: sticky;
+  top: 0;
+
+  z-index: 2;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+
+  padding:
+    35px 38px 30px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(38, 5, 20, 0.98),
+      rgba(38, 5, 20, 0.91) 75%,
+      transparent
+    );
+
+  backdrop-filter:
+    blur(16px);
+}
+
+.romance-notes-header span,
+.romance-note-number,
+.romance-notes-footer span {
+  display: block;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  color:
+    rgba(255, 209, 196, 0.68);
+}
+
+.romance-notes-header h2 {
+  margin:
+    10px 0 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(52px, 7vw, 88px);
+
+  font-weight: 400;
+  line-height: 0.84;
+
+  letter-spacing: -0.045em;
+}
+
+#romance-notes-close {
+  padding:
+    5px 0 7px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 238, 231, 0.34);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  opacity: 0.72;
+
+  transition:
+    opacity 250ms ease,
+    border-color 250ms ease;
+}
+
+#romance-notes-close:hover,
+#romance-notes-close:focus-visible {
+  opacity: 1;
+
+  border-color:
+    rgba(255, 238, 231, 0.88);
+}
+
+
+/* ==========================================
+   CONTENU DU DOSSIER
+========================================== */
+
+.romance-notes-content {
+  padding:
+    6px 38px 70px;
+}
+
+.romance-note-section {
+  padding:
+    35px 0 40px;
+
+  border-top:
+    1px solid
+    rgba(255, 231, 222, 0.13);
+}
+
+.romance-note-section h3 {
+  max-width: 430px;
+
+  margin:
+    12px 0 20px;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(27px, 3.2vw, 39px);
+
+  font-weight: 400;
+  line-height: 1.04;
+
+  letter-spacing: -0.025em;
+}
+
+.romance-note-section p {
+  max-width: 480px;
+
+  margin:
+    0 0 16px;
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 11px;
+  line-height: 1.8;
+
+  letter-spacing: 0.015em;
+
+  color:
+    rgba(255, 240, 234, 0.78);
+}
+
+.romance-note-section
+.romance-note-caution {
+  padding-left: 16px;
+
+  border-left:
+    1px solid
+    rgba(255, 133, 133, 0.58);
+
+  color:
+    rgba(255, 205, 195, 0.65);
+}
+
+.romance-note-section a {
+  display: inline-block;
+
+  margin-top: 8px;
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 208, 196, 0.45);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  color: #ffd5c9;
+
+  transition:
+    letter-spacing 300ms ease,
+    border-color 300ms ease;
+}
+
+.romance-note-section a:hover {
+  letter-spacing: 0.2em;
+
+  border-color: #ffd5c9;
+}
+
+
+/* ==========================================
+   TRANSPOSITION PHYSIQUE
+========================================== */
+
+.physical-room-note {
+  margin-top: 12px;
+  padding:
+    34px 28px 38px;
+
+  border:
+    1px solid
+    rgba(255, 188, 174, 0.18);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(191, 45, 65, 0.14),
+      rgba(255, 163, 134, 0.035)
+    );
+}
+
+.physical-room-note ul {
+  display: grid;
+  gap: 0;
+
+  margin: 8px 0 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.physical-room-note li {
+  position: relative;
+
+  padding:
+    15px 0 15px 28px;
+
+  border-top:
+    1px solid
+    rgba(255, 232, 224, 0.1);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 10px;
+  line-height: 1.7;
+
+  color:
+    rgba(255, 239, 232, 0.78);
+}
+
+.physical-room-note li::before {
+  content: "";
+
+  position: absolute;
+
+  top: 21px;
+  left: 3px;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #ff776f;
+
+  box-shadow:
+    0 0 15px
+    rgba(255, 63, 82, 0.76);
+}
+
+
+/* ==========================================
+   MÉTHODE CURATORIALE
+========================================== */
+
+.romance-notes-footer {
+  margin-top: 42px;
+  padding:
+    30px 0 10px;
+
+  border-top:
+    1px solid
+    rgba(255, 226, 216, 0.2);
+}
+
+.romance-notes-footer p {
+  max-width: 500px;
+
+  margin:
+    14px 0 0;
+
+  font-family:
+    "Italiana",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(23px, 3vw, 34px);
+
+  line-height: 1.16;
+
+  color:
+    rgba(255, 238, 231, 0.9);
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 760px) {
+  .romance-header-tools {
+    gap: 10px;
+  }
+
+  #romance-notes-button,
+  .romance-header-tools #sound-control {
+    font-size: 7px;
+  }
+
+  .romance-notes-header {
+    padding:
+      27px 23px 25px;
+  }
+
+  .romance-notes-content {
+    padding:
+      4px 23px 55px;
+  }
+
+  .physical-room-note {
+    padding:
+      28px 20px 30px;
+  }
+}
