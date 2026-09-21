@@ -292,15 +292,15 @@ const phases = [
     },
 
     science: {
-      number:
-        "RESEARCH NOTE 02.3",
+  number:
+    "RESEARCH NOTE 02.3",
 
-      text:
-        "Emotional intensity and personal significance influence which waking-life elements enter dreams.",
+  text:
+    "A diary study found delayed dream incorporation for personally significant experiences in part of its sample.",
 
-      principle:
-        "EMOTION · PERSONAL SALIENCE"
-    }
+  principle:
+    "PERSONAL SIGNIFICANCE · DREAM-LAG"
+  }
   },
 
 
@@ -327,15 +327,15 @@ const phases = [
     },
 
     science: {
-      number:
-        "RESEARCH NOTE 02.3",
+  number:
+    "RESEARCH NOTE 02.3",
 
-      text:
-        "Emotional intensity and personal significance influence which waking-life elements enter dreams.",
+  text:
+    "A diary study found delayed dream incorporation for personally significant experiences in part of its sample.",
 
-      principle:
-        "EMOTION · PERSONAL SALIENCE"
-    }
+  principle:
+    "PERSONAL SIGNIFICANCE · DREAM-LAG"
+  }
   },
 
 
@@ -350,15 +350,15 @@ const phases = [
     dream: null,
 
     science: {
-      number:
-        "RESEARCH NOTE 02.4",
+  number:
+    "RESEARCH NOTE 02.4",
 
-      text:
-        "During dreaming, autobiographical fragments may combine with elements from unrelated memories.",
+  text:
+    "Dreams can preserve features of waking experiences without reproducing the complete episode that produced them.",
 
-      principle:
-        "RECOMBINATION · HYPERASSOCIATION"
-    }
+  principle:
+    "RECOMBINATION · NOT REPRODUCTION"
+  }
   },
 
 
@@ -373,15 +373,15 @@ const phases = [
     dream: null,
 
     science: {
-      number:
-        "RESEARCH NOTE 02.4",
+  number:
+    "RESEARCH NOTE 02.4",
 
-      text:
-        "During dreaming, autobiographical fragments may combine with elements from unrelated memories.",
+  text:
+    "Dreams can preserve features of waking experiences without reproducing the complete episode that produced them.",
 
-      principle:
-        "RECOMBINATION · HYPERASSOCIATION"
-    }
+  principle:
+    "RECOMBINATION · NOT REPRODUCTION"
+  }
   },
 
 
@@ -1213,3 +1213,687 @@ if (
     }
   );
 }
+/* ==========================================
+   CHILDHOOD — ROOM NOTES
+========================================== */
+
+const childhoodNotesButton =
+  document.querySelector(
+    "#childhood-notes-button"
+  );
+
+
+const childhoodNotesClose =
+  document.querySelector(
+    "#childhood-notes-close"
+  );
+
+
+const childhoodNotesBackdrop =
+  document.querySelector(
+    "#childhood-notes-backdrop"
+  );
+
+
+const childhoodNotesPanel =
+  document.querySelector(
+    "#childhood-notes-panel"
+  );
+
+
+function setChildhoodNotes(
+  open
+) {
+  page.classList.toggle(
+    "childhood-notes-open",
+    open
+  );
+
+
+  if (
+    childhoodNotesButton
+  ) {
+    childhoodNotesButton.setAttribute(
+      "aria-expanded",
+      String(open)
+    );
+
+
+    childhoodNotesButton.textContent =
+      open
+        ? "ROOM NOTES −"
+        : "ROOM NOTES +";
+  }
+
+
+  if (
+    childhoodNotesPanel
+  ) {
+    childhoodNotesPanel.setAttribute(
+      "aria-hidden",
+      String(!open)
+    );
+  }
+}
+
+
+if (
+  childhoodNotesButton
+) {
+  childhoodNotesButton.addEventListener(
+    "click",
+    function () {
+      const open =
+        !page.classList.contains(
+          "childhood-notes-open"
+        );
+
+
+      setChildhoodNotes(
+        open
+      );
+    }
+  );
+}
+
+
+if (
+  childhoodNotesClose
+) {
+  childhoodNotesClose.addEventListener(
+    "click",
+    function () {
+      setChildhoodNotes(
+        false
+      );
+    }
+  );
+}
+
+
+if (
+  childhoodNotesBackdrop
+) {
+  childhoodNotesBackdrop.addEventListener(
+    "click",
+    function () {
+      setChildhoodNotes(
+        false
+      );
+    }
+  );
+}
+
+
+window.addEventListener(
+  "keydown",
+  function (
+    event
+  ) {
+    if (
+      event.key ===
+      "Escape"
+    ) {
+      setChildhoodNotes(
+        false
+      );
+    }
+  }
+);
+
+
+/* ==========================================
+   CHILDHOOD — AMBIANCE SONORE
+
+   Boîte à musique, vibration de la maison
+   et voix fredonnée derrière la porte.
+========================================== */
+
+const childhoodSoundButton =
+  document.querySelector(
+    "#childhood-sound-button"
+  );
+
+
+let childhoodAudioContext =
+  null;
+
+
+let childhoodMasterGain =
+  null;
+
+
+let childhoodRoomGain =
+  null;
+
+
+let childhoodVoiceGain =
+  null;
+
+
+let childhoodSoundEnabled =
+  false;
+
+
+let childhoodAudioCreated =
+  false;
+
+
+let childhoodMelodyPosition =
+  0;
+
+
+let childhoodMelodyTimer =
+  null;
+
+
+const childhoodMelody = [
+  523.25,
+  659.25,
+  587.33,
+  440,
+  493.88,
+  392,
+  440,
+  329.63
+];
+
+
+/* ==========================================
+   CRÉER LE PAYSAGE SONORE
+========================================== */
+
+function createChildhoodAudio() {
+  if (
+    childhoodAudioCreated
+  ) {
+    return;
+  }
+
+
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+
+  if (
+    !AudioContextClass
+  ) {
+    return;
+  }
+
+
+  childhoodAudioContext =
+    new AudioContextClass();
+
+
+  childhoodMasterGain =
+    childhoodAudioContext.createGain();
+
+
+  childhoodRoomGain =
+    childhoodAudioContext.createGain();
+
+
+  childhoodVoiceGain =
+    childhoodAudioContext.createGain();
+
+
+  childhoodMasterGain.gain.value =
+    0.0001;
+
+
+  childhoodRoomGain.gain.value =
+    0.018;
+
+
+  childhoodVoiceGain.gain.value =
+    0.0001;
+
+
+  childhoodRoomGain.connect(
+    childhoodMasterGain
+  );
+
+
+  childhoodVoiceGain.connect(
+    childhoodMasterGain
+  );
+
+
+  childhoodMasterGain.connect(
+    childhoodAudioContext.destination
+  );
+
+
+  /*
+   * Respiration grave de la maison.
+   */
+
+  const roomOscillator =
+    childhoodAudioContext.createOscillator();
+
+
+  const roomFilter =
+    childhoodAudioContext.createBiquadFilter();
+
+
+  roomOscillator.type =
+    "sine";
+
+
+  roomOscillator.frequency.value =
+    73.42;
+
+
+  roomFilter.type =
+    "lowpass";
+
+
+  roomFilter.frequency.value =
+    170;
+
+
+  roomOscillator.connect(
+    roomFilter
+  );
+
+
+  roomFilter.connect(
+    childhoodRoomGain
+  );
+
+
+  roomOscillator.start();
+
+
+  /*
+   * Fredonnement très discret.
+   * Il devient audible près de la porte.
+   */
+
+  const voiceOne =
+    childhoodAudioContext.createOscillator();
+
+
+  const voiceTwo =
+    childhoodAudioContext.createOscillator();
+
+
+  voiceOne.type =
+    "sine";
+
+
+  voiceTwo.type =
+    "sine";
+
+
+  voiceOne.frequency.value =
+    174.61;
+
+
+  voiceTwo.frequency.value =
+    261.63;
+
+
+  voiceOne.connect(
+    childhoodVoiceGain
+  );
+
+
+  voiceTwo.connect(
+    childhoodVoiceGain
+  );
+
+
+  voiceOne.start();
+
+
+  voiceTwo.start();
+
+
+  childhoodAudioCreated =
+    true;
+}
+
+
+/* ==========================================
+   NOTE DE BOÎTE À MUSIQUE
+========================================== */
+
+function playChildhoodChime(
+  frequency
+) {
+  if (
+    !childhoodSoundEnabled ||
+    !childhoodAudioContext ||
+    !childhoodMasterGain
+  ) {
+    return;
+  }
+
+
+  const now =
+    childhoodAudioContext.currentTime;
+
+
+  const oscillator =
+    childhoodAudioContext.createOscillator();
+
+
+  const harmonic =
+    childhoodAudioContext.createOscillator();
+
+
+  const gain =
+    childhoodAudioContext.createGain();
+
+
+  oscillator.type =
+    "sine";
+
+
+  harmonic.type =
+    "sine";
+
+
+  oscillator.frequency.setValueAtTime(
+    frequency,
+    now
+  );
+
+
+  harmonic.frequency.setValueAtTime(
+    frequency * 2,
+    now
+  );
+
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.055,
+    now + 0.025
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 1.8
+  );
+
+
+  oscillator.connect(
+    gain
+  );
+
+
+  harmonic.connect(
+    gain
+  );
+
+
+  gain.connect(
+    childhoodMasterGain
+  );
+
+
+  oscillator.start(
+    now
+  );
+
+
+  harmonic.start(
+    now
+  );
+
+
+  oscillator.stop(
+    now + 1.9
+  );
+
+
+  harmonic.stop(
+    now + 1.9
+  );
+}
+
+
+/* ==========================================
+   BOUCLE MÉLODIQUE
+========================================== */
+
+function scheduleChildhoodMelody() {
+  window.clearTimeout(
+    childhoodMelodyTimer
+  );
+
+
+  const wait =
+    currentPhase === 5 ||
+    currentPhase === 6
+
+      ? 2300
+
+      : 3100;
+
+
+  childhoodMelodyTimer =
+    window.setTimeout(
+      function () {
+        if (
+          childhoodSoundEnabled
+        ) {
+          playChildhoodChime(
+            childhoodMelody[
+              childhoodMelodyPosition
+            ]
+          );
+
+
+          childhoodMelodyPosition =
+            (
+              childhoodMelodyPosition +
+              1
+            ) %
+            childhoodMelody.length;
+        }
+
+
+        scheduleChildhoodMelody();
+      },
+      wait
+    );
+}
+
+
+/* ==========================================
+   ADAPTER LE SON À LA PHASE
+========================================== */
+
+function syncChildhoodSound() {
+  if (
+    !childhoodAudioCreated ||
+    !childhoodAudioContext
+  ) {
+    return;
+  }
+
+
+  const now =
+    childhoodAudioContext.currentTime;
+
+
+  const voiceVisible =
+    currentPhase === 5 ||
+    currentPhase === 6;
+
+
+  childhoodVoiceGain.gain.setTargetAtTime(
+    voiceVisible &&
+    childhoodSoundEnabled
+
+      ? 0.011
+
+      : 0.0001,
+
+    now,
+    0.9
+  );
+
+
+  childhoodRoomGain.gain.setTargetAtTime(
+    childhoodSoundEnabled
+
+      ? 0.017 +
+        memoryEnergy *
+        0.009
+
+      : 0.0001,
+
+    now,
+    0.8
+  );
+}
+
+
+/* ==========================================
+   ACTIVER OU COUPER LE SON
+========================================== */
+
+function setChildhoodSound(
+  enabled
+) {
+  createChildhoodAudio();
+
+
+  if (
+    !childhoodAudioContext ||
+    !childhoodMasterGain
+  ) {
+    return;
+  }
+
+
+  childhoodSoundEnabled =
+    enabled;
+
+
+  if (
+    childhoodAudioContext.state ===
+    "suspended"
+  ) {
+    childhoodAudioContext.resume();
+  }
+
+
+  const now =
+    childhoodAudioContext.currentTime;
+
+
+  childhoodMasterGain.gain.cancelScheduledValues(
+    now
+  );
+
+
+  childhoodMasterGain.gain.setTargetAtTime(
+    enabled
+      ? 0.7
+      : 0.0001,
+
+    now,
+    0.35
+  );
+
+
+  if (
+    childhoodSoundButton
+  ) {
+    childhoodSoundButton.setAttribute(
+      "aria-pressed",
+      String(enabled)
+    );
+
+
+    childhoodSoundButton.textContent =
+      enabled
+        ? "SOUND ON"
+        : "SOUND OFF";
+  }
+
+
+  syncChildhoodSound();
+
+
+  if (
+    enabled &&
+    !childhoodMelodyTimer
+  ) {
+    playChildhoodChime(
+      childhoodMelody[
+        childhoodMelodyPosition
+      ]
+    );
+
+
+    scheduleChildhoodMelody();
+  }
+}
+
+
+if (
+  childhoodSoundButton
+) {
+  childhoodSoundButton.addEventListener(
+    "click",
+    function () {
+      setChildhoodSound(
+        !childhoodSoundEnabled
+      );
+    }
+  );
+}
+
+
+/*
+ * Synchronisation légère avec le scroll.
+ */
+
+window.addEventListener(
+  "scroll",
+  syncChildhoodSound,
+  {
+    passive: true
+  }
+);
+
+
+document.addEventListener(
+  "visibilitychange",
+  function () {
+    if (
+      !childhoodAudioCreated ||
+      !childhoodAudioContext ||
+      !childhoodMasterGain
+    ) {
+      return;
+    }
+
+
+    childhoodMasterGain.gain.setTargetAtTime(
+      document.hidden ||
+      !childhoodSoundEnabled
+
+        ? 0.0001
+
+        : 0.7,
+
+      childhoodAudioContext.currentTime,
+      0.3
+    );
+  }
+);
