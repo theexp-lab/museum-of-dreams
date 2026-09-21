@@ -1809,26 +1809,24 @@ if (
 
 
 if (progress < 0.15) {
-
-  if (progress < 0.15) {
-    scrollInstruction.textContent =
-      "APPROACH THE LIGHT";
-  } else if (progress < 0.39) {
-    scrollInstruction.textContent =
-      "CROSS THE DISTANCE";
-  } else if (progress < 0.63) {
-    scrollInstruction.textContent =
-      "STAY IN THE DREAM";
-  } else if (progress < 0.88) {
-    scrollInstruction.textContent =
-      "WATCH THE THIRD LIGHT";
-  } else if (progress < 0.958) {
-    scrollInstruction.textContent =
-      "LET THE DREAM END";
-  } else {
-    scrollInstruction.textContent =
-      "FOLLOW THE PULSE";
-  }
+  scrollInstruction.textContent =
+    "APPROACH THE LIGHT";
+} else if (progress < 0.39) {
+  scrollInstruction.textContent =
+    "CROSS THE DISTANCE";
+} else if (progress < 0.63) {
+  scrollInstruction.textContent =
+    "STAY IN THE DREAM";
+} else if (progress < 0.88) {
+  scrollInstruction.textContent =
+    "WATCH THE THIRD LIGHT";
+} else if (progress < 0.958) {
+  scrollInstruction.textContent =
+    "LET THE DREAM END";
+} else {
+  scrollInstruction.textContent =
+    "FOLLOW THE PULSE";
+}
 }
 
 
@@ -2064,8 +2062,14 @@ function animateParticles(time) {
 
 
       context.fill();
-    }
+       }
   );
+}
+
+
+/* ==========================================
+   SOURIS
+========================================== */
 
 
 
