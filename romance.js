@@ -415,6 +415,12 @@ let tensionGain = null;
 
 let whistleGain = null;
 
+let jealousyNoiseGain = null;
+
+let jealousyNoiseFilter = null;
+
+let jealousyNoisePanner = null;
+
 let soundEnabled = false;
 
 let heartbeatTimer = null;
@@ -696,19 +702,35 @@ function playRomancePhrase() {
      */
 
     playRomanceNote(
-      349.23,
-      0.034,
-      0,
-      -0.4
-    );
+  349.23,
+  0.043,
+  0,
+  -0.55
+);
 
 
-    playRomanceNote(
-      369.99,
-      0.032,
-      0.16,
-      0.4
-    );
+playRomanceNote(
+  369.99,
+  0.04,
+  0.13,
+  0.55
+);
+
+
+playRomanceNote(
+  174.61,
+  0.038,
+  0.42,
+  -0.18
+);
+
+
+playRomanceNote(
+  185,
+  0.034,
+  0.54,
+  0.22
+);
   }
 
 
@@ -966,6 +988,163 @@ async function startAudio() {
       whistleGain,
       "sine"
     );
+
+     /* ==========================================
+   SOUFFLE DE JALOUSIE
+
+   Bruit filtré et mouvant qui apparaît
+   uniquement dans la partie rouge.
+========================================== */
+
+jealousyNoiseGain =
+  audioContext.createGain();
+
+
+jealousyNoiseFilter =
+  audioContext.createBiquadFilter();
+
+
+jealousyNoisePanner =
+  audioContext.createStereoPanner
+    ? audioContext.createStereoPanner()
+    : null;
+
+
+jealousyNoiseGain.gain.value =
+  0.0001;
+
+
+jealousyNoiseFilter.type =
+  "bandpass";
+
+
+jealousyNoiseFilter.frequency.value =
+  780;
+
+
+jealousyNoiseFilter.Q.value =
+  6;
+
+
+const jealousyBuffer =
+  audioContext.createBuffer(
+    1,
+    audioContext.sampleRate * 2,
+    audioContext.sampleRate
+  );
+
+
+const jealousyData =
+  jealousyBuffer.getChannelData(
+    0
+  );
+
+
+let previousNoiseValue = 0;
+
+
+for (
+  let index = 0;
+  index < jealousyData.length;
+  index++
+) {
+  const randomValue =
+    Math.random() * 2 - 1;
+
+
+  /*
+   * Le lissage transforme le bruit blanc
+   * en souffle organique.
+   */
+
+  previousNoiseValue =
+    previousNoiseValue * 0.965 +
+    randomValue * 0.035;
+
+
+  jealousyData[index] =
+    previousNoiseValue;
+}
+
+
+const jealousyNoiseSource =
+  audioContext.createBufferSource();
+
+
+jealousyNoiseSource.buffer =
+  jealousyBuffer;
+
+
+jealousyNoiseSource.loop =
+  true;
+
+
+jealousyNoiseSource.connect(
+  jealousyNoiseFilter
+);
+
+
+jealousyNoiseFilter.connect(
+  jealousyNoiseGain
+);
+
+
+if (jealousyNoisePanner) {
+  jealousyNoiseGain.connect(
+    jealousyNoisePanner
+  );
+
+
+  jealousyNoisePanner.connect(
+    masterGain
+  );
+} else {
+  jealousyNoiseGain.connect(
+    masterGain
+  );
+}
+
+
+jealousyNoiseSource.start();
+
+
+/* Mouvement lent entre gauche et droite */
+
+if (
+  jealousyNoisePanner
+) {
+  const jealousyPanLfo =
+    audioContext.createOscillator();
+
+
+  const jealousyPanDepth =
+    audioContext.createGain();
+
+
+  jealousyPanLfo.type =
+    "sine";
+
+
+  jealousyPanLfo.frequency.value =
+    0.085;
+
+
+  jealousyPanDepth.gain.value =
+    0.72;
+
+
+  jealousyPanLfo.connect(
+    jealousyPanDepth
+  );
+
+
+  jealousyPanDepth.connect(
+    jealousyNoisePanner.pan
+  );
+
+
+  jealousyPanLfo.start();
+}
   }
 
 
@@ -1081,6 +1260,43 @@ function updateAudio() {
     now,
     0.35
   );
+
+   /*
+ * Le souffle devient audible seulement
+ * lorsque la troisième présence apparaît.
+ */
+
+if (
+  jealousyNoiseGain &&
+  jealousyNoiseFilter
+) {
+  jealousyNoiseGain.gain.setTargetAtTime(
+    0.0001 +
+    Math.pow(
+      currentJealousy,
+      2.25
+    ) *
+    0.17,
+    now,
+    0.32
+  );
+
+
+  jealousyNoiseFilter.frequency.setTargetAtTime(
+    680 +
+    currentJealousy * 2100,
+    now,
+    0.4
+  );
+
+
+  jealousyNoiseFilter.Q.setTargetAtTime(
+    5 +
+    currentJealousy * 8,
+    now,
+    0.4
+  );
+}
 }
 
 
