@@ -1839,3 +1839,162 @@ window.addEventListener(
     updateRomance();
   }
 );
+/* ==========================================
+   DOSSIER CURATORIAL — ROMANCE
+========================================== */
+
+const romanceNotesButton =
+  document.querySelector(
+    "#romance-notes-button"
+  );
+
+
+const romanceNotesPanel =
+  document.querySelector(
+    "#romance-notes-panel"
+  );
+
+
+const romanceNotesBackdrop =
+  document.querySelector(
+    "#romance-notes-backdrop"
+  );
+
+
+const romanceNotesClose =
+  document.querySelector(
+    "#romance-notes-close"
+  );
+
+
+function openRomanceNotes() {
+  if (
+    !romanceNotesPanel ||
+    !romanceNotesButton
+  ) {
+    return;
+  }
+
+
+  page.classList.add(
+    "notes-open"
+  );
+
+
+  romanceNotesPanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  romanceNotesButton.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+
+  romanceNotesButton.textContent =
+    "ROOM NOTES −";
+
+
+  if (
+    romanceNotesClose
+  ) {
+    romanceNotesClose.focus();
+  }
+}
+
+
+function closeRomanceNotes() {
+  if (
+    !romanceNotesPanel ||
+    !romanceNotesButton
+  ) {
+    return;
+  }
+
+
+  page.classList.remove(
+    "notes-open"
+  );
+
+
+  romanceNotesPanel.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  romanceNotesButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+
+  romanceNotesButton.textContent =
+    "ROOM NOTES +";
+}
+
+
+if (
+  romanceNotesButton
+) {
+  romanceNotesButton.addEventListener(
+    "click",
+    function () {
+      if (
+        page.classList.contains(
+          "notes-open"
+        )
+      ) {
+        closeRomanceNotes();
+      } else {
+        openRomanceNotes();
+      }
+    }
+  );
+}
+
+
+if (
+  romanceNotesClose
+) {
+  romanceNotesClose.addEventListener(
+    "click",
+    closeRomanceNotes
+  );
+}
+
+
+if (
+  romanceNotesBackdrop
+) {
+  romanceNotesBackdrop.addEventListener(
+    "click",
+    closeRomanceNotes
+  );
+}
+
+
+window.addEventListener(
+  "keydown",
+  function (
+    event
+  ) {
+    if (
+      event.key === "Escape" &&
+      page.classList.contains(
+        "notes-open"
+      )
+    ) {
+      closeRomanceNotes();
+
+
+      if (
+        romanceNotesButton
+      ) {
+        romanceNotesButton.focus();
+      }
+    }
+  }
+);
