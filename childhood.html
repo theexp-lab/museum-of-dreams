@@ -48,7 +48,7 @@
 
   <link
     rel="stylesheet"
-    href="./childhood.css?v=1"
+    href="./childhood.css?v=2"
   >
 
 </head>
@@ -295,6 +295,181 @@
 
   </header>
 
+  <!-- ==========================================
+     OUTILS DE LA SALLE
+=========================================== -->
+
+<div class="childhood-tools">
+
+  <button
+    type="button"
+    class="childhood-tool-button"
+    id="childhood-sound-button"
+    aria-pressed="false"
+  >
+    ENABLE SOUND
+  </button>
+
+
+  <button
+    type="button"
+    class="childhood-tool-button"
+    id="childhood-notes-button"
+    aria-controls="childhood-notes-panel"
+    aria-expanded="false"
+  >
+    ROOM NOTES +
+  </button>
+
+</div>
+
+
+<button
+  type="button"
+  class="childhood-notes-backdrop"
+  id="childhood-notes-backdrop"
+  aria-label="Close room notes"
+  tabindex="-1"
+></button>
+
+
+<aside
+  class="childhood-notes-panel"
+  id="childhood-notes-panel"
+  aria-hidden="true"
+>
+
+  <div class="childhood-notes-heading">
+
+    <div>
+
+      <span>
+        ROOM 02 · RESEARCH FILE
+      </span>
+
+      <h2>
+        CHILDHOOD
+      </h2>
+
+    </div>
+
+
+    <button
+      type="button"
+      id="childhood-notes-close"
+      aria-label="Close room notes"
+    >
+      CLOSE ×
+    </button>
+
+  </div>
+
+
+  <section class="childhood-note-section">
+
+    <span class="childhood-note-number">
+      RESEARCH 02.A
+    </span>
+
+    <h3>
+      MEMORIES ENTER DREAMS AS FRAGMENTS
+    </h3>
+
+    <p>
+      In a study of 299 sleep reports, 65% contained
+      elements connected to recent waking life.
+      Complete replay of an episodic event appeared
+      in only 1–2% of reports.
+    </p>
+
+    <a
+      href="https://direct.mit.edu/jocn/article/15/1/1/3724/Dreaming-and-Episodic-Memory-A-Functional"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      FOSSE ET AL. · 2003 ↗
+    </a>
+
+  </section>
+
+
+  <section class="childhood-note-section">
+
+    <span class="childhood-note-number">
+      RESEARCH 02.B
+    </span>
+
+    <h3>
+      SOME MEMORIES RETURN LATER
+    </h3>
+
+    <p>
+      A fourteen-day diary study found that personally
+      significant experiences could reappear in dreams
+      both shortly after the event and several days later.
+      The result appeared only in part of the sample.
+    </p>
+
+    <a
+      href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6849581/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      EICHENLAUB ET AL. · 2019 ↗
+    </a>
+
+  </section>
+
+
+  <section class="childhood-note-section physical-room-note">
+
+    <span class="childhood-note-number">
+      PHYSICAL TRANSLATION
+    </span>
+
+    <h3>
+      HOW THIS BECOMES A REAL ROOM
+    </h3>
+
+    <ul>
+
+      <li>
+        An oversized bedroom uses forced perspective
+        to return visitors to a child’s physical scale.
+      </li>
+
+      <li>
+        Projection mapping slowly detaches animals
+        from the wallpaper.
+      </li>
+
+      <li>
+        A directional speaker places a remembered
+        humming voice behind a closed door.
+      </li>
+
+      <li>
+        Furniture, windows and doors come from
+        incompatible architectural periods.
+      </li>
+
+      <li>
+        The final window becomes a luminous passage
+        into the Adventure gallery.
+      </li>
+
+    </ul>
+
+  </section>
+
+
+  <p class="childhood-research-caveat">
+    The installation translates research findings into
+    an artistic experience. It does not propose a universal
+    interpretation of childhood dreams.
+  </p>
+
+</aside>
 
   <!-- ==========================================
        TITRE DE LA SALLE
@@ -568,7 +743,7 @@
   ></div>
 
 
-  <script src="./childhood.js?v=1"></script>
+  <script src="./childhood.js?v=2"></script>
 
 </body>
 
