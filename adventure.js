@@ -559,10 +559,10 @@
 
 
 /* ==========================================
-   AMBIANCE SONORE
+   AMBIANCE SONORE — ADVENTURE
 
-   Vent, traversée rapide, forêt suspendue,
-   chute et apparition de la lumière.
+   Vent naturel, forêt vivante,
+   chute et lumière harmonique.
 ========================================== */
 
   const soundButton =
@@ -583,15 +583,19 @@
     null;
 
 
-  let forestGain =
+  let windFilter =
     null;
 
 
-  let fallGain =
+  let windSource =
     null;
 
 
-  let romanceGain =
+  let fallToneGain =
+    null;
+
+
+  let romanceToneGain =
     null;
 
 
@@ -603,12 +607,16 @@
     false;
 
 
-  let chimeTimer =
+  let natureTimer =
     null;
 
 
+  let currentSunsetScene =
+    -1;
+
+
 /* ==========================================
-   PROGRESSION LOCALE
+   PROGRESSION
 ========================================== */
 
   function getAdventureProgress() {
@@ -654,16 +662,15 @@
 
 
 /* ==========================================
-   CRÉATION DU SON
+   BRUIT BRUN
+
+   Plus doux que le bruit blanc :
+   pas de grésillement agressif.
 ========================================== */
 
-  function createNoiseSource(
-    filterType,
-    frequency,
-    destination
-  ) {
+  function createBrownNoiseBuffer() {
     const duration =
-      2;
+      4;
 
 
     const buffer =
@@ -681,67 +688,45 @@
       );
 
 
+    let previous =
+      0;
+
+
     for (
       let index = 0;
       index < data.length;
       index++
     ) {
-      data[
-        index
-      ] =
+      const white =
         Math.random() *
         2 -
         1;
+
+
+      previous =
+        (
+          previous +
+          0.018 *
+          white
+        ) /
+        1.018;
+
+
+      data[
+        index
+      ] =
+        previous *
+        3.1;
     }
 
 
-    const source =
-      audioContext.createBufferSource();
-
-
-    const filter =
-      audioContext.createBiquadFilter();
-
-
-    source.buffer =
-      buffer;
-
-
-    source.loop =
-      true;
-
-
-    filter.type =
-      filterType;
-
-
-    filter.frequency.value =
-      frequency;
-
-
-    filter.Q.value =
-      0.7;
-
-
-    source.connect(
-      filter
-    );
-
-
-    filter.connect(
-      destination
-    );
-
-
-    source.start();
-
-
-    return {
-      source: source,
-      filter: filter
-    };
+    return buffer;
   }
 
+
+/* ==========================================
+   CRÉER LE PAYSAGE SONORE
+========================================== */
 
   function createAdventureAudio() {
     if (
@@ -775,16 +760,20 @@
       audioContext.createGain();
 
 
-    forestGain =
+    fallToneGain =
       audioContext.createGain();
 
 
-    fallGain =
+    romanceToneGain =
       audioContext.createGain();
 
 
-    romanceGain =
-      audioContext.createGain();
+    windFilter =
+      audioContext.createBiquadFilter();
+
+
+    windSource =
+      audioContext.createBufferSource();
 
 
     masterGain.gain.value =
@@ -795,16 +784,42 @@
       0.0001;
 
 
-    forestGain.gain.value =
+    fallToneGain.gain.value =
       0.0001;
 
 
-    fallGain.gain.value =
+    romanceToneGain.gain.value =
       0.0001;
 
 
-    romanceGain.gain.value =
-      0.0001;
+    windFilter.type =
+      "lowpass";
+
+
+    windFilter.frequency.value =
+      620;
+
+
+    windFilter.Q.value =
+      0.55;
+
+
+    windSource.buffer =
+      createBrownNoiseBuffer();
+
+
+    windSource.loop =
+      true;
+
+
+    windSource.connect(
+      windFilter
+    );
+
+
+    windFilter.connect(
+      windGain
+    );
 
 
     windGain.connect(
@@ -812,17 +827,12 @@
     );
 
 
-    forestGain.connect(
+    fallToneGain.connect(
       masterGain
     );
 
 
-    fallGain.connect(
-      masterGain
-    );
-
-
-    romanceGain.connect(
+    romanceToneGain.connect(
       masterGain
     );
 
@@ -832,29 +842,42 @@
     );
 
 
-    createNoiseSource(
-      "bandpass",
-      720,
-      windGain
+    /*
+     * Le filtre du vent respire lentement.
+     */
+
+    const windMovement =
+      audioContext.createOscillator();
+
+
+    const windMovementAmount =
+      audioContext.createGain();
+
+
+    windMovement.type =
+      "sine";
+
+
+    windMovement.frequency.value =
+      0.075;
+
+
+    windMovementAmount.gain.value =
+      145;
+
+
+    windMovement.connect(
+      windMovementAmount
     );
 
 
-    createNoiseSource(
-      "highpass",
-      1900,
-      forestGain
-    );
-
-
-    createNoiseSource(
-      "lowpass",
-      230,
-      fallGain
+    windMovementAmount.connect(
+      windFilter.frequency
     );
 
 
     /*
-     * Vibration grave durant la chute.
+     * Grave de la chute.
      */
 
     const fallOscillator =
@@ -866,19 +889,16 @@
 
 
     fallOscillator.frequency.value =
-      49;
+      52;
 
 
     fallOscillator.connect(
-      fallGain
+      fallToneGain
     );
 
 
-    fallOscillator.start();
-
-
     /*
-     * Lumière de Romance.
+     * Lumière finale.
      */
 
     const romanceOscillator =
@@ -890,13 +910,19 @@
 
 
     romanceOscillator.frequency.value =
-      261.63;
+      293.66;
 
 
     romanceOscillator.connect(
-      romanceGain
+      romanceToneGain
     );
 
+
+    windSource.start();
+
+    windMovement.start();
+
+    fallOscillator.start();
 
     romanceOscillator.start();
 
@@ -907,10 +933,10 @@
 
 
 /* ==========================================
-   ÉCLAT SONORE
+   FEUILLAGES
 ========================================== */
 
-  function playAdventureChime() {
+  function playLeafRustle() {
     if (
       !soundEnabled ||
       !audioContext ||
@@ -920,21 +946,100 @@
     }
 
 
-    const frequencies = [
-      523.25,
-      659.25,
-      783.99,
-      1046.5
-    ];
+    const now =
+      audioContext.currentTime;
 
 
-    const frequency =
-      frequencies[
-        Math.floor(
-          Math.random() *
-          frequencies.length
-        )
-      ];
+    const source =
+      audioContext.createBufferSource();
+
+
+    const filter =
+      audioContext.createBiquadFilter();
+
+
+    const gain =
+      audioContext.createGain();
+
+
+    source.buffer =
+      createBrownNoiseBuffer();
+
+
+    filter.type =
+      "bandpass";
+
+
+    filter.frequency.setValueAtTime(
+      1250 +
+      Math.random() *
+      650,
+      now
+    );
+
+
+    filter.Q.value =
+      0.75;
+
+
+    gain.gain.setValueAtTime(
+      0.0001,
+      now
+    );
+
+
+    gain.gain.linearRampToValueAtTime(
+      0.018,
+      now + 0.28
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      now + 1.35
+    );
+
+
+    source.connect(
+      filter
+    );
+
+
+    filter.connect(
+      gain
+    );
+
+
+    gain.connect(
+      masterGain
+    );
+
+
+    source.start(
+      now
+    );
+
+
+    source.stop(
+      now + 1.5
+    );
+  }
+
+
+/* ==========================================
+   APPEL D’OISEAU ABSTRAIT
+
+   Très léger : ce n’est pas une jungle MP3.
+========================================== */
+
+  function playForestCall() {
+    if (
+      !soundEnabled ||
+      !audioContext ||
+      !masterGain
+    ) {
+      return;
+    }
 
 
     const now =
@@ -953,9 +1058,29 @@
       "sine";
 
 
+    const startingFrequency =
+      1550 +
+      Math.random() *
+      450;
+
+
     oscillator.frequency.setValueAtTime(
-      frequency,
+      startingFrequency,
       now
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+      startingFrequency *
+      1.42,
+      now + 0.16
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+      startingFrequency *
+      1.08,
+      now + 0.42
     );
 
 
@@ -965,15 +1090,15 @@
     );
 
 
-    gain.gain.exponentialRampToValueAtTime(
-      0.025,
-      now + 0.02
+    gain.gain.linearRampToValueAtTime(
+      0.012,
+      now + 0.06
     );
 
 
     gain.gain.exponentialRampToValueAtTime(
       0.0001,
-      now + 1.7
+      now + 0.48
     );
 
 
@@ -993,38 +1118,311 @@
 
 
     oscillator.stop(
-      now + 1.8
+      now + 0.52
     );
   }
 
 
-  function scheduleAdventureChime() {
+/* ==========================================
+   VIE DE LA FORÊT
+========================================== */
+
+  function scheduleNature() {
     window.clearTimeout(
-      chimeTimer
+      natureTimer
     );
 
 
-    chimeTimer =
+    natureTimer =
       window.setTimeout(
         function () {
+          const progress =
+            getAdventureProgress();
+
+
+          const insideForest =
+            progress >= 0.35 &&
+            progress <= 0.57;
+
+
           if (
-            soundEnabled
+            soundEnabled &&
+            insideForest
           ) {
-            playAdventureChime();
+            playLeafRustle();
+
+
+            if (
+              Math.random() >
+              0.45
+            ) {
+              window.setTimeout(
+                playForestCall,
+                350 +
+                Math.random() *
+                700
+              );
+            }
           }
 
 
-          scheduleAdventureChime();
+          scheduleNature();
         },
-        2700 +
+        1800 +
         Math.random() *
-        2200
+        1800
       );
   }
 
 
 /* ==========================================
-   SYNCHRONISATION AU SCROLL
+   SON DE LUMIÈRE
+
+   Chaque coucher de soleil utilise
+   une harmonie légèrement différente.
+========================================== */
+
+  function playLightChord(
+    frequencies,
+    intensity
+  ) {
+    if (
+      !soundEnabled ||
+      !audioContext ||
+      !masterGain
+    ) {
+      return;
+    }
+
+
+    const now =
+      audioContext.currentTime;
+
+
+    frequencies.forEach(
+      function (
+        frequency,
+        index
+      ) {
+        const oscillator =
+          audioContext.createOscillator();
+
+
+        const harmonic =
+          audioContext.createOscillator();
+
+
+        const gain =
+          audioContext.createGain();
+
+
+        oscillator.type =
+          "sine";
+
+
+        harmonic.type =
+          "sine";
+
+
+        oscillator.frequency.value =
+          frequency;
+
+
+        harmonic.frequency.value =
+          frequency *
+          2.01;
+
+
+        gain.gain.setValueAtTime(
+          0.0001,
+          now
+        );
+
+
+        gain.gain.linearRampToValueAtTime(
+          intensity /
+          (
+            index +
+            2
+          ),
+          now +
+          0.7 +
+          index *
+          0.12
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          now + 5.2
+        );
+
+
+        oscillator.connect(
+          gain
+        );
+
+
+        harmonic.connect(
+          gain
+        );
+
+
+        gain.connect(
+          masterGain
+        );
+
+
+        oscillator.start(
+          now
+        );
+
+
+        harmonic.start(
+          now
+        );
+
+
+        oscillator.stop(
+          now + 5.3
+        );
+
+
+        harmonic.stop(
+          now + 5.3
+        );
+      }
+    );
+  }
+
+
+  function updateSunsetSound(
+    progress
+  ) {
+    let scene =
+      -1;
+
+
+    if (
+      progress >= 0.58 &&
+      progress < 0.66
+    ) {
+      scene =
+        0;
+    }
+
+    else if (
+      progress >= 0.66 &&
+      progress < 0.73
+    ) {
+      scene =
+        1;
+    }
+
+    else if (
+      progress >= 0.73 &&
+      progress < 0.86
+    ) {
+      scene =
+        2;
+    }
+
+    else if (
+      progress >= 0.86 &&
+      progress < 0.94
+    ) {
+      scene =
+        3;
+    }
+
+
+    if (
+      scene ===
+      currentSunsetScene
+    ) {
+      return;
+    }
+
+
+    currentSunsetScene =
+      scene;
+
+
+    if (
+      scene === 0
+    ) {
+      /*
+       * Coucher doré :
+       * accord ouvert et chaleureux.
+       */
+
+      playLightChord(
+        [
+          261.63,
+          392,
+          523.25
+        ],
+        0.055
+      );
+    }
+
+    else if (
+      scene === 1
+    ) {
+      /*
+       * Coucher électrique :
+       * couleur plus étrange.
+       */
+
+      playLightChord(
+        [
+          311.13,
+          466.16,
+          622.25
+        ],
+        0.05
+      );
+    }
+
+    else if (
+      scene === 2
+    ) {
+      /*
+       * Dernière lumière :
+       * harmonie plus basse.
+       */
+
+      playLightChord(
+        [
+          220,
+          329.63,
+          440
+        ],
+        0.052
+      );
+    }
+
+    else if (
+      scene === 3
+    ) {
+      /*
+       * Horizon impossible.
+       */
+
+      playLightChord(
+        [
+          196,
+          293.66,
+          392
+        ],
+        0.045
+      );
+    }
+  }
+
+
+/* ==========================================
+   SYNCHRONISATION
 ========================================== */
 
   function syncAdventureSound() {
@@ -1044,14 +1442,14 @@
       soundRange(
         progress,
         0.04,
-        0.14
+        0.13
       ) *
       (
         1 -
         soundRange(
           progress,
           0.34,
-          0.4
+          0.42
         )
       );
 
@@ -1059,14 +1457,14 @@
     const forest =
       soundRange(
         progress,
-        0.35,
+        0.34,
         0.43
       ) *
       (
         1 -
         soundRange(
           progress,
-          0.52,
+          0.53,
           0.59
         )
       );
@@ -1076,13 +1474,13 @@
       soundRange(
         progress,
         0.56,
-        0.67
+        0.66
       ) *
       (
         1 -
         soundRange(
           progress,
-          0.83,
+          0.82,
           0.89
         )
       );
@@ -1091,7 +1489,7 @@
     const romance =
       soundRange(
         progress,
-        0.9,
+        0.91,
         0.98
       );
 
@@ -1100,54 +1498,78 @@
       audioContext.currentTime;
 
 
+    /*
+     * Vent doux au départ,
+     * plus large pendant la chute.
+     */
+
+    const windVolume =
+      0.009 +
+      flight *
+      0.055 +
+      fall *
+      0.048 +
+      forest *
+      0.008;
+
+
     windGain.gain.setTargetAtTime(
       soundEnabled
-        ? 0.018 +
-          flight *
-          0.075
+        ? windVolume
         : 0.0001,
 
       now,
-      0.35
+      0.55
     );
 
 
-    forestGain.gain.setTargetAtTime(
-      soundEnabled
-        ? forest *
-          0.025
-        : 0.0001,
+    /*
+     * Le filtre s’ouvre avec la vitesse,
+     * sans ajouter de bruit agressif.
+     */
+
+    windFilter.frequency.setTargetAtTime(
+      430 +
+      flight *
+      420 +
+      fall *
+      280,
 
       now,
-      0.45
+      0.6
     );
 
 
-    fallGain.gain.setTargetAtTime(
+    fallToneGain.gain.setTargetAtTime(
       soundEnabled
         ? fall *
-          0.045
+          0.023
         : 0.0001,
 
       now,
-      0.4
+      0.5
     );
 
 
-    romanceGain.gain.setTargetAtTime(
+    romanceToneGain.gain.setTargetAtTime(
       soundEnabled
         ? romance *
-          0.012
+          0.011
         : 0.0001,
 
       now,
-      0.8
+      0.9
+    );
+
+
+    updateSunsetSound(
+      progress
     );
   }
 
 
 /* ==========================================
-   BOUTON SONORE
+   ACTIVER LE SON
 ========================================== */
 
   function setAdventureSound(
@@ -1178,11 +1600,11 @@
 
     masterGain.gain.setTargetAtTime(
       enabled
-        ? 0.72
+        ? 0.78
         : 0.0001,
 
       audioContext.currentTime,
-      0.3
+      0.35
     );
 
 
@@ -1202,16 +1624,18 @@
     }
 
 
+    currentSunsetScene =
+      -1;
+
+
     syncAdventureSound();
 
 
     if (
       enabled &&
-      !chimeTimer
+      !natureTimer
     ) {
-      playAdventureChime();
-
-      scheduleAdventureChime();
+      scheduleNature();
     }
   }
 
@@ -1256,10 +1680,10 @@
         !soundEnabled
 
           ? 0.0001
-          : 0.72,
+          : 0.78,
 
         audioContext.currentTime,
-        0.3
+        0.35
       );
     }
   );
