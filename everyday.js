@@ -948,3 +948,741 @@ if (
     }
   );
 }
+
+/* ==========================================
+   ROOM 01 — CONTRÔLES ADDITIONNELS
+
+   Ce bloc est indépendant du système
+   de scroll existant.
+========================================== */
+
+
+/* ==========================================
+   ÉLÉMENTS
+========================================== */
+
+const everydaySoundToggle =
+  document.querySelector(
+    "#everyday-sound-toggle"
+  );
+
+
+const everydaySoundLabel =
+  document.querySelector(
+    "#everyday-sound-label"
+  );
+
+
+const everydayNotesToggle =
+  document.querySelector(
+    "#everyday-notes-toggle"
+  );
+
+
+const everydayNotesPanel =
+  document.querySelector(
+    "#everyday-room-notes"
+  );
+
+
+const everydayNotesBackdrop =
+  document.querySelector(
+    "#everyday-notes-backdrop"
+  );
+
+
+const everydayCloseNotes =
+  document.querySelector(
+    "#everyday-close-notes"
+  );
+
+
+/* ==========================================
+   PANNEAU ROOM NOTES
+========================================== */
+
+function openEverydayNotes() {
+  everydayNotesPanel.classList.add(
+    "is-open"
+  );
+
+
+  everydayNotesBackdrop.classList.add(
+    "is-visible"
+  );
+
+
+  everydayNotesPanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  everydayNotesBackdrop.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  everydayNotesToggle.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+
+  page.classList.add(
+    "notes-open"
+  );
+}
+
+
+function closeEverydayNotes() {
+  everydayNotesPanel.classList.remove(
+    "is-open"
+  );
+
+
+  everydayNotesBackdrop.classList.remove(
+    "is-visible"
+  );
+
+
+  everydayNotesPanel.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  everydayNotesBackdrop.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  everydayNotesToggle.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+
+  page.classList.remove(
+    "notes-open"
+  );
+}
+
+
+if (
+  everydayNotesToggle &&
+  everydayNotesPanel
+) {
+  everydayNotesToggle.addEventListener(
+    "click",
+    openEverydayNotes
+  );
+
+
+  everydayCloseNotes.addEventListener(
+    "click",
+    closeEverydayNotes
+  );
+
+
+  everydayNotesBackdrop.addEventListener(
+    "click",
+    closeEverydayNotes
+  );
+
+
+  window.addEventListener(
+    "keydown",
+    function (
+      event
+    ) {
+      if (
+        event.key ===
+        "Escape"
+      ) {
+        closeEverydayNotes();
+      }
+    }
+  );
+}
+
+
+/* ==========================================
+   AMBIANCE SONORE GÉNÉRÉE
+
+   Aucun fichier audio supplémentaire
+   n’est nécessaire.
+========================================== */
+
+let everydayAudioContext =
+  null;
+
+
+let everydayMasterGain =
+  null;
+
+
+let everydaySoundEnabled =
+  false;
+
+
+let everydayTickTimer =
+  null;
+
+
+/* ==========================================
+   CRÉER L’AMBIANCE
+========================================== */
+
+function createEverydaySoundscape() {
+  if (
+    everydayAudioContext
+  ) {
+    return;
+  }
+
+
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+
+  if (
+    !AudioContextClass
+  ) {
+    everydaySoundLabel.textContent =
+      "SOUND UNAVAILABLE";
+
+
+    everydaySoundToggle.disabled =
+      true;
+
+
+    return;
+  }
+
+
+  everydayAudioContext =
+    new AudioContextClass();
+
+
+  everydayMasterGain =
+    everydayAudioContext.createGain();
+
+
+  everydayMasterGain.gain.value =
+    0;
+
+
+  everydayMasterGain.connect(
+    everydayAudioContext.destination
+  );
+
+
+  /*
+   * Souffle très discret du couloir.
+   */
+
+  const noiseDuration =
+    2;
+
+
+  const noiseBuffer =
+    everydayAudioContext.createBuffer(
+      1,
+      everydayAudioContext.sampleRate *
+      noiseDuration,
+      everydayAudioContext.sampleRate
+    );
+
+
+  const noiseData =
+    noiseBuffer.getChannelData(
+      0
+    );
+
+
+  for (
+    let index = 0;
+    index < noiseData.length;
+    index++
+  ) {
+    noiseData[index] =
+      Math.random() *
+      2 -
+      1;
+  }
+
+
+  const noiseSource =
+    everydayAudioContext.createBufferSource();
+
+
+  const noiseFilter =
+    everydayAudioContext.createBiquadFilter();
+
+
+  const noiseGain =
+    everydayAudioContext.createGain();
+
+
+  noiseSource.buffer =
+    noiseBuffer;
+
+
+  noiseSource.loop =
+    true;
+
+
+  noiseFilter.type =
+    "lowpass";
+
+
+  noiseFilter.frequency.value =
+    520;
+
+
+  noiseGain.gain.value =
+    0.018;
+
+
+  noiseSource.connect(
+    noiseFilter
+  );
+
+
+  noiseFilter.connect(
+    noiseGain
+  );
+
+
+  noiseGain.connect(
+    everydayMasterGain
+  );
+
+
+  noiseSource.start();
+
+
+  /*
+   * Ronronnement électrique très bas.
+   */
+
+  const lowHum =
+    everydayAudioContext.createOscillator();
+
+
+  const lowHumGain =
+    everydayAudioContext.createGain();
+
+
+  lowHum.type =
+    "sine";
+
+
+  lowHum.frequency.value =
+    48;
+
+
+  lowHumGain.gain.value =
+    0.017;
+
+
+  lowHum.connect(
+    lowHumGain
+  );
+
+
+  lowHumGain.connect(
+    everydayMasterGain
+  );
+
+
+  lowHum.start();
+
+
+  /*
+   * Seconde fréquence donnant une sensation
+   * légèrement instable.
+   */
+
+  const unstableHum =
+    everydayAudioContext.createOscillator();
+
+
+  const unstableGain =
+    everydayAudioContext.createGain();
+
+
+  unstableHum.type =
+    "triangle";
+
+
+  unstableHum.frequency.value =
+    93;
+
+
+  unstableGain.gain.value =
+    0.004;
+
+
+  unstableHum.connect(
+    unstableGain
+  );
+
+
+  unstableGain.connect(
+    everydayMasterGain
+  );
+
+
+  unstableHum.start();
+}
+
+
+/* ==========================================
+   TIC-TAC IMPOSSIBLE
+========================================== */
+
+function playEverydayTick() {
+  if (
+    !everydaySoundEnabled ||
+    !everydayAudioContext ||
+    everydayAudioContext.state !==
+    "running"
+  ) {
+    return;
+  }
+
+
+  const now =
+    everydayAudioContext.currentTime;
+
+
+  const tick =
+    everydayAudioContext.createOscillator();
+
+
+  const tickGain =
+    everydayAudioContext.createGain();
+
+
+  tick.type =
+    "sine";
+
+
+  tick.frequency.setValueAtTime(
+    1050,
+    now
+  );
+
+
+  tick.frequency.exponentialRampToValueAtTime(
+    420,
+    now +
+    0.045
+  );
+
+
+  tickGain.gain.setValueAtTime(
+    0.0001,
+    now
+  );
+
+
+  tickGain.gain.exponentialRampToValueAtTime(
+    0.026,
+    now +
+    0.006
+  );
+
+
+  tickGain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now +
+    0.065
+  );
+
+
+  tick.connect(
+    tickGain
+  );
+
+
+  tickGain.connect(
+    everydayMasterGain
+  );
+
+
+  tick.start(
+    now
+  );
+
+
+  tick.stop(
+    now +
+    0.08
+  );
+}
+
+
+/* ==========================================
+   RYTHME DU TIC-TAC
+========================================== */
+
+function scheduleEverydayTick() {
+  window.clearTimeout(
+    everydayTickTimer
+  );
+
+
+  if (
+    !everydaySoundEnabled
+  ) {
+    return;
+  }
+
+
+  playEverydayTick();
+
+
+  let delay =
+    1650;
+
+
+  /*
+   * Le rythme devient moins fiable
+   * au fur et à mesure du rêve.
+   */
+
+  if (
+    currentPhase >=
+    3
+  ) {
+    delay =
+      980 +
+      Math.random() *
+      420;
+  }
+
+
+  if (
+    currentPhase >=
+    5
+  ) {
+    delay =
+      540 +
+      Math.random() *
+      620;
+  }
+
+
+  everydayTickTimer =
+    window.setTimeout(
+      scheduleEverydayTick,
+      delay
+    );
+}
+
+
+/* ==========================================
+   ACTIVER LE SON
+========================================== */
+
+async function enableEverydaySound() {
+  createEverydaySoundscape();
+
+
+  if (
+    !everydayAudioContext ||
+    !everydayMasterGain
+  ) {
+    return;
+  }
+
+
+  try {
+    await everydayAudioContext.resume();
+  } catch (
+    error
+  ) {
+    console.warn(
+      "Everyday sound could not resume:",
+      error
+    );
+
+
+    everydaySoundLabel.textContent =
+      "TRY SOUND AGAIN";
+
+
+    return;
+  }
+
+
+  everydaySoundEnabled =
+    true;
+
+
+  localStorage.setItem(
+    "museumSound",
+    "on"
+  );
+
+
+  const now =
+    everydayAudioContext.currentTime;
+
+
+  everydayMasterGain.gain.cancelScheduledValues(
+    now
+  );
+
+
+  everydayMasterGain.gain.setValueAtTime(
+    everydayMasterGain.gain.value,
+    now
+  );
+
+
+  everydayMasterGain.gain.linearRampToValueAtTime(
+    0.78,
+    now +
+    1.1
+  );
+
+
+  everydaySoundToggle.classList.add(
+    "is-on"
+  );
+
+
+  everydaySoundToggle.setAttribute(
+    "aria-pressed",
+    "true"
+  );
+
+
+  everydaySoundLabel.textContent =
+    "SOUND ON";
+
+
+  scheduleEverydayTick();
+}
+
+
+/* ==========================================
+   COUPER LE SON
+========================================== */
+
+function disableEverydaySound() {
+  everydaySoundEnabled =
+    false;
+
+
+  localStorage.setItem(
+    "museumSound",
+    "off"
+  );
+
+
+  window.clearTimeout(
+    everydayTickTimer
+  );
+
+
+  if (
+    everydayAudioContext &&
+    everydayMasterGain
+  ) {
+    const now =
+      everydayAudioContext.currentTime;
+
+
+    everydayMasterGain.gain.cancelScheduledValues(
+      now
+    );
+
+
+    everydayMasterGain.gain.setValueAtTime(
+      everydayMasterGain.gain.value,
+      now
+    );
+
+
+    everydayMasterGain.gain.linearRampToValueAtTime(
+      0,
+      now +
+      0.45
+    );
+
+
+    window.setTimeout(
+      function () {
+        if (
+          !everydaySoundEnabled &&
+          everydayAudioContext
+        ) {
+          everydayAudioContext.suspend();
+        }
+      },
+      520
+    );
+  }
+
+
+  everydaySoundToggle.classList.remove(
+    "is-on"
+  );
+
+
+  everydaySoundToggle.setAttribute(
+    "aria-pressed",
+    "false"
+  );
+
+
+  everydaySoundLabel.textContent =
+    "ENABLE SOUND";
+}
+
+
+/* ==========================================
+   BOUTON SON
+========================================== */
+
+if (
+  everydaySoundToggle
+) {
+  /*
+   * Même si le son était activé dans une
+   * salle précédente, un clic reste proposé
+   * afin de respecter les règles du navigateur.
+   */
+
+  if (
+    localStorage.getItem(
+      "museumSound"
+    ) ===
+    "on"
+  ) {
+    everydaySoundLabel.textContent =
+      "RESUME SOUND";
+  }
+
+
+  everydaySoundToggle.addEventListener(
+    "click",
+    function () {
+      if (
+        everydaySoundEnabled
+      ) {
+        disableEverydaySound();
+      } else {
+        enableEverydaySound();
+      }
+    }
+  );
+}
