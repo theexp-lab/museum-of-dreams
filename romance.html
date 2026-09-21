@@ -44,7 +44,7 @@
 
   <link
     rel="stylesheet"
-    href="./romance.css?v=11"
+    href="./romance.css?v=12"
   >
 
 </head>
@@ -222,17 +222,254 @@
     </div>
 
 
+    <div class="romance-header-tools">
+
+  <button
+    id="sound-control"
+    type="button"
+    aria-pressed="false"
+  >
+    SOUND OFF
+  </button>
+
+  <button
+    id="romance-notes-button"
+    type="button"
+    aria-expanded="false"
+    aria-controls="romance-notes-panel"
+  >
+    ROOM NOTES +
+  </button>
+
+</div>
+
+  </header>
+
+<!-- ==========================================
+     DOSSIER CURATORIAL DE LA SALLE
+=========================================== -->
+
+<div
+  class="romance-notes-backdrop"
+  id="romance-notes-backdrop"
+  aria-hidden="true"
+></div>
+
+
+<aside
+  class="romance-notes-panel"
+  id="romance-notes-panel"
+  aria-hidden="true"
+  aria-labelledby="romance-notes-title"
+>
+
+  <header class="romance-notes-header">
+
+    <div>
+
+      <span>
+        CURATORIAL FILE · ROOM 04
+      </span>
+
+      <h2 id="romance-notes-title">
+        ROMANCE
+      </h2>
+
+    </div>
+
+
     <button
-      id="sound-control"
+      id="romance-notes-close"
       type="button"
-      aria-pressed="false"
+      aria-label="Close room notes"
     >
-      SOUND OFF
+      CLOSE ×
     </button>
 
   </header>
 
 
+  <div class="romance-notes-content">
+
+    <section class="romance-note-section">
+
+      <span class="romance-note-number">
+        RESEARCH 04.A
+      </span>
+
+      <h3>
+        DREAMS ARE SOCIAL SPACES
+      </h3>
+
+      <p>
+        In dream reports collected from 15 students,
+        83.5% contained at least one social situation.
+        Dreams also contained more social events than
+        waking-life reports from the same participants.
+      </p>
+
+      <p class="romance-note-caution">
+        The sample was small and the study provided
+        only partial support for the broader theory
+        being tested.
+      </p>
+
+      <a
+        href="https://pubmed.ncbi.nlm.nih.gov/30769273/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VIEW STUDY ↗
+      </a>
+
+    </section>
+
+
+    <section class="romance-note-section">
+
+      <span class="romance-note-number">
+        RESEARCH 04.B
+      </span>
+
+      <h3>
+        PARTNERS AND FORMER PARTNERS
+      </h3>
+
+      <p>
+        Across 1,612 dream reports from 425 students,
+        current partners appeared more frequently than
+        former partners.
+      </p>
+
+      <p>
+        Dreams involving former partners were often
+        more negatively toned, although they could also
+        contain friendliness and positive emotions.
+        Current-partner dreams were more likely to
+        involve ordinary shared situations.
+      </p>
+
+      <a
+        href="https://www.mdpi.com/2624-5175/3/2/18"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VIEW STUDY ↗
+      </a>
+
+    </section>
+
+
+    <section class="romance-note-section">
+
+      <span class="romance-note-number">
+        RESEARCH 04.C
+      </span>
+
+      <h3>
+        WHAT FOLLOWS INTO THE MORNING
+      </h3>
+
+      <p>
+        In a two-week diary study, emotions and
+        interactions involving romantic partners in
+        dreams were associated with relationship
+        behaviour the following day.
+      </p>
+
+      <p>
+        Dreamed jealousy and infidelity were associated
+        with less intimacy and greater conflict the
+        next day.
+      </p>
+
+      <p class="romance-note-caution">
+        These findings describe associations. They do
+        not mean that a dream predicts or determines
+        what will happen in a relationship.
+      </p>
+
+      <a
+        href="https://journals.sagepub.com/doi/10.1177/1948550613486678"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VIEW STUDY ↗
+      </a>
+
+    </section>
+
+
+    <section class="romance-note-section physical-room-note">
+
+      <span class="romance-note-number">
+        PHYSICAL TRANSLATION
+      </span>
+
+      <h3>
+        HOW THIS BECOMES A MUSEUM ROOM
+      </h3>
+
+      <ul>
+
+        <li>
+          Two human-scale fields of light respond to
+          visitors by approaching, separating and
+          moving at different rhythms.
+        </li>
+
+        <li>
+          Amber lighting and controlled radiant warmth
+          make the space physically warmer as the two
+          lights move closer.
+        </li>
+
+        <li>
+          A third red light enters the installation and
+          disrupts the relationship between them.
+        </li>
+
+        <li>
+          Spatial audio moves around the room while
+          low-frequency transducers allow the final
+          heartbeat to be felt through the floor.
+        </li>
+
+        <li>
+          An optional pulse sensor could influence the
+          final light rhythm without recording or
+          storing the visitor’s biometric information.
+        </li>
+
+        <li>
+          The pulse naturally continues beyond the room
+          and becomes the transition into Action.
+        </li>
+
+      </ul>
+
+    </section>
+
+
+    <footer class="romance-notes-footer">
+
+      <span>
+        CURATORIAL METHOD
+      </span>
+
+      <p>
+        The room does not claim to interpret individual
+        dreams. It translates recurring emotional and
+        social patterns into light, temperature,
+        movement and sound.
+      </p>
+
+    </footer>
+
+  </div>
+
+</aside>
+  
   <!-- ==========================================
        INTRODUCTION
   =========================================== -->
@@ -789,7 +1026,7 @@
   ></div>
 
 
-  <script src="./romance.js?v=11"></script>
+  <script src="./romance.js?v=12"></script>
 
 </body>
 
