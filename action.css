@@ -756,6 +756,99 @@ button {
   gap: 10px;
 }
 
+.action-header-tools {
+  justify-self: end;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  pointer-events: auto;
+}
+
+.action-header-tools > a {
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.35);
+}
+
+.sound-toggle {
+  position: relative;
+
+  padding:
+    7px 0 7px 15px;
+
+  border: 0;
+
+  color:
+    rgba(255, 255, 255, 0.62);
+
+  background: transparent;
+
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    color 300ms ease,
+    opacity 300ms ease;
+}
+
+.sound-toggle::before {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 0;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.34);
+
+  transform:
+    translateY(-50%);
+}
+
+.sound-toggle[aria-pressed="true"] {
+  color: #ffffff;
+}
+
+.sound-toggle[aria-pressed="true"]::before {
+  background: var(--red);
+
+  box-shadow:
+    0 0 13px
+    var(--red);
+
+  animation:
+    actionSoundPulse
+    1.1s ease-in-out infinite;
+}
+
+@keyframes actionSoundPulse {
+  50% {
+    opacity: 0.35;
+
+    transform:
+      translateY(-50%)
+      scale(0.68);
+  }
+}
 
 .location-dot {
   width: 6px;
@@ -774,30 +867,6 @@ button {
 }
 
 
-.sound-toggle {
-  position: fixed;
-
-  z-index: 60;
-
-  top: 62px;
-  right: 34px;
-
-  padding: 0;
-
-  color:
-    rgba(255, 255, 255, 0.58);
-
-  background: none;
-
-  font:
-    8px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.14em;
-
-  cursor: pointer;
-}
 
 
 .research-note {
@@ -861,6 +930,33 @@ button {
   letter-spacing: 0.1em;
 }
 
+.research-note a {
+  display: inline-block;
+
+  margin-top: 11px;
+  padding-bottom: 4px;
+
+  border-bottom:
+    1px solid
+    rgba(131, 233, 255, 0.35);
+
+  color:
+    rgba(131, 233, 255, 0.68);
+
+  font-size: 7px;
+
+  letter-spacing: 0.12em;
+
+  transition:
+    color 250ms ease,
+    border-color 250ms ease;
+}
+
+.research-note a:hover {
+  color: var(--cyan);
+
+  border-color: var(--cyan);
+}
 
 .action-progress {
   position: fixed;
@@ -1326,15 +1422,13 @@ button {
    ÉTATS DES SCÈNES
 ========================================== */
 
-body:not([data-scene="intro"])
-:not([data-scene="exhibit"])
+body:not([data-scene="intro"]):not([data-scene="exhibit"])
 .museum-room {
   opacity: 0;
 }
 
 
-body:not([data-scene="intro"])
-:not([data-scene="exhibit"])
+body:not([data-scene="intro"]):not([data-scene="exhibit"])
 .city-plate {
   opacity: 0.94;
 
@@ -2108,367 +2202,6 @@ body[data-scene="pulse"]
   }
 }
 
-/* ==========================================
-   ENTRÉE SONORE
-========================================== */
-
-body.sound-locked {
-  height: 100svh;
-
-  overflow: hidden;
-}
-
-
-.sound-entry {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 500;
-
-  display: grid;
-
-  place-items: center;
-
-  overflow: hidden;
-
-  background:
-    radial-gradient(
-      circle at 50% 53%,
-      rgba(108, 14, 32, 0.33),
-      transparent 30%
-    ),
-
-    linear-gradient(
-      180deg,
-      rgba(3, 4, 9, 0.94),
-      rgba(5, 6, 13, 0.98)
-    );
-
-  transition:
-    opacity 900ms ease,
-    visibility 900ms ease,
-    filter 900ms ease;
-}
-
-
-.sound-entry::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  opacity: 0.2;
-
-  pointer-events: none;
-
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 9%,
-      rgba(131, 233, 255, 0.08) 9.1%,
-      transparent 9.25% 18%
-    );
-
-  transform:
-    perspective(800px)
-    rotateX(70deg)
-    translateY(48%);
-
-  animation:
-    entryGrid 5s linear infinite;
-}
-
-
-.sound-entry-glow {
-  position: absolute;
-
-  top: 50%;
-  left: 50%;
-
-  width:
-    min(65vw, 780px);
-
-  aspect-ratio: 1;
-
-  border-radius: 50%;
-
-  opacity: 0.75;
-
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.08),
-      rgba(255, 35, 71, 0.15) 19%,
-      rgba(255, 35, 71, 0.04) 43%,
-      transparent 70%
-    );
-
-  transform:
-    translate(-50%, -50%);
-
-  animation:
-    soundEntryPulse
-    2.2s
-    ease-in-out
-    infinite;
-}
-
-
-.sound-entry-content {
-  position: relative;
-
-  z-index: 2;
-
-  width:
-    min(720px, 88vw);
-
-  text-align: center;
-}
-
-
-.sound-entry-content > span {
-  display: block;
-
-  margin-bottom: 30px;
-
-  color: var(--red);
-
-  font:
-    9px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.22em;
-
-  text-transform: uppercase;
-}
-
-
-.sound-entry-content h2 {
-  margin: 0;
-
-  font:
-    400
-    clamp(62px, 10vw, 145px) / 0.78
-    "Italiana",
-    serif;
-
-  letter-spacing: -0.055em;
-}
-
-
-.sound-entry-content h2 em {
-  display: block;
-
-  color: #f4a5b3;
-
-  font-family:
-    "Gloock",
-    serif;
-
-  font-weight: 400;
-}
-
-
-.sound-entry-content > p {
-  width:
-    min(460px, 86%);
-
-  margin:
-    38px auto 34px;
-
-  color:
-    rgba(255, 255, 255, 0.52);
-
-  font:
-    9px/1.7
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.11em;
-
-  text-transform: uppercase;
-}
-
-
-.enter-with-sound {
-  position: relative;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 14px;
-
-  padding:
-    17px 25px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.35);
-
-  color: white;
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
-  box-shadow:
-    0 0 30px
-    rgba(255, 40, 72, 0.08);
-
-  font:
-    9px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.18em;
-
-  cursor: pointer;
-
-  transition:
-    color 350ms ease,
-    border-color 350ms ease,
-    box-shadow 350ms ease,
-    letter-spacing 350ms ease,
-    background 350ms ease;
-}
-
-
-.enter-with-sound:hover {
-  color: white;
-
-  border-color:
-    rgba(255, 48, 79, 0.85);
-
-  background:
-    rgba(255, 48, 79, 0.1);
-
-  box-shadow:
-    0 0 45px
-    rgba(255, 40, 72, 0.22);
-
-  letter-spacing: 0.23em;
-}
-
-
-.sound-symbol {
-  color: var(--red);
-
-  font-size: 14px;
-
-  text-shadow:
-    0 0 12px var(--red);
-
-  animation:
-    soundSymbolPulse
-    1.2s
-    ease-in-out
-    infinite;
-}
-
-
-.sound-entry-content small {
-  display: block;
-
-  margin-top: 19px;
-
-  color:
-    rgba(255, 255, 255, 0.3);
-
-  font:
-    7px/1
-    "DM Mono",
-    monospace;
-
-  letter-spacing: 0.16em;
-}
-
-
-.sound-entry.is-leaving {
-  visibility: hidden;
-
-  opacity: 0;
-
-  filter:
-    blur(16px);
-
-  pointer-events: none;
-}
-
-
-.sound-entry.is-leaving
-.sound-entry-content {
-  transform:
-    scale(1.06);
-
-  transition:
-    transform 900ms
-    cubic-bezier(
-      0.2,
-      0.8,
-      0.2,
-      1
-    );
-}
-
-
-@keyframes soundEntryPulse {
-  0%,
-  100% {
-    opacity: 0.48;
-
-    transform:
-      translate(-50%, -50%)
-      scale(0.9);
-  }
-
-  50% {
-    opacity: 0.9;
-
-    transform:
-      translate(-50%, -50%)
-      scale(1.08);
-  }
-}
-
-
-@keyframes soundSymbolPulse {
-  0%,
-  100% {
-    opacity: 0.45;
-
-    transform:
-      scale(0.8);
-  }
-
-  50% {
-    opacity: 1;
-
-    transform:
-      scale(1.2);
-  }
-}
-
-
-@keyframes entryGrid {
-  from {
-    background-position:
-      0 0;
-  }
-
-  to {
-    background-position:
-      170px 0;
-  }
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
 
 @media (max-width: 760px) {
   .action-header {
@@ -2483,10 +2216,17 @@ body.sound-locked {
     display: none;
   }
 
-  .sound-toggle {
-    top: 52px;
-    right: 20px;
-  }
+.action-header-tools {
+  gap: 12px;
+}
+
+.action-header-tools > a {
+  display: none;
+}
+
+.sound-toggle {
+  font-size: 7px;
+}
 
   .story-beat {
     padding:
