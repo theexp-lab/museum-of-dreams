@@ -133,8 +133,8 @@ let startSoundCutTimer;
 let mediaPrimed =
   false;
 
-let mediaPriming =
-  false;
+let mediaPrimePromise =
+  null;
 
 let atmosphereReady =
   false;
@@ -243,35 +243,27 @@ function ensureAudio() {
    autorisera ensuite pendant le scroll.
 ========================================== */
 
-async function primeMedia() {
+function primeMedia() {
   if (!soundEnabled) {
-    return false;
+    return Promise.resolve(
+      false
+    );
   }
 
 
   ensureAudio();
 
 
-  if (
-    audioContext &&
-    audioContext.state ===
-    "suspended"
-  ) {
-    await audioContext.resume();
-  }
-
-
   if (mediaPrimed) {
-    return true;
+    return Promise.resolve(
+      true
+    );
   }
 
 
-  if (mediaPriming) {
-    return false;
+  if (mediaPrimePromise) {
+    return mediaPrimePromise;
   }
-
-
-  mediaPriming = true;
 
 
   const media = [
@@ -280,60 +272,84 @@ async function primeMedia() {
   ];
 
 
-  try {
-    await Promise.all(
-      media.map(
-        async function (
-          audio
-        ) {
-          if (!audio) {
-            return;
-          }
-
-
-          audio.pause();
-
-          audio.currentTime = 0;
-
-          audio.muted = true;
-
-          audio.volume = 0;
-
-
-          try {
-            await audio.play();
-          } catch (error) {
-            /*
-             * Un fichier refusé ne doit pas
-             * bloquer toute la salle.
-             */
-          }
-
-
-          audio.pause();
-
-          audio.currentTime = 0;
-
-          audio.muted = false;
+  const attempts =
+    media.map(
+      function (audio) {
+        if (!audio) {
+          return Promise.resolve();
         }
-      )
+
+
+        audio.pause();
+
+        audio.currentTime = 0;
+
+        audio.muted = true;
+
+        audio.load();
+
+
+        const playback =
+          audio.play();
+
+
+        if (
+          playback &&
+          typeof playback.catch ===
+          "function"
+        ) {
+          return playback.catch(
+            function () {
+              return null;
+            }
+          );
+        }
+
+
+        return Promise.resolve();
+      }
     );
 
 
-    startSound.volume =
-      0.92;
+  mediaPrimePromise =
+    Promise
+      .all(
+        attempts
+      )
+      .then(
+        function () {
+          media.forEach(
+            function (audio) {
+              if (!audio) {
+                return;
+              }
 
 
-    trainSound.volume =
-      0.95;
+              audio.pause();
+
+              audio.currentTime = 0;
+
+              audio.muted =
+                !soundEnabled;
+            }
+          );
 
 
-    mediaPrimed = true;
+          mediaPrimed = true;
 
-    return true;
-  } finally {
-    mediaPriming = false;
-  }
+
+          return true;
+        }
+      )
+      .finally(
+        function () {
+          mediaPrimePromise =
+            null;
+        }
+      );
+
+
+  return mediaPrimePromise;
 }
 /* ==========================================
    AMBIANCE DE LA VILLE
@@ -1726,9 +1742,10 @@ function goToBeat(
 
 
   /*
-   * Activer immédiatement la scène.
-   * IntersectionObserver reste une sécurité,
-   * mais ne contrôle plus seul l’expérience.
+   * La scène est activée immédiatement.
+   * L’IntersectionObserver reste seulement
+   * une sécurité pour le scroll tactile
+   * ou le déplacement manuel.
    */
 
   activateScene(
@@ -1858,11 +1875,6 @@ window.addEventListener(
     );
   }
 );
-
-
-
-    
-    updateSoundButton();
 
 
 
