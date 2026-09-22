@@ -2806,3 +2806,775 @@ body.is-awakening
     display: none;
   }
 }
+/* ==========================================
+   NIGHTMARE V3 — CORRECTIONS GLOBALES
+========================================== */
+
+
+/* ==========================================
+   PAGE ET SCROLL
+========================================== */
+
+body.nightmare-page {
+  overflow-x: hidden;
+
+  overscroll-behavior-y: none;
+}
+
+body.nightmare-page.notes-open {
+  overflow: hidden;
+}
+
+
+/*
+ * La porte sonore n’existe plus dans le HTML.
+ * Cette règle neutralise aussi tout éventuel
+ * ancien verrou resté dans le navigateur.
+ */
+
+body.nightmare-locked {
+  height: auto;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+
+/* ==========================================
+   LAMPE ACTIVE DÈS LE DÉBUT
+========================================== */
+
+.reveal-image {
+  clip-path:
+    circle(
+      150px
+      at
+      var(--pointer-x)
+      var(--pointer-y)
+    );
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.nightmare-header-tools {
+  justify-self: end;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  pointer-events: auto;
+}
+
+.nightmare-header-tools > a {
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.35);
+}
+
+
+/* L’ancien bouton était fixé sous le header. */
+
+.nightmare-header
+.sound-toggle,
+.room-notes-button {
+  position: relative;
+
+  top: auto;
+  right: auto;
+
+  padding:
+    7px 0;
+
+  border: 0;
+
+  color:
+    rgba(255, 255, 255, 0.58);
+
+  background: transparent;
+
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    color 300ms ease,
+    opacity 300ms ease,
+    letter-spacing 300ms ease;
+}
+
+
+/* ==========================================
+   ÉTAT DU SON
+========================================== */
+
+.nightmare-header
+.sound-toggle {
+  padding-left: 15px;
+}
+
+.nightmare-header
+.sound-toggle::before {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 0;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.34);
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    background 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.nightmare-header
+.sound-toggle[aria-pressed="true"] {
+  color: #ffffff;
+}
+
+.nightmare-header
+.sound-toggle[aria-pressed="true"]::before {
+  background: var(--red);
+
+  box-shadow:
+    0 0 13px
+    var(--red);
+
+  animation:
+    nightmareSoundPulse
+    1.05s
+    ease-in-out
+    infinite;
+}
+
+@keyframes nightmareSoundPulse {
+  50% {
+    opacity: 0.32;
+
+    transform:
+      translateY(-50%)
+      scale(0.65);
+  }
+}
+
+
+/* ==========================================
+   ROOM NOTES — BOUTON
+========================================== */
+
+.room-notes-button {
+  padding-bottom: 6px;
+
+  border-bottom:
+    1px solid
+    rgba(202, 237, 243, 0.36);
+
+  color:
+    rgba(202, 237, 243, 0.72);
+}
+
+.nightmare-header
+.sound-toggle:hover,
+.room-notes-button:hover {
+  color: #ffffff;
+
+  letter-spacing: 0.18em;
+}
+
+
+/* ==========================================
+   SOURCE SCIENTIFIQUE
+========================================== */
+
+.research-note a {
+  display: inline-block;
+
+  margin-top: 11px;
+  padding-bottom: 4px;
+
+  border-bottom:
+    1px solid
+    rgba(202, 237, 243, 0.35);
+
+  color:
+    rgba(202, 237, 243, 0.7);
+
+  font-size: 7px;
+
+  letter-spacing: 0.12em;
+
+  transition:
+    color 250ms ease,
+    border-color 250ms ease;
+}
+
+.research-note a:hover {
+  color: var(--ice);
+
+  border-color: var(--ice);
+}
+
+
+/* ==========================================
+   L’ŒIL RESTE CACHÉ AVANT L’AVERTISSEMENT
+========================================== */
+
+/*
+ * L’ancienne version révélait déjà l’œil
+ * dans la scène waking. On annule cela.
+ */
+
+body[data-scene="waking"]
+.eye-closed {
+  opacity: 0;
+
+  transform:
+    scale(1);
+
+  animation: none;
+}
+
+
+/* L’œil apparaît seulement à l’avant-dernier écran. */
+
+body[data-scene="eye"]
+.eye-closed {
+  opacity: 1;
+
+  transform:
+    scale(1.035);
+
+  filter:
+    brightness(0.7)
+    saturate(0.86)
+    contrast(1.08);
+
+  animation:
+    eyeTremble
+    1.35s
+    ease-in-out
+    infinite;
+}
+
+body[data-scene="eye"]
+.corruption-image {
+  opacity: 0.12;
+}
+
+body[data-scene="eye"]
+.emergency-wash {
+  opacity: 0.38;
+
+  animation:
+    redBreathing
+    680ms
+    ease-in-out
+    infinite;
+}
+
+body[data-scene="eye"]
+.screen-veins {
+  opacity: 0.64;
+
+  animation:
+    redBreathing
+    760ms
+    ease-in-out
+    infinite;
+}
+
+.eye-warning-beat
+.warning-copy p {
+  color: #f7dce0;
+
+  text-shadow:
+    0 0 38px
+    rgba(224, 30, 60, 0.58);
+}
+
+
+/* ==========================================
+   FOND DU DOSSIER CURATORIAL
+========================================== */
+
+.nightmare-notes-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 180;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  background:
+    rgba(1, 2, 6, 0.78);
+
+  backdrop-filter:
+    blur(8px);
+
+  transition:
+    opacity 450ms ease,
+    visibility 450ms;
+}
+
+.nightmare-page.notes-open
+.nightmare-notes-backdrop {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+
+/* ==========================================
+   PANNEAU CURATORIAL
+========================================== */
+
+.nightmare-notes-panel {
+  position: fixed;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 190;
+
+  width:
+    min(620px, 94vw);
+
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  color: var(--white);
+
+  background:
+    radial-gradient(
+      circle at 90% 12%,
+      rgba(224, 30, 60, 0.2),
+      transparent 31%
+    ),
+
+    radial-gradient(
+      circle at 4% 68%,
+      rgba(202, 237, 243, 0.07),
+      transparent 35%
+    ),
+
+    linear-gradient(
+      150deg,
+      rgba(15, 12, 20, 0.995),
+      rgba(6, 6, 12, 1) 58%,
+      rgba(2, 3, 7, 1)
+    );
+
+  border-left:
+    1px solid
+    rgba(202, 237, 243, 0.12);
+
+  box-shadow:
+    -35px 0 100px
+    rgba(0, 0, 0, 0.7);
+
+  transform:
+    translateX(102%);
+
+  transition:
+    transform 650ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.nightmare-page.notes-open
+.nightmare-notes-panel {
+  transform:
+    translateX(0);
+}
+
+
+/* ==========================================
+   EN-TÊTE DU DOSSIER
+========================================== */
+
+.nightmare-notes-header {
+  position: sticky;
+
+  top: 0;
+
+  z-index: 2;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 30px;
+
+  padding:
+    34px 38px 30px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 7, 14, 0.99),
+      rgba(8, 7, 14, 0.93) 76%,
+      transparent
+    );
+
+  backdrop-filter:
+    blur(14px);
+}
+
+.nightmare-notes-header span,
+.nightmare-note-number,
+.nightmare-notes-footer > span {
+  display: block;
+
+  color:
+    rgba(202, 237, 243, 0.65);
+
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.nightmare-notes-header h2 {
+  margin:
+    11px 0 0;
+
+  font:
+    400
+    clamp(52px, 8vw, 94px) / 0.78
+    "Gloock",
+    serif;
+
+  letter-spacing: -0.06em;
+}
+
+#nightmare-notes-close {
+  padding:
+    6px 0;
+
+  border: 0;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.32);
+
+  color:
+    rgba(255, 255, 255, 0.68);
+
+  background: transparent;
+
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.13em;
+
+  cursor: pointer;
+
+  transition:
+    color 250ms ease,
+    border-color 250ms ease;
+}
+
+#nightmare-notes-close:hover {
+  color: #ffffff;
+
+  border-color: var(--red);
+}
+
+
+/* ==========================================
+   CONTENU DU DOSSIER
+========================================== */
+
+.nightmare-notes-content {
+  padding:
+    5px 38px 70px;
+}
+
+.nightmare-note-section {
+  padding:
+    36px 0 41px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+}
+
+.nightmare-note-section h3 {
+  max-width: 490px;
+
+  margin:
+    13px 0 21px;
+
+  font:
+    400
+    clamp(27px, 3.2vw, 41px) / 1
+    "Italiana",
+    serif;
+
+  letter-spacing: -0.025em;
+}
+
+.nightmare-note-section p {
+  max-width: 500px;
+
+  margin:
+    0 0 16px;
+
+  color:
+    rgba(247, 243, 235, 0.72);
+
+  font:
+    10px/1.8
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.02em;
+}
+
+.nightmare-note-section
+.nightmare-note-caution {
+  padding-left: 16px;
+
+  border-left:
+    1px solid
+    rgba(224, 30, 60, 0.62);
+
+  color:
+    rgba(247, 243, 235, 0.52);
+}
+
+.nightmare-note-section > a {
+  display: inline-block;
+
+  margin-top: 7px;
+  padding-bottom: 5px;
+
+  border-bottom:
+    1px solid
+    rgba(202, 237, 243, 0.38);
+
+  color:
+    rgba(202, 237, 243, 0.78);
+
+  font:
+    8px/1
+    "DM Mono",
+    monospace;
+
+  letter-spacing: 0.14em;
+
+  transition:
+    color 250ms ease,
+    border-color 250ms ease,
+    letter-spacing 250ms ease;
+}
+
+.nightmare-note-section > a:hover {
+  color: var(--ice);
+
+  border-color: var(--ice);
+
+  letter-spacing: 0.19em;
+}
+
+
+/* ==========================================
+   TRADUCTION PHYSIQUE
+========================================== */
+
+.nightmare-physical-note {
+  margin-top: 12px;
+
+  padding:
+    32px 27px 35px;
+
+  border:
+    1px solid
+    rgba(224, 30, 60, 0.24);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(224, 30, 60, 0.1),
+      rgba(202, 237, 243, 0.025)
+    );
+}
+
+.nightmare-physical-note ul {
+  display: grid;
+
+  margin:
+    8px 0 0;
+
+  padding: 0;
+
+  list-style: none;
+}
+
+.nightmare-physical-note li {
+  position: relative;
+
+  padding:
+    15px 0 15px 27px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  color:
+    rgba(247, 243, 235, 0.72);
+
+  font:
+    10px/1.7
+    "DM Mono",
+    monospace;
+}
+
+.nightmare-physical-note li::before {
+  content: "";
+
+  position: absolute;
+
+  top: 21px;
+  left: 2px;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--red);
+
+  box-shadow:
+    0 0 13px
+    rgba(224, 30, 60, 0.8);
+}
+
+
+/* ==========================================
+   MÉTHODE CURATORIALE
+========================================== */
+
+.nightmare-notes-footer {
+  margin-top: 40px;
+
+  padding:
+    30px 0 10px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+}
+
+.nightmare-notes-footer p {
+  max-width: 500px;
+
+  margin:
+    15px 0 0;
+
+  color:
+    rgba(247, 243, 235, 0.82);
+
+  font:
+    clamp(20px, 2.5vw, 30px) / 1.18
+    "Italiana",
+    serif;
+}
+
+
+/* ==========================================
+   MOBILE V3
+========================================== */
+
+@media (max-width: 780px) {
+
+  .nightmare-header-tools {
+    gap: 11px;
+  }
+
+  .nightmare-header-tools > a {
+    display: none;
+  }
+
+  .nightmare-header
+  .sound-toggle,
+  .room-notes-button {
+    top: auto;
+    right: auto;
+
+    padding-left: 0;
+
+    font-size: 7px;
+  }
+
+  .nightmare-header
+  .sound-toggle::before {
+    display: none;
+  }
+
+  .reveal-image {
+    clip-path:
+      circle(
+        110px
+        at
+        var(--pointer-x)
+        var(--pointer-y)
+      );
+  }
+
+  .nightmare-notes-header {
+    padding:
+      27px 22px 24px;
+  }
+
+  .nightmare-notes-content {
+    padding:
+      4px 22px 55px;
+  }
+
+  .nightmare-physical-note {
+    padding:
+      27px 19px 30px;
+  }
+
+}
