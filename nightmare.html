@@ -69,74 +69,19 @@
 
   <link
     rel="stylesheet"
-    href="./nightmare.css?v=2"
+    href="./nightmare.css?v=3"
   >
 
 </head>
 
 
 <body
-  class="nightmare-page nightmare-locked"
-  data-scene="arrival"
+  class="nightmare-page"
+  data-scene="title"
 >
 
 
-  <!-- ==========================================
-       ENTRÉE ET ACTIVATION DU SON
-  =========================================== -->
 
-  <div
-    class="pulse-gate"
-    id="pulse-gate"
-  >
-
-    <div
-      class="gate-scan"
-      aria-hidden="true"
-    ></div>
-
-
-    <div class="gate-copy">
-
-      <p>
-        UNREGISTERED LIFE SIGNAL
-      </p>
-
-
-      <div
-        class="gate-counter"
-        aria-hidden="true"
-      >
-
-        <span></span>
-
-        <span></span>
-
-        <span class="wrong-pulse"></span>
-
-      </div>
-
-
-      <strong>
-        03
-      </strong>
-
-
-      <button
-        type="button"
-        id="follow-pulse"
-      >
-        FOLLOW THE THIRD PULSE
-      </button>
-
-
-      <small>
-        HEADPHONES RECOMMENDED
-      </small>
-
-    </div>
-
-  </div>
 
 
   <!-- ==========================================
@@ -302,43 +247,57 @@
        NAVIGATION
   =========================================== -->
 
-  <header class="nightmare-header">
+ <header class="nightmare-header">
 
-    <a href="action.html">
-      THE MUSEUM OF DREAMS
-    </a>
+  <a href="action.html">
+    THE MUSEUM OF DREAMS
+  </a>
 
 
-    <div class="nightmare-location">
+  <div class="nightmare-location">
 
-      <span class="location-signal"></span>
+    <span class="location-signal"></span>
 
-      <span>
-        ROOM 06 · NIGHTMARE
-      </span>
+    <span>
+      ROOM 06 · NIGHTMARE
+    </span>
 
-    </div>
+  </div>
+
+
+  <div class="nightmare-header-tools">
+
+    <button
+      class="sound-toggle"
+      id="sound-toggle"
+      type="button"
+      aria-pressed="false"
+    >
+      ENABLE SOUND
+    </button>
+
+
+    <button
+      class="room-notes-button"
+      id="nightmare-notes-button"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nightmare-notes-panel"
+    >
+      ROOM NOTES +
+    </button>
 
 
     <a href="case-study.html">
       PROJECT
     </a>
 
-  </header>
+  </div>
+
+</header>
 
 
-  <!-- ==========================================
-       BOUTON SON
-  =========================================== -->
 
-  <button
-    class="sound-toggle"
-    id="sound-toggle"
-    type="button"
-    aria-pressed="true"
-  >
-    SOUND ON
-  </button>
 
 
   <!-- ==========================================
@@ -445,9 +404,230 @@
       FEAR · SIMULATED, FELT
     </strong>
 
+    <a
+  id="research-source"
+  href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7267911/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  VIEW STUDY ↗
+</a>
+
   </aside>
 
+<!-- ==========================================
+     DOSSIER CURATORIAL — NIGHTMARE
+========================================== -->
 
+<div
+  class="nightmare-notes-backdrop"
+  id="nightmare-notes-backdrop"
+  aria-hidden="true"
+></div>
+
+
+<aside
+  class="nightmare-notes-panel"
+  id="nightmare-notes-panel"
+  aria-hidden="true"
+  aria-labelledby="nightmare-notes-title"
+>
+
+  <header class="nightmare-notes-header">
+
+    <div>
+
+      <span>
+        CURATORIAL FILE · ROOM 06
+      </span>
+
+      <h2 id="nightmare-notes-title">
+        NIGHTMARE
+      </h2>
+
+    </div>
+
+
+    <button
+      id="nightmare-notes-close"
+      type="button"
+      aria-label="Close room notes"
+    >
+      CLOSE ×
+    </button>
+
+  </header>
+
+
+  <div class="nightmare-notes-content">
+
+    <section class="nightmare-note-section">
+
+      <span class="nightmare-note-number">
+        RESEARCH 06.A
+      </span>
+
+      <h3>
+        FEAR · SIMULATED, FELT
+      </h3>
+
+      <p>
+        Fear reported during dreaming has been
+        associated with activity in regions
+        including the insula and midcingulate
+        cortex.
+      </p>
+
+      <p class="nightmare-note-caution">
+        This describes an observed association,
+        not a universal interpretation of
+        nightmares.
+      </p>
+
+      <a
+        href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7267911/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VIEW STUDY ↗
+      </a>
+
+    </section>
+
+
+    <section class="nightmare-note-section">
+
+      <span class="nightmare-note-number">
+        RESEARCH 06.B
+      </span>
+
+      <h3>
+        THREAT SIMULATION
+      </h3>
+
+      <p>
+        Threat-simulation theory proposes that
+        some dreams construct virtual dangers
+        and rehearse possible responses.
+      </p>
+
+      <p class="nightmare-note-caution">
+        It remains a scientific hypothesis,
+        not a settled explanation for every
+        nightmare.
+      </p>
+
+      <a
+        href="https://pubmed.ncbi.nlm.nih.gov/15766897/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VIEW THEORY ↗
+      </a>
+
+    </section>
+
+
+    <section class="nightmare-note-section">
+
+      <span class="nightmare-note-number">
+        RESEARCH 06.C
+      </span>
+
+      <h3>
+        VIRTUAL DANGER · REAL AROUSAL
+      </h3>
+
+      <p>
+        Physiological studies have observed
+        increased autonomic activation around
+        nightmare episodes.
+      </p>
+
+      <a
+        href="https://pubmed.ncbi.nlm.nih.gov/30927477/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VIEW STUDY ↗
+      </a>
+
+    </section>
+
+
+    <section class="nightmare-note-section nightmare-physical-note">
+
+      <span class="nightmare-note-number">
+        PHYSICAL TRANSLATION
+      </span>
+
+      <h3>
+        HOW THIS BECOMES A MUSEUM ROOM
+      </h3>
+
+      <ul>
+
+        <li>
+          A reconstructed underground platform
+          surrounds the visitor with panoramic
+          projection and directional light.
+        </li>
+
+        <li>
+          A tracked flashlight reveals a second
+          visual layer containing figures hidden
+          inside the station.
+        </li>
+
+        <li>
+          Directional speakers move breathing,
+          footsteps and the third heartbeat
+          around the visitor.
+        </li>
+
+        <li>
+          Low-frequency floor transducers make
+          the pulse physically perceptible.
+        </li>
+
+        <li>
+          Projection and moving ceiling lights
+          create the sensation of running without
+          moving the visitor through real danger.
+        </li>
+
+        <li>
+          A sustained-pressure sensor opens the
+          final eye and triggers the transition
+          into white light.
+        </li>
+
+      </ul>
+
+    </section>
+
+
+    <footer class="nightmare-notes-footer">
+
+      <span>
+        CURATORIAL METHOD
+      </span>
+
+      <p>
+        The room translates selected research
+        into a fictional sensory experience.
+      </p>
+
+      <p>
+        It does not diagnose the visitor or claim
+        that every nightmare has the same meaning.
+      </p>
+
+    </footer>
+
+  </div>
+
+</aside>
   <!-- ==========================================
        PROGRESSION
   =========================================== -->
@@ -477,27 +657,7 @@
   <main class="nightmare-story">
 
 
-    <!-- 01 — Arrivée -->
-
-    <section
-  class="nightmare-beat"
-  data-scene="warning"
->
-
-  <div class="beat-copy warning-copy">
-
-    <p>
-
-      You have to
-      <br>
-
-      get out of here.
-
-    </p>
-
-  </div>
-
-</section>
+   
 
 
     <!-- 02 — Titre -->
@@ -819,55 +979,35 @@
     </section>
 
 
-    <!-- 13 — Avertissement -->
-
-    <section
-      class="nightmare-beat"
-      data-scene="warning"
-    >
-
-      <div class="beat-copy warning-copy">
-
-        <p>
-
-          Do not let it
-          <br>
-
-          open its eyes.
-
-        </p>
-
-      </div>
-
-    </section>
+  
 
 
-    <!-- 14 — L’œil fermé -->
+  <!-- Avant-dernière scène — L’œil fermé -->
 
-    <section
-      class="nightmare-beat"
-      data-scene="eye"
-    >
+<section
+  class="nightmare-beat eye-warning-beat"
+  data-scene="eye"
+>
 
-      <div class="beat-copy">
+  <div class="beat-copy warning-copy">
 
-        <p>
+    <p>
 
-          There is
-          <br>
+      You have to
+      <br>
 
-          no door.
+      get out of here.
 
-        </p>
+    </p>
 
 
-        <em>
-          Only an eye refusing to open.
-        </em>
+    <em>
+      Do not let it open its eyes.
+    </em>
 
-      </div>
+  </div>
 
-    </section>
+</section>
 
 
     <!-- 15 — Réveil forcé -->
@@ -947,7 +1087,7 @@
 
   <!-- JavaScript -->
 
-  <script src="./nightmare.js?v=2"></script>
+  <script src="./nightmare.js?v=3"></script>
 
 </body>
 
