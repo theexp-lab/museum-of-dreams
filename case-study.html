@@ -50,6 +50,244 @@
     href="./case-study.css?v=2"
   >
 
+
+  <style>
+
+    /* ==========================================
+       MUSEUM MAP · GLOBAL NAVIGATION
+    ========================================== */
+
+    body.museum-menu-open {
+      overflow: hidden;
+    }
+
+    .museum-menu-toggle {
+      position: fixed;
+      z-index: 210;
+      top: 62px;
+      right: 34px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 13px;
+      border: 1px solid rgba(52, 36, 99, 0.2);
+      border-radius: 999px;
+      color: #342463;
+      background: rgba(247, 245, 255, 0.78);
+      backdrop-filter: blur(14px);
+      font: 600 8px/1 "Manrope", sans-serif;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 250ms ease, background 250ms ease,
+        border-color 250ms ease, transform 250ms ease;
+    }
+
+    .museum-menu-toggle:hover {
+      color: #ffffff;
+      border-color: #7456c5;
+      background: #7456c5;
+      transform: translateY(-2px);
+    }
+
+    .museum-menu-toggle i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #7456c5;
+      box-shadow: 0 0 10px rgba(116, 86, 197, 0.72);
+    }
+
+    .museum-menu-toggle:hover i,
+    .museum-menu-open .museum-menu-toggle i {
+      background: #ffffff;
+    }
+
+    .museum-menu-backdrop {
+      position: fixed;
+      z-index: 190;
+      inset: 0;
+      visibility: hidden;
+      opacity: 0;
+      background: rgba(20, 15, 36, 0.48);
+      backdrop-filter: blur(8px);
+      transition: opacity 400ms ease, visibility 400ms;
+    }
+
+    .museum-menu {
+      position: fixed;
+      z-index: 200;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(560px, 94vw);
+      padding: 34px 38px 56px;
+      overflow-y: auto;
+      color: #f8f5ff;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(139, 107, 230, 0.36), transparent 31%),
+        linear-gradient(150deg, #211936, #100d1d 62%, #090812);
+      box-shadow: -35px 0 100px rgba(18, 10, 39, 0.38);
+      transform: translateX(104%);
+      transition: transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .museum-menu-open .museum-menu-backdrop {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .museum-menu-open .museum-menu {
+      transform: translateX(0);
+    }
+
+    .museum-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      padding-bottom: 27px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+    }
+
+    .museum-menu-header span,
+    .museum-menu-group > span {
+      display: block;
+      color: rgba(205, 190, 255, 0.7);
+      font: 500 8px/1 "Manrope", sans-serif;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .museum-menu-header h2 {
+      margin: 12px 0 0;
+      font: 400 clamp(48px, 7vw, 79px)/0.8 "Instrument Serif", serif;
+      letter-spacing: -0.05em;
+    }
+
+    .museum-menu-close {
+      padding: 6px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      color: rgba(255, 255, 255, 0.72);
+      background: transparent;
+      font: 500 8px/1 "Manrope", sans-serif;
+      letter-spacing: 0.13em;
+      cursor: pointer;
+    }
+
+    .museum-menu-group {
+      padding: 28px 0 6px;
+    }
+
+    .museum-menu-links {
+      display: grid;
+      margin-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .museum-menu-links a,
+    .museum-project-link {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 13px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      color: rgba(255, 255, 255, 0.78);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      transition: color 220ms ease, padding-left 220ms ease;
+    }
+
+    .museum-menu-links a:hover,
+    .museum-project-link:hover {
+      padding-left: 8px;
+      color: #ffffff;
+    }
+
+    .museum-menu-links small,
+    .museum-project-link small {
+      color: rgba(205, 190, 255, 0.58);
+      font: 500 8px/1 "Manrope", sans-serif;
+      letter-spacing: 0.12em;
+    }
+
+    .museum-menu-links strong,
+    .museum-project-link strong {
+      font: 400 18px/1 "Instrument Serif", serif;
+      letter-spacing: 0.01em;
+    }
+
+    .museum-menu-links i,
+    .museum-project-link i {
+      font-style: normal;
+      opacity: 0.48;
+    }
+
+    /* Stable accordion: no viewport jump when a taller panel closes. */
+
+    .accordion-section {
+      scroll-margin-top: 105px;
+    }
+
+    .accordion-section:not(.is-open) > .accordion-panel {
+      display: none !important;
+    }
+
+    .accordion-section.is-open > .accordion-panel {
+      display: block !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    .accordion-section.is-open .accordion-content {
+      animation: projectPanelIn 420ms ease both;
+    }
+
+    @keyframes projectPanelIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .museum-menu-toggle {
+        top: 54px;
+        right: 20px;
+      }
+
+      .museum-menu {
+        padding: 27px 22px 48px;
+      }
+
+      .museum-menu-header h2 {
+        font-size: 56px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .museum-menu,
+      .museum-menu-backdrop,
+      .museum-menu-toggle,
+      .accordion-section.is-open .accordion-content {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+  </style>
+
 </head>
 
 
@@ -104,6 +342,165 @@
     </a>
 
   </header>
+
+
+  <!-- ==========================================
+       CARTE DU MUSÉE
+  =========================================== -->
+
+  <button
+    class="museum-menu-toggle"
+    id="museum-menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="museum-menu"
+  >
+    <i aria-hidden="true"></i>
+    MUSEUM MAP
+  </button>
+
+
+  <div
+    class="museum-menu-backdrop"
+    id="museum-menu-backdrop"
+    aria-hidden="true"
+  ></div>
+
+
+  <aside
+    class="museum-menu"
+    id="museum-menu"
+    aria-hidden="true"
+    aria-labelledby="museum-menu-title"
+  >
+
+    <header class="museum-menu-header">
+
+      <div>
+        <span>THE EXPERIENCE LABORATORY · 002</span>
+        <h2 id="museum-menu-title">MUSEUM MAP</h2>
+      </div>
+
+      <button
+        class="museum-menu-close"
+        id="museum-menu-close"
+        type="button"
+      >
+        CLOSE ×
+      </button>
+
+    </header>
+
+
+    <section class="museum-menu-group">
+
+      <span>THE JOURNEY</span>
+
+      <nav class="museum-menu-links" aria-label="Museum journey">
+
+        <a href="index.html">
+          <small>00</small><strong>Entrance</strong><i>→</i>
+        </a>
+
+        <a href="sleep.html">
+          <small>00.5</small><strong>The Sleeper</strong><i>→</i>
+        </a>
+
+        <a href="awakening.html">
+          <small>07</small><strong>Awakening</strong><i>→</i>
+        </a>
+
+        <a href="observatory.html">
+          <small>08</small><strong>Dream Observatory</strong><i>→</i>
+        </a>
+
+      </nav>
+
+    </section>
+
+
+    <section class="museum-menu-group">
+
+      <span>THE ROOMS</span>
+
+      <nav class="museum-menu-links" aria-label="Dream rooms">
+
+        <a href="everyday.html">
+          <small>01</small><strong>Everyday</strong><i>→</i>
+        </a>
+
+        <a href="childhood.html">
+          <small>02</small><strong>Childhood</strong><i>→</i>
+        </a>
+
+        <a href="adventure.html">
+          <small>03</small><strong>Adventure</strong><i>→</i>
+        </a>
+
+        <a href="romance.html">
+          <small>04</small><strong>Romance</strong><i>→</i>
+        </a>
+
+        <a href="action.html">
+          <small>05</small><strong>Action</strong><i>→</i>
+        </a>
+
+        <a href="nightmare.html">
+          <small>06</small><strong>Nightmare</strong><i>→</i>
+        </a>
+
+      </nav>
+
+    </section>
+
+
+    <section class="museum-menu-group">
+
+      <span>PROJECT CHAPTERS</span>
+
+      <div class="museum-menu-links">
+
+        <button class="museum-project-link" data-panel="panel-01" type="button">
+          <small>01</small><strong>The Challenge</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-02" type="button">
+          <small>02</small><strong>The Curatorial System</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-03" type="button">
+          <small>03</small><strong>From Dream to Exhibition</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-04" type="button">
+          <small>04</small><strong>The Visitor Journey</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-05" type="button">
+          <small>05</small><strong>Digital to Physical</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-06" type="button">
+          <small>06</small><strong>Artistic Collaboration</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-07" type="button">
+          <small>07</small><strong>Research Foundation</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-08" type="button">
+          <small>08</small><strong>My Role &amp; Prototype</strong><i>↓</i>
+        </button>
+
+        <button class="museum-project-link" data-panel="panel-09" type="button">
+          <small>09</small><strong>Production Note</strong><i>↓</i>
+        </button>
+
+      </div>
+
+    </section>
+
+  </aside>
 
 
   <main>
@@ -2322,6 +2719,340 @@
 
 
   <script src="./case-study.js?v=2"></script>
+
+
+  <script>
+
+    /* ==========================================
+       STABLE ACCORDION + MUSEUM MAP
+    ========================================== */
+
+    (function () {
+      const pageBody = document.body;
+
+      const accordionSections = [
+        ...document.querySelectorAll(
+          ".accordion-section"
+        )
+      ];
+
+      const menuToggle =
+        document.querySelector(
+          "#museum-menu-toggle"
+        );
+
+      const menu =
+        document.querySelector(
+          "#museum-menu"
+        );
+
+      const menuBackdrop =
+        document.querySelector(
+          "#museum-menu-backdrop"
+        );
+
+      const menuClose =
+        document.querySelector(
+          "#museum-menu-close"
+        );
+
+
+      function setAccordionState(
+        section,
+        open
+      ) {
+        const trigger =
+          section.querySelector(
+            ".accordion-trigger"
+          );
+
+        const symbol =
+          section.querySelector(
+            ".accordion-symbol"
+          );
+
+        section.classList.toggle(
+          "is-open",
+          open
+        );
+
+        if (trigger) {
+          trigger.setAttribute(
+            "aria-expanded",
+            String(open)
+          );
+        }
+
+        if (symbol) {
+          symbol.textContent =
+            open
+              ? "×"
+              : "+";
+        }
+      }
+
+
+      function openOnlySection(
+        selectedSection
+      ) {
+        accordionSections.forEach(
+          function (section) {
+            setAccordionState(
+              section,
+              section === selectedSection
+            );
+          }
+        );
+      }
+
+
+      /*
+       * Capture the click before the legacy script.
+       * The trigger is kept at the same screen position
+       * while the previously opened panel collapses.
+       */
+
+      document.addEventListener(
+        "click",
+        function (event) {
+          const trigger =
+            event.target.closest(
+              ".accordion-trigger"
+            );
+
+          if (!trigger) {
+            return;
+          }
+
+          event.preventDefault();
+          event.stopImmediatePropagation();
+
+          const section =
+            trigger.closest(
+              ".accordion-section"
+            );
+
+          if (!section) {
+            return;
+          }
+
+          const triggerTopBefore =
+            trigger
+              .getBoundingClientRect()
+              .top;
+
+          const willOpen =
+            !section.classList.contains(
+              "is-open"
+            );
+
+          if (willOpen) {
+            openOnlySection(section);
+          } else {
+            setAccordionState(
+              section,
+              false
+            );
+          }
+
+          window.requestAnimationFrame(
+            function () {
+              window.requestAnimationFrame(
+                function () {
+                  const triggerTopAfter =
+                    trigger
+                      .getBoundingClientRect()
+                      .top;
+
+                  window.scrollBy({
+                    top:
+                      triggerTopAfter -
+                      triggerTopBefore,
+                    left: 0,
+                    behavior: "auto"
+                  });
+                }
+              );
+            }
+          );
+        },
+        true
+      );
+
+
+      function openMuseumMenu() {
+        pageBody.classList.add(
+          "museum-menu-open"
+        );
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+
+        menu.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+        menuBackdrop.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+        menuClose.focus();
+      }
+
+
+      function closeMuseumMenu(
+        restoreFocus = true
+      ) {
+        pageBody.classList.remove(
+          "museum-menu-open"
+        );
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        menu.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        menuBackdrop.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        if (restoreFocus) {
+          menuToggle.focus();
+        }
+      }
+
+
+      menuToggle.addEventListener(
+        "click",
+        function () {
+          if (
+            pageBody.classList.contains(
+              "museum-menu-open"
+            )
+          ) {
+            closeMuseumMenu();
+          } else {
+            openMuseumMenu();
+          }
+        }
+      );
+
+
+      menuClose.addEventListener(
+        "click",
+        function () {
+          closeMuseumMenu();
+        }
+      );
+
+
+      menuBackdrop.addEventListener(
+        "click",
+        function () {
+          closeMuseumMenu();
+        }
+      );
+
+
+      menu.querySelectorAll("a").forEach(
+        function (link) {
+          link.addEventListener(
+            "click",
+            function () {
+              closeMuseumMenu(false);
+            }
+          );
+        }
+      );
+
+
+      menu
+        .querySelectorAll(
+          ".museum-project-link"
+        )
+        .forEach(
+          function (projectLink) {
+            projectLink.addEventListener(
+              "click",
+              function () {
+                const panel =
+                  document.getElementById(
+                    projectLink.dataset.panel
+                  );
+
+                const section =
+                  panel?.closest(
+                    ".accordion-section"
+                  );
+
+                if (!section) {
+                  return;
+                }
+
+                openOnlySection(section);
+
+                closeMuseumMenu(false);
+
+                window.requestAnimationFrame(
+                  function () {
+                    section.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start"
+                    });
+
+                    section
+                      .querySelector(
+                        ".accordion-trigger"
+                      )
+                      ?.focus({
+                        preventScroll: true
+                      });
+                  }
+                );
+              }
+            );
+          }
+        );
+
+
+      window.addEventListener(
+        "keydown",
+        function (event) {
+          if (
+            event.key === "Escape" &&
+            pageBody.classList.contains(
+              "museum-menu-open"
+            )
+          ) {
+            closeMuseumMenu();
+          }
+        }
+      );
+
+
+      accordionSections.forEach(
+        function (section) {
+          setAccordionState(
+            section,
+            section.classList.contains(
+              "is-open"
+            )
+          );
+        }
+      );
+    })();
+
+  </script>
 
 </body>
 
