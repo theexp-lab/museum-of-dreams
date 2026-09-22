@@ -58,6 +58,12 @@ const researchPrinciple =
   document.querySelector(
     "#research-principle"
   );
+
+const researchSource =
+  document.querySelector(
+    "#research-source"
+  );
+
 const actionNotesButton =
   document.querySelector(
     "#action-notes-button"
@@ -1652,20 +1658,29 @@ function activateScene(
       ? "ROOM 06 SIGNAL DETECTED"
       : "CONTINUE THROUGH THE INSTALLATION";
 
-  setResearch(
-    scene
-  );
-
   if (
-    scene !== "pulse"
-  ) {
-    resetThirdSignal();
-  }
+  scene !== "pulse"
+) {
+  resetThirdSignal();
+}
 
-  syncAudio(
-    scene,
-    activeIndex
-  );
+
+/*
+ * Les mécanismes narratifs sont lancés
+ * avant les éléments documentaires.
+ * Une erreur dans une note scientifique
+ * ne peut donc plus couper la scène.
+ */
+
+syncAudio(
+  scene,
+  activeIndex
+);
+
+
+setResearch(
+  scene
+);
 }
 
 
