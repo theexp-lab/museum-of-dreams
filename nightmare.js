@@ -5,7 +5,7 @@
 
 
 /* ==========================================
-   ÉLÉMENTS HTML
+   ÉLÉMENTS
 ========================================== */
 
 const body =
@@ -24,18 +24,6 @@ const sceneNames =
     function (beat) {
       return beat.dataset.scene;
     }
-  );
-
-
-const pulseGate =
-  document.querySelector(
-    "#pulse-gate"
-  );
-
-
-const followPulse =
-  document.querySelector(
-    "#follow-pulse"
   );
 
 
@@ -105,6 +93,12 @@ const researchPrinciple =
   );
 
 
+const researchSource =
+  document.querySelector(
+    "#research-source"
+  );
+
+
 const forceEye =
   document.querySelector(
     "#force-eye"
@@ -118,33 +112,56 @@ const forceLabel =
 
 
 /* ==========================================
-   ÉTAT DE LA PAGE
+   ROOM NOTES
 ========================================== */
 
-let activeIndex =
-  -1;
+const nightmareNotesButton =
+  document.querySelector(
+    "#nightmare-notes-button"
+  );
 
 
-let wheelLocked =
-  false;
+const nightmareNotesPanel =
+  document.querySelector(
+    "#nightmare-notes-panel"
+  );
 
 
-let touchStartY =
-  0;
+const nightmareNotesBackdrop =
+  document.querySelector(
+    "#nightmare-notes-backdrop"
+  );
 
 
-let sceneTimer =
-  null;
-
-
-let soundEnabled =
-  localStorage.getItem(
-    "museumSound"
-  ) !== "off";
+const nightmareNotesClose =
+  document.querySelector(
+    "#nightmare-notes-close"
+  );
 
 
 /* ==========================================
-   ÉTAT AUDIO
+   ÉTAT DE LA PAGE
+========================================== */
+
+let activeIndex = -1;
+
+let scrollFrame = null;
+
+let pointerFrame = null;
+
+let pointerX = 50;
+
+let pointerY = 50;
+
+let soundEnabled = false;
+
+let audioReady = false;
+
+let escapeComplete = false;
+
+
+/* ==========================================
+   AUDIO
 ========================================== */
 
 let audioContext;
@@ -163,44 +180,28 @@ let subGain;
 
 let subOscillator;
 
-let audioReady =
-  false;
+let heartbeatTimer = null;
 
+let thirdPulseTimer = null;
 
-let heartbeatTimer =
-  null;
+let footstepTimer = null;
 
+let breathingTimer = null;
 
-let footstepTimer =
-  null;
+let panicTimer = null;
 
-
-let breathingTimer =
-  null;
-
-
-let panicTimer =
-  null;
+let uncannyTimer = null;
 
 
 /* ==========================================
    OUVERTURE DE L’ŒIL
 ========================================== */
 
-let holdFrame =
-  null;
+let holdFrame = null;
 
+let holdStart = 0;
 
-let holdStart =
-  0;
-
-
-let isHolding =
-  false;
-
-
-let escapeComplete =
-  false;
+let isHolding = false;
 
 
 const HOLD_DURATION =
@@ -226,19 +227,49 @@ function clamp(
 }
 
 
+function randomBetween(
+  minimum,
+  maximum
+) {
+  return (
+    minimum +
+    Math.random() *
+    (
+      maximum -
+      minimum
+    )
+  );
+}
+
+
+/* ==========================================
+   BOUTON AUDIO
+========================================== */
+
 function updateSoundButton() {
+  if (!soundToggle) {
+    return;
+  }
+
+
   soundToggle.textContent =
     soundEnabled
       ? "SOUND ON"
-      : "SOUND OFF";
+      : "ENABLE SOUND";
 
 
   soundToggle.setAttribute(
     "aria-pressed",
-    String(soundEnabled)
+    String(
+      soundEnabled
+    )
   );
 }
 
+
+/* ==========================================
+   PRÉCHARGEMENT DES IMAGES
+========================================== */
 
 function preloadImages() {
   const images = [
@@ -264,47 +295,50 @@ function preloadImages() {
 
 
 /* ==========================================
-   INITIALISER LE MOTEUR AUDIO
+   INITIALISER L’AUDIO
 ========================================== */
 
 function ensureAudio() {
-  if (!audioReady) {
-    audioContext =
-      new (
-        window.AudioContext ||
-        window.webkitAudioContext
-      )();
+  if (audioReady) {
+    return;
+  }
 
 
-    masterGain =
-      audioContext.createGain();
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
 
 
-    masterGain.gain.value =
-      soundEnabled
-        ? 0.82
-        : 0;
-
-
-    masterGain.connect(
-      audioContext.destination
+  if (!AudioContextClass) {
+    throw new Error(
+      "Web Audio is unavailable."
     );
-
-
-    createAtmosphere();
-
-
-    audioReady =
-      true;
   }
 
 
-  if (
-    audioContext.state ===
-    "suspended"
-  ) {
-    audioContext.resume();
-  }
+  audioContext =
+    new AudioContextClass();
+
+
+  masterGain =
+    audioContext.createGain();
+
+
+  masterGain.gain.value =
+    soundEnabled
+      ? 0.82
+      : 0.0001;
+
+
+  masterGain.connect(
+    audioContext.destination
+  );
+
+
+  createAtmosphere();
+
+
+  audioReady = true;
 }
 
 
@@ -314,8 +348,10 @@ function ensureAudio() {
 
 function createAtmosphere() {
   const length =
-    audioContext.sampleRate *
-    3;
+    Math.floor(
+      audioContext.sampleRate *
+      3
+    );
 
 
   const buffer =
@@ -327,11 +363,12 @@ function createAtmosphere() {
 
 
   const data =
-    buffer.getChannelData(0);
+    buffer.getChannelData(
+      0
+    );
 
 
-  let lastValue =
-    0;
+  let lastValue = 0;
 
 
   for (
@@ -340,17 +377,21 @@ function createAtmosphere() {
     index += 1
   ) {
     const whiteNoise =
-      Math.random() * 2 -
+      Math.random() *
+      2 -
       1;
 
 
     lastValue =
-      lastValue * 0.96 +
-      whiteNoise * 0.04;
+      lastValue *
+      0.96 +
+      whiteNoise *
+      0.04;
 
 
     data[index] =
-      lastValue * 2.6;
+      lastValue *
+      2.6;
   }
 
 
@@ -375,7 +416,7 @@ function createAtmosphere() {
 
 
   ambienceFilter.frequency.value =
-    360;
+    350;
 
 
   ambienceFilter.Q.value =
@@ -391,15 +432,21 @@ function createAtmosphere() {
 
 
   noise
-    .connect(ambienceFilter)
-    .connect(ambienceGain)
-    .connect(masterGain);
+    .connect(
+      ambienceFilter
+    )
+    .connect(
+      ambienceGain
+    )
+    .connect(
+      masterGain
+    );
 
 
   noise.start();
 
 
-  /* Ronflement grave */
+  /* Ronflement électrique */
 
   humOscillator =
     audioContext.createOscillator();
@@ -422,14 +469,18 @@ function createAtmosphere() {
 
 
   humOscillator
-    .connect(humGain)
-    .connect(masterGain);
+    .connect(
+      humGain
+    )
+    .connect(
+      masterGain
+    );
 
 
   humOscillator.start();
 
 
-  /* Fréquence très basse */
+  /* Infragrave */
 
   subOscillator =
     audioContext.createOscillator();
@@ -452,8 +503,12 @@ function createAtmosphere() {
 
 
   subOscillator
-    .connect(subGain)
-    .connect(masterGain);
+    .connect(
+      subGain
+    )
+    .connect(
+      masterGain
+    );
 
 
   subOscillator.start();
@@ -461,7 +516,7 @@ function createAtmosphere() {
 
 
 /* ==========================================
-   CRÉER UNE NOTE
+   NOTE SYNTHÉTISÉE
 ========================================== */
 
 function tone(
@@ -493,10 +548,6 @@ function tone(
     audioContext.createGain();
 
 
-  const panner =
-    audioContext.createStereoPanner();
-
-
   oscillator.type =
     type;
 
@@ -505,14 +556,6 @@ function tone(
     frequency,
     now
   );
-
-
-  panner.pan.value =
-    clamp(
-      pan,
-      -1,
-      1
-    );
 
 
   gain.gain.setValueAtTime(
@@ -536,13 +579,44 @@ function tone(
   );
 
 
-  oscillator
-    .connect(gain)
-    .connect(panner)
-    .connect(masterGain);
+  oscillator.connect(
+    gain
+  );
 
 
-  oscillator.start(now);
+  if (
+    audioContext.createStereoPanner
+  ) {
+    const panner =
+      audioContext.createStereoPanner();
+
+
+    panner.pan.value =
+      clamp(
+        pan,
+        -1,
+        1
+      );
+
+
+    gain.connect(
+      panner
+    );
+
+
+    panner.connect(
+      masterGain
+    );
+  } else {
+    gain.connect(
+      masterGain
+    );
+  }
+
+
+  oscillator.start(
+    now
+  );
 
 
   oscillator.stop(
@@ -554,7 +628,7 @@ function tone(
 
 
 /* ==========================================
-   CRÉER UN BRUIT
+   BRUIT SYNTHÉTISÉ
 ========================================== */
 
 function noiseBurst(
@@ -572,9 +646,12 @@ function noiseBurst(
 
 
   const length =
-    Math.floor(
-      audioContext.sampleRate *
-      duration
+    Math.max(
+      1,
+      Math.floor(
+        audioContext.sampleRate *
+        duration
+      )
     );
 
 
@@ -587,7 +664,9 @@ function noiseBurst(
 
 
   const data =
-    buffer.getChannelData(0);
+    buffer.getChannelData(
+      0
+    );
 
 
   for (
@@ -597,12 +676,14 @@ function noiseBurst(
   ) {
     data[index] =
       (
-        Math.random() * 2 -
+        Math.random() *
+        2 -
         1
       ) *
       (
         1 -
-        index / length
+        index /
+        length
       );
   }
 
@@ -617,14 +698,6 @@ function noiseBurst(
 
   const gain =
     audioContext.createGain();
-
-
-  const panner =
-    audioContext.createStereoPanner();
-
-
-  const now =
-    audioContext.currentTime;
 
 
   source.buffer =
@@ -643,47 +716,73 @@ function noiseBurst(
     0.85;
 
 
-  panner.pan.value =
-    clamp(
-      pan,
-      -1,
-      1
-    );
-
-
   gain.gain.setValueAtTime(
     Math.max(
       0.0002,
       volume
     ),
-    now
+    audioContext.currentTime
   );
 
 
   gain.gain.exponentialRampToValueAtTime(
     0.0001,
-    now + duration
+    audioContext.currentTime +
+    duration
   );
 
 
   source
-    .connect(filter)
-    .connect(gain)
-    .connect(panner)
-    .connect(masterGain);
+    .connect(
+      filter
+    )
+    .connect(
+      gain
+    );
 
 
-  source.start(now);
+  if (
+    audioContext.createStereoPanner
+  ) {
+    const panner =
+      audioContext.createStereoPanner();
+
+
+    panner.pan.value =
+      clamp(
+        pan,
+        -1,
+        1
+      );
+
+
+    gain.connect(
+      panner
+    );
+
+
+    panner.connect(
+      masterGain
+    );
+  } else {
+    gain.connect(
+      masterGain
+    );
+  }
+
+
+  source.start();
 }
 
 
 /* ==========================================
-   RESPIRATION HUMAINE
+   RESPIRATION
 ========================================== */
 
 function humanBreath(
   speed = 1,
-  strength = 1
+  strength = 1,
+  pan = -0.24
 ) {
   if (
     !soundEnabled ||
@@ -714,7 +813,9 @@ function humanBreath(
 
 
   const data =
-    buffer.getChannelData(0);
+    buffer.getChannelData(
+      0
+    );
 
 
   for (
@@ -736,7 +837,8 @@ function humanBreath(
 
     data[index] =
       (
-        Math.random() * 2 -
+        Math.random() *
+        2 -
         1
       ) *
       envelope;
@@ -755,10 +857,6 @@ function humanBreath(
     audioContext.createGain();
 
 
-  const panner =
-    audioContext.createStereoPanner();
-
-
   source.buffer =
     buffer;
 
@@ -769,7 +867,8 @@ function humanBreath(
 
   filter.frequency.value =
     620 +
-    speed * 90;
+    speed *
+    90;
 
 
   filter.Q.value =
@@ -781,17 +880,43 @@ function humanBreath(
     strength;
 
 
-  panner.pan.value =
-    -0.28 +
-    Math.random() *
-    0.12;
-
-
   source
-    .connect(filter)
-    .connect(gain)
-    .connect(panner)
-    .connect(masterGain);
+    .connect(
+      filter
+    )
+    .connect(
+      gain
+    );
+
+
+  if (
+    audioContext.createStereoPanner
+  ) {
+    const panner =
+      audioContext.createStereoPanner();
+
+
+    panner.pan.value =
+      clamp(
+        pan,
+        -1,
+        1
+      );
+
+
+    gain.connect(
+      panner
+    );
+
+
+    panner.connect(
+      masterGain
+    );
+  } else {
+    gain.connect(
+      masterGain
+    );
+  }
 
 
   source.start();
@@ -804,8 +929,7 @@ function stopBreathing() {
   );
 
 
-  breathingTimer =
-    null;
+  breathingTimer = null;
 }
 
 
@@ -836,7 +960,11 @@ function setBreathing(
       function () {
         humanBreath(
           speed,
-          strength
+          strength,
+          randomBetween(
+            -0.45,
+            0.2
+          )
         );
       },
       period
@@ -845,7 +973,7 @@ function setBreathing(
 
 
 /* ==========================================
-   BATTEMENTS DE CŒUR
+   CŒUR PRINCIPAL
 ========================================== */
 
 function heartbeat(
@@ -855,7 +983,8 @@ function heartbeat(
   tone(
     52,
     0.17,
-    0.31 * strength,
+    0.31 *
+    strength,
     "sine"
   );
 
@@ -863,7 +992,8 @@ function heartbeat(
   tone(
     39,
     0.24,
-    0.23 * strength,
+    0.23 *
+    strength,
     "sine",
     0.16
   );
@@ -873,7 +1003,8 @@ function heartbeat(
     tone(
       69,
       0.11,
-      0.12 * strength,
+      0.12 *
+      strength,
       "triangle",
       0.39,
       0.16
@@ -883,7 +1014,8 @@ function heartbeat(
     tone(
       34,
       0.26,
-      0.35 * strength,
+      0.35 *
+      strength,
       "sine",
       0.43,
       0.16
@@ -898,8 +1030,7 @@ function stopHeartbeat() {
   );
 
 
-  heartbeatTimer =
-    null;
+  heartbeatTimer = null;
 }
 
 
@@ -939,7 +1070,90 @@ function setHeartbeat(
 
 
 /* ==========================================
-   BRUITS DE PAS
+   TROISIÈME POULS
+========================================== */
+
+function thirdPulse(
+  strength = 1
+) {
+  tone(
+    33,
+    0.25,
+    0.25 *
+    strength,
+    "sine",
+    0,
+    0.65
+  );
+
+
+  tone(
+    27,
+    0.32,
+    0.32 *
+    strength,
+    "sine",
+    0.23,
+    0.65
+  );
+
+
+  tone(
+    96,
+    0.12,
+    0.045 *
+    strength,
+    "triangle",
+    0.08,
+    0.58
+  );
+}
+
+
+function stopThirdPulse() {
+  window.clearInterval(
+    thirdPulseTimer
+  );
+
+
+  thirdPulseTimer = null;
+}
+
+
+function setThirdPulse(
+  period,
+  strength = 1
+) {
+  stopThirdPulse();
+
+
+  if (
+    !soundEnabled ||
+    !audioReady
+  ) {
+    return;
+  }
+
+
+  thirdPulse(
+    strength
+  );
+
+
+  thirdPulseTimer =
+    window.setInterval(
+      function () {
+        thirdPulse(
+          strength
+        );
+      },
+      period
+    );
+}
+
+
+/* ==========================================
+   PAS
 ========================================== */
 
 let nextFootstepSide =
@@ -952,7 +1166,8 @@ function footstep(
   tone(
     43,
     0.2,
-    0.2 * strength,
+    0.2 *
+    strength,
     "sine",
     0,
     nextFootstepSide
@@ -961,7 +1176,8 @@ function footstep(
 
   noiseBurst(
     0.15,
-    0.055 * strength,
+    0.055 *
+    strength,
     190,
     nextFootstepSide
   );
@@ -978,8 +1194,7 @@ function stopFootsteps() {
   );
 
 
-  footstepTimer =
-    null;
+  footstepTimer = null;
 }
 
 
@@ -998,13 +1213,17 @@ function setFootsteps(
   }
 
 
-  footstep(strength);
+  footstep(
+    strength
+  );
 
 
   footstepTimer =
     window.setInterval(
       function () {
-        footstep(strength);
+        footstep(
+          strength
+        );
       },
       period
     );
@@ -1012,7 +1231,7 @@ function setFootsteps(
 
 
 /* ==========================================
-   SONS DE PANIQUE
+   PARASITES DE PANIQUE
 ========================================== */
 
 function stopPanicSounds() {
@@ -1021,8 +1240,7 @@ function stopPanicSounds() {
   );
 
 
-  panicTimer =
-    null;
+  panicTimer = null;
 }
 
 
@@ -1044,26 +1262,22 @@ function setPanicSounds(
     window.setInterval(
       function () {
         const pan =
-          Math.random() *
-          1.8 -
-          0.9;
-
-
-        const frequency =
-          500 +
-          Math.random() *
-          1300;
+          randomBetween(
+            -0.9,
+            0.9
+          );
 
 
         noiseBurst(
-          0.08 +
-          Math.random() *
-          0.18,
-
+          randomBetween(
+            0.08,
+            0.26
+          ),
           0.04,
-
-          frequency,
-
+          randomBetween(
+            500,
+            1800
+          ),
           pan
         );
 
@@ -1073,18 +1287,14 @@ function setPanicSounds(
           0.5
         ) {
           tone(
-            80 +
-            Math.random() *
-            160,
-
+            randomBetween(
+              80,
+              240
+            ),
             0.12,
-
             0.035,
-
             "sawtooth",
-
             0,
-
             pan
           );
         }
@@ -1094,34 +1304,201 @@ function setPanicSounds(
 }
 
 
+/* ==========================================
+   SONS ÉTRANGES PONCTUELS
+========================================== */
+
+function metallicTick() {
+  const pan =
+    randomBetween(
+      -0.85,
+      0.85
+    );
+
+
+  tone(
+    randomBetween(
+      1100,
+      1750
+    ),
+    0.08,
+    0.025,
+    "triangle",
+    0,
+    pan
+  );
+
+
+  tone(
+    randomBetween(
+      1900,
+      2700
+    ),
+    0.06,
+    0.012,
+    "sine",
+    0.045,
+    pan
+  );
+}
+
+
+function organicCreak() {
+  const pan =
+    randomBetween(
+      -0.7,
+      0.7
+    );
+
+
+  noiseBurst(
+    0.85,
+    0.085,
+    randomBetween(
+      170,
+      310
+    ),
+    pan
+  );
+
+
+  tone(
+    randomBetween(
+      44,
+      73
+    ),
+    0.95,
+    0.055,
+    "sawtooth",
+    0,
+    pan
+  );
+}
+
+
+function distantWhisper() {
+  const pan =
+    randomBetween(
+      -0.9,
+      0.9
+    );
+
+
+  noiseBurst(
+    randomBetween(
+      0.45,
+      0.85
+    ),
+    0.045,
+    randomBetween(
+      1250,
+      2200
+    ),
+    pan
+  );
+}
+
+
+function eyeRing() {
+  tone(
+    2350,
+    2.5,
+    0.028,
+    "sine",
+    0,
+    -0.24
+  );
+
+
+  tone(
+    2387,
+    2.5,
+    0.022,
+    "sine",
+    0,
+    0.24
+  );
+}
+
+
+function stopUncannySounds() {
+  window.clearTimeout(
+    uncannyTimer
+  );
+
+
+  uncannyTimer = null;
+}
+
+
+function setUncannySounds(
+  effect,
+  minimumDelay,
+  maximumDelay
+) {
+  stopUncannySounds();
+
+
+  if (
+    !soundEnabled ||
+    !audioReady
+  ) {
+    return;
+  }
+
+
+  function schedule() {
+    uncannyTimer =
+      window.setTimeout(
+        function () {
+          effect();
+
+          schedule();
+        },
+        randomBetween(
+          minimumDelay,
+          maximumDelay
+        )
+      );
+  }
+
+
+  schedule();
+}
+
+
+/* ==========================================
+   ARRÊTER LES BOUCLES
+========================================== */
+
 function stopAllAudioLoops() {
   stopHeartbeat();
+
+  stopThirdPulse();
 
   stopFootsteps();
 
   stopBreathing();
 
   stopPanicSounds();
+
+  stopUncannySounds();
 }
 
 
 /* ==========================================
-   ATMOSPHÈRE DE CHAQUE SCÈNE
+   ATMOSPHÈRE PAR SCÈNE
 ========================================== */
 
-function setAtmosphere(scene) {
+function setAtmosphere(
+  scene
+) {
   if (!audioReady) {
     return;
   }
 
 
   const levels = {
-    arrival: [
-      0.02,
-      0.018,
-      320
-    ],
-
     title: [
       0.023,
       0.021,
@@ -1188,12 +1565,6 @@ function setAtmosphere(scene) {
       1320
     ],
 
-    warning: [
-      0.09,
-      0.12,
-      520
-    ],
-
     eye: [
       0.05,
       0.08,
@@ -1210,19 +1581,7 @@ function setAtmosphere(scene) {
 
   const selected =
     levels[scene] ||
-    levels.arrival;
-
-
-  const noiseLevel =
-    selected[0];
-
-
-  const subLevel =
-    selected[1];
-
-
-  const filterFrequency =
-    selected[2];
+    levels.title;
 
 
   const active =
@@ -1236,11 +1595,9 @@ function setAtmosphere(scene) {
 
 
   ambienceGain.gain.setTargetAtTime(
-    noiseLevel *
+    selected[0] *
     active,
-
     now,
-
     0.25
   );
 
@@ -1253,39 +1610,38 @@ function setAtmosphere(scene) {
         : 0.028
     ) *
     active,
-
     now,
-
     0.3
   );
 
 
   subGain.gain.setTargetAtTime(
-    subLevel *
+    selected[1] *
     active,
-
     now,
-
     0.2
   );
 
 
   ambienceFilter.frequency.setTargetAtTime(
-    filterFrequency,
-
+    selected[2],
     now,
-
     0.22
   );
 }
 
 
 /* ==========================================
-   SYNCHRONISER LE SON ET LA SCÈNE
+   AUDIO PAR SCÈNE
 ========================================== */
 
-function syncAudio(scene) {
-  if (!audioReady) {
+function syncAudio(
+  scene
+) {
+  if (
+    !audioReady ||
+    !soundEnabled
+  ) {
     return;
   }
 
@@ -1293,16 +1649,12 @@ function syncAudio(scene) {
   stopAllAudioLoops();
 
 
-  setAtmosphere(scene);
+  setAtmosphere(
+    scene
+  );
 
 
   const heartSettings = {
-    arrival: [
-      880,
-      0.66,
-      false
-    ],
-
     title: [
       820,
       0.72,
@@ -1369,12 +1721,6 @@ function syncAudio(scene) {
       true
     ],
 
-    warning: [
-      330,
-      1.48,
-      true
-    ],
-
     eye: [
       420,
       1.18,
@@ -1391,67 +1737,58 @@ function syncAudio(scene) {
 
   const settings =
     heartSettings[scene] ||
-    heartSettings.arrival;
-
-
-  const period =
-    settings[0];
-
-
-  const strength =
-    settings[1];
-
-
-  const panic =
-    settings[2];
+    heartSettings.title;
 
 
   setHeartbeat(
-    period,
-    strength,
-    panic
+    settings[0],
+    settings[1],
+    settings[2]
   );
 
 
-  /*
-   * Le souffle commence dès l’arrivée.
-   */
+  /* Gare et titre */
 
   if (
-    scene === "arrival" ||
     scene === "title"
   ) {
     setBreathing(
       2850,
       0.82,
-      1.1
+      1.05
+    );
+
+
+    setUncannySounds(
+      metallicTick,
+      2600,
+      5200
     );
   }
 
 
-  /*
-   * Le souffle disparaît brutalement
-   * lorsque la personne cesse de respirer.
-   */
+  /* La personne ne respire plus */
 
   if (
     scene === "companion"
   ) {
-    stopBreathing();
-
-
     noiseBurst(
-      0.12,
-      0.055,
+      0.16,
+      0.06,
       920,
-      -0.3
+      -0.35
+    );
+
+
+    setUncannySounds(
+      distantWhisper,
+      3200,
+      5600
     );
   }
 
 
-  /*
-   * Moniteur médical.
-   */
+  /* Moniteur et troisième pouls */
 
   if (
     scene === "monitor"
@@ -1480,12 +1817,16 @@ function syncAudio(scene) {
       "sawtooth",
       0.52
     );
+
+
+    setThirdPulse(
+      1120,
+      0.9
+    );
   }
 
 
-  /*
-   * Apparition de la silhouette.
-   */
+  /* Silhouette */
 
   if (
     scene === "faceless"
@@ -1503,13 +1844,23 @@ function syncAudio(scene) {
       0.1,
       "sawtooth"
     );
+
+
+    setThirdPulse(
+      960,
+      1
+    );
+
+
+    setUncannySounds(
+      distantWhisper,
+      1700,
+      3400
+    );
   }
 
 
-  /*
-   * Les murs respirent une fois,
-   * puis le souffle s’arrête.
-   */
+  /* Les murs respirent */
 
   if (
     scene === "breathing"
@@ -1521,17 +1872,15 @@ function syncAudio(scene) {
     );
 
 
-    window.setTimeout(
-      stopBreathing,
-      2500
+    setUncannySounds(
+      organicCreak,
+      1900,
+      3300
     );
   }
 
 
-  /*
-   * La respiration recommence,
-   * beaucoup plus rapidement.
-   */
+  /* Ils recommencent plus vite */
 
   if (
     scene === "again"
@@ -1546,12 +1895,17 @@ function syncAudio(scene) {
     setPanicSounds(
       1100
     );
+
+
+    setUncannySounds(
+      organicCreak,
+      950,
+      1700
+    );
   }
 
 
-  /*
-   * Le troisième signal se rapproche.
-   */
+  /* Localisation du troisième signal */
 
   if (
     scene === "locating"
@@ -1560,6 +1914,12 @@ function syncAudio(scene) {
       980,
       1.9,
       1.25
+    );
+
+
+    setThirdPulse(
+      760,
+      1.2
     );
 
 
@@ -1586,9 +1946,7 @@ function syncAudio(scene) {
   }
 
 
-  /*
-   * Le signal est à l’intérieur.
-   */
+  /* Le signal est à l’intérieur */
 
   if (
     scene === "inside"
@@ -1597,6 +1955,12 @@ function syncAudio(scene) {
       850,
       2.15,
       1.4
+    );
+
+
+    setThirdPulse(
+      590,
+      1.45
     );
 
 
@@ -1621,9 +1985,7 @@ function syncAudio(scene) {
   }
 
 
-  /*
-   * Course.
-   */
+  /* Course */
 
   if (
     scene === "run"
@@ -1638,6 +2000,12 @@ function syncAudio(scene) {
       720,
       2.35,
       1.55
+    );
+
+
+    setThirdPulse(
+      480,
+      1.35
     );
 
 
@@ -1662,9 +2030,7 @@ function syncAudio(scene) {
   }
 
 
-  /*
-   * Le couloir se referme.
-   */
+  /* Couloir qui se referme */
 
   if (
     scene === "narrowing"
@@ -1682,8 +2048,21 @@ function syncAudio(scene) {
     );
 
 
+    setThirdPulse(
+      420,
+      1.5
+    );
+
+
     setPanicSounds(
       270
+    );
+
+
+    setUncannySounds(
+      organicCreak,
+      650,
+      1100
     );
 
 
@@ -1696,9 +2075,7 @@ function syncAudio(scene) {
   }
 
 
-  /*
-   * Quelque chose se réveille.
-   */
+  /* Quelque chose se réveille */
 
   if (
     scene === "waking"
@@ -1716,6 +2093,12 @@ function syncAudio(scene) {
     );
 
 
+    setThirdPulse(
+      360,
+      1.65
+    );
+
+
     setPanicSounds(
       220
     );
@@ -1729,26 +2112,18 @@ function syncAudio(scene) {
   }
 
 
-  if (
-    scene === "warning"
-  ) {
-    setPanicSounds(
-      440
-    );
-
-
-    tone(
-      115,
-      1.4,
-      0.1,
-      "sawtooth"
-    );
-  }
-
+  /* Œil fermé */
 
   if (
     scene === "eye"
   ) {
+    stopFootsteps();
+
+    stopBreathing();
+
+    stopPanicSounds();
+
+
     tone(
       34,
       2.2,
@@ -1762,34 +2137,83 @@ function syncAudio(scene) {
       0.07,
       380
     );
+
+
+    eyeRing();
+
+
+    setThirdPulse(
+      780,
+      1.15
+    );
+
+
+    setUncannySounds(
+      distantWhisper,
+      2100,
+      4100
+    );
+  }
+
+
+  /* Dernière scène */
+
+  if (
+    scene === "escape"
+  ) {
+    stopFootsteps();
+
+    setBreathing(
+      1200,
+      1.3,
+      0.9
+    );
+
+
+    setThirdPulse(
+      650,
+      1.25
+    );
+
+
+    eyeRing();
   }
 }
 
 
 /* ==========================================
-   OBSERVATIONS SCIENTIFIQUES
+   NOTES SCIENTIFIQUES
 ========================================== */
 
-function setResearch(scene) {
+function setResearch(
+  scene
+) {
   if (
     [
-      "arrival",
       "title",
       "companion",
       "monitor",
       "faceless"
-    ].includes(scene)
+    ].includes(
+      scene
+    )
   ) {
     researchNumber.textContent =
       "RESEARCH NOTE 06.1";
 
 
     researchText.textContent =
-      "Fear in dreams has been associated with activity in the insula and midcingulate cortex.";
+      "Fear reported during dreaming has been associated with activity in the insula and midcingulate cortex.";
 
 
     researchPrinciple.textContent =
       "FEAR · SIMULATED, FELT";
+
+
+    if (researchSource) {
+      researchSource.href =
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC7267911/";
+    }
 
 
     return;
@@ -1802,18 +2226,26 @@ function setResearch(scene) {
       "again",
       "locating",
       "inside"
-    ].includes(scene)
+    ].includes(
+      scene
+    )
   ) {
     researchNumber.textContent =
       "RESEARCH NOTE 06.2";
 
 
     researchText.textContent =
-      "Threat-simulation theories propose that dreams can construct virtual dangers and possible responses.";
+      "Threat-simulation theory proposes that some dreams construct virtual dangers and possible responses.";
 
 
     researchPrinciple.textContent =
       "THREAT · REHEARSAL HYPOTHESIS";
+
+
+    if (researchSource) {
+      researchSource.href =
+        "https://pubmed.ncbi.nlm.nih.gov/15766897/";
+    }
 
 
     return;
@@ -1825,16 +2257,22 @@ function setResearch(scene) {
 
 
   researchText.textContent =
-    "The threat is simulated, but fear and bodily arousal can still be experienced as real.";
+    "Nightmare episodes can be accompanied by measurable changes in autonomic activation.";
 
 
   researchPrinciple.textContent =
     "VIRTUAL DANGER · REAL AROUSAL";
+
+
+  if (researchSource) {
+    researchSource.href =
+      "https://pubmed.ncbi.nlm.nih.gov/30927477/";
+  }
 }
 
 
 /* ==========================================
-   DONNÉES DE CONFINEMENT
+   INTERFACE DE CONFINEMENT
 ========================================== */
 
 function setInterface(
@@ -1842,8 +2280,11 @@ function setInterface(
   index
 ) {
   const dangerStart =
-    sceneNames.indexOf(
-      "breathing"
+    Math.max(
+      0,
+      sceneNames.indexOf(
+        "breathing"
+      )
     );
 
 
@@ -1853,14 +2294,13 @@ function setInterface(
         index -
         dangerStart
       ) /
-      (
+      Math.max(
+        1,
         sceneNames.length -
         1 -
         dangerStart
       ),
-
       0,
-
       1
     );
 
@@ -1879,7 +2319,6 @@ function setInterface(
   dreamIntegrity.textContent =
     Math.max(
       4,
-
       Math.round(
         74 -
         progress *
@@ -1890,10 +2329,7 @@ function setInterface(
 
 
   if (
-    [
-      "arrival",
-      "title"
-    ].includes(scene)
+    scene === "title"
   ) {
     containmentStatus.textContent =
       "UNSTABLE";
@@ -1901,12 +2337,20 @@ function setInterface(
 
     threatDistance.textContent =
       "UNKNOWN";
-  } else if (
+
+
+    return;
+  }
+
+
+  if (
     [
       "companion",
       "monitor",
       "faceless"
-    ].includes(scene)
+    ].includes(
+      scene
+    )
   ) {
     containmentStatus.textContent =
       "BREACHED";
@@ -1914,12 +2358,20 @@ function setInterface(
 
     threatDistance.textContent =
       "18 M";
-  } else if (
+
+
+    return;
+  }
+
+
+  if (
     [
       "breathing",
       "again",
       "locating"
-    ].includes(scene)
+    ].includes(
+      scene
+    )
   ) {
     containmentStatus.textContent =
       "FAILED";
@@ -1929,7 +2381,13 @@ function setInterface(
       scene === "locating"
         ? "4 M"
         : "8 M";
-  } else if (
+
+
+    return;
+  }
+
+
+  if (
     scene === "inside"
   ) {
     containmentStatus.textContent =
@@ -1938,12 +2396,20 @@ function setInterface(
 
     threatDistance.textContent =
       "0 M";
-  } else if (
+
+
+    return;
+  }
+
+
+  if (
     [
       "run",
       "narrowing",
       "waking"
-    ].includes(scene)
+    ].includes(
+      scene
+    )
   ) {
     containmentStatus.textContent =
       "PURSUIT";
@@ -1953,14 +2419,18 @@ function setInterface(
       scene === "narrowing"
         ? "2 M"
         : "4 M";
-  } else {
-    containmentStatus.textContent =
-      "CRITICAL";
 
 
-    threatDistance.textContent =
-      "INSIDE";
+    return;
   }
+
+
+  containmentStatus.textContent =
+    "CRITICAL";
+
+
+  threatDistance.textContent =
+    "INSIDE";
 }
 
 
@@ -1968,7 +2438,9 @@ function setInterface(
    ACTIVER UNE SCÈNE
 ========================================== */
 
-function activateScene(index) {
+function activateScene(
+  index
+) {
   const nextIndex =
     clamp(
       index,
@@ -1978,8 +2450,7 @@ function activateScene(index) {
 
 
   if (
-    nextIndex ===
-    activeIndex
+    nextIndex === activeIndex
   ) {
     return;
   }
@@ -1993,11 +2464,6 @@ function activateScene(index) {
     sceneNames[
       activeIndex
     ];
-
-
-  window.clearTimeout(
-    sceneTimer
-  );
 
 
   beats.forEach(
@@ -2017,27 +2483,26 @@ function activateScene(index) {
     scene;
 
 
+  const progress =
+    activeIndex /
+    Math.max(
+      1,
+      beats.length - 1
+    );
+
+
   body.style.setProperty(
     "--scene-progress",
-
-    activeIndex /
-    (
-      beats.length -
-      1
-    )
+    progress
   );
 
 
-  progressFill.style.height =
-    (
-      activeIndex /
-      (
-        beats.length -
-        1
-      )
-    ) *
-    100 +
-    "%";
+  if (progressFill) {
+    progressFill.style.height =
+      progress *
+      100 +
+      "%";
+  }
 
 
   scrollCue.textContent =
@@ -2046,78 +2511,127 @@ function activateScene(index) {
       : "FOLLOW THE SIGNAL";
 
 
-  setResearch(scene);
-
-
   setInterface(
     scene,
     activeIndex
   );
 
 
-  syncAudio(scene);
+  /*
+   * Le son est lancé avant les notes.
+   * Une erreur documentaire ne peut donc
+   * plus interrompre l’expérience.
+   */
+
+  syncAudio(
+    scene
+  );
+
+
+  setResearch(
+    scene
+  );
 }
 
 
 /* ==========================================
-   OBSERVER LES SECTIONS
+   SCÈNE LA PLUS PROCHE DU CENTRE
 ========================================== */
 
-const observer =
-  new IntersectionObserver(
-    function (entries) {
-      const visible =
-        entries
-
-          .filter(
-            function (entry) {
-              return entry.isIntersecting;
-            }
-          )
-
-          .sort(
-            function (
-              first,
-              second
-            ) {
-              return (
-                second.intersectionRatio -
-                first.intersectionRatio
-              );
-            }
-          )[0];
+function updateSceneFromScroll() {
+  scrollFrame = null;
 
 
-      if (visible) {
-        activateScene(
-          beats.indexOf(
-            visible.target
-          )
+  if (
+    body.classList.contains(
+      "notes-open"
+    ) ||
+    escapeComplete
+  ) {
+    return;
+  }
+
+
+  const viewportCenter =
+    window.innerHeight /
+    2;
+
+
+  let closestIndex = 0;
+
+  let closestDistance =
+    Infinity;
+
+
+  beats.forEach(
+    function (
+      beat,
+      index
+    ) {
+      const rectangle =
+        beat.getBoundingClientRect();
+
+
+      const beatCenter =
+        rectangle.top +
+        rectangle.height /
+        2;
+
+
+      const distance =
+        Math.abs(
+          beatCenter -
+          viewportCenter
         );
-      }
-    },
 
-    {
-      threshold: [
-        0.58,
-        0.74
-      ]
+
+      if (
+        distance <
+        closestDistance
+      ) {
+        closestDistance =
+          distance;
+
+
+        closestIndex =
+          index;
+      }
     }
   );
 
 
-beats.forEach(
-  function (beat) {
-    observer.observe(beat);
+  activateScene(
+    closestIndex
+  );
+}
+
+
+window.addEventListener(
+  "scroll",
+  function () {
+    if (scrollFrame) {
+      return;
+    }
+
+
+    scrollFrame =
+      window.requestAnimationFrame(
+        updateSceneFromScroll
+      );
+  },
+  {
+    passive: true
   }
 );
 
 
 /* ==========================================
-   ALLER À UNE PHRASE
+   NAVIGATION CLAVIER
 ========================================== */
 
-function goToBeat(index) {
+function goToBeat(
+  index
+) {
   const target =
     clamp(
       index,
@@ -2126,92 +2640,26 @@ function goToBeat(index) {
     );
 
 
-  beats[target].scrollIntoView({
+  activateScene(
+    target
+  );
+
+
+  beats[
+    target
+  ].scrollIntoView({
     behavior: "smooth",
     block: "start"
   });
 }
 
 
-/* ==========================================
-   SCROLL À LA MOLETTE
-========================================== */
-
-window.addEventListener(
-  "wheel",
-
-  function (event) {
-    if (
-      body.classList.contains(
-        "nightmare-locked"
-      ) ||
-      escapeComplete
-    ) {
-      event.preventDefault();
-
-      return;
-    }
-
-
-    if (
-      Math.abs(
-        event.deltaY
-      ) <
-      8
-    ) {
-      return;
-    }
-
-
-    event.preventDefault();
-
-
-    if (wheelLocked) {
-      return;
-    }
-
-
-    wheelLocked =
-      true;
-
-
-    goToBeat(
-      activeIndex +
-      (
-        event.deltaY > 0
-          ? 1
-          : -1
-      )
-    );
-
-
-    window.setTimeout(
-      function () {
-        wheelLocked =
-          false;
-      },
-
-      820
-    );
-  },
-
-  {
-    passive: false
-  }
-);
-
-
-/* ==========================================
-   NAVIGATION AU CLAVIER
-========================================== */
-
 window.addEventListener(
   "keydown",
-
   function (event) {
     if (
       body.classList.contains(
-        "nightmare-locked"
+        "notes-open"
       ) ||
       escapeComplete
     ) {
@@ -2219,7 +2667,7 @@ window.addEventListener(
     }
 
 
-    const keys = [
+    const acceptedKeys = [
       "ArrowDown",
       "ArrowUp",
       "PageDown",
@@ -2229,7 +2677,7 @@ window.addEventListener(
 
 
     if (
-      !keys.includes(
+      !acceptedKeys.includes(
         event.key
       ) ||
       document.activeElement ===
@@ -2243,8 +2691,10 @@ window.addEventListener(
 
 
     const backward =
-      event.key === "ArrowUp" ||
-      event.key === "PageUp";
+      event.key ===
+        "ArrowUp" ||
+      event.key ===
+        "PageUp";
 
 
     goToBeat(
@@ -2260,196 +2710,272 @@ window.addEventListener(
 
 
 /* ==========================================
-   NAVIGATION TACTILE
+   ENABLE SOUND
 ========================================== */
 
-window.addEventListener(
-  "touchstart",
+if (soundToggle) {
+  soundToggle.addEventListener(
+    "click",
+    async function () {
+      if (soundEnabled) {
+        soundEnabled = false;
 
-  function (event) {
-    touchStartY =
-      event
-        .changedTouches[0]
-        .clientY;
-  },
 
-  {
-    passive: true
+        localStorage.setItem(
+          "museumSound",
+          "off"
+        );
+
+
+        stopAllAudioLoops();
+
+
+        if (
+          masterGain &&
+          audioContext
+        ) {
+          masterGain.gain.setTargetAtTime(
+            0.0001,
+            audioContext.currentTime,
+            0.08
+          );
+        }
+
+
+        setAtmosphere(
+          sceneNames[
+            activeIndex
+          ]
+        );
+
+
+        updateSoundButton();
+
+        return;
+      }
+
+
+      soundEnabled = true;
+
+
+      localStorage.setItem(
+        "museumSound",
+        "on"
+      );
+
+
+      try {
+        ensureAudio();
+
+
+        if (
+          audioContext.state ===
+          "suspended"
+        ) {
+          await audioContext.resume();
+        }
+
+
+        masterGain.gain.cancelScheduledValues(
+          audioContext.currentTime
+        );
+
+
+        masterGain.gain.setValueAtTime(
+          Math.max(
+            0.0001,
+            masterGain.gain.value
+          ),
+          audioContext.currentTime
+        );
+
+
+        masterGain.gain.exponentialRampToValueAtTime(
+          0.82,
+          audioContext.currentTime +
+          0.45
+        );
+
+
+        updateSoundButton();
+
+
+        tone(
+          220,
+          0.32,
+          0.035,
+          "sine"
+        );
+
+
+        tone(
+          440,
+          0.27,
+          0.022,
+          "sine",
+          0.11
+        );
+
+
+        syncAudio(
+          sceneNames[
+            activeIndex
+          ]
+        );
+      } catch (error) {
+        soundEnabled = false;
+
+
+        updateSoundButton();
+
+
+        console.warn(
+          "Nightmare audio unavailable:",
+          error
+        );
+      }
+    }
+  );
+}
+
+
+/* ==========================================
+   ROOM NOTES
+========================================== */
+
+function openNightmareNotes() {
+  if (
+    !nightmareNotesPanel ||
+    !nightmareNotesButton
+  ) {
+    return;
   }
-);
+
+
+  body.classList.add(
+    "notes-open"
+  );
+
+
+  nightmareNotesPanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  if (nightmareNotesBackdrop) {
+    nightmareNotesBackdrop.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+  }
+
+
+  nightmareNotesButton.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+
+  nightmareNotesButton.textContent =
+    "ROOM NOTES −";
+
+
+  if (nightmareNotesClose) {
+    nightmareNotesClose.focus();
+  }
+}
+
+
+function closeNightmareNotes() {
+  if (
+    !nightmareNotesPanel ||
+    !nightmareNotesButton
+  ) {
+    return;
+  }
+
+
+  body.classList.remove(
+    "notes-open"
+  );
+
+
+  nightmareNotesPanel.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  if (nightmareNotesBackdrop) {
+    nightmareNotesBackdrop.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+  }
+
+
+  nightmareNotesButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+
+  nightmareNotesButton.textContent =
+    "ROOM NOTES +";
+}
+
+
+if (nightmareNotesButton) {
+  nightmareNotesButton.addEventListener(
+    "click",
+    function () {
+      if (
+        body.classList.contains(
+          "notes-open"
+        )
+      ) {
+        closeNightmareNotes();
+      } else {
+        openNightmareNotes();
+      }
+    }
+  );
+}
+
+
+if (nightmareNotesClose) {
+  nightmareNotesClose.addEventListener(
+    "click",
+    closeNightmareNotes
+  );
+}
+
+
+if (nightmareNotesBackdrop) {
+  nightmareNotesBackdrop.addEventListener(
+    "click",
+    closeNightmareNotes
+  );
+}
 
 
 window.addEventListener(
-  "touchend",
-
+  "keydown",
   function (event) {
     if (
+      event.key === "Escape" &&
       body.classList.contains(
-        "nightmare-locked"
-      ) ||
-      escapeComplete
-    ) {
-      return;
-    }
-
-
-    const difference =
-      touchStartY -
-      event
-        .changedTouches[0]
-        .clientY;
-
-
-    if (
-      Math.abs(
-        difference
-      ) <
-      45 ||
-      wheelLocked
-    ) {
-      return;
-    }
-
-
-    wheelLocked =
-      true;
-
-
-    goToBeat(
-      activeIndex +
-      (
-        difference > 0
-          ? 1
-          : -1
+        "notes-open"
       )
-    );
+    ) {
+      closeNightmareNotes();
 
 
-    window.setTimeout(
-      function () {
-        wheelLocked =
-          false;
-      },
-
-      820
-    );
-  },
-
-  {
-    passive: true
-  }
-);
-
-
-/* ==========================================
-   ENTRER DANS LE CAUCHEMAR
-========================================== */
-
-followPulse.addEventListener(
-  "click",
-
-  function () {
-    soundEnabled =
-      true;
-
-
-    localStorage.setItem(
-      "museumSound",
-      "on"
-    );
-
-
-    updateSoundButton();
-
-
-    ensureAudio();
-
-
-    body.classList.remove(
-      "nightmare-locked"
-    );
-
-
-    pulseGate.classList.add(
-      "is-leaving"
-    );
-
-
-    /*
-     * On lance immédiatement le souffle
-     * de la première scène.
-     */
-
-    syncAudio(
-      "arrival"
-    );
-
-
-    window.setTimeout(
-      function () {
-        pulseGate.remove();
-      },
-
-      1050
-    );
-  }
-);
-
-
-/* ==========================================
-   SOUND ON / OFF
-========================================== */
-
-soundToggle.addEventListener(
-  "click",
-
-  function () {
-    ensureAudio();
-
-
-    soundEnabled =
-      !soundEnabled;
-
-
-    localStorage.setItem(
-      "museumSound",
-
-      soundEnabled
-        ? "on"
-        : "off"
-    );
-
-
-    masterGain.gain.setTargetAtTime(
-      soundEnabled
-        ? 0.82
-        : 0.0001,
-
-      audioContext.currentTime,
-
-      0.06
-    );
-
-
-    if (soundEnabled) {
-      syncAudio(
-        sceneNames[
-          activeIndex
-        ]
-      );
-    } else {
-      stopAllAudioLoops();
-
-
-      setAtmosphere(
-        sceneNames[
-          activeIndex
-        ]
-      );
+      if (nightmareNotesButton) {
+        nightmareNotesButton.focus();
+      }
     }
-
-
-    updateSoundButton();
   }
 );
 
@@ -2476,16 +3002,13 @@ function updateHold(
         holdStart
       ) /
       HOLD_DURATION,
-
       0,
-
       1
     );
 
 
   body.style.setProperty(
     "--hold-progress",
-
     progress *
     360 +
     "deg"
@@ -2494,8 +3017,9 @@ function updateHold(
 
   body.style.setProperty(
     "--hold-value",
-
-    progress.toFixed(3)
+    progress.toFixed(
+      3
+    )
   );
 
 
@@ -2518,8 +3042,7 @@ function updateHold(
 
 
   if (
-    progress >=
-    1
+    progress >= 1
   ) {
     completeEscape();
 
@@ -2535,13 +3058,15 @@ function updateHold(
 
 
 /* ==========================================
-   COMMENCER À OUVRIR L’ŒIL
+   COMMENCER LE MAINTIEN
 ========================================== */
 
-function startHold(event) {
+function startHold(
+  event
+) {
   if (
     body.dataset.scene !==
-    "escape" ||
+      "escape" ||
     escapeComplete
   ) {
     return;
@@ -2551,11 +3076,7 @@ function startHold(event) {
   event.preventDefault();
 
 
-  ensureAudio();
-
-
-  isHolding =
-    true;
+  isHolding = true;
 
 
   holdStart =
@@ -2567,43 +3088,49 @@ function startHold(event) {
   );
 
 
-  /*
-   * Le cœur, la respiration et les
-   * parasites deviennent incontrôlables.
-   */
-
-  setHeartbeat(
-    235,
-    1.75,
-    true
-  );
+  if (soundEnabled) {
+    ensureAudio();
 
 
-  setBreathing(
-    500,
-    3.1,
-    1.9
-  );
+    setHeartbeat(
+      235,
+      1.75,
+      true
+    );
 
 
-  setPanicSounds(
-    170
-  );
+    setThirdPulse(
+      210,
+      1.75
+    );
 
 
-  tone(
-    25,
-    3,
-    0.4,
-    "sawtooth"
-  );
+    setBreathing(
+      500,
+      3.1,
+      1.9
+    );
 
 
-  noiseBurst(
-    2.7,
-    0.2,
-    620
-  );
+    setPanicSounds(
+      170
+    );
+
+
+    tone(
+      25,
+      3,
+      0.4,
+      "sawtooth"
+    );
+
+
+    noiseBurst(
+      2.7,
+      0.2,
+      620
+    );
+  }
 
 
   window.cancelAnimationFrame(
@@ -2619,7 +3146,7 @@ function startHold(event) {
 
 
 /* ==========================================
-   RELÂCHER LE BOUTON TROP TÔT
+   RELÂCHER TROP TÔT
 ========================================== */
 
 function cancelHold() {
@@ -2631,8 +3158,7 @@ function cancelHold() {
   }
 
 
-  isHolding =
-    false;
+  isHolding = false;
 
 
   window.cancelAnimationFrame(
@@ -2668,16 +3194,13 @@ function cancelHold() {
 
 
 /* ==========================================
-   OUVERTURE COMPLÈTE ET RÉVEIL
+   RÉVEIL
 ========================================== */
 
 function completeEscape() {
-  escapeComplete =
-    true;
+  escapeComplete = true;
 
-
-  isHolding =
-    false;
+  isHolding = false;
 
 
   window.cancelAnimationFrame(
@@ -2685,10 +3208,11 @@ function completeEscape() {
   );
 
 
-  /*
-   * Maintenir définitivement l’image
-   * de l’œil ouvert.
-   */
+  body.style.setProperty(
+    "--hold-progress",
+    "360deg"
+  );
+
 
   body.style.setProperty(
     "--hold-value",
@@ -2749,12 +3273,6 @@ function completeEscape() {
   );
 
 
-  /*
-   * Le son disparaît pendant
-   * que la lumière blanche envahit
-   * progressivement l’écran.
-   */
-
   window.setTimeout(
     function () {
       if (
@@ -2763,28 +3281,20 @@ function completeEscape() {
       ) {
         masterGain.gain.setTargetAtTime(
           0.0001,
-
           audioContext.currentTime,
-
           0.16
         );
       }
     },
-
     520
   );
 
-
-  /*
-   * Aller vers la page du réveil.
-   */
 
   window.setTimeout(
     function () {
       window.location.href =
         "awakening.html";
     },
-
     1650
   );
 }
@@ -2794,10 +3304,43 @@ function completeEscape() {
    ÉVÉNEMENTS DU BOUTON FINAL
 ========================================== */
 
-forceEye.addEventListener(
-  "pointerdown",
-  startHold
-);
+if (forceEye) {
+  forceEye.addEventListener(
+    "pointerdown",
+    startHold
+  );
+
+
+  forceEye.addEventListener(
+    "keydown",
+    function (event) {
+      if (
+        (
+          event.key === "Enter" ||
+          event.key === " "
+        ) &&
+        !isHolding
+      ) {
+        startHold(
+          event
+        );
+      }
+    }
+  );
+
+
+  forceEye.addEventListener(
+    "keyup",
+    function (event) {
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+        cancelHold();
+      }
+    }
+  );
+}
 
 
 window.addEventListener(
@@ -2812,56 +3355,12 @@ window.addEventListener(
 );
 
 
-forceEye.addEventListener(
-  "keydown",
-
-  function (event) {
-    if (
-      (
-        event.key === "Enter" ||
-        event.key === " "
-      ) &&
-      !isHolding
-    ) {
-      startHold(event);
-    }
-  }
-);
-
-
-forceEye.addEventListener(
-  "keyup",
-
-  function (event) {
-    if (
-      event.key === "Enter" ||
-      event.key === " "
-    ) {
-      cancelHold();
-    }
-  }
-);
-
-
 /* ==========================================
-   LAMPE QUI SUIT LA SOURIS
+   LAMPE DE LA SOURIS
 ========================================== */
-
-let pointerFrame =
-  null;
-
-
-let pointerX =
-  50;
-
-
-let pointerY =
-  50;
-
 
 window.addEventListener(
   "pointermove",
-
   function (event) {
     pointerX =
       (
@@ -2889,7 +3388,6 @@ window.addEventListener(
         function () {
           body.style.setProperty(
             "--pointer-x",
-
             pointerX +
             "%"
           );
@@ -2897,20 +3395,45 @@ window.addEventListener(
 
           body.style.setProperty(
             "--pointer-y",
-
             pointerY +
             "%"
           );
 
 
-          pointerFrame =
-            null;
+          pointerFrame = null;
         }
       );
   },
-
   {
     passive: true
+  }
+);
+
+
+/* ==========================================
+   VISIBILITÉ DE LA PAGE
+========================================== */
+
+document.addEventListener(
+  "visibilitychange",
+  function () {
+    if (document.hidden) {
+      stopAllAudioLoops();
+
+      return;
+    }
+
+
+    if (
+      soundEnabled &&
+      audioReady
+    ) {
+      syncAudio(
+        sceneNames[
+          activeIndex
+        ]
+      );
+    }
   }
 );
 
@@ -2935,4 +3458,6 @@ preloadImages();
 updateSoundButton();
 
 
-activateScene(0);
+activateScene(
+  0
+);
